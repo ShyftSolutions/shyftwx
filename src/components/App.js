@@ -4,7 +4,7 @@ import BaseWxViewer from './viewers/BaseWxViewer';
 function App() {
     return (
         <div className="App">
-            <BaseWxViewer swBounds={[-1, -1]} neBounds={[1, 1]} />
+            <BaseWxViewer swBounds={[-40, -98]} neBounds={[-35, -58]} />
         </div>
     );
 }
