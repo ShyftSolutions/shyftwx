@@ -1,5 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Storybook
+
+The Storybook is statically hosted on a third party site Netlify. This link should update as changes are made to the Storybook
+
+[https://romantic-fermi-2afb7c.netlify.app/?path=/story/button--text]
+
 ## Available Scripts
 
 In the project directory, you can run:
