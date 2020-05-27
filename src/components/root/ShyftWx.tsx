@@ -6,7 +6,7 @@ type ShyftWxProps = {
     indexUrl?: string;
 };
 
-export const ShyftWx: React.FC<ShyftWxProps> = ({ indexData, indexUrl }) => {
+export const ShyftWx: React.FC<ShyftWxProps> = ({ children, indexData, indexUrl }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [index, setIndex] = useState<ShyftIndex>();
@@ -33,7 +33,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ indexData, indexUrl }) => {
         return <p>LOADING</p>;
     }
 
-    return <p>{JSON.stringify(index)}</p>;
+    return <div>{children}</div>;
 };
 
 export default ShyftWx;

@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const BaseWxViewer = ({ swBounds, neBounds, layers }) => {
+export const BaseWxViewer = ({ swBounds, neBounds }) => {
     const classes = useStyles();
 
     const bounds = latLngBounds(swBounds, neBounds);
