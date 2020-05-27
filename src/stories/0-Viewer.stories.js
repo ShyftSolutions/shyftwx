@@ -11,10 +11,10 @@ export default {
 };
 
 export const BaseWxViewer = () => {
-    const swBounds = array('Southwest Bounds', [-1, -1]);
-    const neBounds = array('Northeast Bounds', [1, 1]);
+    const swBounds = array('Southwest Bounds', [23.81, -65.69]);
+    const neBounds = array('Northeast Bounds', [49.38, -129.17]);
 
-    return <_BaseWxViewer swBounds={swBounds} neBounds={neBounds} />;
+    return <_BaseWxViewer swBounds={swBounds} neBounds={neBounds} layers={[]} />;
 };
 
 export const WxViewer = () => <_WxViewer />;
