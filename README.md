@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 The Storybook is statically hosted on a third party site Netlify. This link should update as changes are made to the Storybook
 
-[https://romantic-fermi-2afb7c.netlify.app/?path=/story/button--text]
+https://romantic-fermi-2afb7c.netlify.app/?path=/story/button--text
 
 ## Available Scripts
 
