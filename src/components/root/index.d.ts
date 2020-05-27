@@ -1,7 +1,3 @@
-declare type ShyftWxProps = {
-    products: [];
-};
-
 declare type ShyftIndex = {
     version: string;
     sources: ShyftSource[];
@@ -34,11 +30,6 @@ declare type ShyftProduct = {
     parmater: string;
     legend: ShyftLegend;
     frames: ShyftFrame[];
-};
-
-declare type GuiProduct = {
-    elevation: string[];
-    products: ShyftProduct[];
 };
 
 declare type ShyftFrame = {
