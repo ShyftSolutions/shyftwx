@@ -3,12 +3,12 @@ import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        color:'#4287f5',
-     ariaLabel: "outlined primary button group"
+        fillColor: '#4287f5',
+        ariaLabel: "outlined primary button group"
     },
 }));
 
-export const BasicButtonGroup = () => {
+export const BasicButtonGroup2 = () => {
     const classes = useStyles();
 
     return (
@@ -20,4 +20,4 @@ export const BasicButtonGroup = () => {
     );
 };
 
-export default BasicButtonGroup;
+export default BasicButtonGroup2;
