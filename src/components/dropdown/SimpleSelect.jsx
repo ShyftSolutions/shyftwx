@@ -1,11 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -15,13 +13,16 @@ const useStyles = makeStyles((theme) => ({
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
+    label: {
+        align: 'center'
+    }
 }));
 
-export default function SimpleSelect() {
+export default function SimpleSelect({label, selectOptions}) {
     const classes = useStyles();
     const [state, setState] = React.useState({
-        modelRun: '',
-        name: 'hai',
+        modelRun: {label},
+        name: 'Selector',
     });
 
     const handleChange = (event) => {
@@ -31,21 +32,22 @@ export default function SimpleSelect() {
             [name]: event.target.value,
         });
     };
-
+    
 
     return (
         <div>
-            <FormControl variant="outlined" className={classes.formControl}>
+            <Typography variant='subtitle1' className={classes.label}>{label}</Typography>
+            <FormControl variant='outlined' className={classes.formControl}>
 
                 <Select
-                    id="demo-simple-select-outlined"
-                    defaultValue={10}
+                    id='demo-simple-select-outlined'
+                    defaultValue={selectOptions[0]}
                     onChange={handleChange}
                 >
+                    {selectOptions.map(option => (
+                        <MenuItem value={option}>{option}</MenuItem>
+                    ))}
 
-                    <MenuItem value={10}>2020-05-27T12:00:00Z</MenuItem>
-                    <MenuItem value={20}>2020-05-27T06:00:00Z</MenuItem>
-                    <MenuItem value={30}>2020-05-27T11:00:00Z</MenuItem>
                 </Select>
             </FormControl>
         </div>
