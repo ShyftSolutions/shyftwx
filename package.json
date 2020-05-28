@@ -36,7 +36,6 @@
         "eject": "react-scripts eject",
         "storybook:start": "start-storybook -p 9009 -s public",
         "storybook:build": "build-storybook -c .storybook -o .out"
-
     },
     "eslintConfig": {
         "extends": "react-app"

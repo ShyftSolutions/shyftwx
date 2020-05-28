@@ -4,7 +4,7 @@ import React from 'react';
 const useStyles = makeStyles((theme) => ({
     root: {
         color:'#4287f5',
-     ariaLabel: "outlined primary button group"
+     ariaLabel: "outlined primary button group",
     },
 }));
 
