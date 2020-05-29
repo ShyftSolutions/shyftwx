@@ -1,6 +1,5 @@
 import { makeStyles, ButtonGroup, Button } from '@material-ui/core';
 import React from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
     root: {

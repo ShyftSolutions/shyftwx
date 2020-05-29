@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: green[600],
         },
-        ariaLabel:"play",
+        ariaLabel: "play",
     },
 }));
 
@@ -19,7 +19,7 @@ export const PlayButton = () => {
 
     return (
         <Fab className={classes.root}>
-            <PlayArrowIcon />
+            <PlayArrowIcon/>
         </Fab>
     );
 };

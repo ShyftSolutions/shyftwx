@@ -1,11 +1,11 @@
-import _PlayButton from 'components/time/PlayButton.jsx';
-import _PauseButton from 'components/time/PauseButton.jsx';
+import _StartStopButton from 'components/time/StartStopButton.jsx';
+import _TimeControl from 'components/time/TimeControl.jsx';
 import React from 'react';
 
 export default {
     title: 'Time',
 };
 
-export const PlayButton = () => <_PlayButton />;
+export const StartStopButton = () => <_StartStopButton />;
 
-export const PauseButton = () => <_PauseButton />;
+export const TimeControl = () => <_TimeControl />;
