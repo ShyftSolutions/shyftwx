@@ -35,7 +35,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "storybook:start": "start-storybook -p 9009 -s public",
-        "storybook:build": "build-storybook -c .storybook -o .out --quiet"
+        "build-storybook": "build-storybook -c .storybook -o .out --quiet"
     },
     "eslintConfig": {
         "extends": "react-app"
