@@ -15,16 +15,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MenuListComposition() {
+export default function MenuListComposition({ categories }) {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <List>
-                   <ProductGroup />
-                   <ProductGroup />
-                   <ProductGroup />
+                    {categories.map(cat => (
+                        <ProductGroup category={cat} />
+                    ))}
                 </List>
             </Paper>
         </div>

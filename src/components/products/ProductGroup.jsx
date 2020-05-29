@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function NestedList() {
+export default function NestedList({category}) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -26,7 +26,7 @@ export default function NestedList() {
     return (
         <List>
             <ListItem button onClick={handleClick}>
-                <ListItemText primary="Inbox" />
+                <ListItemText primary={category} />
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>

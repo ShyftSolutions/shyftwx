@@ -9,9 +9,9 @@ export default {
 
 export const BasicButtonGroup = () => {
 
-    const options = array('Button Options', ["One",
-        "Two",
-        "Three",
+    const options = array('Button Options', ["TQI Model",
+        "GFS",
+        "HRRR",
     ]);
 
     return <_BasicButtonGroup buttonOptions={options} />
