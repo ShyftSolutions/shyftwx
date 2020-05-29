@@ -1,5 +1,6 @@
 import { makeStyles, ButtonGroup, Button } from '@material-ui/core';
 import React from 'react';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -8,14 +9,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const BasicButtonGroup = () => {
+export const BasicButtonGroup = ({buttonOptions}) => {
     const classes = useStyles();
 
     return (
         <ButtonGroup className={classes.root} >
-            <Button>One</Button>
-            <Button>Two</Button>
-            <Button>Three</Button>
+            {buttonOptions.map(option => (
+                <Button>{option}</Button>
+            ))}
         </ButtonGroup>
     );
 };
