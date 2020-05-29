@@ -32,7 +32,7 @@ export default function SimpleSelect({label, selectOptions}) {
             [name]: event.target.value,
         });
     };
-    
+
 
     return (
         <div>
