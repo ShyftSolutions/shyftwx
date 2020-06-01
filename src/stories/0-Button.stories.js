@@ -28,6 +28,6 @@ export const BasicButtonGroup = () => {
     
     const options = array('Button Options', optionObjs);
 
-    return <_BasicButtonGroup buttonOptions={options} />
+    return <_BasicButtonGroup defaultOptions={options} />
 
 };
