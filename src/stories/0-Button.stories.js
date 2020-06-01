@@ -9,10 +9,24 @@ export default {
 
 export const BasicButtonGroup = () => {
 
-    const options = array('Button Options', ["TQI Model",
-        "GFS",
-        "HRRR",
-    ]);
+    const tqi = {
+        name: "TQI Model",
+        selected: true
+    };
+
+    const gfs = {
+        name: "GFS",
+        selected: false
+    };
+
+    const hrrr = {
+        name: "HRRR",
+        selected: false
+    };
+
+    const optionObjs = [tqi, gfs, hrrr];
+    
+    const options = array('Button Options', optionObjs);
 
     return <_BasicButtonGroup buttonOptions={options} />
 
