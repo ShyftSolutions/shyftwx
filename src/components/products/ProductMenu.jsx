@@ -1,8 +1,7 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, List } from '@material-ui/core';
 import ProductGroup from './ProductGroup';
-import List from '@material-ui/core/List';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -15,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MenuListComposition({ categories }) {
+export default function ProductMenu({ categories }) {
     const classes = useStyles();
 
     return (
@@ -24,7 +23,7 @@ export default function MenuListComposition({ categories }) {
                 <List>
                     {categories.map(cat => (
                         <ProductGroup category={cat} />
-                    ))}
+                        ))}
                 </List>
             </Paper>
         </div>

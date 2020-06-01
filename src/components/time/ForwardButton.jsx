@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import grey from '@material-ui/core/colors/grey';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,7 @@ export default function ForwardButton() {
 
     return (
         <Button className={classes.root} >
-            <SkipNextIcon />
+            <NavigateNextIcon />
         </Button>
     );
 }
