@@ -1,5 +1,9 @@
 import { makeStyles, ButtonGroup, Button } from '@material-ui/core';
+<<<<<<< HEAD
 import React, {useState} from 'react';
+=======
+import React from 'react';
+>>>>>>> e13606ffe43ad64215ee8a180e302f3e09227ba4
 
 const useStyles = makeStyles((theme) => ({
     default: {
