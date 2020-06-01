@@ -10,7 +10,8 @@ export default function TimeControl() {
               container
               direction="row"
               justify="flex-start"
-              alignItems="center">
+              alignItems="center"
+              spacing={1}>
             <Grid item>
                 <BackButton/>
             </Grid>
