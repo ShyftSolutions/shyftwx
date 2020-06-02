@@ -1,20 +1,30 @@
 import _ProductsMenu from 'components/products/ProductMenu';
-import _ProductGroup from 'components/products/ProductGroup';
-import { array, withKnobs } from '@storybook/addon-knobs';
+import { array, object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 
 export default {
+    component: _ProductsMenu,
     title: 'Products',
     decoration: [withKnobs]
 };
 
-export const ProductMenu = () => {
+const defaultCategories = [
+    {
+        name: 'Surface',
+        open: false
+    },
+    {
+        name: '850MB',
+        open: false
+    },
+    {
+        name: '700MB',
+        open: false
+    }
+];
 
-    const cats = array('Categories', ["Surface",
-        "850MB",
-        "700MB",
-    ]);
-
-    return <_ProductsMenu categories={cats} />
-
+export const ProductsMenu = () => {
+    return <_ProductsMenu defaultCategories={object('Product Categories', defaultCategories)}/>;
 };
+
+
