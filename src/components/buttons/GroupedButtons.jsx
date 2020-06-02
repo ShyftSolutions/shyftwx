@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export const BasicButtonGroup = ({ defaultOptions }) => {
+export const GroupedButtons = ({ defaultOptions }) => {
     const classes = useStyles();
 
     const [selected, setSelected] = useState(0);
@@ -43,4 +43,4 @@ export const BasicButtonGroup = ({ defaultOptions }) => {
         </ButtonGroup>
     );
 };
-export default BasicButtonGroup;
+export default GroupedButtons;

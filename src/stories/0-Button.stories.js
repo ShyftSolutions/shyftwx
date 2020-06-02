@@ -1,13 +1,12 @@
-import _BasicButtonGroup from 'components/buttons/BasicButtonGroup';
+import _GroupedButtons from 'components/buttons/GroupedButtons';
 import React from 'react';
 import { object, withKnobs } from '@storybook/addon-knobs';
 
 export default {
-    component: _BasicButtonGroup,
+    component: _GroupedButtons,
     title: 'Buttons',
     decorators: [withKnobs]
 };
-
 
 const defaultOptions = [
     {
@@ -21,6 +20,6 @@ const defaultOptions = [
     }
 ];
 
-export const BasicButtonGroup = () => {
-    return <_BasicButtonGroup defaultOptions={object('Button Labels', defaultOptions)} />;
+export const GroupedButtons = () => {
+    return <_GroupedButtons defaultOptions={object('Button Labels', defaultOptions)} />;
 };
