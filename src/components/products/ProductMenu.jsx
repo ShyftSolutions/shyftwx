@@ -1,7 +1,7 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon } from '@material-ui/core';
-import { ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
+import { makeStyles, List, ListItem, ListItemText, Collapse } from '@material-ui/core';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -53,14 +53,13 @@ export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
                                 {cat.open ? <ExpandLess/> : <ExpandMore/>}
                             </ListItem>
                             <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding/>
-                                <ListItem button className={classes.nested} selected={selectedIndex === index}
-                                          onClick={(event) => handleListItemClick(event, index)}>
-                                    <ListItemIcon>
-                                        <StarBorder/>
-                                    </ListItemIcon>
-                                    <ListItemText primary="Temperature and Wind"/>
-                                </ListItem>
+                                {cat.products.map((product, i) => (
+                                    // FIX selectedIndex to be scalable
+                                    <ListItem button className={classes.nested} selected={selectedIndex === Number(index.toString() + i.toString())}
+                                              onClick={(event) => handleListItemClick(event, Number(index.toString() + i.toString()))}>
+                                        <ListItemText primary={product}/>
+                                    </ListItem>
+                                ))}
                             </Collapse>
                         </List>
                     ))}
