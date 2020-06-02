@@ -2,36 +2,14 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
+    
     root: {
         width: 500,
-        padding: 40,
-    },
-    margin: {
-        height: theme.spacing(3),
-    },
-
-}));
-
-function ValueLabelComponent(props) {
-    const { children, open, value } = props;
-
-    return (
-        <span>
-            <Tooltip open={open} enterTouchDelay={2} placement='top' title={value}>
-                {children}
-            </Tooltip>
-        </span>
-    );
-}
-
-
-const PrettoSlider = withStyles({
-    root: {
         color: '#4287f5',
-        height: 5,
+        height: 20,
+        margin: 25
     },
     thumb: {
         height: 24,
@@ -64,14 +42,41 @@ const PrettoSlider = withStyles({
         backgroundColor: '#4287f5',
         height: 5
     }
-})(Slider);
+
+}));
+
+function ValueLabelComponent(props) {
+    const { children, open, value } = props;
+
+    return (
+        <span>
+            <Tooltip open={open} enterTouchDelay={2} placement='top' title={value + " + Model Run"}>
+                {children}
+            </Tooltip>
+        </span>
+    );
+}
+
+
+
+
 
 export const DiscreteSlider = ({ marks }) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <PrettoSlider
+            <Slider
+                classes={{
+                    root: classes.root,
+                    thumb: classes.thumb,
+                    active: classes.active,
+                    valueLabel: classes.valueLabel,
+                    rail: classes.rail,
+                    markLabelActive: classes.markLabelActive,
+                    markLabel: classes.markLabel,
+                    mark: classes.mark
+                }}
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
                 track={false}
