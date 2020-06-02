@@ -1,46 +1,84 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
+import Tooltip from '@material-ui/core/Tooltip';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: 500,
-        padding: 10,
+        padding: 40,
     },
     margin: {
         height: theme.spacing(3),
     },
-    customMarkLabel: {
-        backgroundColor: '#cccccc',
-        fontWeight: 500,
-        padding: 12
-
-    },
-    customMarkLabelActive: {
-        backgroundColor: '#aaaaaa',
-        fontWeight: 600,
-        padding: 12,
-    }
 
 }));
+
+function ValueLabelComponent(props) {
+    const { children, open, value } = props;
+
+    return (
+        <span>
+            <Tooltip open={open} enterTouchDelay={2} placement='top' title={value}>
+                {children}
+            </Tooltip>
+        </span>
+    );
+}
+
+
+const PrettoSlider = withStyles({
+    root: {
+        color: '#4287f5',
+        height: 5,
+    },
+    thumb: {
+        height: 24,
+        width: 24,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        marginTop: -8,
+        marginLeft: -12,
+        '&:focus, &:hover, &$active': {
+            boxShadow: 'inherit',
+        },
+    },
+    active: {},
+    valueLabel: {
+        left: 'calc(-50% + 4px)',
+    },
+    rail: {
+        height: 5,
+        borderRadius: 4,
+    },
+    markLabelActive: {
+        fontWeight: 700,
+        padding: 12,
+    },
+    markLabel: {
+        fontWeight: 500,
+        padding: 12
+    },
+    mark: {
+        backgroundColor: '#4287f5',
+        height: 5
+    }
+})(Slider);
 
 export const DiscreteSlider = ({ marks }) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <Slider
-                classes={{ markLabel: classes.customMarkLabel,
-                markLabelActive: classes.customMarkLabelActive }}
-                defaultValue={20}
-                aria-labelledby="discrete-slider-custom"
-                step={1}
-                valueLabelDisplay="off"
-                marks={marks}
-                max={12}
+            <PrettoSlider
+                valueLabelDisplay="auto"
+                aria-label="pretto slider"
                 track={false}
-            />
+                marks={marks}
+                defaultValue={marks[0]}
+                max={12}
+                ValueLabelComponent={ValueLabelComponent} />
         </div>
     );
 }
