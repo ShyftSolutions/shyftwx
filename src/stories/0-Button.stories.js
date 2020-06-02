@@ -24,8 +24,7 @@ export const BasicButtonGroup = () => {
         selected: false
     };
 
-    //const optionObjs = [tqi, gfs, hrrr];
-    const optionObjs = ["TQI", "GFS", "HRRR"]
+    const optionObjs = [tqi, gfs, hrrr];
     
     const options = array('Button Options', optionObjs);
 
