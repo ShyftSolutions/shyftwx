@@ -1,15 +1,19 @@
 import _TimeControl from 'components/time/TimeControl.jsx';
 import _Slider from 'components/time/Slider.jsx'
+import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 
 export default {
     title: 'Time',
+    decoration: [withKnobs]
 };
 
 export const TimeControl = () => <_TimeControl />;
 
-export const Slider = () => {
-    const marks = [
+const defaultSliderKnobs = {
+    maxValue: 12,
+    stepValue: 1,
+    marks: [
         {
             value: 0,
             label: '0H',
@@ -62,6 +66,11 @@ export const Slider = () => {
             value: 12,
             label: '12H',
         }
-    ];
-    return <_Slider marks={marks}/>;
-}
+    ]
+
+};
+
+export const Slider = () => {
+
+    return <_Slider defaultSettings={object('Settings', defaultSliderKnobs)} />;
+};

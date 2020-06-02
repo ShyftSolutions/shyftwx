@@ -61,9 +61,8 @@ function ValueLabelComponent(props) {
 
 
 
-export const DiscreteSlider = ({ marks }) => {
+export const DiscreteSlider = ({ defaultSettings }) => {
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <Slider
@@ -80,9 +79,10 @@ export const DiscreteSlider = ({ marks }) => {
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
                 track={false}
-                marks={marks}
-                defaultValue={marks[0]}
-                max={12}
+                step={defaultSettings.stepValue}
+                marks={defaultSettings.marks}
+                defaultValue={defaultSettings.marks[0].value}
+                max={defaultSettings.maxValue}
                 ValueLabelComponent={ValueLabelComponent} />
         </div>
     );
