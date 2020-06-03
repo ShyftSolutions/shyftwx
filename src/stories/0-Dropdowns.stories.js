@@ -1,6 +1,8 @@
 import _SimpleSelect from 'components/dropdown/SimpleSelect';
 import { object, withKnobs } from '@storybook/addon-knobs/react';
 import React from 'react';
+import { MuiThemeProvider } from '@material-ui/core';
+import theme from 'theme.js';
 
 export default {
     component: _SimpleSelect,
@@ -24,6 +26,10 @@ const defaultSelectKnobs = [
 ];
 
 export const SimpleSelect = () => {
-    return <_SimpleSelect defaultSettings={object('Select Options', defaultSelectKnobs)} />;
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_SimpleSelect defaultSettings={object('Select Options', defaultSelectKnobs)} />
+        </MuiThemeProvider>
+    );
 };
 

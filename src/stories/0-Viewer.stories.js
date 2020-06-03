@@ -4,6 +4,8 @@ import _DynamicWxViewer from 'components/viewers/DynamicWxViewer';
 import _StaticWxViewer from 'components/viewers/StaticWxViewer';
 import _WxViewer from 'components/viewers/WxViewer';
 import React from 'react';
+import { MuiThemeProvider } from '@material-ui/core';
+import theme from 'theme.js';
 
 export default {
     title: 'Viewer',
@@ -87,9 +89,9 @@ const defaultViewerKnobs = {
                 label: '12H',
             }
         ],
-    
+
     },
-    
+
     selectKnobs: [
         {
             name: "2020-05-27T 12:00:00Z"
@@ -108,7 +110,11 @@ const defaultViewerKnobs = {
 };
 
 export const BaseWxViewer = () => {
-    return <_BaseWxViewer defaultSettings={object('Settings', defaultViewerKnobs)} />
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_BaseWxViewer defaultSettings={object('Settings', defaultViewerKnobs)} />
+        </MuiThemeProvider>
+    );
 }
 
 export const WxViewer = () => <_WxViewer />;

@@ -2,13 +2,21 @@ import _TimeControl from 'components/time/TimeControl.jsx';
 import _Slider from 'components/time/Slider.jsx'
 import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
+import { MuiThemeProvider } from '@material-ui/core';
+import theme from 'theme.js';
 
 export default {
     title: 'Time',
     decoration: [withKnobs]
 };
 
-export const TimeControl = () => <_TimeControl />;
+export const TimeControl = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_TimeControl />
+        </MuiThemeProvider>
+    );
+};
 
 const defaultSliderKnobs = {
     maxValue: 12,
@@ -72,5 +80,9 @@ const defaultSliderKnobs = {
 
 export const Slider = () => {
 
-    return <_Slider defaultSettings={object('Settings', defaultSliderKnobs)} />;
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_Slider defaultSettings={object('Settings', defaultSliderKnobs)} />
+        </MuiThemeProvider>
+    );;
 };

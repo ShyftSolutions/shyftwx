@@ -45,8 +45,8 @@ export default function SimpleSelect({ defaultSettings }) {
                     defaultValue={defaultSettings[0].name}
                     onChange={handleChange}
                 >
-                    {defaultSettings.map(option => (
-                        <MenuItem classes={{selected: classes.customSelected}} value={option.name}>{option.name}</MenuItem>
+                    {defaultSettings.map((option, index) => (
+                        <MenuItem key={index} classes={{selected: classes.customSelected}} value={option.name}>{option.name}</MenuItem>
                     ))}
 
                 </Select>

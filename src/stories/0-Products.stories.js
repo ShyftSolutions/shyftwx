@@ -1,6 +1,8 @@
 import _ProductsMenu from 'components/products/ProductMenu';
 import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
+import { MuiThemeProvider } from '@material-ui/core';
+import theme from 'theme.js';
 
 export default {
     component: _ProductsMenu,
@@ -28,7 +30,11 @@ const defaultCategories = [
 
 export const ProductsMenu = () => {
 
-    return <_ProductsMenu defaultCategories={object('Product Categories', defaultCategories)}/>;
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_ProductsMenu defaultCategories={object('Product Categories', defaultCategories)} />
+        </MuiThemeProvider>
+    );
 };
 
 
