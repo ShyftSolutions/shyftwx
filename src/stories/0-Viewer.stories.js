@@ -105,6 +105,24 @@ const defaultViewerKnobs = {
         {
             name: "2020-05-27T 02:00:00Z"
         }
+    ],
+
+    productsKnobs: [
+        {
+            name: 'Surface',
+            open: true,
+            products: ['Wind and Temperature', 'Relative Humidity'],
+        },
+        {
+            name: '850MB',
+            open: false,
+            products: ['Relative Humidity'],
+        },
+        {
+            name: '700MB',
+            open: false,
+            products: ['Wind and Temperature'],
+        }
     ]
 
 };

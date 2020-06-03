@@ -15,4 +15,5 @@ export default createMuiTheme({
             contrastText: '#212529'
           },
         },
+        spacing: 8,
 });

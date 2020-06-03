@@ -2,6 +2,9 @@ import { makeStyles, ButtonGroup, Button } from '@material-ui/core';
 import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        margin: 0
+    },
     defaultButton: {
         backgroundColor: '#f8f9fa',
         '&:hover': {
@@ -30,7 +33,7 @@ export const GroupedButtons = ({ defaultSettings }) => {
     }
 
     return (
-        <ButtonGroup>
+        <ButtonGroup className={classes.root}>
             {defaultSettings.map((option, index) => (
                 <Button
                     key={index}
