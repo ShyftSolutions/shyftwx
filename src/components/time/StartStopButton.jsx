@@ -6,9 +6,20 @@ import PauseIcon from '@material-ui/icons/Pause';
 const useStyles = makeStyles((theme) => ({
     play: {
         label: 'play',
+        background: theme.palette.primary.main,
+        '&:hover': {
+            background: theme.palette.primary.dark,
+        }
     },
     pause: {
-        label: 'pause'
+        label: 'pause',
+        background: theme.palette.primary.main,
+        '&:hover': {
+            background: theme.palette.primary.dark,
+        }
+    },
+    icon: {
+        color: theme.palette.primary.contrastText
     }
 }));
 
@@ -27,10 +38,10 @@ export const StartStopButton = () => {
     return (
         playing ?
             <Fab onClick={ handleClick } className={classes.pause}>
-                <PauseIcon/>
+                <PauseIcon className={classes.icon}/>
             </Fab> :
             <Fab onClick={ handleClick } className={classes.play}>
-                <PlayArrowIcon />
+                <PlayArrowIcon className={classes.icon}/>
             </Fab>
     );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import grey from '@material-ui/core/colors/grey';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -10,13 +9,16 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '35px',
         minHeight: '30px',
         variant: 'contained',
-        color: theme.palette.common.white,
-        backgroundColor: grey[800],
+        color: theme.palette.secondary.contrastText,
+        backgroundColor: theme.palette.primary.dark,
         '&:hover': {
-            backgroundColor: grey[900],
+            backgroundColor: theme.palette.primary.dark,
         },
         ariaLabel: "forward",
     },
+    icon: {
+        color: theme.palette.primary.contrastText
+    }
 }))
 
 export default function ForwardButton() {
@@ -24,7 +26,7 @@ export default function ForwardButton() {
 
     return (
         <Button className={classes.root} >
-            <NavigateNextIcon />
+            <NavigateNextIcon className={classes.icon}/>
         </Button>
     );
 }

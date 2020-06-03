@@ -9,11 +9,11 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     selectedButton: {
-        backgroundColor: '#329af0',
-        color: '#f8f9fa',
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
         '&:hover': {
-            backgroundColor: '#1c7cd6',
-            color: '#f8f9fa',
+            backgroundColor: theme.palette.primary.dark,
+            color: theme.palette.primary.contrastText,
         }
     }
 

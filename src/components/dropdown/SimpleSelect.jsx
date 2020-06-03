@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         align: 'center'
+    },
+    customSelected: {
+        background: "#329af0"
     }
 }));
 
@@ -43,7 +46,7 @@ export default function SimpleSelect({ defaultSettings }) {
                     onChange={handleChange}
                 >
                     {defaultSettings.map(option => (
-                        <MenuItem value={option.name}>{option.name}</MenuItem>
+                        <MenuItem classes={{selected: classes.customSelected}} value={option.name}>{option.name}</MenuItem>
                     ))}
 
                 </Select>

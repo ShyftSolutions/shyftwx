@@ -2,8 +2,6 @@ import React from 'react';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
-import blueGrey from '@material-ui/core/colors/blueGrey';
-import grey from '@material-ui/core/colors/grey';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,13 +10,16 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '35px',
         minHeight: '30px',
         variant: 'contained',
-        color: theme.palette.common.white,
-        backgroundColor: grey[800],
+        color: theme.palette.secondary.contrastText,
+        backgroundColor: theme.palette.primary.dark,
         '&:hover': {
-            backgroundColor: grey[900],
+            backgroundColor: theme.palette.primary.dark,
         },
         ariaLabel: "back",
     },
+    icon: {
+        color: theme.palette.primary.contrastText
+    }
 }))
 
 export default function BackButton() {
@@ -26,7 +27,7 @@ export default function BackButton() {
 
     return (
         <Button className={classes.root}>
-            <NavigateBeforeIcon />
+            <NavigateBeforeIcon className={classes.icon}/>
         </Button>
     );
 }
