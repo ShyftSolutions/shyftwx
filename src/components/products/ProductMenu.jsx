@@ -48,14 +48,16 @@ export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
         <div className={classes.root}>
             {categories.map((cat, index) => (
                 <List key={index}>
+
                     <Paper className={classes.category}>
                         <ListItem button className={classes.category} onClick={() => handleClick(cat)}>
                             <ListItemText primary={cat.name}/>
                             {cat.open ? <ExpandLess/> : <ExpandMore/>}
                         </ListItem>
                     </Paper>
+
                     <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {cat.products.map((product, i) => (
+                            {cat.products.map((product) => (
                                 <ListItem button className={classes.nested}
                                           selected={selectedProduct === (cat.name + ' ' + product.name)}
                                           onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}>
@@ -66,6 +68,7 @@ export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
                                 </ListItem>
                             ))}
                     </Collapse>
+
                 </List>
             ))}
         </div>
