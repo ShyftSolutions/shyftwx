@@ -4,13 +4,15 @@ import { makeStyles, List, ListItem, ListItemText, Collapse } from '@material-ui
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginRight: theme.spacing(2)
+    category: {
+        fontWeight: 300,
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
     },
     root: {
         width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper
+        maxWidth: 300,
+        backgroundColor: theme.palette.background.paper,
     },
     nested: {
         paddingLeft: theme.spacing(4)
@@ -44,27 +46,28 @@ export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <List>
-                    {categories.map((cat, index) => (
-                        <List key={index}>
-                            <ListItem button onClick={() => handleClick(cat)}>
-                                <ListItemText primary={cat.name}/>
-                                {cat.open ? <ExpandLess/> : <ExpandMore/>}
-                            </ListItem>
-                            <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                                {cat.products.map((product, i) => (
-                                    // FIX selectedIndex to be scalable
-                                    <ListItem button className={classes.nested} selected={selectedIndex === Number(index.toString() + i.toString())}
-                                              onClick={(event) => handleListItemClick(event, Number(index.toString() + i.toString()))}>
-                                        <ListItemText primary={product}/>
-                                    </ListItem>
-                                ))}
-                            </Collapse>
-                        </List>
-                    ))}
+            {categories.map((cat, index) => (
+                <List key={index}>
+                    <Paper className={classes.category}>
+                        <ListItem button className={classes.category} onClick={() => handleClick(cat)}>
+                            <ListItemText primary={cat.name}/>
+                            {cat.open ? <ExpandLess/> : <ExpandMore/>}
+                        </ListItem>
+                    </Paper>
+                    <Collapse in={cat.open} timeout="auto" unmountOnExit>
+                            {cat.products.map((product, i) => (
+                                <ListItem button className={classes.nested}
+                                          selected={selectedProduct === (cat.name + ' ' + product.name)}
+                                          onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}>
+                                    <ListItemIcon>
+                                        <FontAwesomeIcon className={classes.icon} icon={product.icon}/>
+                                    </ListItemIcon>
+                                    <ListItemText primary={product.name}/>
+                                </ListItem>
+                            ))}
+                    </Collapse>
                 </List>
-            </Paper>
+            ))}
         </div>
     );
 };
