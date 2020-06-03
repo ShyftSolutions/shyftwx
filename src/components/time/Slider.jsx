@@ -6,10 +6,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 const useStyles = makeStyles((theme) => ({
     
     root: {
-        width: 500,
+        width: 700,
         color: theme.palette.primary.dark,
         height: 20,
-        margin: 25
+        margin: 0
     },
     thumb: {
         height: 24,
