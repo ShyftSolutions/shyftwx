@@ -4,7 +4,7 @@ import blue from '@material-ui/core/colors/blue';
 export default createMuiTheme({
         palette: {
           primary: {
-              light: '#1c7cd6',
+              light: '#72c3fc',
               main: '#329af0',
               dark: '#1c7cd6',
               contrastText: '#f8f9fa',

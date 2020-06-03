@@ -16,9 +16,15 @@ const useStyles = makeStyles((theme) => ({
     label: {
         align: 'center'
     },
-    customSelected: {
-        background: "#329af0"
-    }
+    dropdown: {
+        background: theme.palette.primary.contrastText,
+    },
+    items: {
+        background: theme.palette.primary.contrastText,
+        '&:hover': {
+            background: theme.palette.primary.main,
+        }
+    },
 }));
 
 export default function SimpleSelect({ defaultSettings }) {
@@ -41,12 +47,13 @@ export default function SimpleSelect({ defaultSettings }) {
         <div>
             <FormControl variant='outlined' className={classes.formControl}>
                 <Select
+                    classes={{select: classes.dropdown}}
                     id='simple-select'
                     defaultValue={defaultSettings[0].name}
                     onChange={handleChange}
                 >
                     {defaultSettings.map((option, index) => (
-                        <MenuItem key={index} classes={{selected: classes.customSelected}} value={option.name}>{option.name}</MenuItem>
+                        <MenuItem color="primary" key={index} className={classes.items} value={option.name}>{option.name}</MenuItem>
                     ))}
 
                 </Select>
