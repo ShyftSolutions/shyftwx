@@ -21,5 +21,5 @@ const defaultOptions = [
 ];
 
 export const GroupedButtons = () => {
-    return <_GroupedButtons defaultOptions={object('Button Labels', defaultOptions)} />;
+    return <_GroupedButtons defaultSettings={object('Button Labels', defaultOptions)} />;
 };

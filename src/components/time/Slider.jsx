@@ -7,14 +7,14 @@ const useStyles = makeStyles((theme) => ({
     
     root: {
         width: 500,
-        color: '#4287f5',
+        color: '#1c7cd6',
         height: 20,
         margin: 25
     },
     thumb: {
         height: 24,
         width: 24,
-        backgroundColor: '#fff',
+        backgroundColor: '#f8f9fa',
         border: '2px solid currentColor',
         marginTop: -8,
         marginLeft: -12,
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 12
     },
     mark: {
-        backgroundColor: '#4287f5',
+        backgroundColor: '#1c7cd6',
         height: 5
     }
 

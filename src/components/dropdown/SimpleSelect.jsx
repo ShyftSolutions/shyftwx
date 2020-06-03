@@ -18,10 +18,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SimpleSelect({label, selectOptions}) {
+export default function SimpleSelect({ defaultSettings }) {
     const classes = useStyles();
     const [state, setState] = React.useState({
-        modelRun: {label},
+        modelRun: {},
         name: 'Selector',
     });
 
@@ -36,16 +36,14 @@ export default function SimpleSelect({label, selectOptions}) {
 
     return (
         <div>
-            <Typography variant='subtitle1' className={classes.label}>{label}</Typography>
             <FormControl variant='outlined' className={classes.formControl}>
-
                 <Select
-                    id='demo-simple-select-outlined'
-                    defaultValue={selectOptions[0]}
+                    id='simple-select'
+                    defaultValue={defaultSettings[0].name}
                     onChange={handleChange}
                 >
-                    {selectOptions.map(option => (
-                        <MenuItem value={option}>{option}</MenuItem>
+                    {defaultSettings.map(option => (
+                        <MenuItem value={option.name}>{option.name}</MenuItem>
                     ))}
 
                 </Select>

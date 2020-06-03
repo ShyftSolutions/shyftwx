@@ -3,25 +3,24 @@ import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
     defaultButton: {
-        backgroundColor: '#cccccc',
-        fontWeight: '300',
+        backgroundColor: '#f8f9fa',
         '&:hover': {
-            backgroundColor: '#dddddd'
+            backgroundColor: '#e9ecef'
         }
     },
     selectedButton: {
-        backgroundColor: '#4287f5',
-        color: '#f2f2f2',
-        fontWeight: '600',
+        backgroundColor: '#329af0',
+        color: '#f8f9fa',
         '&:hover': {
-            backgroundColor: '#72a5f7'
+            backgroundColor: '#1c7cd6',
+            color: '#f8f9fa',
         }
     }
 
 }));
 
 
-export const GroupedButtons = ({ defaultOptions }) => {
+export const GroupedButtons = ({ defaultSettings }) => {
     const classes = useStyles();
 
     const [selected, setSelected] = useState(0);
@@ -32,12 +31,12 @@ export const GroupedButtons = ({ defaultOptions }) => {
 
     return (
         <ButtonGroup>
-            {defaultOptions.map((option, index) => (
-                <Button 
-                key={index}
-                name='group-button'
-                onClick={() => handleClick(index)}
-                className={selected === index ? classes.selectedButton : classes.defaultButton}
+            {defaultSettings.map((option, index) => (
+                <Button
+                    key={index}
+                    name='group-button'
+                    onClick={() => handleClick(index)}
+                    className={selected === index ? classes.selectedButton : classes.defaultButton}
                 >{option.name}</Button>
             ))}
         </ButtonGroup>
