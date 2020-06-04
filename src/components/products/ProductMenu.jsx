@@ -3,12 +3,9 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPercent, faTint, faWind } from '@fortawesome/free-solid-svg-icons';
-
 
 const useStyles = makeStyles((theme) => ({
     category: {
-        fontWeight: 300,
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText,
     },
@@ -19,8 +16,12 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.secondary.contrastText,
+        color: theme.palette.primary.contrastText,
+        backgroundColor: theme.palette.secondary.contrastText,
     },
+    icon: {
+        color: theme.palette.primary.contrastText,
+    }
 }));
 export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
     const classes = useStyles();

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         ariaLabel: "back",
     },
     icon: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.secondary.contrastText
     }
 }))
 

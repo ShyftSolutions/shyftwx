@@ -15,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.primary.dark,
         },
         ariaLabel: "forward",
+
     },
     icon: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.secondary.contrastText,
     }
 }))
 
