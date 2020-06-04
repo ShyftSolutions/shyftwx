@@ -10,7 +10,7 @@ const defaultViewerKnobs = {
         neBounds: [49.38, -129.17]
     },
 
-    buttonKnobs: [
+    modelButtonKnobs: [
         {
             name: "TQI Model"
         },
@@ -81,6 +81,18 @@ const defaultViewerKnobs = {
         ],
 
     },
+
+    regionButtonKnobs: [
+        {
+            name: "TQI Model"
+        },
+        {
+            name: "CONUS"
+        },
+        {
+            name: "Southeast"
+        }
+    ],
 
     selectKnobs: [
         {

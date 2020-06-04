@@ -28,6 +28,7 @@ export const GroupedButtons = ({ defaultSettings }) => {
     const classes = useStyles();
 
     const [selected, setSelected] = useState(0);
+    console.log(defaultSettings);
 
     const handleClick = (index) => {
         setSelected(index);
