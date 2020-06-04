@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
         variant: 'contained',
         color: theme.palette.secondary.contrastText,
         backgroundColor: theme.palette.primary.dark,
+        boxShadow: theme.shadows[3],
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         },

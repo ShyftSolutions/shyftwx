@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         maxWidth: 300,
         backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[3]
     },
     nested: {
         paddingLeft: theme.spacing(4),

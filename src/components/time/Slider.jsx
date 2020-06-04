@@ -2,11 +2,12 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme) => ({
     
     root: {
-        width: 700,
+        width: 600,
         color: theme.palette.primary.dark,
         height: 20,
         margin: 0
@@ -46,13 +47,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ValueLabelComponent(props) {
-    const { children, open, value } = props;
+    const { children, value } = props;
+
+    const LightTooltip = withStyles((theme) => ({
+        tooltip: {
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          boxShadow: theme.shadows[1],
+          fontSize: 16,
+        },
+      }))(Tooltip);
 
     return (
         <span>
-            <Tooltip open={open} enterTouchDelay={2} placement='top' title={value + " + Model Run"}>
+            <LightTooltip placement='top' title={value + " + Model Run"} >
                 {children}
-            </Tooltip>
+            </LightTooltip>
         </span>
     );
 }

@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
-        margin: theme.spacing(1),
         minWidth: 120,
+        boxShadow: theme.shadows[3]
     },
     selectEmpty: {
         marginTop: theme.spacing(2),

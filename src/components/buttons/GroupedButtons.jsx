@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: 0
+        margin: 0,
+        boxShadow: theme.shadows[3]
     },
     defaultButton: {
         backgroundColor: '#f8f9fa',
