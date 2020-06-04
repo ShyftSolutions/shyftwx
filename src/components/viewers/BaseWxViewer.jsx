@@ -33,14 +33,13 @@ export const BaseWxViewer = ({ defaultSettings, layers }) => {
             {/* Top Row Grid Container */}
             <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
                 <Grid item xs={3}>
-
                     {/* Model Grid Container */}
                     <Grid container direction="column">
                         <Grid item>
                             <Typography variant='h6'>Model</Typography>
                         </Grid>
                         <Grid item>
-                            <GroupedButtons defaultSettings={defaultSettings.buttonKnobs}></GroupedButtons>
+                            <GroupedButtons defaultSettings={defaultSettings.modelButtonKnobs}></GroupedButtons>
                         </Grid>
                     </Grid>
 
@@ -53,7 +52,7 @@ export const BaseWxViewer = ({ defaultSettings, layers }) => {
                             <Typography variant='h6'> Region</Typography>
                         </Grid>
                         <Grid item>
-                            <GroupedButtons defaultSettings={defaultSettings.buttonKnobs}></GroupedButtons>
+                            <GroupedButtons defaultSettings={defaultSettings.regionButtonKnobs}></GroupedButtons>
                         </Grid>
                     </Grid>
 

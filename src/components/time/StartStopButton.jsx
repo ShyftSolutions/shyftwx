@@ -6,22 +6,22 @@ import PauseIcon from '@material-ui/icons/Pause';
 const useStyles = makeStyles((theme) => ({
     play: {
         label: 'play',
-        background: theme.palette.primary.main,
         boxShadow: theme.shadows[3],
+        background: theme.palette.primary.lightText,
         '&:hover': {
-            background: theme.palette.primary.dark,
+            background: theme.palette.primary.lightText,
         }
     },
     pause: {
         label: 'pause',
-        background: theme.palette.primary.main,
         boxShadow: theme.shadows[3],
+        background: theme.palette.primary.lightText,
         '&:hover': {
-            background: theme.palette.primary.dark,
+            background: theme.palette.primary.contrastText,
         }
     },
     icon: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.secondary.contrastText
     }
 }));
 

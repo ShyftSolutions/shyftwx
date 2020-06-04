@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
         align: 'center'
     },
     dropdown: {
-        background: theme.palette.primary.contrastText,
+        background: theme.palette.secondary.contrastText,
     },
     items: {
-        background: theme.palette.primary.contrastText,
+        background: theme.palette.secondary.contrastText,
         '&:hover': {
             background: theme.palette.primary.main,
         }

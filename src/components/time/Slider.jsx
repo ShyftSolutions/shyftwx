@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     thumb: {
         height: 24,
         width: 24,
-        backgroundColor: theme.palette.primary.contrastText,
+        backgroundColor: theme.palette.secondary.contrastText,
         border: '2px solid currentColor',
         marginTop: -8,
         marginLeft: -12,
