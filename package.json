@@ -40,7 +40,8 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "storybook:start": "start-storybook -p 9009 -s public",
-        "storybook:build": "build-storybook -c .storybook -o storybook-static"
+        "storybook:build": "build-storybook -c .storybook -o storybook-static",
+        "fontawesome:build": "npm i --save @fortawesome/fontawesome-svg-core"
     },
     "eslintConfig": {
         "extends": "react-app"
