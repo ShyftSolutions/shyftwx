@@ -3,6 +3,9 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPercent, faTint, faWind } from '@fortawesome/free-solid-svg-icons';
+
+
 const useStyles = makeStyles((theme) => ({
     category: {
         fontWeight: 300,
@@ -65,16 +68,6 @@ export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
                                     <ListItemText primary={product.name} />
                                 </ListItem>
                             ))}
-                        {cat.products.map((product) => (
-                            <ListItem button className={classes.nested}
-                                selected={selectedProduct === (cat.name + ' ' + product.name)}
-                                onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}>
-                                <ListItemIcon>
-                                    <FontAwesomeIcon className={classes.icon} icon={product.icon} />
-                                </ListItemIcon>
-                                <ListItemText primary={product.name} />
-                            </ListItem>
-                        ))}
                     </Collapse>
 
                 </List>

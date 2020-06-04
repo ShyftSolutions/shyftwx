@@ -6,6 +6,7 @@ import _WxViewer from 'components/viewers/WxViewer';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import theme from 'theme.js';
+import { faPercent, faTint, faWind } from '@fortawesome/free-solid-svg-icons';
 
 export default {
     title: 'Viewer',
@@ -111,17 +112,29 @@ const defaultViewerKnobs = {
         {
             name: 'Surface',
             open: true,
-            products: ['Wind and Temperature', 'Relative Humidity'],
+            products: [{
+                name: 'Wind and Temperature',
+                icon: faWind,
+            }, {
+                name: 'Relative Humidity',
+                icon: faPercent,
+            }]
         },
         {
             name: '850MB',
             open: false,
-            products: ['Relative Humidity'],
+            products: [{
+                name: 'Relative Humidity',
+                icon: faTint,
+            },]
         },
         {
             name: '700MB',
             open: false,
-            products: ['Wind and Temperature'],
+            products: [{
+                name: 'Wind and Temperature',
+                icon: faWind,
+            },]
         }
     ]
 
