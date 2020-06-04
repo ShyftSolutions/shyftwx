@@ -5,7 +5,7 @@ import { MuiThemeProvider } from '@material-ui/core';
 import theme from 'theme.js';
 
 export default {
-    component: _ProductsMenu,
+    component: _ProductMenu,
     title: 'Products',
     decoration: [withKnobs]
 };
@@ -28,11 +28,11 @@ const defaultCategories = [
     }
 ];
 
-export const ProductsMenu = () => {
+export const ProductMenu = () => {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <_ProductsMenu defaultCategories={object('Product Categories', defaultCategories)} />
+            <_ProductMenu defaultCategories={object('Product Categories', defaultCategories)} />
         </MuiThemeProvider>
     );
 };
