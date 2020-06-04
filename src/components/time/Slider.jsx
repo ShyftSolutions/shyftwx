@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
-import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme) => ({
     
@@ -51,8 +50,8 @@ function ValueLabelComponent(props) {
 
     const LightTooltip = withStyles((theme) => ({
         tooltip: {
-          backgroundColor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
+          backgroundColor: theme.palette.primary.darkText,
+          color: theme.palette.secondary.contrastText,
           boxShadow: theme.shadows[1],
           fontSize: 16,
         },

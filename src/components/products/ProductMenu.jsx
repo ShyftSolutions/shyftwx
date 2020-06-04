@@ -1,27 +1,34 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon } from '@material-ui/core';
+import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon, Typography, Box } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const useStyles = makeStyles((theme) => ({
-    category: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
-    },
     root: {
         width: '100%',
         maxWidth: 300,
         backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[3]
+        boxShadow: theme.shadows[3],
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        paddingLeft: theme.spacing(1.5)
+    },
+    paper: {
+        width: '95%',
+        backgroundColor: theme.palette.primary.main
+    },
+    category: {
+        color: theme.palette.primary.contrastText
     },
     nested: {
         paddingLeft: theme.spacing(4),
         color: theme.palette.primary.contrastText,
-        backgroundColor: theme.palette.secondary.contrastText,
+        width: '95%'
     },
-    icon: {
-        color: theme.palette.primary.contrastText,
+    icon: {},
+    selectedIcon: {
+        color: theme.palette.selected.text
     }
 }));
 export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
@@ -51,25 +58,32 @@ export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
         <div className={classes.root}>
             {categories.map((cat, index) => (
                 <List key={index}>
-
-                    <Paper className={classes.category}>
+                    <Paper className={classes.paper}>
                         <ListItem button className={classes.category} onClick={() => handleClick(cat)}>
-                            <ListItemText primary={cat.name} />
-                            {cat.open ? <ExpandLess /> : <ExpandMore />}
+                            <ListItemText disableTypography primary= {
+                                <Typography>
+                                    <Box fontWeight="fontWeightBold" m={1} fontSize={16}>
+                                    {cat.name}
+                                    </Box>
+                                </Typography>}
+                            />
+                            {cat.open ? <ExpandLess/> : <ExpandMore/>}
                         </ListItem>
                     </Paper>
 
                     <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {cat.products.map((product) => (
-                                <ListItem button className={classes.nested}
-                                          selected={selectedProduct === (cat.name + ' ' + product.name)}
-                                          onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}>
-                                    <ListItemIcon>
-                                        <FontAwesomeIcon className={classes.icon} icon={product.icon}/>
-                                    </ListItemIcon>
-                                    <ListItemText primary={product.name} />
-                                </ListItem>
-                            ))}
+                        {cat.products.map((product) => (
+                            <ListItem button className={classes.nested}
+                                      selected={selectedProduct === (cat.name + ' ' + product.name)}
+                                      onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}>
+                                <ListItemIcon>
+                                    <FontAwesomeIcon
+                                        className={selectedProduct === (cat.name + ' ' + product.name) ? classes.selectedIcon : classes.icon}
+                                        icon={product.icon}/>
+                                </ListItemIcon>
+                                <ListItemText primary={product.name}/>
+                            </ListItem>
+                        ))}
                     </Collapse>
 
                 </List>

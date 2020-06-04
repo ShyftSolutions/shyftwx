@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[3],
         background: theme.palette.primary.darkText,
         '&:hover': {
-            background: theme.palette.primary.lightText,
+            background: theme.palette.primary.darkText,
         }
     },
     pause: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[3],
         background: theme.palette.primary.darkText,
         '&:hover': {
-            background: theme.palette.primary.contrastText,
+            background: theme.palette.primary.darkText,
         }
     },
     icon: {

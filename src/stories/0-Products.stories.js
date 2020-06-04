@@ -3,7 +3,6 @@ import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import theme from 'theme.js';
-import { faPercent, faTint, faWind } from '@fortawesome/free-solid-svg-icons';
 
 export default {
     component: _ProductMenu,
@@ -29,7 +28,11 @@ const defaultCategories = [
         products: [{
             name: 'Relative Humidity',
             icon: faTint,
-        },]
+        },
+            {
+                name: 'Precipitation Type',
+                icon: faCloudShowersHeavy,
+            }]
     },
     {
         name: '700MB',
