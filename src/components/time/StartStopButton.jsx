@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     play: {
         label: 'play',
         boxShadow: theme.shadows[3],
-        background: theme.palette.primary.lightText,
+        background: theme.palette.primary.darkText,
         '&:hover': {
             background: theme.palette.primary.lightText,
         }
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     pause: {
         label: 'pause',
         boxShadow: theme.shadows[3],
-        background: theme.palette.primary.lightText,
+        background: theme.palette.primary.darkText,
         '&:hover': {
             background: theme.palette.primary.contrastText,
         }
