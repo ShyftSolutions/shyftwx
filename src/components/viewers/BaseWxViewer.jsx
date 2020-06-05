@@ -8,6 +8,7 @@ import Slider from 'components/time/Slider';
 import TimeControl from 'components/time/TimeControl';
 import ProductMenu from 'components/products/ProductMenu';
 import ShyftModel from 'components/buttons/ShyftModel';
+import RegionSelector from 'components/regions/RegionSelector';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,6 +27,7 @@ export const BaseWxViewer = ({ defaultSettings, layers }) => {
 
     const bounds = latLngBounds(defaultSettings.viewerKnobs.swBounds, defaultSettings.viewerKnobs.neBounds);
     console.log(defaultSettings.modelButtonKnobs);
+    console.log(defaultSettings.regionButtonKnobs);
 
     return (
         <>
@@ -33,7 +35,7 @@ export const BaseWxViewer = ({ defaultSettings, layers }) => {
             <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
                 <ShyftModel defaultSettings={defaultSettings.modelButtonKnobs}></ShyftModel>
 
-                <ShyftModel defaultSettings={defaultSettings.regionButtonKnobs}></ShyftModel>
+                <RegionSelector defaultSettings={defaultSettings.regionButtonKnobs}></RegionSelector>
 
                 <Grid item xs={3}>
 

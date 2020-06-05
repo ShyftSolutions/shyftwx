@@ -4,7 +4,7 @@ import GroupedButtons from '../buttons/GroupedButtons';
 
 
 export const RegionSelector = ({defaultSettings}) => {
-
+    console.log(defaultSettings);
     return (
         <Grid item xs={3}>
             {/* Region Grid Container */}
@@ -13,7 +13,7 @@ export const RegionSelector = ({defaultSettings}) => {
                     <Typography variant='h6'>Region</Typography>
                 </Grid>
                 <Grid item>
-                    <GroupedButtons defaultSettings={defaultSettings.regionButtonKnobs}></GroupedButtons>
+                    <GroupedButtons defaultSettings={defaultSettings.buttonLabels}></GroupedButtons>
                 </Grid>
             </Grid>
         </Grid>

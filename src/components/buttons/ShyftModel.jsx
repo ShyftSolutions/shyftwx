@@ -11,7 +11,7 @@ export const ShyftModel = ({ defaultSettings }) => {
                     <Typography variant='h6'>Model</Typography>
                 </Grid>
                 <Grid item>
-                    <GroupedButtons defaultSettings={defaultSettings.modelButtonKnobs}></GroupedButtons>
+                    <GroupedButtons defaultSettings={defaultSettings.buttonLabels}></GroupedButtons>
                 </Grid>
             </Grid>
         </Grid>
