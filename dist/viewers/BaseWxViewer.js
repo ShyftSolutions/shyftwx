@@ -68,20 +68,6 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
     item: true
   }, /*#__PURE__*/_react.default.createElement(_core.Typography, {
     variant: "h6"
-  }, " Region")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    item: true
-  }, /*#__PURE__*/_react.default.createElement(_.GroupedButtons, {
-    defaultSettings: defaultSettings.regionButtonKnobs
-  })))), /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    item: true
-  }, /*#__PURE__*/_react.default.createElement(_core.Typography, {
-    variant: "h6"
   }, "Model Run")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true
   }, /*#__PURE__*/_react.default.createElement(_.SimpleSelect, {
