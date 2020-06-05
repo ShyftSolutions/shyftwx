@@ -69,6 +69,12 @@ Object.defineProperty(exports, "theme", {
     return _theme.default;
   }
 });
+Object.defineProperty(exports, "apis", {
+  enumerable: true,
+  get: function get() {
+    return _apis.default;
+  }
+});
 
 var _BaseWxViewer = _interopRequireDefault(require("./viewers/BaseWxViewer"));
 
@@ -91,5 +97,7 @@ var _TimeControl = _interopRequireDefault(require("./time/TimeControl"));
 var _ShyftWx = _interopRequireDefault(require("./root/ShyftWx"));
 
 var _theme = _interopRequireDefault(require("./theme"));
+
+var _apis = _interopRequireDefault(require("apis"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
