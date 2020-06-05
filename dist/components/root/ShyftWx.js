@@ -9,11 +9,11 @@ exports.default = exports.ShyftWx = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _apis = require("apis");
+var _apis = require("../../apis");
 
 var _core = require("@material-ui/core");
 
-var _theme = _interopRequireDefault(require("theme"));
+var _theme = _interopRequireDefault(require("../../theme"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

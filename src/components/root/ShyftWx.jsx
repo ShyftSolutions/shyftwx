@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { getIndexAsync } from 'apis';
+import { getIndexAsync } from '../../apis';
 import { MuiThemeProvider, Theme, Grid } from '@material-ui/core';
-import theme from 'theme';
+import theme from '../../theme';
 
 export const ShyftWx = ({ children, indexData, indexUrl, themeOverride }) => {
     const [error, setError] = useState('');
