@@ -1,14 +1,9 @@
 import { makeStyles, MuiThemeProvider, Grid, Typography } from '@material-ui/core';
-import theme from 'theme.js';
 import { latLngBounds } from 'leaflet';
 import React from 'react';
 import { Map, TileLayer, ImageOverlay } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import SimpleSelect from 'components/dropdown/SimpleSelect';
-import Slider from 'components/time/Slider';
-import GroupedButtons from 'components/buttons/GroupedButtons';
-import TimeControl from 'components/time/TimeControl';
-import ProductMenu from 'components/products/ProductMenu';
+import { theme, SimpleSelect, Slider, GroupedButtons, TimeControl, ProductMenu } from './../'
 
 const useStyles = makeStyles((theme) => ({
     root: {

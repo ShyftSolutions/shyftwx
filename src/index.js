@@ -1,12 +1,3 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import App from 'components/App';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import BaseWxViewer from './components/viewers/BaseWxViewer'
 
-ReactDOM.render(
-    <React.StrictMode>
-        <CssBaseline />
-        <App />
-    </React.StrictMode>,
-    document.getElementById('root')
-);
+export default BaseWxViewer
