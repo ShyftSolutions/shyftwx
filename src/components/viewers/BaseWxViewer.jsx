@@ -46,19 +46,6 @@ export const BaseWxViewer = ({ defaultSettings, layers }) => {
                 </Grid>
 
                 <Grid item xs={3}>
-                {/* Region Grid Container */}
-                    <Grid container direction="column">
-                        <Grid item>
-                            <Typography variant='h6'> Region</Typography>
-                        </Grid>
-                        <Grid item>
-                            <GroupedButtons defaultSettings={defaultSettings.regionButtonKnobs}></GroupedButtons>
-                        </Grid>
-                    </Grid>
-
-                </Grid>
-
-                <Grid item xs={3}>
                 {/* Model Run Container */}
                 
                     <Grid container direction="column">
