@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SimpleSelect({ defaultSettings }) {
+export default function SimpleSelect({ options }) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         modelRun: {},
@@ -48,10 +48,10 @@ export default function SimpleSelect({ defaultSettings }) {
                 <Select
                     classes={{select: classes.dropdown}}
                     id='simple-select'
-                    defaultValue={defaultSettings[0].name}
+                    defaultValue={options[0].name}
                     onChange={handleChange}
                 >
-                    {defaultSettings.map((option, index) => (
+                    {options.map((option, index) => (
                         <MenuItem color="primary" key={index} className={classes.items} value={option.name}>{option.name}</MenuItem>
                     ))}
 

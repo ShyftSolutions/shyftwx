@@ -1,3 +1,9 @@
+declare type ShyftWxProps = {
+    indexData?: ShyftIndex;
+    indexUrl?: string;
+    themeOverride?: Theme;
+};
+
 declare type ShyftIndex = {
     version: string;
     sources: ShyftSource[];

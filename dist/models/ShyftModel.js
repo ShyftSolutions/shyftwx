@@ -7,7 +7,7 @@ exports.default = exports.ShyftModel = void 0;
 
 var _core = require("@material-ui/core");
 
-var _GroupedButtons = _interopRequireDefault(require("./GroupedButtons"));
+var _GroupedButtons = _interopRequireDefault(require("../buttons/GroupedButtons"));
 
 var _react = _interopRequireDefault(require("react"));
 

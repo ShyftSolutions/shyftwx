@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@material-ui/core';
-import GroupedButtons from './GroupedButtons';
+import GroupedButtons from '../buttons/GroupedButtons';
 import React from 'react';
 
 export const ShyftModel = ({ defaultSettings }) => {

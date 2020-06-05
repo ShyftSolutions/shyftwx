@@ -60,7 +60,7 @@ var useStyles = (0, _styles.makeStyles)(function (theme) {
 });
 
 function SimpleSelect(_ref) {
-  var defaultSettings = _ref.defaultSettings;
+  var options = _ref.options;
   var classes = useStyles();
 
   var _React$useState = _react.default.useState({
@@ -84,9 +84,9 @@ function SimpleSelect(_ref) {
       select: classes.dropdown
     },
     id: "simple-select",
-    defaultValue: defaultSettings[0].name,
+    defaultValue: options[0].name,
     onChange: handleChange
-  }, defaultSettings.map(function (option, index) {
+  }, options.map(function (option, index) {
     return /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       color: "primary",
       key: index,
