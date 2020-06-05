@@ -60,7 +60,7 @@ var useStyles = (0, _core.makeStyles)(function (theme) {
     },
     icon: {},
     selectedIcon: {
-      color: theme.palette.selected.text
+      color: theme.palette.text.selected
     }
   };
 });
