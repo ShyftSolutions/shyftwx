@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { getIndexAsync } from 'apis';
+import { MuiThemeProvider, Theme } from '@material-ui/core';
+import theme from 'theme';
 
 type ShyftWxProps = {
     indexData?: ShyftIndex;
     indexUrl?: string;
+    themeOverride?: Theme;
 };
 
-export const ShyftWx: React.FC<ShyftWxProps> = ({ children, indexData, indexUrl }) => {
+export const ShyftWx: React.FC<ShyftWxProps> = ({ children, indexData, indexUrl, themeOverride }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [index, setIndex] = useState<ShyftIndex>();
@@ -33,7 +36,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, indexData, indexUrl 
         return <p>LOADING</p>;
     }
 
-    return <div>{children}</div>;
+    // TODO: pass index data to children
+    return <MuiThemeProvider theme={themeOverride || theme}>{children}</MuiThemeProvider>;
 };
 
 export default ShyftWx;

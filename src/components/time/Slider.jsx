@@ -4,12 +4,11 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
-    
     root: {
         width: 600,
         color: theme.palette.primary.dark,
         height: 20,
-        margin: 0
+        margin: 0,
     },
     thumb: {
         height: 24,
@@ -36,13 +35,12 @@ const useStyles = makeStyles((theme) => ({
     },
     markLabel: {
         fontWeight: 500,
-        padding: 12
+        padding: 12,
     },
     mark: {
         backgroundColor: theme.palette.primary.dark,
-        height: 5
-    }
-
+        height: 5,
+    },
 }));
 
 function ValueLabelComponent(props) {
@@ -50,41 +48,28 @@ function ValueLabelComponent(props) {
 
     const LightTooltip = withStyles((theme) => ({
         tooltip: {
-          backgroundColor: theme.palette.primary.darkText,
-          color: theme.palette.secondary.contrastText,
-          boxShadow: theme.shadows[1],
-          fontSize: 16,
+            backgroundColor: theme.palette.primary.darkText,
+            color: theme.palette.secondary.contrastText,
+            boxShadow: theme.shadows[1],
+            fontSize: 16,
         },
-      }))(Tooltip);
+    }))(Tooltip);
 
     return (
         <span>
-            <LightTooltip placement='top' title={value + " + Model Run"} >
+            <LightTooltip placement="top" title={value + ' + Model Run'}>
                 {children}
             </LightTooltip>
         </span>
     );
 }
 
-
-
-
-
 export const DiscreteSlider = ({ defaultSettings }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
             <Slider
-                classes={{
-                    root: classes.root,
-                    thumb: classes.thumb,
-                    active: classes.active,
-                    valueLabel: classes.valueLabel,
-                    rail: classes.rail,
-                    markLabelActive: classes.markLabelActive,
-                    markLabel: classes.markLabel,
-                    mark: classes.mark
-                }}
+                classes={classes}
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
                 track={false}
@@ -92,9 +77,10 @@ export const DiscreteSlider = ({ defaultSettings }) => {
                 marks={defaultSettings.marks}
                 defaultValue={defaultSettings.marks[0].value}
                 max={defaultSettings.maxValue}
-                ValueLabelComponent={ValueLabelComponent} />
+                ValueLabelComponent={ValueLabelComponent}
+            />
         </div>
     );
-}
+};
 
 export default DiscreteSlider;
