@@ -1,16 +1,18 @@
-import _GroupedButtons from 'components/buttons/GroupedButtons';
+import _ShyftModel from 'components/buttons/ShyftModel';
 import React from 'react';
 import { object, withKnobs } from '@storybook/addon-knobs';
 import theme from 'theme.js';
 import { MuiThemeProvider } from '@material-ui/core';
 
 export default {
-    component: _GroupedButtons,
+    component: _ShyftModel,
     title: 'Buttons',
     decorators: [withKnobs]
 };
 
-const defaultOptions = [
+const modelButtonKnobs ={
+    label: "Model",
+    buttonLabels: [
     {
         name: "TQI Model"
     },
@@ -20,12 +22,12 @@ const defaultOptions = [
     {
         name: "HRRR"
     }
-];
+]};
 
-export const GroupedButtons = () => {
+export const ShyftModel = () => {
     return (
-    <MuiThemeProvider theme={theme}>
-        <_GroupedButtons defaultSettings={object('Button Labels', defaultOptions)} />
-    </MuiThemeProvider>
-    )
+        <MuiThemeProvider theme={theme}>
+            <_ShyftModel defaultSettings={object('Settings', modelButtonKnobs)} />
+        </MuiThemeProvider>
+    );
 };

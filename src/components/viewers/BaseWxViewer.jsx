@@ -3,7 +3,12 @@ import { latLngBounds } from 'leaflet';
 import React from 'react';
 import { Map, TileLayer, ImageOverlay } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { theme, SimpleSelect, Slider, GroupedButtons, TimeControl, ProductMenu } from './../'
+import SimpleSelect from 'components/dropdown/SimpleSelect';
+import Slider from 'components/time/Slider';
+import TimeControl from 'components/time/TimeControl';
+import ProductMenu from 'components/products/ProductMenu';
+import ShyftModel from 'components/buttons/ShyftModel';
+import RegionSelector from 'components/regions/RegionSelector';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,24 +26,19 @@ export const BaseWxViewer = ({ defaultSettings, layers }) => {
     const classes = useStyles();
 
     const bounds = latLngBounds(defaultSettings.viewerKnobs.swBounds, defaultSettings.viewerKnobs.neBounds);
+    console.log(defaultSettings.modelButtonKnobs);
+    console.log(defaultSettings.regionButtonKnobs);
 
     return (
         <>
             {/* Top Row Grid Container */}
             <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
-                <Grid item xs={3}>
-                    {/* Model Grid Container */}
-                    <Grid container direction="column">
-                        <Grid item>
-                            <Typography variant="h6">Model</Typography>
-                        </Grid>
-                        <Grid item>
-                            <GroupedButtons defaultSettings={defaultSettings.modelButtonKnobs}></GroupedButtons>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                <ShyftModel defaultSettings={defaultSettings.modelButtonKnobs}></ShyftModel>
+
+                <RegionSelector defaultSettings={defaultSettings.regionButtonKnobs}></RegionSelector>
 
                 <Grid item xs={3}>
+
                     {/* Model Run Container */}
 
                     <Grid container direction="column">
