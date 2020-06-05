@@ -8,6 +8,7 @@ import ForwardButton from './time/ForwardButton'
 import Slider from './time/Slider'
 import StartStopButton from './time/StartStopButton'
 import TimeControl from './time/TimeControl'
+import ShyftWx from './root/ShyftWx';
 import theme from './theme'
 
 export {
@@ -19,6 +20,7 @@ export {
     BackButton,
     ForwardButton,
     Slider,
+    ShyftWx,
     StartStopButton,
     TimeControl,
     theme
