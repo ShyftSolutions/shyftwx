@@ -149,7 +149,7 @@ export const App = () => {
     // TODO: change the defaultSettings to build everything off of index data
     return (
         <ShyftWx indexUrl="https://wxchange-images.s3.us-east-2.amazonaws.com/index.json">
-            <BaseWxViewer defaultSettings={defaultViewerKnobs} />
+            <BaseWxViewer />
         </ShyftWx>
     );
 };

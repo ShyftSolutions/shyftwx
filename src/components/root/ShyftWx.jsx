@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Children, useState, cloneElement } from 'react';
 import { getIndexAsync } from '../../apis';
 import { MuiThemeProvider, Theme, Grid } from '@material-ui/core';
 import theme from '../../theme';
@@ -34,7 +34,7 @@ export const ShyftWx = ({ children, indexData, indexUrl, themeOverride }) => {
     return (
         <MuiThemeProvider theme={themeOverride || theme}>
             <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
-                {children}
+                {Children.map(children, (child) => cloneElement(child, { index }))}
             </Grid>
         </MuiThemeProvider>
     );
