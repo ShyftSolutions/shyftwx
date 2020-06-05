@@ -10,7 +10,7 @@ import StartStopButton from './time/StartStopButton';
 import TimeControl from './time/TimeControl';
 import ShyftWx from './root/ShyftWx';
 import theme from './theme';
-import apis from 'apis';
+import apis from '../apis';
 
 export {
     BaseWxViewer,
