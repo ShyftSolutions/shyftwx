@@ -20,13 +20,16 @@ var defaultViewerKnobs = {
     swBounds: [23.81, -65.69],
     neBounds: [49.38, -129.17]
   },
-  modelButtonKnobs: [{
-    name: "TQI Model"
-  }, {
-    name: "GFS"
-  }, {
-    name: "HRRR"
-  }],
+  modelButtonKnobs: {
+    label: "Model",
+    buttonLabels: [{
+      name: "TQI Model"
+    }, {
+      name: "GFS"
+    }, {
+      name: "HRRR"
+    }]
+  },
   sliderKnobs: {
     maxValue: 12,
     stepValue: 1,
@@ -71,13 +74,16 @@ var defaultViewerKnobs = {
       label: '12H'
     }]
   },
-  regionButtonKnobs: [{
-    name: "TQI Model"
-  }, {
-    name: "CONUS"
-  }, {
-    name: "Southeast"
-  }],
+  regionButtonKnobs: {
+    label: "Region",
+    buttonLabels: [{
+      name: "TQI Model"
+    }, {
+      name: "CONUS"
+    }, {
+      name: "Southeast"
+    }]
+  },
   selectKnobs: [{
     name: "2020-05-27T 12:00:00Z"
   }, {

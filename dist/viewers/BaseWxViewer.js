@@ -15,7 +15,17 @@ var _reactLeaflet = require("react-leaflet");
 
 require("leaflet/dist/leaflet.css");
 
-var _ = require("./../");
+var _SimpleSelect = _interopRequireDefault(require("components/dropdown/SimpleSelect"));
+
+var _Slider = _interopRequireDefault(require("components/time/Slider"));
+
+var _TimeControl = _interopRequireDefault(require("components/time/TimeControl"));
+
+var _ProductMenu = _interopRequireDefault(require("components/products/ProductMenu"));
+
+var _ShyftModel = _interopRequireDefault(require("components/buttons/ShyftModel"));
+
+var _RegionSelector = _interopRequireDefault(require("components/regions/RegionSelector"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38,27 +48,19 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
       layers = _ref.layers;
   var classes = useStyles();
   var bounds = (0, _leaflet.latLngBounds)(defaultSettings.viewerKnobs.swBounds, defaultSettings.viewerKnobs.neBounds);
+  console.log(defaultSettings.modelButtonKnobs);
+  console.log(defaultSettings.regionButtonKnobs);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_core.Grid, {
     container: true,
     direction: "row",
     justify: "flex-end",
     alignItems: "flex-start",
     spacing: 3
-  }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    item: true
-  }, /*#__PURE__*/_react.default.createElement(_core.Typography, {
-    variant: "h6"
-  }, "Model")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
-    item: true
-  }, /*#__PURE__*/_react.default.createElement(_.GroupedButtons, {
+  }, /*#__PURE__*/_react.default.createElement(_ShyftModel.default, {
     defaultSettings: defaultSettings.modelButtonKnobs
-  })))), /*#__PURE__*/_react.default.createElement(_core.Grid, {
+  }), /*#__PURE__*/_react.default.createElement(_RegionSelector.default, {
+    defaultSettings: defaultSettings.regionButtonKnobs
+  }), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true,
     xs: 3
   }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
@@ -70,7 +72,7 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
     variant: "h6"
   }, "Model Run")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true
-  }, /*#__PURE__*/_react.default.createElement(_.SimpleSelect, {
+  }, /*#__PURE__*/_react.default.createElement(_SimpleSelect.default, {
     defaultSettings: defaultSettings.selectKnobs
   }))))), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     container: true,
@@ -92,7 +94,7 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
     variant: "h6"
   }, "Products")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true
-  }, /*#__PURE__*/_react.default.createElement(_.ProductMenu, {
+  }, /*#__PURE__*/_react.default.createElement(_ProductMenu.default, {
     defaultCategories: defaultSettings.productsKnobs
   })))), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true,
@@ -120,10 +122,10 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true,
     xs: 2
-  }, /*#__PURE__*/_react.default.createElement(_.TimeControl, null)), /*#__PURE__*/_react.default.createElement(_core.Grid, {
+  }, /*#__PURE__*/_react.default.createElement(_TimeControl.default, null)), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true,
     xs: 6
-  }, /*#__PURE__*/_react.default.createElement(_.Slider, {
+  }, /*#__PURE__*/_react.default.createElement(_Slider.default, {
     defaultSettings: defaultSettings.sliderKnobs
   }))));
 };

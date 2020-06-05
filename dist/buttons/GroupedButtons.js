@@ -59,8 +59,6 @@ var GroupedButtons = function GroupedButtons(_ref) {
       selected = _useState2[0],
       setSelected = _useState2[1];
 
-  console.log(defaultSettings);
-
   var handleClick = function handleClick(index) {
     setSelected(index);
   };

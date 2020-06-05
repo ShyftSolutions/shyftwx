@@ -57,6 +57,12 @@ Object.defineProperty(exports, "TimeControl", {
     return _TimeControl.default;
   }
 });
+Object.defineProperty(exports, "ShyftWx", {
+  enumerable: true,
+  get: function get() {
+    return _ShyftWx.default;
+  }
+});
 Object.defineProperty(exports, "theme", {
   enumerable: true,
   get: function get() {
@@ -81,6 +87,8 @@ var _Slider = _interopRequireDefault(require("./time/Slider"));
 var _StartStopButton = _interopRequireDefault(require("./time/StartStopButton"));
 
 var _TimeControl = _interopRequireDefault(require("./time/TimeControl"));
+
+var _ShyftWx = _interopRequireDefault(require("./root/ShyftWx"));
 
 var _theme = _interopRequireDefault(require("./theme"));
 
