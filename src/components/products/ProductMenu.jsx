@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {},
     selectedIcon: {
-        color: theme.palette.selected.text
+        color: theme.palette.text.selected
     }
 }));
 export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
