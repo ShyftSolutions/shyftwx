@@ -21,7 +21,9 @@ const defaultViewerKnobs = {
         neBounds: [49.38, -129.17]
     },
 
-    modelButtonKnobs: [
+    modelButtonKnobs: {
+        label: "Model",
+        buttonLabels: [
         {
             name: "TQI Model"
         },
@@ -31,19 +33,7 @@ const defaultViewerKnobs = {
         {
             name: "HRRR"
         }
-    ],
-
-    regionButtonKnobs: [
-        {
-            name: "TQI Model"
-        },
-        {
-            name: "CONUS"
-        },
-        {
-            name: "Southeast"
-        }
-    ],
+    ]},
 
     sliderKnobs: {
         maxValue: 12,
@@ -104,6 +94,20 @@ const defaultViewerKnobs = {
         ],
 
     },
+
+    regionButtonKnobs: {
+        label: "Region",
+        buttonLabels: [
+        {
+            name: "TQI Model"
+        },
+        {
+            name: "CONUS"
+        },
+        {
+            name: "Southeast"
+        }
+    ]},
 
     selectKnobs: [
         {
