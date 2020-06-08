@@ -124,9 +124,7 @@ var App = function App() {
   // TODO: change the defaultSettings to build everything off of index data
   return /*#__PURE__*/_react.default.createElement(_ShyftWx.default, {
     indexUrl: "https://wxchange-images.s3.us-east-2.amazonaws.com/index.json"
-  }, /*#__PURE__*/_react.default.createElement(_BaseWxViewer.default, {
-    defaultSettings: defaultViewerKnobs
-  }));
+  }, /*#__PURE__*/_react.default.createElement(_BaseWxViewer.default, null));
 };
 
 exports.App = App;

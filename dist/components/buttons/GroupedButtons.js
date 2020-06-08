@@ -34,14 +34,15 @@ var useStyles = (0, _core.makeStyles)(function (theme) {
       boxShadow: theme.shadows[3]
     },
     defaultButton: {
-      backgroundColor: '#f8f9fa',
+      backgroundColor: theme.palette.secondary.contrastText,
       '&:hover': {
-        backgroundColor: '#e9ecef'
+        backgroundColor: theme.palette.secondary.light
       }
     },
     selectedButton: {
       backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
+      color: theme.palette.secondary.contrastText,
+      fontWeight: 800,
       '&:hover': {
         backgroundColor: theme.palette.primary.dark,
         color: theme.palette.primary.contrastText
@@ -49,9 +50,15 @@ var useStyles = (0, _core.makeStyles)(function (theme) {
     }
   };
 });
+/**
+ * Uses Material UI to create a group of buttons labeled with the string
+ * values stored in the 'options' parameter
+ * 
+ * @param {Array[String]} options 
+ */
 
 var GroupedButtons = function GroupedButtons(_ref) {
-  var defaultSettings = _ref.defaultSettings;
+  var options = _ref.options;
   var classes = useStyles();
 
   var _useState = (0, _react.useState)(0),
@@ -65,15 +72,15 @@ var GroupedButtons = function GroupedButtons(_ref) {
 
   return /*#__PURE__*/_react.default.createElement(_core.ButtonGroup, {
     className: classes.root
-  }, defaultSettings.map(function (option, index) {
+  }, options.map(function (option, index) {
     return /*#__PURE__*/_react.default.createElement(_core.Button, {
-      key: index,
+      key: option,
       name: "group-button",
       onClick: function onClick() {
         return handleClick(index);
       },
       className: selected === index ? classes.selectedButton : classes.defaultButton
-    }, option.name);
+    }, option);
   }));
 };
 

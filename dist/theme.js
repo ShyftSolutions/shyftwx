@@ -17,10 +17,11 @@ var _default = (0, _core.createMuiTheme)({
       light: '#72c3fc',
       main: '#329af0',
       dark: '#1c7cd6',
-      contrastText: '#000000',
+      contrastText: '#f8f9fa',
       darkText: '#474545'
     },
     secondary: {
+      light: '#e9ecef',
       main: '#ff922b',
       dark: '#f76707',
       contrastText: '#f8f9fa'
@@ -33,7 +34,11 @@ var _default = (0, _core.createMuiTheme)({
     MuiListItem: {
       root: {
         "&$selected": {
-          color: '#868e96'
+          margin: 10,
+          backgroundColor: '#72c3fc',
+          '&:hover': {
+            backgroundColor: '#72c3fc'
+          }
         }
       }
     },

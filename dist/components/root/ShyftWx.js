@@ -85,7 +85,11 @@ var ShyftWx = function ShyftWx(_ref) {
     justify: "flex-end",
     alignItems: "flex-start",
     spacing: 3
-  }, children));
+  }, _react.Children.map(children, function (child) {
+    return /*#__PURE__*/(0, _react.cloneElement)(child, {
+      index: index
+    });
+  })));
 };
 
 exports.ShyftWx = ShyftWx;

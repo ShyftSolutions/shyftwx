@@ -25,7 +25,7 @@ var _default = {
   decoration: [_addonKnobs.withKnobs]
 };
 exports.default = _default;
-var defaultCategories = [{
+var defaultOptions = [{
   name: 'Surface',
   open: true,
   products: [{
@@ -58,7 +58,7 @@ var ProductMenu = function ProductMenu() {
   return /*#__PURE__*/_react.default.createElement(_core.MuiThemeProvider, {
     theme: _theme.default
   }, /*#__PURE__*/_react.default.createElement(_ProductMenu2.default, {
-    defaultCategories: (0, _addonKnobs.object)('Product Categories', defaultCategories)
+    defaultOptions: (0, _addonKnobs.object)('Product Categories', defaultOptions)
   }));
 };
 

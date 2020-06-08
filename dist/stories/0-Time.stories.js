@@ -32,7 +32,7 @@ var TimeControl = function TimeControl() {
 };
 
 exports.TimeControl = TimeControl;
-var defaultSliderKnobs = {
+var defaultSettings = {
   maxValue: 12,
   stepValue: 1,
   marks: [{
@@ -81,7 +81,7 @@ var Slider = function Slider() {
   return /*#__PURE__*/_react.default.createElement(_core.MuiThemeProvider, {
     theme: _theme.default
   }, /*#__PURE__*/_react.default.createElement(_Slider2.default, {
-    defaultSettings: (0, _addonKnobs.object)('Settings', defaultSliderKnobs)
+    settings: (0, _addonKnobs.object)('Settings', defaultSettings)
   }));
   ;
 };

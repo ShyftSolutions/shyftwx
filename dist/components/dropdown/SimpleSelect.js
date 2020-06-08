@@ -58,6 +58,12 @@ var useStyles = (0, _styles.makeStyles)(function (theme) {
     }
   };
 });
+/**
+ * Uses Material UI to create a dropdown menu option with
+ * the options of the String values in 'options'
+ * 
+ * @param {Array[String]} options
+ */
 
 function SimpleSelect(_ref) {
   var options = _ref.options;
@@ -84,14 +90,14 @@ function SimpleSelect(_ref) {
       select: classes.dropdown
     },
     id: "simple-select",
-    defaultValue: options[0].name,
+    defaultValue: options[0],
     onChange: handleChange
-  }, options.map(function (option, index) {
+  }, options.map(function (option) {
     return /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       color: "primary",
-      key: index,
+      key: option,
       className: classes.items,
-      value: option.name
-    }, option.name);
+      value: option
+    }, option);
   }))));
 }

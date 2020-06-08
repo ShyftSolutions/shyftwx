@@ -32,9 +32,11 @@ var useStyles = (0, _core.makeStyles)(function (theme) {
 });
 
 var BaseWxViewer = function BaseWxViewer(_ref) {
-  var layers = _ref.layers,
+  var index = _ref.index,
+      layers = _ref.layers,
       neBounds = _ref.neBounds,
       swBounds = _ref.swBounds;
+  console.log(index);
   var classes = useStyles();
   var bounds = (0, _leaflet.latLngBounds)(swBounds, neBounds);
   return /*#__PURE__*/_react.default.createElement(_core.Grid, {

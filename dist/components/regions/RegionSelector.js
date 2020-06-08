@@ -13,9 +13,13 @@ var _GroupedButtons = _interopRequireDefault(require("../buttons/GroupedButtons"
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Creates a Material UI Grid Item for the Region button group
+ * 
+ * @param {Array[String]} options 
+ */
 var RegionSelector = function RegionSelector(_ref) {
-  var defaultSettings = _ref.defaultSettings;
-  console.log(defaultSettings);
+  var options = _ref.options;
   return /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true,
     xs: 3
@@ -29,7 +33,7 @@ var RegionSelector = function RegionSelector(_ref) {
   }, "Region")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true
   }, /*#__PURE__*/_react.default.createElement(_GroupedButtons.default, {
-    defaultSettings: defaultSettings.buttonLabels
+    options: options
   }))));
 };
 

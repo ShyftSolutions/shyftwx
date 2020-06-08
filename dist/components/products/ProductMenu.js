@@ -55,8 +55,8 @@ var useStyles = (0, _core.makeStyles)(function (theme) {
     },
     nested: {
       paddingLeft: theme.spacing(4),
-      color: theme.palette.primary.contrastText,
-      width: '95%'
+      color: theme.palette.text.selected,
+      width: '98%'
     },
     icon: {},
     selectedIcon: {
@@ -64,9 +64,28 @@ var useStyles = (0, _core.makeStyles)(function (theme) {
     }
   };
 });
+/**
+ * Uses Material UI to create an accordian dropdown with main categories
+ * and subcategories. 'defaultOptions' should be an array of objects in the 
+ * form of:
+ * 
+ * {
+            name: STRING,
+            open: BOOLEAN,
+            products: [{
+                name: STRING,
+                icon: FAICON,
+            }, {
+                name: STRING,
+                icon: FAICON,
+            }]
+        },
+ * 
+ * @param {Array[Object]} defaultOptions 
+ */
 
 var ProductMenu = function ProductMenu(_ref) {
-  var defaultCategories = _ref.defaultCategories,
+  var defaultOptions = _ref.defaultOptions,
       onCategoryClick = _ref.onCategoryClick;
   var classes = useStyles();
 
@@ -75,7 +94,7 @@ var ProductMenu = function ProductMenu(_ref) {
       selectedProduct = _React$useState2[0],
       setSelectedProduct = _React$useState2[1];
 
-  var _React$useState3 = _react.default.useState(defaultCategories || []),
+  var _React$useState3 = _react.default.useState(defaultOptions || []),
       _React$useState4 = _slicedToArray(_React$useState3, 2),
       categories = _React$useState4[0],
       setCategories = _React$useState4[1];
@@ -117,8 +136,9 @@ var ProductMenu = function ProductMenu(_ref) {
     }, /*#__PURE__*/_react.default.createElement(_core.ListItemText, {
       disableTypography: true,
       primary: /*#__PURE__*/_react.default.createElement(_core.Typography, null, /*#__PURE__*/_react.default.createElement(_core.Box, {
-        fontWeight: "fontWeightBold",
+        fontWeight: 800,
         m: 1,
+        letterSpacing: 1,
         fontSize: 16
       }, cat.name))
     }), cat.open ? /*#__PURE__*/_react.default.createElement(_icons.ExpandLess, null) : /*#__PURE__*/_react.default.createElement(_icons.ExpandMore, null))), /*#__PURE__*/_react.default.createElement(_core.Collapse, {

@@ -23,21 +23,13 @@ var _default = {
   decoration: [_addonKnobs.withKnobs]
 };
 exports.default = _default;
-var defaultOptions = {
-  regionButtonKnobs: [{
-    name: "TQI Model"
-  }, {
-    name: "CONUS"
-  }, {
-    name: "Southeast"
-  }]
-};
+var defaultOptions = ["TQI Model", "CONUS", "Southeast"];
 
 var RegionSelector = function RegionSelector() {
   return /*#__PURE__*/_react.default.createElement(_core.MuiThemeProvider, {
     theme: _theme.default
   }, /*#__PURE__*/_react.default.createElement(_RegionSelector2.default, {
-    defaultSettings: (0, _addonKnobs.object)('Button Labels', defaultOptions)
+    options: (0, _addonKnobs.object)('Button Labels', defaultOptions)
   }));
 };
 

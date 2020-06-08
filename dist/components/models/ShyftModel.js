@@ -13,8 +13,14 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Creates a Material UI Grid Item for a Model and its button group
+ * 
+ * @param {Array[String]} options
+ */
 var ShyftModel = function ShyftModel(_ref) {
-  var defaultSettings = _ref.defaultSettings;
+  var options = _ref.options;
+  console.log(options);
   return /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true,
     xs: 3
@@ -28,7 +34,7 @@ var ShyftModel = function ShyftModel(_ref) {
   }, "Model")), /*#__PURE__*/_react.default.createElement(_core.Grid, {
     item: true
   }, /*#__PURE__*/_react.default.createElement(_GroupedButtons.default, {
-    defaultSettings: defaultSettings.buttonLabels
+    options: options
   }))));
 };
 

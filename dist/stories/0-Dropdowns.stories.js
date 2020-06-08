@@ -23,21 +23,13 @@ var _default = {
   decorators: [_react.withKnobs]
 };
 exports.default = _default;
-var defaultSelectKnobs = [{
-  name: "2020-05-27T 12:00:00Z"
-}, {
-  name: "2020-05-27T 06:00:00Z"
-}, {
-  name: "2020-05-27T 11:00:00Z"
-}, {
-  name: "2020-05-27T 02:00:00Z"
-}];
+var defaultOptions = ["2020-05-27T 02:00:00Z", "2020-05-27T 06:00:00Z", "2020-05-27T 11:00:00Z", "2020-05-27T 12:00:00Z"];
 
 var SimpleSelect = function SimpleSelect() {
   return /*#__PURE__*/_react2.default.createElement(_core.MuiThemeProvider, {
     theme: _theme.default
   }, /*#__PURE__*/_react2.default.createElement(_SimpleSelect2.default, {
-    defaultSettings: (0, _react.object)('Select Options', defaultSelectKnobs)
+    options: (0, _react.object)('Select Options', defaultOptions)
   }));
 };
 

@@ -77,7 +77,7 @@ function ValueLabelComponent(props) {
 }
 
 var DiscreteSlider = function DiscreteSlider(_ref) {
-  var defaultSettings = _ref.defaultSettings;
+  var settings = _ref.settings;
   var classes = useStyles();
   return /*#__PURE__*/_react.default.createElement("div", {
     className: classes.root
@@ -86,10 +86,10 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     valueLabelDisplay: "auto",
     "aria-label": "pretto slider",
     track: false,
-    step: defaultSettings.stepValue,
-    marks: defaultSettings.marks,
-    defaultValue: defaultSettings.marks[0].value,
-    max: defaultSettings.maxValue,
+    step: settings.stepValue,
+    marks: settings.marks,
+    defaultValue: settings.marks[0].value,
+    max: settings.maxValue,
     ValueLabelComponent: ValueLabelComponent
   }));
 };

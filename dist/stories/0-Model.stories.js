@@ -19,26 +19,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _default = {
   component: _ShyftModel2.default,
-  title: 'Buttons',
+  title: 'Model',
   decorators: [_addonKnobs.withKnobs]
 };
 exports.default = _default;
-var modelButtonKnobs = {
-  label: "Model",
-  buttonLabels: [{
-    name: "TQI Model"
-  }, {
-    name: "GFS"
-  }, {
-    name: "HRRR"
-  }]
-};
+var defaultOptions = ["TQI Model", "GFS", "HRRR"];
 
 var ShyftModel = function ShyftModel() {
   return /*#__PURE__*/_react.default.createElement(_core.MuiThemeProvider, {
     theme: _theme.default
   }, /*#__PURE__*/_react.default.createElement(_ShyftModel2.default, {
-    defaultSettings: (0, _addonKnobs.object)('Settings', modelButtonKnobs)
+    options: (0, _addonKnobs.object)('Settings', defaultOptions)
   }));
 };
 
