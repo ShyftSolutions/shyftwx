@@ -24,11 +24,11 @@ export default createMuiTheme({
         MuiListItem: {
             root: {
                 "&$selected": {
-                    margin: 10,
-                    backgroundColor: '#72c3fc',
+                    backgroundColor: '#E9ECEF',
                     '&:hover': {
-                        backgroundColor: '#72c3fc'
-                    }
+                        backgroundColor: '#E9ECEF'
+                    },
+                    color: '#868e96'
                 },
             },
         },

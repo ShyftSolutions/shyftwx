@@ -7,36 +7,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        maxWidth: 300,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[3],
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(1.5),
-    },
-    paper: {
-        width: '95%',
-        backgroundColor: theme.palette.primary.main,
+        maxWidth: 300
     },
     category: {
         color: theme.palette.primary.contrastText,
+        backgroundColor: theme.palette.primary.main
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.text.selected,
-        width: '98%',
+        color: theme.palette.primary.darkText,
     },
     icon: {},
     selectedIcon: {
-        color: theme.palette.text.selected,
-    },
+        color: theme.palette.selected.text,
+    }
 }));
 
 /**
  * Uses Material UI to create an accordian dropdown with main categories
- * and subcategories. 'defaultOptions' should be an array of objects in the 
+ * and subcategories. 'defaultOptions' should be an array of objects in the
  * form of:
- * 
+ *
  * {
             name: STRING,
             open: BOOLEAN,
@@ -48,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
                 icon: FAICON,
             }]
         },
- * 
- * @param {Array[Object]} defaultOptions 
+ *
+ * @param {Array[Object]} defaultOptions
  */
 export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
     const classes = useStyles();
@@ -67,7 +58,7 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
             }
             return {
                 ...item,
-                open: !cat.open,
+                open: !cat.open
             };
         });
 
@@ -82,8 +73,8 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
         <div className={classes.root}>
             {categories.map((cat, index) => (
                 <List key={index}>
-                    <Paper className={classes.paper}>
-                        <ListItem button className={classes.category} onClick={() => handleClick(cat)}>
+                    <Paper className={classes.category}>
+                        <ListItem button onClick={() => handleClick(cat)}>
                             <ListItemText
                                 disableTypography
                                 primary={
@@ -94,32 +85,33 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
                                     </Typography>
                                 }
                             />
-                            {cat.open ? <ExpandLess /> : <ExpandMore />}
+                            {cat.open ? <ExpandLess/> : <ExpandMore/>}
                         </ListItem>
                     </Paper>
-
-                    <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                        {cat.products.map((product) => (
-                            <ListItem
-                                button
-                                className={classes.nested}
-                                selected={selectedProduct === cat.name + ' ' + product.name}
-                                onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}
-                            >
-                                <ListItemIcon>
-                                    <FontAwesomeIcon
-                                        className={
-                                            selectedProduct === cat.name + ' ' + product.name
-                                                ? classes.selectedIcon
-                                                : classes.icon
-                                        }
-                                        icon={product.icon}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText primary={product.name} />
-                            </ListItem>
-                        ))}
-                    </Collapse>
+                    <Paper>
+                        <Collapse in={cat.open} timeout="auto" unmountOnExit>
+                            {cat.products.map((product) => (
+                                <ListItem
+                                    button
+                                    className={classes.nested}
+                                    selected={selectedProduct === cat.name + ' ' + product.name}
+                                    onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}
+                                >
+                                    <ListItemIcon>
+                                        <FontAwesomeIcon
+                                            className={
+                                                selectedProduct === cat.name + ' ' + product.name
+                                                    ? classes.selectedIcon
+                                                    : classes.icon
+                                            }
+                                            icon={product.icon}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary={product.name}/>
+                                </ListItem>
+                            ))}
+                        </Collapse>
+                    </Paper>
                 </List>
             ))}
         </div>
