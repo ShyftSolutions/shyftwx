@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import SimpleSelect from 'components/dropdown/SimpleSelect';
+import SimpleSelect from 'components/dropdown/SimpleSelect.tsx';
 
 export const RunDropdown = ({ options }) => {
     return (

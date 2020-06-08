@@ -27,21 +27,21 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Uses Material UI to create a group of buttons labeled with the string
  * values stored in the 'options' parameter
- * 
- * @param {Array[String]} options 
+ *
+ * @param {Array[String]} options
  */
 export const GroupedButtons = ({ options }) => {
     const classes = useStyles();
 
     const [selected, setSelected] = useState(0);
 
-    const handleClick = (index) => {
+    const handleClick = (index: number) => {
         setSelected(index);
     }
 
     return (
         <ButtonGroup className={classes.root}>
-            {options.map((option, index) => (
+            {options.map((option: string, index: number) => (
                 <Button
                     key={option}
                     name='group-button'

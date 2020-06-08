@@ -1,4 +1,4 @@
-import _SimpleSelect from 'components/dropdown/SimpleSelect';
+import _SimpleSelect from 'components/dropdown/SimpleSelect.tsx';
 import { object, withKnobs } from '@storybook/addon-knobs/react';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';

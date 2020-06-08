@@ -48,7 +48,7 @@ function ValueLabelComponent(props) {
 
     const LightTooltip = withStyles((theme) => ({
         tooltip: {
-            backgroundColor: theme.palette.primary.darkText,
+            backgroundColor: theme.palette.primary.main,
             color: theme.palette.secondary.contrastText,
             boxShadow: theme.shadows[1],
             fontSize: 16,
@@ -71,7 +71,7 @@ export const DiscreteSlider = ({ settings }) => {
             <Slider
                 classes={classes}
                 valueLabelDisplay="auto"
-                aria-label="pretto slider"
+                aria-label="pretty slider"
                 track={false}
                 step={settings.stepValue}
                 marks={settings.marks}

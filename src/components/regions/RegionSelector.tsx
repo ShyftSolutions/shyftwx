@@ -7,7 +7,7 @@ import GroupedButtons from '../buttons/GroupedButtons.tsx';
  * 
  * @param {Array[String]} options 
  */
-export const RegionSelector = ({ options }) => {
+export const RegionSelector = ({ options}) => {
     return (
         <Grid item xs={3}>
             {/* Region Grid Container */}

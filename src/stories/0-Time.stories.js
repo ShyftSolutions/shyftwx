@@ -1,5 +1,5 @@
-import _TimeControl from 'components/time/TimeControl.jsx';
-import _Slider from 'components/time/Slider.jsx'
+import _TimeControl from 'components/time/TimeControl.tsx';
+import _Slider from 'components/time/Slider.tsx'
 import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';

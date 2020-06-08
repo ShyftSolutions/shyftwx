@@ -52,7 +52,7 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
             onCategoryClick(cat);
         }
 
-        const newCategories = categories.map((item, index) => {
+        const newCategories = categories.map((item, index: number) => {
             if (item !== cat) {
                 return item;
             }
@@ -65,13 +65,13 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
         setCategories(newCategories);
     };
 
-    const handleListItemClick = (event, product) => {
+    const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product) => {
         setSelectedProduct(product);
     };
 
     return (
         <div className={classes.root}>
-            {categories.map((cat, index) => (
+            {categories.map((cat, index: number) => (
                 <List key={index}>
                     <Paper className={classes.category}>
                         <ListItem button onClick={() => handleClick(cat)}>
@@ -90,7 +90,7 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
                     </Paper>
                     <Paper>
                         <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {cat.products.map((product) => (
+                            {cat.products.map((product: {name: String, icon: String}) => (
                                 <ListItem
                                     button
                                     className={classes.nested}
