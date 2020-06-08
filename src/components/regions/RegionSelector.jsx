@@ -2,8 +2,12 @@ import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import GroupedButtons from '../buttons/GroupedButtons';
 
-
-export const RegionSelector = ({defaultSettings}) => {
+/**
+ * Creates a Material UI Grid Item for the Region button group
+ * 
+ * @param {Array[String]} options 
+ */
+export const RegionSelector = ({ options }) => {
     console.log(defaultSettings);
     return (
         <Grid item xs={3}>
@@ -13,7 +17,7 @@ export const RegionSelector = ({defaultSettings}) => {
                     <Typography variant='h6'>Region</Typography>
                 </Grid>
                 <Grid item>
-                    <GroupedButtons defaultSettings={defaultSettings.buttonLabels}></GroupedButtons>
+                    <GroupedButtons options={options}></GroupedButtons>
                 </Grid>
             </Grid>
         </Grid>

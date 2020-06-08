@@ -26,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/**
+ * Uses Material UI to create a dropdown menu option with
+ * the options of the String values in 'options'
+ * 
+ * @param {Array[String]} options
+ */
 export default function SimpleSelect({ options }) {
     const classes = useStyles();
     const [state, setState] = React.useState({
@@ -48,11 +54,11 @@ export default function SimpleSelect({ options }) {
                 <Select
                     classes={{select: classes.dropdown}}
                     id='simple-select'
-                    defaultValue={options[0].name}
+                    defaultValue={options[0]}
                     onChange={handleChange}
                 >
-                    {options.map((option, index) => (
-                        <MenuItem color="primary" key={index} className={classes.items} value={option.name}>{option.name}</MenuItem>
+                    {options.map(option => (
+                        <MenuItem color="primary" key={option} className={classes.items} value={option}>{option}</MenuItem>
                     ))}
 
                 </Select>
