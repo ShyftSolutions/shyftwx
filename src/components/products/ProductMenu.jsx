@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.primary.contrastText,
-        width: '95%',
+        color: theme.palette.text.selected,
+        width: '98%',
     },
     icon: {},
     selectedIcon: {
@@ -88,7 +88,7 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
                                 disableTypography
                                 primary={
                                     <Typography>
-                                        <Box fontWeight="fontWeightBold" m={1} fontSize={16}>
+                                        <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
                                             {cat.name}
                                         </Box>
                                     </Typography>

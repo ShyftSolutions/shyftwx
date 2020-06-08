@@ -7,14 +7,15 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[3]
     },
     defaultButton: {
-        backgroundColor: '#f8f9fa',
+        backgroundColor: theme.palette.secondary.contrastText,
         '&:hover': {
-            backgroundColor: '#e9ecef'
+            backgroundColor: theme.palette.secondary.light,
         }
     },
     selectedButton: {
         backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
+        color: theme.palette.secondary.contrastText,
+        fontWeight: 800,
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
             color: theme.palette.primary.contrastText,
