@@ -6,28 +6,16 @@ import { MuiThemeProvider } from '@material-ui/core';
 
 export default {
     component: _ShyftModel,
-    title: 'Buttons',
+    title: 'Model',
     decorators: [withKnobs]
 };
 
-const modelButtonKnobs ={
-    label: "Model",
-    buttonLabels: [
-    {
-        name: "TQI Model"
-    },
-    {
-        name: "GFS"
-    },
-    {
-        name: "HRRR"
-    }
-]};
+const defaultOptions = ["TQI Model", "GFS", "HRRR"]
 
 export const ShyftModel = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_ShyftModel defaultSettings={object('Settings', modelButtonKnobs)} />
+            <_ShyftModel options={object('Settings', defaultOptions)} />
         </MuiThemeProvider>
     );
 };

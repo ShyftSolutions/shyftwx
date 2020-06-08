@@ -10,25 +10,12 @@ export default {
     decorators: [withKnobs]
 };
 
-const defaultSelectKnobs = [
-    {
-        name: "2020-05-27T 12:00:00Z"
-    },
-    {
-        name: "2020-05-27T 06:00:00Z"
-    },
-    {
-        name: "2020-05-27T 11:00:00Z"
-    },
-    {
-        name: "2020-05-27T 02:00:00Z"
-    }
-];
+const defaultOptions = ["2020-05-27T 02:00:00Z", "2020-05-27T 06:00:00Z", "2020-05-27T 11:00:00Z", "2020-05-27T 12:00:00Z"];
 
 export const SimpleSelect = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_SimpleSelect defaultSettings={object('Select Options', defaultSelectKnobs)} />
+            <_SimpleSelect options={object('Select Options', defaultOptions)} />
         </MuiThemeProvider>
     );
 };

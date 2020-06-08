@@ -10,24 +10,12 @@ export default {
     decoration: [withKnobs]
 };
 
-const defaultOptions = {
-    regionButtonKnobs: [
-        {
-            name: "TQI Model"
-        },
-        {
-            name: "CONUS"
-        },
-        {
-            name: "Southeast"
-        }
-    ],
-}
+const defaultOptions = ["TQI Model", "CONUS", "Southeast"]
 
 export const RegionSelector = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_RegionSelector defaultSettings={object('Button Labels', defaultOptions)} />
+            <_RegionSelector options={object('Button Labels', defaultOptions)} />
         </MuiThemeProvider>
     )
 };

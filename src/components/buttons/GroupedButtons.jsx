@@ -40,7 +40,7 @@ export const GroupedButtons = ({ options }) => {
 
     return (
         <ButtonGroup className={classes.root}>
-            {options.map(option => (
+            {options.map((option, index) => (
                 <Button
                     key={option}
                     name='group-button'

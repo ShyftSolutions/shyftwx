@@ -8,6 +8,7 @@ import React from 'react';
  * @param {Array[String]} options
  */
 export const ShyftModel = ({ options }) => {
+    console.log(options);
     return (
         <Grid item xs={3}>
             {/* Region Grid Container */}

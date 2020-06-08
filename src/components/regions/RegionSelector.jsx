@@ -8,7 +8,6 @@ import GroupedButtons from '../buttons/GroupedButtons';
  * @param {Array[String]} options 
  */
 export const RegionSelector = ({ options }) => {
-    console.log(defaultSettings);
     return (
         <Grid item xs={3}>
             {/* Region Grid Container */}

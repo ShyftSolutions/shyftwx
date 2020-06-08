@@ -11,7 +11,7 @@ export default {
     decoration: [withKnobs]
 };
 
-const defaultCategories = [
+const defaultOptions = [
     {
         name: 'Surface',
         open: true,
@@ -49,7 +49,7 @@ export const ProductMenu = () => {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <_ProductMenu defaultCategories={object('Product Categories', defaultCategories)} />
+            <_ProductMenu defaultOptions={object('Product Categories', defaultOptions)} />
         </MuiThemeProvider>
     );
 };

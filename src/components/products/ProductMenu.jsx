@@ -32,10 +32,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const ProductMenu = ({ defaultCategories, onCategoryClick }) => {
+/**
+ * Uses Material UI to create an accordian dropdown with main categories
+ * and subcategories. 'defaultOptions' should be an array of objects in the 
+ * form of:
+ * 
+ * {
+            name: STRING,
+            open: BOOLEAN,
+            products: [{
+                name: STRING,
+                icon: FAICON,
+            }, {
+                name: STRING,
+                icon: FAICON,
+            }]
+        },
+ * 
+ * @param {Array[Object]} defaultOptions 
+ */
+export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
     const classes = useStyles();
     const [selectedProduct, setSelectedProduct] = React.useState();
-    const [categories, setCategories] = React.useState(defaultCategories || []);
+    const [categories, setCategories] = React.useState(defaultOptions || []);
 
     const handleClick = (cat) => {
         if (onCategoryClick) {
