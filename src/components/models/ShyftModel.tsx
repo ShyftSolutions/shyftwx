@@ -1,19 +1,20 @@
 import { Grid, Typography } from '@material-ui/core';
+import GroupedButtons from '../buttons/GroupedButtons.tsx';
 import React from 'react';
-import GroupedButtons from '../buttons/GroupedButtons';
 
 /**
- * Creates a Material UI Grid Item for the Region button group
+ * Creates a Material UI Grid Item for a Model and its button group
  * 
- * @param {Array[String]} options 
+ * @param {Array[String]} options
  */
-export const RegionSelector = ({ options }) => {
+export const ShyftModel = ({ options }) => {
+    console.log(options);
     return (
         <Grid item xs={3}>
             {/* Region Grid Container */}
             <Grid container direction="column">
                 <Grid item>
-                    <Typography variant='h6'>Region</Typography>
+                    <Typography variant='h6'>Model</Typography>
                 </Grid>
                 <Grid item>
                     <GroupedButtons options={options}></GroupedButtons>
@@ -23,4 +24,4 @@ export const RegionSelector = ({ options }) => {
     );
 }
 
-export default RegionSelector;
+export default ShyftModel;

@@ -1,4 +1,4 @@
-import _ShyftModel from 'components/models/ShyftModel';
+import _ShyftModel from 'components/models/ShyftModel.tsx';
 import React from 'react';
 import { object, withKnobs } from '@storybook/addon-knobs';
 import theme from 'theme.js';

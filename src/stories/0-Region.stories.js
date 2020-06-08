@@ -1,4 +1,4 @@
-import _RegionSelector from 'components/regions/RegionSelector';
+import _RegionSelector from 'components/regions/RegionSelector.tsx';
 import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
