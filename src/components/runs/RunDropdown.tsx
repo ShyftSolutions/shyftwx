@@ -1,8 +1,10 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import SimpleSelect from 'components/dropdown/SimpleSelect.tsx';
+import SimpleSelect from '../dropdown/SimpleSelect';
 
-export const RunDropdown = ({ options }) => {
+export const RunDropdown = ( Props: {options : string[]}) => {
+    const { options } = Props;
+
     return (
         <Grid item xs={3}>
             <Grid container direction="column">
@@ -10,7 +12,7 @@ export const RunDropdown = ({ options }) => {
                     <Typography variant="h6">Model Run</Typography>
                 </Grid>
                 <Grid item>
-                    <SimpleSelect options={options}></SimpleSelect>
+                    <SimpleSelect options={options}/>
                 </Grid>
             </Grid>
         </Grid>

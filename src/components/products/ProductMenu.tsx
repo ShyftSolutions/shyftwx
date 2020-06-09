@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon, Typography, Box } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,13 +16,24 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.primary.darkText,
+        color: theme.palette.secondary.contrastText,
     },
     icon: {},
     selectedIcon: {
-        color: theme.palette.selected.text,
+        color: theme.palette.secondary.dark,
     }
 }));
+
+interface Category {
+    name: string,
+    open: boolean,
+    products: Product[]
+}
+
+interface Product {
+    name: string,
+    icon: IconProp,
+}
 
 /**
  * Uses Material UI to create an accordian dropdown with main categories
@@ -40,19 +52,18 @@ const useStyles = makeStyles((theme) => ({
             }]
         },
  *
- * @param {Array[Object]} defaultOptions
+ * @param Props: {options: string[]}
  */
-export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
+export const ProductMenu = (Props: {options: Category[]}) => {
     const classes = useStyles();
-    const [selectedProduct, setSelectedProduct] = React.useState();
-    const [categories, setCategories] = React.useState(defaultOptions || []);
+    const { options } = Props;
 
-    const handleClick = (cat) => {
-        if (onCategoryClick) {
-            onCategoryClick(cat);
-        }
+    const [selectedProduct, setSelectedProduct] = React.useState("");
+    const [categories, setCategories] = React.useState(options || []);
 
-        const newCategories = categories.map((item, index: number) => {
+    const handleClick = (cat: Category) => {
+
+        const newCategories = categories.map((item: Category) => {
             if (item !== cat) {
                 return item;
             }
@@ -65,13 +76,13 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
         setCategories(newCategories);
     };
 
-    const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product) => {
+    const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product: string) => {
         setSelectedProduct(product);
     };
 
     return (
         <div className={classes.root}>
-            {categories.map((cat, index: number) => (
+            {categories.map((cat: Category, index: number) => (
                 <List key={index}>
                     <Paper className={classes.category}>
                         <ListItem button onClick={() => handleClick(cat)}>
@@ -90,7 +101,7 @@ export const ProductMenu = ({ defaultOptions, onCategoryClick }) => {
                     </Paper>
                     <Paper>
                         <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {cat.products.map((product: {name: String, icon: String}) => (
+                            {cat.products.map((product: Product) => (
                                 <ListItem
                                     button
                                     className={classes.nested}

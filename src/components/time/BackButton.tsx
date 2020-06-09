@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '35px',
         minHeight: '30px',
         variant: 'contained',
-        color: theme.palette.secondary.contrastText,
         backgroundColor: theme.palette.primary.dark,
         boxShadow: theme.shadows[3],
         '&:hover': {
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         ariaLabel: "back",
     },
     icon: {
-        color: theme.palette.secondary.contrastText
+        color: theme.palette.primary.contrastText
     }
 }))
 

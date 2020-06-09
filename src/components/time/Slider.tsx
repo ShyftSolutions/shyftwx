@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     thumb: {
         height: 24,
         width: 24,
-        backgroundColor: theme.palette.secondary.contrastText,
+        backgroundColor: theme.palette.primary.contrastText,
         border: '2px solid currentColor',
         marginTop: -8,
         marginLeft: -12,
@@ -50,7 +50,7 @@ function ValueLabelComponent(Props: { children: any; value: number; }) {
     const LightTooltip = withStyles((theme) => ({
         tooltip: {
             backgroundColor: theme.palette.primary.main,
-            color: theme.palette.secondary.contrastText,
+            color: theme.palette.primary.contrastText,
             boxShadow: theme.shadows[1],
             fontSize: 16,
         },

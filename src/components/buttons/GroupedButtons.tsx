@@ -7,14 +7,14 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[3]
     },
     defaultButton: {
-        backgroundColor: theme.palette.secondary.contrastText,
+        backgroundColor: theme.palette.primary.contrastText,
         '&:hover': {
             backgroundColor: theme.palette.secondary.light,
         }
     },
     selectedButton: {
         backgroundColor: theme.palette.primary.main,
-        color: theme.palette.secondary.contrastText,
+        color: theme.palette.primary.contrastText,
         fontWeight: 800,
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
@@ -28,10 +28,11 @@ const useStyles = makeStyles((theme) => ({
  * Uses Material UI to create a group of buttons labeled with the string
  * values stored in the 'options' parameter
  *
- * @param {Array[String]} options
+ * @param Props: { options: string[]}
  */
-export const GroupedButtons = ({ options }) => {
+export const GroupedButtons = (Props: { options: string[]}) => {
     const classes = useStyles();
+    const { options } = Props;
 
     const [selected, setSelected] = useState(options[0]);
 

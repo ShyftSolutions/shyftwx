@@ -7,21 +7,21 @@ const useStyles = makeStyles((theme) => ({
     play: {
         label: 'play',
         boxShadow: theme.shadows[3],
-        background: theme.palette.primary.darkText,
+        background: theme.palette.secondary.dark,
         '&:hover': {
-            background: theme.palette.primary.darkText,
+            background: theme.palette.secondary.dark,
         }
     },
     pause: {
         label: 'pause',
         boxShadow: theme.shadows[3],
-        background: theme.palette.primary.darkText,
+        background: theme.palette.secondary.dark,
         '&:hover': {
-            background: theme.palette.primary.darkText,
+            background: theme.palette.secondary.dark,
         }
     },
     icon: {
-        color: theme.palette.secondary.contrastText
+        color: theme.palette.primary.contrastText
     }
 }));
 

@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
         align: 'center'
     },
     dropdown: {
-        background: theme.palette.secondary.contrastText,
+        background: theme.palette.primary.contrastText,
     },
     items: {
-        background: theme.palette.secondary.contrastText,
+        background: theme.palette.primary.contrastText,
         '&:hover': {
             background: theme.palette.primary.main,
         }
@@ -29,18 +29,20 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Uses Material UI to create a dropdown menu option with
  * the options of the String values in 'options'
- * 
- * @param {Array[String]} options
+ *
+ * @param Props: {options: string[]}
  */
-export default function SimpleSelect({ options }) {
+export default function SimpleSelect(Props: {options: string[]}) {
     const classes = useStyles();
+    const { options } = Props;
+
     const [state, setState] = React.useState({
         modelRun: {},
         name: 'Selector',
     });
 
-    const handleChange = (event) => {
-        const name = event.target.name;
+    const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+        const name = event.target.name as keyof typeof state;
         setState({
             ...state,
             [name]: event.target.value,
@@ -57,7 +59,7 @@ export default function SimpleSelect({ options }) {
                     defaultValue={options[0]}
                     onChange={handleChange}
                 >
-                    {options.map(option => (
+                    {options.map((option: string) => (
                         <MenuItem color="primary" key={option} className={classes.items} value={option}>{option}</MenuItem>
                     ))}
 
