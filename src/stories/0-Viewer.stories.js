@@ -159,7 +159,7 @@ const defaultViewerKnobs = {
 export const BaseWxViewer = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_BaseWxViewer defaultSettings={object('Settings', defaultViewerKnobs)} />
+            <_BaseWxViewer neBounds={object('neBounds', [49.38, -129.17])} swBounds={object('swBounds', [23.81, -65.69])}/>
         </MuiThemeProvider>
     );
 }
