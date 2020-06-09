@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
+
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ValueLabelComponent(props) {
-    const { children, value } = props;
+function ValueLabelComponent(Props: { children: any; value: number; }) {
+    const { children, value } = Props;
 
     const LightTooltip = withStyles((theme) => ({
         tooltip: {
@@ -64,8 +65,14 @@ function ValueLabelComponent(props) {
     );
 }
 
-export const DiscreteSlider = ({ settings }) => {
+
+export const DiscreteSlider = (Props: { options: any }) => {
+    const{options} = Props;
     const classes = useStyles();
+    const stepValue: number = options[1].value - options[0].value;
+    const defaultValue: number = options[0].value;
+    const maxValue: number = options[options.length - 1].value;
+
     return (
         <div className={classes.root}>
             <Slider
@@ -73,10 +80,10 @@ export const DiscreteSlider = ({ settings }) => {
                 valueLabelDisplay="auto"
                 aria-label="pretty slider"
                 track={false}
-                step={settings.stepValue}
-                marks={settings.marks}
-                defaultValue={settings.marks[0].value}
-                max={settings.maxValue}
+                step={stepValue}
+                marks={options}
+                defaultValue={defaultValue}
+                max={maxValue}
                 ValueLabelComponent={ValueLabelComponent}
             />
         </div>

@@ -18,10 +18,7 @@ export const TimeControl = () => {
     );
 };
 
-const defaultSettings = {
-    maxValue: 12,
-    stepValue: 1,
-    marks: [
+const defaultSettings = [
         {
             value: 0,
             label: '0H',
@@ -74,15 +71,13 @@ const defaultSettings = {
             value: 12,
             label: '12H',
         }
-    ]
-
-};
+    ];
 
 export const Slider = () => {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <_Slider settings={object('Settings', defaultSettings)} />
+            <_Slider options={object('Settings', defaultSettings)} />
         </MuiThemeProvider>
     );;
 };
