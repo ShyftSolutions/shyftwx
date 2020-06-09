@@ -33,20 +33,21 @@ const useStyles = makeStyles((theme) => ({
 export const GroupedButtons = ({ options }) => {
     const classes = useStyles();
 
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState(options[0]);
 
-    const handleClick = (index: number) => {
+    const handleClick = (index: string) => {
         setSelected(index);
+        alert("You clicked the button that says " + index);
     }
 
     return (
         <ButtonGroup className={classes.root}>
-            {options.map((option: string, index: number) => (
+            {options.map((option: string) => (
                 <Button
                     key={option}
                     name='group-button'
-                    onClick={() => handleClick(index)}
-                    className={selected === index ? classes.selectedButton : classes.defaultButton}
+                    onClick={() => handleClick(option)}
+                    className={selected === option ? classes.selectedButton : classes.defaultButton}
                 >{option}</Button>
             ))}
         </ButtonGroup>
