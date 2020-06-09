@@ -2,7 +2,7 @@ import { object, withKnobs } from '@storybook/addon-knobs';
 import _BaseWxViewer from 'components/viewers/BaseWxViewer';
 import _DynamicWxViewer from 'components/viewers/DynamicWxViewer';
 import _StaticWxViewer from 'components/viewers/StaticWxViewer';
-import _WxViewer from 'components/viewers/WxViewer';
+import _WxViewer from '../components/viewers/WxViewer';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import theme from 'theme.js';

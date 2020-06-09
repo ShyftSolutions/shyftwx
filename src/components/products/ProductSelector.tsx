@@ -14,8 +14,9 @@ interface Product {
     icon: IconProp,
 }
 
-export const ProductSelector = (Props: {options: Category[] } ) => {
+export const ProductSelector = (Props: {options: Category[], action: Function } ) => {
     const { options } = Props;
+    const { action } = Props;
 
     return (
         <Grid item xs={3}>
@@ -24,7 +25,7 @@ export const ProductSelector = (Props: {options: Category[] } ) => {
                     <Typography variant="h6">Products</Typography>
                 </Grid>
                 <Grid item>
-                    <ProductMenu options={options} />
+                    <ProductMenu options={options} action={action} />
                 </Grid>
             </Grid>
         </Grid>

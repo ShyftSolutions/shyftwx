@@ -32,9 +32,10 @@ const useStyles = makeStyles((theme) => ({
  *
  * @param Props: {options: string[]}
  */
-export default function SimpleSelect(Props: {options: string[]}) {
+export default function SimpleSelect(Props: {options: string[], action: Function}) {
     const classes = useStyles();
     const { options } = Props;
+    const { action } = Props;
 
     const [state, setState] = React.useState({
         modelRun: {},
@@ -47,6 +48,7 @@ export default function SimpleSelect(Props: {options: string[]}) {
             ...state,
             [name]: event.target.value,
         });
+        action(event.target.value);
     };
 
 

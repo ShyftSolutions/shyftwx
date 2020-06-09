@@ -32,7 +32,7 @@ interface Category {
 
 interface Product {
     name: string,
-    icon: IconProp,
+    icon?: IconProp,
 }
 
 /**
@@ -54,9 +54,10 @@ interface Product {
  *
  * @param Props: {options: string[]}
  */
-export const ProductMenu = (Props: {options: Category[]}) => {
+export const ProductMenu = (Props: {options: Category[], action: Function}) => {
     const classes = useStyles();
     const { options } = Props;
+    const { action } = Props;
 
     const [selectedProduct, setSelectedProduct] = React.useState("");
     const [categories, setCategories] = React.useState(options || []);
@@ -78,6 +79,7 @@ export const ProductMenu = (Props: {options: Category[]}) => {
 
     const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product: string) => {
         setSelectedProduct(product);
+        action(product);
     };
 
     return (
@@ -109,14 +111,16 @@ export const ProductMenu = (Props: {options: Category[]}) => {
                                     onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}
                                 >
                                     <ListItemIcon>
-                                        <FontAwesomeIcon
-                                            className={
-                                                selectedProduct === cat.name + ' ' + product.name
-                                                    ? classes.selectedIcon
-                                                    : classes.icon
-                                            }
-                                            icon={product.icon}
-                                        />
+                                        {product.icon != undefined &&
+                                            <FontAwesomeIcon
+                                                className={
+                                                    selectedProduct === cat.name + ' ' + product.name
+                                                        ? classes.selectedIcon
+                                                        : classes.icon
+                                                }
+                                                icon={product.icon}
+                                            />
+                                        }
                                     </ListItemIcon>
                                     <ListItemText primary={product.name}/>
                                 </ListItem>
