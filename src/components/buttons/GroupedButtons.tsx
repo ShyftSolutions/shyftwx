@@ -1,6 +1,5 @@
-import { makeStyles, ButtonGroup, Button } from '@material-ui/core';
+import { makeStyles, ButtonGroup, Button, BottomNavigationAction } from '@material-ui/core';
 import React, { useState } from 'react';
-
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: 0,
@@ -21,26 +20,22 @@ const useStyles = makeStyles((theme) => ({
             color: theme.palette.primary.contrastText,
         }
     }
-
 }));
-
 /**
  * Uses Material UI to create a group of buttons labeled with the string
  * values stored in the 'options' parameter
  *
  * @param Props: { options: string[]}
  */
-export const GroupedButtons = (Props: { options: string[]}) => {
+export const GroupedButtons = (Props: { options: string[], action: any}) => {
     const classes = useStyles();
-    const { options } = Props;
-
+    const { options, action } = Props;
     const [selected, setSelected] = useState(options[0]);
-
+    
     const handleClick = (index: string) => {
         setSelected(index);
-        alert("You clicked the button that says " + index);
+        action(index);
     }
-
     return (
         <ButtonGroup className={classes.root}>
             {options.map((option: string) => (
@@ -54,5 +49,4 @@ export const GroupedButtons = (Props: { options: string[]}) => {
         </ButtonGroup>
     );
 };
-
 export default GroupedButtons;
