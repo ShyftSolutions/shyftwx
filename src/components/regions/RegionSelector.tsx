@@ -10,6 +10,10 @@ import GroupedButtons from '../buttons/GroupedButtons';
 export const RegionSelector = ( Props: { options: string[]}) => {
     const { options } = Props;
 
+    const handleClick = (index: string) => {
+        console.log(`clicked ${index}`)
+    }
+
     return (
         <Grid item xs={3}>
             {/* Region Grid Container */}
@@ -18,7 +22,7 @@ export const RegionSelector = ( Props: { options: string[]}) => {
                     <Typography variant='h6'>Region</Typography>
                 </Grid>
                 <Grid item>
-                    <GroupedButtons options={options} />
+                    <GroupedButtons options={options} action={handleClick} />
                 </Grid>
             </Grid>
         </Grid>

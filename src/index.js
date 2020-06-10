@@ -9,7 +9,7 @@ import Slider from './components/time/Slider';
 import StartStopButton from './components/time/StartStopButton';
 import TimeControl from './components/time/TimeControl';
 import ShyftWx from './components/root/ShyftWx';
-import theme from './components/theme';
+import theme from './theme';
 import * as apis from './apis';
 
 export {
