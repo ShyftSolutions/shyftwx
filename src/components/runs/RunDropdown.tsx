@@ -2,9 +2,13 @@ import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import SimpleSelect from '../dropdown/SimpleSelect';
 
-export const RunDropdown = (Props: { options: string[], label: string }) => {
-    const { options } = Props;
-    const { label } = Props;
+interface Props {
+    options: string[],
+    label?: string
+}
+
+export const RunDropdown = (props: Props) => {
+    const { options, label } = props;
 
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);

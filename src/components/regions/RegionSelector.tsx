@@ -7,7 +7,7 @@ import GroupedButtons from '../buttons/GroupedButtons';
  *
  * @param Props: { options: string[]}
  */
-export const RegionSelector = (Props: { options: string[], label: string }) => {
+export const RegionSelector = (Props: { options: string[], label?: string }) => {
     const { options } = Props;
     const { label } = Props;
 

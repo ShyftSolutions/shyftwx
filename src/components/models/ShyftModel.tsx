@@ -7,7 +7,7 @@ import React from 'react';
  *
  * @param Props: {options: string[]}
  */
-export const ShyftModel = (Props: { options: string[], label: string }) => {
+export const ShyftModel = (Props: { options: string[], label?: string }) => {
     const { options } = Props;
     const { label } = Props;
 

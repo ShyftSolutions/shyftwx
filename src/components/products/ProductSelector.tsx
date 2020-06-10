@@ -14,7 +14,7 @@ interface Product {
     icon: IconProp,
 }
 
-export const ProductSelector = (Props: { options: Category[], action: Function , label: string}) => {
+export const ProductSelector = (Props: { options: Category[], action: Function , label?: string}) => {
     const { options } = Props;
     const { action } = Props;
     const { label } = Props;
