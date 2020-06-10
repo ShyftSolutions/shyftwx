@@ -281,6 +281,27 @@ var ProductMenu = function ProductMenu(Props) {
   }));
 };
 
+var ProductSelector = function ProductSelector(Props) {
+  var options = Props.options;
+  var action = Props.action;
+  return /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Products")), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(ProductMenu, {
+    options: options,
+    action: action
+  }))));
+};
+
 var useStyles$4 = makeStyles(function (theme) {
   return {
     root: {
@@ -590,5 +611,55 @@ var ShyftWx = function ShyftWx(_ref) {
   })));
 };
 
-export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ProductMenu, ShyftWx, SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme };
+var ShyftModel = function ShyftModel(Props) {
+  var options = Props.options;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Model")), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(GroupedButtons, {
+    options: options,
+    action: handleClick
+  }))));
+};
+
+var RegionSelector = function RegionSelector(Props) {
+  var options = Props.options;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Region")), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(GroupedButtons, {
+    options: options,
+    action: handleClick
+  }))));
+};
+
+export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ProductMenu, ProductSelector, RegionSelector, ShyftModel, ShyftWx, SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme };
 //# sourceMappingURL=index.modern.js.map

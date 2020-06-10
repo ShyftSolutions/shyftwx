@@ -284,6 +284,27 @@ var ProductMenu = function ProductMenu(Props) {
   }));
 };
 
+var ProductSelector = function ProductSelector(Props) {
+  var options = Props.options;
+  var action = Props.action;
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, "Products")), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(ProductMenu, {
+    options: options,
+    action: action
+  }))));
+};
+
 var useStyles$4 = core.makeStyles(function (theme) {
   return {
     root: {
@@ -593,11 +614,64 @@ var ShyftWx = function ShyftWx(_ref) {
   })));
 };
 
+var ShyftModel = function ShyftModel(Props) {
+  var options = Props.options;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, "Model")), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    options: options,
+    action: handleClick
+  }))));
+};
+
+var RegionSelector = function RegionSelector(Props) {
+  var options = Props.options;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, "Region")), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    options: options,
+    action: handleClick
+  }))));
+};
+
 exports.BackButton = BackButton;
 exports.BaseWxViewer = BaseWxViewer;
 exports.ForwardButton = ForwardButton;
 exports.GroupedButtons = GroupedButtons;
 exports.ProductMenu = ProductMenu;
+exports.ProductSelector = ProductSelector;
+exports.RegionSelector = RegionSelector;
+exports.ShyftModel = ShyftModel;
 exports.ShyftWx = ShyftWx;
 exports.SimpleSelect = SimpleSelect;
 exports.Slider = DiscreteSlider;
