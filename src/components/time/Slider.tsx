@@ -68,6 +68,10 @@ export const DiscreteSlider = (Props: { options: any }) => {
     const defaultValue: number = options[0].value;
     const maxValue: number = options[options.length - 1].value;
 
+    const onChange = () => {
+
+    }
+
     return (
         <div className={classes.root}>
             <Slider

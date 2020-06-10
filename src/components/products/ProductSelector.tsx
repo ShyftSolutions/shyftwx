@@ -14,19 +14,18 @@ interface Product {
     icon: IconProp,
 }
 
-export const ProductSelector = (Props: {options: Category[], action: Function } ) => {
+export const ProductSelector = (Props: { options: Category[], action: Function , label: string}) => {
     const { options } = Props;
     const { action } = Props;
+    const { label } = Props;
 
     return (
-        <Grid item xs={3}>
-            <Grid container direction="column">
-                <Grid item>
-                    <Typography variant="h6">Products</Typography>
-                </Grid>
-                <Grid item>
-                    <ProductMenu options={options} action={action} />
-                </Grid>
+        <Grid container direction="column">
+            <Grid item>
+                <Typography variant="h6">{label}</Typography>
+            </Grid>
+            <Grid item>
+                <ProductMenu options={options} action={action}/>
             </Grid>
         </Grid>
     );
