@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
-
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,27 +43,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ValueLabelComponent(Props: { children: any; value: number; }) {
-    const { children, value } = Props;
+interface Props {
+    children: React.ReactElement;
+    open: boolean;
+    value: number;
+}
 
-    const LightTooltip = withStyles((theme) => ({
-        tooltip: {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            boxShadow: theme.shadows[1],
-            fontSize: 16,
-        },
-    }))(Tooltip);
+function ValueLabelComponent(props: Props ) {
+    const { children, open, value } = props;
 
     return (
         <span>
-            <LightTooltip placement="top" title={value + ' + Model Run'}>
+            <Tooltip open={open} enterTouchDelay={0} placement="top" title={value + ' + Model Run'}>
                 {children}
-            </LightTooltip>
+            </Tooltip>
         </span>
     );
 }
-
 
 export const DiscreteSlider = (Props: { options: any }) => {
     const{options} = Props;
@@ -72,6 +67,10 @@ export const DiscreteSlider = (Props: { options: any }) => {
     const stepValue: number = options[1].value - options[0].value;
     const defaultValue: number = options[0].value;
     const maxValue: number = options[options.length - 1].value;
+
+    const onChange = () => {
+
+    }
 
     return (
         <div className={classes.root}>

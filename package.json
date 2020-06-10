@@ -50,9 +50,7 @@
         "eject": "react-scripts eject",
         "storybook:start": "NODE_PATH=src start-storybook -p 9009 -s public",
         "storybook:build": "build-storybook -c .storybook -o storybook-static",
-        "fontawesome:build": "npm i --save @fortawesome/fontawesome-svg-core",
-        "clean": "rimraf dist",
-        "compile": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__"
+        "fontawesome:build": "npm i --save @fortawesome/fontawesome-svg-core"
     },
     "eslintConfig": {
         "extends": "react-app"

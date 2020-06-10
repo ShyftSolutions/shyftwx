@@ -1,5 +1,6 @@
 import { makeStyles, ButtonGroup, Button, BottomNavigationAction } from '@material-ui/core';
 import React, { useState } from 'react';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: 0,
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }));
+
 /**
  * Uses Material UI to create a group of buttons labeled with the string
  * values stored in the 'options' parameter

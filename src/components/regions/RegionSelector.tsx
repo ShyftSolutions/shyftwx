@@ -7,22 +7,25 @@ import GroupedButtons from '../buttons/GroupedButtons';
  *
  * @param Props: { options: string[]}
  */
-export const RegionSelector = ( Props: { options: string[]}) => {
+export const RegionSelector = (Props: { options: string[], label: string }) => {
     const { options } = Props;
+    const { label } = Props;
+
+    const handleClick = (index: string) => {
+        console.log(`clicked ${index}`);
+    };
 
     return (
-        <Grid item xs={3}>
-            {/* Region Grid Container */}
-            <Grid container direction="column">
-                <Grid item>
-                    <Typography variant='h6'>Region</Typography>
-                </Grid>
-                <Grid item>
-                    <GroupedButtons options={options} action />
-                </Grid>
+        /* Region Grid Container */
+        <Grid container direction="column">
+            <Grid item>
+                <Typography variant='h6'>{label}</Typography>
+            </Grid>
+            <Grid item>
+                <GroupedButtons options={options} action={handleClick}/>
             </Grid>
         </Grid>
     );
-}
+};
 
 export default RegionSelector;
