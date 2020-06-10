@@ -1,5 +1,5 @@
 import _ProductSelector from '../components/products/ProductSelector';
-import { object, withKnobs } from '@storybook/addon-knobs';
+import { object, text, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import theme from 'theme.js';
@@ -11,6 +11,7 @@ export default {
     decoration: [withKnobs]
 };
 
+const label = 'Products';
 const options = [
     {
         name: 'Surface',
@@ -48,7 +49,7 @@ const options = [
 export const ProductSelector = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_ProductSelector options={object('Product Categories', options)}  />
+            <_ProductSelector options={object('Product Categories', options)} label={text('Label', label)}/>
         </MuiThemeProvider>
     );
 };
