@@ -10,7 +10,6 @@ export default {
     title: 'Dropdowns',
     decorators: [withKnobs]
 };
-
 const defaultOptions = ["2020-05-27T 02:00:00Z", "2020-05-27T 06:00:00Z", "2020-05-27T 11:00:00Z", "2020-05-27T 12:00:00Z"];
 const label = 'Model Run';
 
