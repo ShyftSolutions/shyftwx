@@ -31,6 +31,13 @@ export default createMuiTheme({
             root: {
                 color: '#000000',
             }
+        },
+        MuiTooltip: {
+            tooltip: {
+                backgroundColor: '#329af0',
+                color: '#f8f9fa',
+                fontSize: 16,
+            }
         }
     },
     spacing: 8
