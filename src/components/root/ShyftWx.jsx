@@ -1,12 +1,14 @@
-import React, { Children, useState, cloneElement } from 'react';
+import { Grid, MuiThemeProvider, CircularProgress } from '@material-ui/core';
+import React from 'react';
 import { getIndexAsync } from '../../apis';
-import { MuiThemeProvider, Theme, Grid } from '@material-ui/core';
 import theme from '../../theme';
 
+export const ShyftContext = React.createContext({});
+
 export const ShyftWx = ({ children, indexData, indexUrl, themeOverride }) => {
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [index, setIndex] = useState();
+    const [error, setError] = React.useState('');
+    const [loading, setLoading] = React.useState(true);
+    const [index, setIndex] = React.useState();
 
     React.useEffect(() => {
         if (indexUrl) {
@@ -27,15 +29,16 @@ export const ShyftWx = ({ children, indexData, indexUrl, themeOverride }) => {
     }
 
     if (loading) {
-        return <p>LOADING</p>;
+        return <CircularProgress />;
     }
 
-    // TODO: pass index data to children
     return (
         <MuiThemeProvider theme={themeOverride || theme}>
-            <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
-                {Children.map(children, (child) => cloneElement(child, { index }))}
-            </Grid>
+            <ShyftContext.Provider value={{ data: index }}>
+                <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
+                    {children}
+                </Grid>
+            </ShyftContext.Provider>
         </MuiThemeProvider>
     );
 };

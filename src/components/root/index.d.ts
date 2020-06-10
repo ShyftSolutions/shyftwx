@@ -6,43 +6,22 @@ declare type ShyftWxProps = {
 
 declare type ShyftIndex = {
     version: string;
-    sources: ShyftSource[];
+    datasets: ShyftDataset[];
 };
 
-declare type ShyftSource = {
-    source: string;
-    type: string;
-    regions: ShyftRegion[];
-};
-
-declare type ShyftRegion = {
+declare type ShyftDataset = {
+    name: string;
     region: string;
-    area: ShyftArea;
-    runs: ShyftRun[];
-};
-
-declare type ShyftArea = {
-    bbox: [number, number, number, number];
-};
-
-declare type ShyftRun = {
     run: string;
-    products: ShyftProduct[];
 };
+
+declare type ShyftProductData = {
+    items: ShyftProduct[];
+} & ShyftDataset;
 
 declare type ShyftProduct = {
     product: string;
-    elevation: string;
-    parmater: string;
-    legend: ShyftLegend;
-    frames: ShyftFrame[];
-};
-
-declare type ShyftFrame = {
-    uri: string;
+    level: string;
     forecast: string;
-};
-
-declare type ShyftLegend = {
-    uri: string;
+    filename: string;
 };

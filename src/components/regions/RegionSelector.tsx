@@ -18,7 +18,7 @@ export const RegionSelector = ( Props: { options: string[]}) => {
                     <Typography variant='h6'>Region</Typography>
                 </Grid>
                 <Grid item>
-                    <GroupedButtons options={options} />
+                    <GroupedButtons options={options} action />
                 </Grid>
             </Grid>
         </Grid>
