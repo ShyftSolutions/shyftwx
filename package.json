@@ -21,7 +21,10 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "storybook:start": "NODE_PATH=src start-storybook -p 9009 -s public",
+    "storybook:build": "build-storybook -c .storybook -o storybook-static",
+    "fontawesome:build": "npm i --save @fortawesome/fontawesome-svg-core"
   },
   "peerDependencies": {
     "react": "^16.0.0"
