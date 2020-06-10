@@ -1,11 +1,9 @@
-import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
+
+import React from 'react';
 import SimpleSelect from '../dropdown/SimpleSelect';
 
-export const RunDropdown = (Props: { options: string[], label: string }) => {
-    const { options } = Props;
-    const { label } = Props;
-
+export const RunDropdown: React.FC<RunDropdownProps> = ({ options, label }) => {
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
     };
@@ -16,7 +14,7 @@ export const RunDropdown = (Props: { options: string[], label: string }) => {
                 <Typography variant="h6">{label}</Typography>
             </Grid>
             <Grid item>
-                <SimpleSelect options={options} action={handleClick}/>
+                <SimpleSelect options={options} action={handleClick} />
             </Grid>
         </Grid>
     );
