@@ -22,3 +22,5 @@ export const RunDropdown = ( Props: {options : string[]}) => {
         </Grid>
     );
 };
+
+export default RunDropdown;
