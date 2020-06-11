@@ -5,7 +5,7 @@ import _StaticWxViewer from 'components/viewers/StaticWxViewer';
 import _WxViewer from '../components/viewers/WxViewer';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
-import theme from 'theme.js';
+import theme from './../theme';
 import { faPercent, faTint, faWind } from '@fortawesome/free-solid-svg-icons';
 
 export default {

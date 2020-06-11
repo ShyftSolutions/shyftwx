@@ -1,7 +1,7 @@
 import _ShyftModel from 'components/models/ShyftModel.tsx';
 import React from 'react';
 import { text, object, withKnobs } from '@storybook/addon-knobs';
-import theme from 'theme.js';
+import theme from './../theme';
 import { MuiThemeProvider } from '@material-ui/core';
 
 export default {

@@ -3,7 +3,7 @@ import _Slider from 'components/time/Slider.tsx'
 import { object, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
-import theme from 'theme.js';
+import theme from './../theme';
 
 export default {
     title: 'Time',
