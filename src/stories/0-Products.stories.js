@@ -49,7 +49,7 @@ const options = [
 export const ProductSelector = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_ProductSelector options={object('Product Categories', options)} label={text('Label', label)}/>
+            <_ProductSelector categories={object('Product Categories', options)}/>
         </MuiThemeProvider>
     );
 };

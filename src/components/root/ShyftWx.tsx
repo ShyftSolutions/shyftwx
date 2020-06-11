@@ -68,7 +68,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             }
                         });
 
-                        
+
                         // for every unique level, look for its products
                         uniqueLevels.map((lvl) => {
                             let lvlProducts: Product[] = [];
@@ -94,7 +94,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
                                 const filteredItems = items.filter((i) => i.level === lvl.name && i.product == product.name);
                                 let forecasts: ForecastHour[] = []
-                                filteredItems.map((item) => {    
+                                filteredItems.map((item) => {
                                     forecasts.push({hour: item.forecast, image: item.filename})
                                 });
 
@@ -112,7 +112,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         setLoading(false);
                     })
                 })
-                
+
             });
         } else {
             setError('No indexUrl or indexData provided.');
@@ -137,7 +137,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         if (forecastIndex + 1 == forecasts.length) {
             return;
         }
-        
+
         setSelectedForecast(forecasts[forecastIndex + 1].hour);
     }
 
@@ -149,7 +149,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         if (forecastIndex - 1 < 0) {
             return;
         }
-        
+
         setSelectedForecast(forecasts[forecastIndex - 1].hour);
     }
 
@@ -176,10 +176,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
         // console.log(index.datasets[0].run.levels.map(lvl => lvl.name));
         // console.log(selectedLevel, selectedProduct);
-        let levelProductVals = index.datasets[0].run.levels.map(lvl => {return { name: lvl.name, open: false, products: lvl.products }})
+        let levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {return { name: lvl.name, open: index == 0, products: lvl.products }})
         let sliderVals = getSelectedProduct().forecasts.map((f) => {return {label: f.hour, value: f.hour}});
         let activeForecastLayer = getSelectedProduct().forecasts.filter(f => f.hour === selectedForecast)[0].image;
-        
+
         console.log(activeForecastLayer)
 
         return <React.Fragment>
@@ -194,7 +194,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             <Grid container item spacing={3}>
                 {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
                 <Grid item xs={2}>
-                    <ProductSelector categories={levelProductVals} 
+                    <ProductSelector categories={levelProductVals}
                                      action={onProductSelect}/>
                 </Grid>
                 <Grid item xs={9}><BaseWxViewer layers={activeForecastLayer} neBounds={[0.0, 0.0]} swBounds={[-10.0, -10.0]} /></Grid>

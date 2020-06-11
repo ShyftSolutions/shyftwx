@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
  * @param Props: { options: string[]}
  */
 export const GroupedButtons: React.FC<GroupedButtonsProps> = ({
-  options,
+  options=['1', '2', '3'],
   action
 }) => {
   const classes = useStyles()

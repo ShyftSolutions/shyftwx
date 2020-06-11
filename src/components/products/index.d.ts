@@ -4,6 +4,11 @@ declare type ProductSelectorProps = {
     action: () => ProductSelectionResponse;
 };
 
+declare type ProductMenuProps = {
+  options: Category[];
+  action: (product: object) => void;
+}
+
 declare type Category = {
     name: string;
     open: boolean;
@@ -12,7 +17,7 @@ declare type Category = {
 
 declare type Product = {
     name: string;
-    icon: IconProp;
+    icon?: IconProp;
 };
 
 declare type ProductSelectionResponse = {

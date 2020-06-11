@@ -3,7 +3,7 @@ import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import SimpleSelect from '../dropdown/SimpleSelect';
 
-export const RunDropdown: React.FC<RunDropdownProps> = ({ options, label }) => {
+export const RunDropdown: React.FC<RunDropdownProps> = ({ options, label='Model Run' }) => {
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
     };

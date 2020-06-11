@@ -6,34 +6,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        maxWidth: 300
-    },
-    category: {
-        color: theme.palette.primary.contrastText,
-        backgroundColor: theme.palette.primary.main
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-        color: theme.palette.secondary.contrastText,
-    },
-    icon: {},
-    selectedIcon: {
-        color: theme.palette.secondary.dark,
-    }
+  root: {
+    width: '100%',
+    maxWidth: 300
+  },
+  category: {
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+    color: theme.palette.secondary.contrastText
+  },
+  icon: {},
+  selectedIcon: {
+    color: theme.palette.secondary.dark
+  }
 }));
 
-interface Category {
-    name: string,
-    open: boolean,
-    products: Product[]
-}
-
-interface Product {
-    name: string,
-    icon?: IconProp,
-}
+const emptyMenu = [
+  {
+    name: 'Menu',
+    open: true,
+    products: [{
+      name: 'A'
+    },
+      {
+        name: 'B'
+      }]
+  }
+];
 
 /**
  * Uses Material UI to create an accordian dropdown with main categories
@@ -54,84 +56,81 @@ interface Product {
  *
  * @param Props: {options: string[]}
  */
-export const ProductMenu = (Props: {options: Category[], action: Function}) => {
-    const classes = useStyles();
-    const { options } = Props;
-    const { action } = Props;
+export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, action }) => {
+  const classes = useStyles();
+  const [selectedProduct, setSelectedProduct] = React.useState(`${options[0].name} ${options[0].products[0].name}`);
+  const [categories, setCategories] = React.useState(options || []);
 
-    const [selectedProduct, setSelectedProduct] = React.useState("");
-    const [categories, setCategories] = React.useState(options || []);
+  const handleClick = (cat: Category) => {
 
-    const handleClick = (cat: Category) => {
+    const newCategories = categories.map((item: Category) => {
+      if (item !== cat) {
+        return item;
+      }
+      return {
+        ...item,
+        open: !cat.open
+      };
+    });
 
-        const newCategories = categories.map((item: Category) => {
-            if (item !== cat) {
-                return item;
-            }
-            return {
-                ...item,
-                open: !cat.open
-            };
-        });
+    setCategories(newCategories);
+  };
 
-        setCategories(newCategories);
-    };
+  const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product: ProductSelectionResponse) => {
+    setSelectedProduct(product.level + ' ' + product.product);
+    action(product);
+  };
 
-    const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product: object) => {
-        setSelectedProduct(product);
-        action(product);
-    };
-
-    return (
-        <div className={classes.root}>
-            {categories.map((cat: Category, index: number) => (
-                <List key={index}>
-                    <Paper className={classes.category}>
-                        <ListItem button onClick={() => handleClick(cat)}>
-                            <ListItemText
-                                disableTypography
-                                primary={
-                                    <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
-                                        <Typography>
-                                                {cat.name}
-                                        </Typography>
-                                    </Box>
-                                }
-                            />
-                            {cat.open ? <ExpandLess/> : <ExpandMore/>}
-                        </ListItem>
-                    </Paper>
-                    <Paper>
-                        <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {cat.products.map((product: Product, index: number) => (
-                                <ListItem
-                                    key={index}
-                                    button
-                                    className={classes.nested}
-                                    selected={selectedProduct === cat.name + ' ' + product.name}
-                                    onClick={(event) => handleListItemClick(event, {level: cat.name, product: product.name})}
-                                >
-                                    <ListItemIcon>
-                                        {product.icon != undefined &&
-                                            <FontAwesomeIcon
-                                                className={
-                                                    selectedProduct === cat.name + ' ' + product.name
-                                                        ? classes.selectedIcon
-                                                        : classes.icon
-                                                }
-                                                icon={product.icon}
-                                            />
-                                        }
-                                    </ListItemIcon>
-                                    <ListItemText primary={product.name}/>
-                                </ListItem>
-                            ))}
-                        </Collapse>
-                    </Paper>
-                </List>
-            ))}
-        </div>
-    );
+  return (
+    <div className={classes.root}>
+      {categories.map((cat: Category, index: number) => (
+        <List key={index}>
+          <Paper className={classes.category}>
+            <ListItem button onClick={() => handleClick(cat)}>
+              <ListItemText
+                disableTypography
+                primary={
+                  <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
+                    <Typography>
+                      {cat.name}
+                    </Typography>
+                  </Box>
+                }
+              />
+              {cat.open ? <ExpandLess/> : <ExpandMore/>}
+            </ListItem>
+          </Paper>
+          <Paper>
+            <Collapse in={cat.open} timeout="auto" unmountOnExit>
+              {cat.products.map((product: Product, index: number) => (
+                <ListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  selected={selectedProduct === cat.name + ' ' + product.name}
+                  onClick={(event) => handleListItemClick(event, { level: cat.name, product: product.name })}
+                >
+                  <ListItemIcon>
+                    {product.icon != undefined &&
+                    <FontAwesomeIcon
+                      className={
+                        selectedProduct === cat.name + ' ' + product.name
+                          ? classes.selectedIcon
+                          : classes.icon
+                      }
+                      icon={product.icon}
+                    />
+                    }
+                  </ListItemIcon>
+                  <ListItemText primary={product.name}/>
+                </ListItem>
+              ))}
+            </Collapse>
+          </Paper>
+        </List>
+      ))}
+    </div>
+  );
 };
 
 export default ProductMenu;
