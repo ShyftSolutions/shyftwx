@@ -15,7 +15,6 @@ import RunDropdown from './components/runs/RunDropdown';
 import theme from './theme';
 import * as apis from './apis';
 
-// Just trying to get it to update
 export {
     BaseWxViewer,
     GroupedButtons,
