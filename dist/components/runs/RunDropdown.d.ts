@@ -1,7 +1,3 @@
-/// <reference types="react" />
-interface Props {
-    options: string[];
-    label?: string;
-}
-export declare const RunDropdown: (props: Props) => JSX.Element;
+import React from 'react';
+export declare const RunDropdown: React.FC<RunDropdownProps>;
 export default RunDropdown;

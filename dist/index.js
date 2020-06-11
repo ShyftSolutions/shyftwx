@@ -1,27 +1,74 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var React = require('react');
+var React__default = _interopDefault(React);
+var NavigateBeforeIcon = _interopDefault(require('@material-ui/icons/NavigateBefore'));
+var Button = _interopDefault(require('@material-ui/core/Button'));
 var core = require('@material-ui/core');
 var leaflet = require('leaflet');
 require('leaflet/dist/leaflet.css');
-var React = require('react');
-var React__default = _interopDefault(React);
 var reactLeaflet = require('react-leaflet');
-var styles = require('@material-ui/core/styles');
-var MenuItem = _interopDefault(require('@material-ui/core/MenuItem'));
-var FormControl = _interopDefault(require('@material-ui/core/FormControl'));
-var Select = _interopDefault(require('@material-ui/core/Select'));
+var NavigateNextIcon = _interopDefault(require('@material-ui/icons/NavigateNext'));
 var Paper = _interopDefault(require('@material-ui/core/Paper'));
 var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
-var NavigateBeforeIcon = _interopDefault(require('@material-ui/icons/NavigateBefore'));
-var Button = _interopDefault(require('@material-ui/core/Button'));
-var NavigateNextIcon = _interopDefault(require('@material-ui/icons/NavigateNext'));
+var FormControl = _interopDefault(require('@material-ui/core/FormControl'));
+var MenuItem = _interopDefault(require('@material-ui/core/MenuItem'));
+var Select = _interopDefault(require('@material-ui/core/Select'));
+var styles = require('@material-ui/core/styles');
 var Slider = _interopDefault(require('@material-ui/core/Slider'));
 var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
 var PlayArrowIcon = _interopDefault(require('@material-ui/icons/PlayArrow'));
 var PauseIcon = _interopDefault(require('@material-ui/icons/Pause'));
 
+var getIndexAsync = function getIndexAsync(url) {
+  return fetch(url).then(function (response) {
+    return response.json();
+  });
+};
+var getProductDataAsync = function getProductDataAsync(url, region, run) {
+  url = url + "/" + run + "-" + region;
+  return fetch(url).then(function (response) {
+    return response.json();
+  });
+};
+
+var index = {
+    __proto__: null,
+    getIndexAsync: getIndexAsync,
+    getProductDataAsync: getProductDataAsync
+};
+
 var useStyles = core.makeStyles(function (theme) {
+  return {
+    root: {
+      maxWidth: '35px',
+      maxHeight: '30px',
+      minWidth: '35px',
+      minHeight: '30px',
+      variant: 'contained',
+      backgroundColor: theme.palette.primary.dark,
+      boxShadow: theme.shadows[3],
+      '&:hover': {
+        backgroundColor: theme.palette.primary.dark
+      },
+      ariaLabel: "back"
+    },
+    icon: {
+      color: theme.palette.primary.contrastText
+    }
+  };
+});
+function BackButton() {
+  var classes = useStyles();
+  return /*#__PURE__*/React__default.createElement(Button, {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(NavigateBeforeIcon, {
+    className: classes.icon
+  }));
+}
+
+var useStyles$1 = core.makeStyles(function (theme) {
   return {
     root: {
       height: '70vh',
@@ -37,7 +84,7 @@ var useStyles = core.makeStyles(function (theme) {
 var BaseWxViewer = function BaseWxViewer(_ref) {
   var neBounds = _ref.neBounds,
       swBounds = _ref.swBounds;
-  var classes = useStyles();
+  var classes = useStyles$1();
   var bounds = leaflet.latLngBounds(swBounds, neBounds);
   return /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true,
@@ -59,7 +106,36 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
   })));
 };
 
-var useStyles$1 = core.makeStyles(function (theme) {
+var useStyles$2 = core.makeStyles(function (theme) {
+  return {
+    root: {
+      maxWidth: '35px',
+      maxHeight: '30px',
+      minWidth: '35px',
+      minHeight: '30px',
+      variant: 'contained',
+      backgroundColor: theme.palette.primary.dark,
+      boxShadow: theme.shadows[3],
+      '&:hover': {
+        backgroundColor: theme.palette.primary.dark
+      },
+      ariaLabel: "forward"
+    },
+    icon: {
+      color: theme.palette.primary.contrastText
+    }
+  };
+});
+function ForwardButton() {
+  var classes = useStyles$2();
+  return /*#__PURE__*/React__default.createElement(core.Button, {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(NavigateNextIcon, {
+    className: classes.icon
+  }));
+}
+
+var useStyles$3 = core.makeStyles(function (theme) {
   return {
     root: {
       margin: 0,
@@ -82,18 +158,18 @@ var useStyles$1 = core.makeStyles(function (theme) {
     }
   };
 });
-var GroupedButtons = function GroupedButtons(Props) {
-  var classes = useStyles$1();
-  var options = Props.options,
-      action = Props.action;
+var GroupedButtons = function GroupedButtons(_ref) {
+  var options = _ref.options,
+      action = _ref.action;
+  var classes = useStyles$3();
 
   var _useState = React.useState(options[0]),
       selected = _useState[0],
       setSelected = _useState[1];
 
-  var handleClick = function handleClick(index) {
-    setSelected(index);
-    action(index);
+  var handleClick = function handleClick(option) {
+    setSelected(option);
+    action(option);
   };
 
   return /*#__PURE__*/React__default.createElement(core.ButtonGroup, {
@@ -108,6 +184,33 @@ var GroupedButtons = function GroupedButtons(Props) {
       className: selected === option ? classes.selectedButton : classes.defaultButton
     }, option);
   }));
+};
+
+var ModelSelector = function ModelSelector(_ref) {
+  var options = _ref.options,
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Model' : _ref$label;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return (
+    /*#__PURE__*/
+    React__default.createElement(core.Grid, {
+      container: true,
+      direction: "column"
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(core.Typography, {
+      variant: "h6"
+    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+      options: options,
+      action: handleClick
+    })))
+  );
 };
 
 function _extends() {
@@ -128,70 +231,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var useStyles$2 = styles.makeStyles(function (theme) {
-  return {
-    formControl: {
-      minWidth: 120,
-      boxShadow: theme.shadows[3]
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    },
-    label: {
-      align: 'center'
-    },
-    dropdown: {
-      background: theme.palette.primary.contrastText
-    },
-    items: {
-      background: theme.palette.primary.contrastText,
-      '&:hover': {
-        background: theme.palette.primary.main
-      }
-    }
-  };
-});
-function SimpleSelect(Props) {
-  var classes = useStyles$2();
-  var options = Props.options;
-  var action = Props.action;
-
-  var _React$useState = React__default.useState({
-    modelRun: {},
-    name: 'Selector'
-  }),
-      state = _React$useState[0],
-      setState = _React$useState[1];
-
-  var handleChange = function handleChange(event) {
-    var _extends2;
-
-    var name = event.target.name;
-    setState(_extends({}, state, (_extends2 = {}, _extends2[name] = event.target.value, _extends2)));
-    action(event.target.value);
-  };
-
-  return /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement(FormControl, {
-    variant: "outlined",
-    className: classes.formControl
-  }, /*#__PURE__*/React__default.createElement(Select, {
-    classes: {
-      select: classes.dropdown
-    },
-    id: "simple-select",
-    defaultValue: options[0],
-    onChange: handleChange
-  }, options.map(function (option) {
-    return /*#__PURE__*/React__default.createElement(MenuItem, {
-      color: "primary",
-      key: option,
-      className: classes.items,
-      value: option
-    }, option);
-  }))));
-}
-
-var useStyles$3 = core.makeStyles(function (theme) {
+var useStyles$4 = core.makeStyles(function (theme) {
   return {
     root: {
       width: '100%',
@@ -212,7 +252,7 @@ var useStyles$3 = core.makeStyles(function (theme) {
   };
 });
 var ProductMenu = function ProductMenu(Props) {
-  var classes = useStyles$3();
+  var classes = useStyles$4();
   var options = Props.options;
   var action = Props.action;
 
@@ -284,10 +324,11 @@ var ProductMenu = function ProductMenu(Props) {
   }));
 };
 
-var ProductSelector = function ProductSelector(Props) {
-  var options = Props.options;
-  var action = Props.action;
-  var label = Props.label;
+var ProductSelector = function ProductSelector(_ref) {
+  var categories = _ref.categories,
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Products' : _ref$label,
+      action = _ref.action;
   return /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     direction: "column"
@@ -298,68 +339,226 @@ var ProductSelector = function ProductSelector(Props) {
   }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
   }, /*#__PURE__*/React__default.createElement(ProductMenu, {
-    options: options,
+    options: categories,
     action: action
   })));
 };
 
-var useStyles$4 = core.makeStyles(function (theme) {
-  return {
-    root: {
-      maxWidth: '35px',
-      maxHeight: '30px',
-      minWidth: '35px',
-      minHeight: '30px',
-      variant: 'contained',
-      backgroundColor: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark
-      },
-      ariaLabel: "back"
-    },
-    icon: {
-      color: theme.palette.primary.contrastText
-    }
-  };
-});
-function BackButton() {
-  var classes = useStyles$4();
-  return /*#__PURE__*/React__default.createElement(Button, {
-    className: classes.root
-  }, /*#__PURE__*/React__default.createElement(NavigateBeforeIcon, {
-    className: classes.icon
-  }));
-}
+var RegionSelector = function RegionSelector(_ref) {
+  var options = _ref.options,
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Region' : _ref$label;
 
-var useStyles$5 = core.makeStyles(function (theme) {
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return (
+    /*#__PURE__*/
+    React__default.createElement(core.Grid, {
+      container: true,
+      direction: "column"
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(core.Typography, {
+      variant: "h6"
+    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+      options: options,
+      action: handleClick
+    })))
+  );
+};
+
+var useStyles$5 = styles.makeStyles(function (theme) {
   return {
-    root: {
-      maxWidth: '35px',
-      maxHeight: '30px',
-      minWidth: '35px',
-      minHeight: '30px',
-      variant: 'contained',
-      backgroundColor: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark
-      },
-      ariaLabel: "forward"
+    formControl: {
+      minWidth: 120,
+      boxShadow: theme.shadows[3]
     },
-    icon: {
-      color: theme.palette.primary.contrastText
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    label: {
+      align: 'center'
+    },
+    dropdown: {
+      background: theme.palette.primary.contrastText
+    },
+    items: {
+      background: theme.palette.primary.contrastText,
+      '&:hover': {
+        background: theme.palette.primary.main
+      }
     }
   };
 });
-function ForwardButton() {
+var SimpleSelect = function SimpleSelect(_ref) {
+  var options = _ref.options,
+      action = _ref.action;
   var classes = useStyles$5();
-  return /*#__PURE__*/React__default.createElement(core.Button, {
-    className: classes.root
-  }, /*#__PURE__*/React__default.createElement(NavigateNextIcon, {
-    className: classes.icon
-  }));
-}
+
+  var _React$useState = React__default.useState(options[0]),
+      selectedValue = _React$useState[0],
+      setSelectedValue = _React$useState[1];
+
+  var handleChange = function handleChange(event) {
+    var name = event.target.name;
+
+    if (name) {
+      setSelectedValue(name);
+      action(name);
+    }
+  };
+
+  return /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement(FormControl, {
+    variant: "outlined",
+    className: classes.formControl
+  }, /*#__PURE__*/React__default.createElement(Select, {
+    classes: {
+      select: classes.dropdown
+    },
+    id: "simple-select",
+    value: selectedValue,
+    onChange: handleChange
+  }, options.map(function (option) {
+    return /*#__PURE__*/React__default.createElement(MenuItem, {
+      color: "primary",
+      key: option,
+      className: classes.items,
+      value: option
+    }, option);
+  }))));
+};
+
+var RunDropdown = function RunDropdown(_ref) {
+  var options = _ref.options,
+      label = _ref.label;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "column"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(SimpleSelect, {
+    options: options,
+    action: handleClick
+  })));
+};
+
+var theme = core.createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#e9ecef',
+      main: '#ff922b',
+      dark: '#868e96',
+      contrastText: '#474545'
+    }
+  },
+  overrides: {
+    MuiListItem: {
+      root: {
+        "&$selected": {
+          backgroundColor: '#E9ECEF',
+          '&:hover': {
+            backgroundColor: '#E9ECEF'
+          },
+          color: '#868e96'
+        }
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#000000'
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#329af0',
+        color: '#f8f9fa',
+        fontSize: 16
+      }
+    }
+  },
+  spacing: 8
+});
+
+var ShyftContext = React__default.createContext({});
+var ShyftWx = function ShyftWx(_ref) {
+  var children = _ref.children,
+      indexData = _ref.indexData,
+      indexUrl = _ref.indexUrl,
+      themeOverride = _ref.themeOverride;
+
+  var _React$useState = React__default.useState(''),
+      error = _React$useState[0],
+      setError = _React$useState[1];
+
+  var _React$useState2 = React__default.useState(true),
+      loading = _React$useState2[0],
+      setLoading = _React$useState2[1];
+
+  var _React$useState3 = React__default.useState(),
+      index = _React$useState3[0],
+      setIndex = _React$useState3[1];
+
+  React__default.useEffect(function () {
+    if (indexUrl) {
+      getIndexAsync(indexUrl).then(function (data) {
+        setIndex(data);
+        setLoading(false);
+      });
+    } else if (indexData) {
+      setIndex(indexData);
+      setLoading(false);
+    } else {
+      setError('No indexUrl or indexData provided.');
+    }
+  }, []);
+
+  var generateContent = function generateContent() {
+    if (error) {
+      return /*#__PURE__*/React__default.createElement(core.Typography, {
+        color: "error"
+      }, error);
+    }
+
+    if (loading) {
+      return /*#__PURE__*/React__default.createElement(core.CircularProgress, null);
+    }
+
+    return children;
+  };
+
+  return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
+    theme: themeOverride || theme
+  }, /*#__PURE__*/React__default.createElement(ShyftContext.Provider, {
+    value: {
+      data: index
+    }
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "row",
+    justify: "flex-end",
+    alignItems: "flex-start",
+    spacing: 3
+  }, generateContent())));
+};
 
 var useStyles$6 = styles.makeStyles(function (theme) {
   return {
@@ -504,199 +703,15 @@ function TimeControl() {
   }, /*#__PURE__*/React__default.createElement(ForwardButton, null)));
 }
 
-var getIndexAsync = function getIndexAsync(url) {
-  return fetch(url).then(function (response) {
-    return response.json();
-  });
-};
-
-var index = {
-    __proto__: null,
-    getIndexAsync: getIndexAsync
-};
-
-var theme = core.createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#e9ecef',
-      main: '#ff922b',
-      dark: '#868e96',
-      contrastText: '#474545'
-    }
-  },
-  overrides: {
-    MuiListItem: {
-      root: {
-        "&$selected": {
-          backgroundColor: '#E9ECEF',
-          '&:hover': {
-            backgroundColor: '#E9ECEF'
-          },
-          color: '#868e96'
-        }
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#000000'
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#329af0',
-        color: '#f8f9fa',
-        fontSize: 16
-      }
-    }
-  },
-  spacing: 8
-});
-
-var ShyftWx = function ShyftWx(_ref) {
-  var children = _ref.children,
-      indexData = _ref.indexData,
-      indexUrl = _ref.indexUrl,
-      themeOverride = _ref.themeOverride;
-
-  var _useState = React.useState(''),
-      error = _useState[0],
-      setError = _useState[1];
-
-  var _useState2 = React.useState(true),
-      loading = _useState2[0],
-      setLoading = _useState2[1];
-
-  var _useState3 = React.useState(),
-      index = _useState3[0],
-      setIndex = _useState3[1];
-
-  React__default.useEffect(function () {
-    if (indexUrl) {
-      getIndexAsync(indexUrl).then(function (data) {
-        setIndex(data);
-        setLoading(false);
-      });
-    } else if (indexData) {
-      setIndex(indexData);
-      setLoading(false);
-    } else {
-      setError('No indexUrl or indexData provided.');
-    }
-  }, []);
-
-  if (error) {
-    return /*#__PURE__*/React__default.createElement("p", null, error);
-  }
-
-  if (loading) {
-    return /*#__PURE__*/React__default.createElement("p", null, "LOADING");
-  }
-
-  return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
-    theme: themeOverride || theme
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    direction: "row",
-    justify: "flex-end",
-    alignItems: "flex-start",
-    spacing: 3
-  }, React.Children.map(children, function (child) {
-    return React.cloneElement(child, {
-      index: index
-    });
-  })));
-};
-
-var ShyftModel = function ShyftModel(Props) {
-  var options = Props.options;
-  var label = Props.label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
-  return (
-    /*#__PURE__*/
-    React__default.createElement(core.Grid, {
-      container: true,
-      direction: "column"
-    }, /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(core.Typography, {
-      variant: "h6"
-    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
-      options: options,
-      action: handleClick
-    })))
-  );
-};
-
-var RegionSelector = function RegionSelector(Props) {
-  var options = Props.options;
-  var label = Props.label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
-  return (
-    /*#__PURE__*/
-    React__default.createElement(core.Grid, {
-      container: true,
-      direction: "column"
-    }, /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(core.Typography, {
-      variant: "h6"
-    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
-      options: options,
-      action: handleClick
-    })))
-  );
-};
-
-var RunDropdown = function RunDropdown(props) {
-  var options = props.options,
-      label = props.label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
-  }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(SimpleSelect, {
-    options: options,
-    action: handleClick
-  })));
-};
-
 exports.BackButton = BackButton;
 exports.BaseWxViewer = BaseWxViewer;
 exports.ForwardButton = ForwardButton;
 exports.GroupedButtons = GroupedButtons;
+exports.ModelSelector = ModelSelector;
 exports.ProductMenu = ProductMenu;
 exports.ProductSelector = ProductSelector;
 exports.RegionSelector = RegionSelector;
 exports.RunDropdown = RunDropdown;
-exports.ShyftModel = ShyftModel;
 exports.ShyftWx = ShyftWx;
 exports.SimpleSelect = SimpleSelect;
 exports.Slider = DiscreteSlider;

@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@material-ui/core';
+
 import GroupedButtons from '../buttons/GroupedButtons';
 import React from 'react';
 
@@ -7,10 +8,7 @@ import React from 'react';
  *
  * @param Props: {options: string[]}
  */
-export const ShyftModel = (Props: { options: string[], label?: string }) => {
-    const { options } = Props;
-    const { label } = Props;
-
+export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = 'Model', action }) => {
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
     };
@@ -19,13 +17,13 @@ export const ShyftModel = (Props: { options: string[], label?: string }) => {
         /* Region Grid Container */
         <Grid container direction="column">
             <Grid item>
-                <Typography variant='h6'>{label}</Typography>
+                <Typography variant="h6">{label}</Typography>
             </Grid>
             <Grid item>
-                <GroupedButtons options={options} action={handleClick}/>
+                <GroupedButtons options={options} action={handleClick} />
             </Grid>
         </Grid>
     );
 };
 
-export default ShyftModel;
+export default ModelSelector;

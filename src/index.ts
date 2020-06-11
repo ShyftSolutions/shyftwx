@@ -1,19 +1,20 @@
+import * as apis from './apis';
+
+import BackButton from './components/time/BackButton';
 import BaseWxViewer from './components/viewers/BaseWxViewer';
+import ForwardButton from './components/time/ForwardButton';
 import GroupedButtons from './components/buttons/GroupedButtons';
-import SimpleSelect from './components/dropdown/SimpleSelect';
+import ModelSelector from './components/models/ModelSelector';
 import ProductMenu from './components/products/ProductMenu';
 import ProductSelector from './components/products/ProductSelector';
-import BackButton from './components/time/BackButton';
-import ForwardButton from './components/time/ForwardButton';
+import RegionSelector from './components/regions/RegionSelector';
+import RunDropdown from './components/runs/RunDropdown';
+import ShyftWx from './components/root/ShyftWx';
+import SimpleSelect from './components/dropdown/SimpleSelect';
 import Slider from './components/time/Slider';
 import StartStopButton from './components/time/StartStopButton';
 import TimeControl from './components/time/TimeControl';
-import ShyftWx from './components/root/ShyftWx';
-import ShyftModel from './components/models/ShyftModel';
-import RegionSelector from './components/regions/RegionSelector';
-import RunDropdown from './components/runs/RunDropdown';
 import theme from './theme';
-import * as apis from './apis';
 
 export {
     BaseWxViewer,
@@ -22,7 +23,7 @@ export {
     ProductMenu,
     ProductSelector,
     RegionSelector,
-    ShyftModel,
+    ModelSelector,
     BackButton,
     ForwardButton,
     Slider,
@@ -31,5 +32,5 @@ export {
     TimeControl,
     RunDropdown,
     theme,
-    apis,
+    apis
 };

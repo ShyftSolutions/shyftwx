@@ -1,14 +1,14 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: 600,
         color: theme.palette.primary.dark,
         height: 20,
-        margin: 0,
+        margin: 0
     },
     thumb: {
         height: 24,
@@ -18,29 +18,29 @@ const useStyles = makeStyles((theme) => ({
         marginTop: -8,
         marginLeft: -12,
         '&:focus, &:hover, &$active': {
-            boxShadow: 'inherit',
-        },
+            boxShadow: 'inherit'
+        }
     },
     active: {},
     valueLabel: {
-        left: 'calc(-50% + 4px)',
+        left: 'calc(-50% + 4px)'
     },
     rail: {
         height: 5,
-        borderRadius: 4,
+        borderRadius: 4
     },
     markLabelActive: {
         fontWeight: 700,
-        padding: 12,
+        padding: 12
     },
     markLabel: {
         fontWeight: 500,
-        padding: 12,
+        padding: 12
     },
     mark: {
         backgroundColor: theme.palette.primary.dark,
-        height: 5,
-    },
+        height: 5
+    }
 }));
 
 interface Props {
@@ -49,7 +49,7 @@ interface Props {
     value: number;
 }
 
-function ValueLabelComponent(props: Props ) {
+function ValueLabelComponent(props: Props) {
     const { children, open, value } = props;
 
     return (
@@ -62,15 +62,13 @@ function ValueLabelComponent(props: Props ) {
 }
 
 export const DiscreteSlider = (Props: { options: any }) => {
-    const{options} = Props;
+    const { options } = Props;
     const classes = useStyles();
     const stepValue: number = options[1].value - options[0].value;
     const defaultValue: number = options[0].value;
     const maxValue: number = options[options.length - 1].value;
 
-    const onChange = () => {
-
-    }
+    const onChange = () => {};
 
     return (
         <div className={classes.root}>

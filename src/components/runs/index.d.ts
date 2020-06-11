@@ -1,3 +1,4 @@
 declare type RunDropdownProps = {
-    options: any;
+    options: string[];
+    label?: string;
 };

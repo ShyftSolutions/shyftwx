@@ -1,8 +1,4 @@
-/// <reference types="react" />
-export declare const ShyftWx: ({ children, indexData, indexUrl, themeOverride }: {
-    children: any;
-    indexData: any;
-    indexUrl: any;
-    themeOverride: any;
-}) => JSX.Element;
+import React from 'react';
+export declare const ShyftContext: React.Context<{}>;
+export declare const ShyftWx: React.FC<ShyftWxProps>;
 export default ShyftWx;

@@ -1,12 +1,15 @@
-import React, { Children, useState, cloneElement } from 'react';
+import { CircularProgress, Grid, MuiThemeProvider, Typography } from '@material-ui/core';
+
+import React from 'react';
 import { getIndexAsync } from '../../apis';
-import { MuiThemeProvider, Theme, Grid } from '@material-ui/core';
 import theme from '../../theme';
 
-export const ShyftWx = ({ children, indexData, indexUrl, themeOverride }) => {
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [index, setIndex] = useState();
+export const ShyftContext = React.createContext({});
+
+export const ShyftWx: React.FC<ShyftWxProps> = ({ children, indexData, indexUrl, themeOverride }) => {
+    const [error, setError] = React.useState('');
+    const [loading, setLoading] = React.useState(true);
+    const [index, setIndex] = React.useState<ShyftIndex>();
 
     React.useEffect(() => {
         if (indexUrl) {
@@ -22,20 +25,25 @@ export const ShyftWx = ({ children, indexData, indexUrl, themeOverride }) => {
         }
     }, []);
 
-    if (error) {
-        return <p>{error}</p>;
-    }
+    const generateContent = (): React.ReactNode => {
+        if (error) {
+            return <Typography color="error">{error}</Typography>;
+        }
 
-    if (loading) {
-        return <p>LOADING</p>;
-    }
+        if (loading) {
+            return <CircularProgress />;
+        }
 
-    // TODO: pass index data to children
+        return children;
+    };
+
     return (
         <MuiThemeProvider theme={themeOverride || theme}>
-            <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
-                {Children.map(children, (child) => cloneElement(child, { index }))}
-            </Grid>
+            <ShyftContext.Provider value={{ data: index }}>
+                <Grid container direction="row" justify="flex-end" alignItems="flex-start" spacing={3}>
+                    {generateContent()}
+                </Grid>
+            </ShyftContext.Provider>
         </MuiThemeProvider>
     );
 };
