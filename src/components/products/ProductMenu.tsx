@@ -91,11 +91,13 @@ export const ProductMenu = (Props: {options: Category[], action: Function}) => {
                             <ListItemText
                                 disableTypography
                                 primary={
-                                    <Typography>
-                                        <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
-                                            {cat.name}
-                                        </Box>
-                                    </Typography>
+                                    <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
+                                        <Typography>
+                                            
+                                                {cat.name}
+                                            
+                                        </Typography>
+                                    </Box>
                                 }
                             />
                             {cat.open ? <ExpandLess/> : <ExpandMore/>}
@@ -103,8 +105,9 @@ export const ProductMenu = (Props: {options: Category[], action: Function}) => {
                     </Paper>
                     <Paper>
                         <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {cat.products.map((product: Product) => (
+                            {cat.products.map((product: Product, index: number) => (
                                 <ListItem
+                                    key={index}
                                     button
                                     className={classes.nested}
                                     selected={selectedProduct === cat.name + ' ' + product.name}

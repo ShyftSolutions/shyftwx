@@ -1,9 +1,8 @@
 import { faPercent, faWind } from '@fortawesome/free-solid-svg-icons';
-
 import GroupedButtons from '../buttons/GroupedButtons';
 import ProductMenu from '../products/ProductMenu';
 import React from 'react';
-import SimpleSelect from '../common/SimpleSelect';
+import SimpleSelect from './../dropdown/SimpleSelect';
 
 const alertClick = (buttonName: string) => {
     alert('You clicked on the button that says ' + buttonName);

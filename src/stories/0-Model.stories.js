@@ -1,11 +1,11 @@
-import _ShyftModel from 'components/models/ShyftModel.tsx';
+import _ModelSelector from 'components/models/ModelSelector.tsx';
 import React from 'react';
 import { text, object, withKnobs } from '@storybook/addon-knobs';
 import theme from './../theme';
 import { MuiThemeProvider } from '@material-ui/core';
 
 export default {
-    component: _ShyftModel,
+    component: _ModelSelector,
     title: 'Model',
     decorators: [withKnobs]
 };
@@ -16,7 +16,7 @@ const label = 'Model';
 export const ShyftModel = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_ShyftModel options={object('Settings', defaultOptions)} label={text('Label', label)}/>
+            <_ModelSelector options={object('Settings', defaultOptions)} label={text('Label', label)}/>
         </MuiThemeProvider>
     );
 };

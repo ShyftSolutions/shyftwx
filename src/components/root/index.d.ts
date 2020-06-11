@@ -1,6 +1,7 @@
 declare type ShyftWxProps = {
-    indexData?: ShyftIndex;
-    indexUrl?: string;
+    dataset: string;
+    customer: string;
+    url: string;
     themeOverride?: Theme;
 };
 
@@ -25,3 +26,33 @@ declare type ShyftProduct = {
     forecast: string;
     filename: string;
 };
+
+declare type ForecastHour = {
+    image: string;
+    hour: string;
+}
+
+declare type Product = {
+    name: string;
+    forecasts: ForecastHour[];
+}
+
+declare type Level = {
+    name: string;
+    products: Product[];
+}
+
+declare type Run = {
+    name: string;
+    levels: Level[];
+}
+
+declare type DatasetRegionRun = {
+    region: string;
+    dataset: string;
+    runs: Run[];
+}
+
+declare type Index = {
+    datasets: DatasetRegionRun[];
+}
