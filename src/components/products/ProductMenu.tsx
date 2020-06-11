@@ -86,12 +86,11 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
       {categories.map((cat: Category, index: number) => (
         <List key={index}>
           <Paper className={classes.category}>
-            <ListItem button onClick={() => handleClick(cat)}>
+            <ListItem button onClick={() => handleClick(cat) }>
               <ListItemText
-                disableTypography
                 primary={
-                  <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
-                    <Typography>
+                  <Box m={1} >
+                    <Typography style={{fontWeight: 800, fontSize: 16, letterSpacing: 1}}>
                       {cat.name}
                     </Typography>
                   </Box>
