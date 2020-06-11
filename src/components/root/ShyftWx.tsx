@@ -16,7 +16,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     // const [index, setIndex] = React.useState<ShyftIndex>();
-    const [index, setIndex] = React.useState<Index>();
+    const [index, setIndex] = React.useState<Index>({datasets: []});
 
     React.useEffect(() => {
         if (url) {
@@ -36,27 +36,24 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                 console.log(data);
                 // setIndex(data);
                 // console.log(index);
-                setLoading(false);
-
-                
 
                 data.datasets.map((dataset: ShyftDataset) => {
                     // console.log(dataset);
 
                     let boop: DatasetRegionRun = {
-                        dataset: dataset,
+                        dataset: dataset.name,
                         region: dataset.region,
-                    }
-
-                    let run: Run = {
-                        name: dataset.run
+                        run: {
+                            name: dataset.run,
+                            levels: []
+                        }
                     }
 
                     const runRegion = dataset.run.concat('-', dataset.region);
                     const datasetUrl = `${customerUrl}/${runRegion}`
                     getIndexAsync(datasetUrl).then((runRegionData: ShyftProductData) => {
+                        console.log(runRegionData);
                         let items = runRegionData.items;
-                        console.log(items);
 
                         let uniqueLevels: Level[] = [];
                         // filter out levels
@@ -68,10 +65,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 uniqueLevels.push({name: item.level, products: []})
                             }
                         });
-
-                        
-
-                        console.log(uniqueLevels);
 
                         
                         // for every unique level, look for its products
@@ -106,14 +99,12 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 product.forecasts = forecasts;
 
                             });
-                        })
+                        });
 
-                        
-
-                        console.log(uniqueLevels);
-                        
-
-
+                        boop.run.levels = uniqueLevels;
+                        const indexes = {datasets: [boop]};
+                        setIndex(indexes);
+                        setLoading(false);
                     })
                 })
                 
@@ -187,17 +178,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             },
         ];
 
-        const products = [
-            {
-                name: 'Surface',
-                open: true,
-                products: [
-                    {
-                        name: 'Temperature'
-                    }
-                ]
-            },
-        ];
+        console.log(index.datasets[0].run.levels.map(lvl => lvl.name));
 
         return <React.Fragment>
             <Grid container item spacing={3}>
@@ -210,9 +191,9 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
             <Grid container item spacing={3}>
                 {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
-                <Grid item
-                        xs={2}>
-                    <ProductSelector  categories={products} action={tempAction}/>
+                <Grid item xs={2}>
+                    <ProductSelector categories={() => index.datasets[0].run.levels.map(lvl => {return { name: lvl.name, open: false, products: lvl.products }})} 
+                                     action={tempAction}/>
                 </Grid>
                 <Grid item xs={9}><BaseWxViewer neBounds={[0.0, 0.0]} swBounds={[-10.0, -10.0]} /></Grid>
             </Grid>

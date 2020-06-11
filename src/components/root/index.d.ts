@@ -50,7 +50,7 @@ declare type Run = {
 declare type DatasetRegionRun = {
     region: string;
     dataset: string;
-    runs: Run[];
+    run: Run;
 }
 
 declare type Index = {
