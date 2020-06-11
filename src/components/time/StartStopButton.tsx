@@ -25,15 +25,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const StartStopButton = () => {
+export const StartStopButton: React.FC<TimeActivationButtonProps> = ({onStart, onStop}) => {
     const classes = useStyles();
     const [playing, setPlaying] = useState(false);
 
     const handleClick = () => {
         if (playing) {
             setPlaying(false);
+            onStart();
         } else {
             setPlaying(true);
+            onStop();
         }
     };
 

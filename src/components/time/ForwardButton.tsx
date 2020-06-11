@@ -22,12 +22,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default function ForwardButton() {
+export const ForwardButton: React.FC<TimeNavigationButtonProps> = ({action}) => {
     const classes = useStyles();
 
     return (
-        <Button className={classes.root} >
+        <Button onClick={action} className={classes.root} >
             <NavigateNextIcon className={classes.icon}/>
         </Button>
     );
 }
+
+export default ForwardButton;

@@ -13,8 +13,9 @@ export default {
 
 
 // https://api.shyftwx.com/datasets/lkjsdflsjd/Vision/
-const customer="lkjsdflsjd";
-const dataset="Vision";
+// 26066922-2b2c-4c3c-8262-654792f6a30f/TQIOmaha/
+const customer="26066922-2b2c-4c3c-8262-654792f6a30f";
+const dataset="TQIOmaha";
 const url="https://api.shyftwx.com/datasets";
 
 

@@ -55,15 +55,17 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     const runRegion = dataset.run.concat('-', dataset.region);
                     const datasetUrl = `${customerUrl}/${runRegion}`
                     getIndexAsync(datasetUrl).then((runRegionData: ShyftProductData) => {
-                        console.log(runRegionData.items);
                         let items = runRegionData.items;
+                        console.log(items);
 
-                        let uniqueLevels = [];
+                        let uniqueLevels: Level[] = [];
                         // filter out levels
                         items.map((item) => {
                             // see if level is already in unique levels
-                            if (uniqueLevels.indexOf(item.level) == -1) {
-                                uniqueLevels.push(item.level)
+
+
+                            if (uniqueLevels.filter(l => l.name === item.level).length == 0) {
+                                uniqueLevels.push({name: item.level, products: []})
                             }
                         });
 
@@ -71,26 +73,44 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
                         console.log(uniqueLevels);
 
+                        
                         // for every unique level, look for its products
                         uniqueLevels.map((lvl) => {
-                            let lvlProducts = [];
+                            let lvlProducts: Product[] = [];
 
                             items.map((item) => {
-                                if (item.level !== lvl) {
+                                if (item.level !== lvl.name) {
                                     return;
                                 }
 
-                                console.log(item.product);
-
                                 // see if level is already in unique levels
-                                if (lvlProducts.indexOf(item.product.name) == -1) {
-                                    lvlProducts.push(item.product)
+                                if (lvlProducts.filter(l => l.name === item.product).length == 0) {
+                                    lvlProducts.push({ name: item.product, forecasts: []})
+                                } else {
+                                    console.log(item.product)
                                 }
-                            })
+                            });
+
+                           lvl.products = lvlProducts;
                         })
 
-                        // collect forecast hours
+                        uniqueLevels.map((lvl) => {
+                            lvl.products.map((product) => {
 
+                                const filteredItems = items.filter((i) => i.level === lvl.name && i.product == product.name);
+                                let forecasts: ForecastHour[] = []
+                                filteredItems.map((item) => {    
+                                    forecasts.push({hour: item.forecast, image: item.filename})
+                                });
+
+                                product.forecasts = forecasts;
+
+                            });
+                        })
+
+                        
+
+                        console.log(uniqueLevels);
                         
 
 
@@ -200,7 +220,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             <Grid container item spacing={3}>
                 <Grid item xs={2} />
 
-                <Grid item xs={2}><TimeControl /></Grid>
+                <Grid item xs={2}><TimeControl onBack={tempAction} onNext={tempAction} onPlay={tempAction} onPause={tempAction}/></Grid>
                 <Grid item xs={8}><Slider options={slider} /></Grid>
             </Grid>
         </React.Fragment>;
