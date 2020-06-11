@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@material-ui/core';
 
 import React from 'react';
-import SimpleSelect from '../dropdown/SimpleSelect';
+import SimpleSelect from '../run/RunsSelector.tsx';
 
 export const RunDropdown: React.FC<RunDropdownProps> = ({ options, label }) => {
     const handleClick = (index: string) => {

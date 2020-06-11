@@ -95,8 +95,6 @@ export const DiscreteSlider = (Props: { options: any }) => {
 
     const onChange = () => { };
 
-    console.log(options);
-
     return (
         <div className={classes.root}>
             <Slider

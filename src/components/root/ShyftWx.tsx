@@ -4,6 +4,7 @@ import RunDropdown from './../runs/RunDropdown';
 import RegionSelector from './../regions/RegionSelector';
 import ProductSelector from './../products/ProductSelector';
 import BaseWxViewer from './../viewers/BaseWxViewer';
+import RunsSelector from './../run/RunsSelector';
 import TimeControl from './../time/TimeControl';
 import Slider from './../time/Slider';
 import React from 'react';
@@ -188,7 +189,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
                 <Grid item xs={3}><ModelSelector options={[index.datasets[0].dataset]} action={tempAction} /></Grid>
                 <Grid item xs={3}><RegionSelector options={[index.datasets[0].region]} action={tempAction}/></Grid>
-                <Grid item xs={3}><RunDropdown label="Runs" options={[index.datasets[0].run.name]}/></Grid>
+                <Grid item xs={3}><RunsSelector options={[index.datasets[0].run.name]} action={tempAction}/></Grid>
             </Grid>
 
             <Grid container item spacing={3}>
