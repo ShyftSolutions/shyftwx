@@ -1,4 +1,5 @@
 import { faPercent, faWind } from '@fortawesome/free-solid-svg-icons';
+
 import GroupedButtons from '../buttons/GroupedButtons';
 import ProductMenu from '../products/ProductMenu';
 import React from 'react';

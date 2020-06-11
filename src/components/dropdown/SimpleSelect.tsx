@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
  *
  * @param Props: {options: string[]}
  */
-export const SimpleSelect: React.FC<SimpleSelectProps> = ({ options, action }) => {
+export const SimpleSelect: React.FC<SimpleSelectProps> = ({ options =[''], action }) => {
     const classes = useStyles();
 
     const [selectedValue, setSelectedValue] = React.useState(options[0]);
