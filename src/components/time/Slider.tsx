@@ -60,15 +60,42 @@ function ValueLabelComponent(props: Props) {
         </span>
     );
 }
+const compare = (a, b) => {
+    // Use toUpperCase() to ignore character casing
+    const valA = Number(a.value);
+    const valB = Number(b.value);
+
+    let comparison = 0;
+    if (valA > valB) {
+        comparison = 1;
+    } else if (valA < valB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+const toHour = (options) => {
+    options.map((option) => {
+        option.label /= 360;
+    })
+}
+
 
 export const DiscreteSlider = (Props: { options: any }) => {
-    const { options } = Props;
     const classes = useStyles();
+    const { options } = Props;
+
+    //sort the array of objects by the value property
+    options.sort(compare);
+    toHour(options);
+
     const stepValue: number = Number(options[1].value) - Number(options[0].value);
     const defaultValue: number = Number(options[0].value);
     const maxValue: number = Number(options[options.length - 1].value);
 
-    const onChange = () => {};
+    const onChange = () => { };
+
+    console.log(options);
 
     return (
         <div className={classes.root}>
