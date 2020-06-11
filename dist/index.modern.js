@@ -3,7 +3,7 @@ import { latLngBounds } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useState, Children, cloneElement } from 'react';
 import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
-import { makeStyles as makeStyles$1, withStyles } from '@material-ui/core/styles';
+import { makeStyles as makeStyles$1 } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -284,22 +284,20 @@ var ProductMenu = function ProductMenu(Props) {
 var ProductSelector = function ProductSelector(Props) {
   var options = Props.options;
   var action = Props.action;
+  var label = Props.label;
   return /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     direction: "column"
   }, /*#__PURE__*/React.createElement(Grid, {
     item: true
   }, /*#__PURE__*/React.createElement(Typography, {
     variant: "h6"
-  }, "Products")), /*#__PURE__*/React.createElement(Grid, {
+  }, label)), /*#__PURE__*/React.createElement(Grid, {
     item: true
   }, /*#__PURE__*/React.createElement(ProductMenu, {
     options: options,
     action: action
-  }))));
+  })));
 };
 
 var useStyles$4 = makeStyles(function (theme) {
@@ -402,20 +400,13 @@ var useStyles$6 = makeStyles$1(function (theme) {
   };
 });
 
-function ValueLabelComponent(Props) {
-  var children = Props.children,
-      value = Props.value;
-  var LightTooltip = withStyles(function (theme) {
-    return {
-      tooltip: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
-        boxShadow: theme.shadows[1],
-        fontSize: 16
-      }
-    };
-  })(Tooltip);
-  return /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(LightTooltip, {
+function ValueLabelComponent(props) {
+  var children = props.children,
+      open = props.open,
+      value = props.value;
+  return /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(Tooltip, {
+    open: open,
+    enterTouchDelay: 0,
     placement: "top",
     title: value + ' + Model Run'
   }, children));
@@ -427,6 +418,7 @@ var DiscreteSlider = function DiscreteSlider(Props) {
   var stepValue = options[1].value - options[0].value;
   var defaultValue = options[0].value;
   var maxValue = options[options.length - 1].value;
+
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React.createElement(Slider, {
@@ -551,6 +543,13 @@ var theme = createMuiTheme({
       root: {
         color: '#000000'
       }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#329af0',
+        color: '#f8f9fa',
+        fontSize: 16
+      }
     }
   },
   spacing: 8
@@ -613,53 +612,78 @@ var ShyftWx = function ShyftWx(_ref) {
 
 var ShyftModel = function ShyftModel(Props) {
   var options = Props.options;
+  var label = Props.label;
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
   };
 
-  return /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
-  }, "Model")), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(GroupedButtons, {
-    options: options,
-    action: handleClick
-  }))));
+  return (
+    /*#__PURE__*/
+    React.createElement(Grid, {
+      container: true,
+      direction: "column"
+    }, /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(Typography, {
+      variant: "h6"
+    }, label)), /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(GroupedButtons, {
+      options: options,
+      action: handleClick
+    })))
+  );
 };
 
 var RegionSelector = function RegionSelector(Props) {
   var options = Props.options;
+  var label = Props.label;
+
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
+
+  return (
+    /*#__PURE__*/
+    React.createElement(Grid, {
+      container: true,
+      direction: "column"
+    }, /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(Typography, {
+      variant: "h6"
+    }, label)), /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(GroupedButtons, {
+      options: options,
+      action: handleClick
+    })))
+  );
+};
+
+var RunDropdown = function RunDropdown(props) {
+  var options = props.options,
+      label = props.label;
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
   };
 
   return /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     direction: "column"
   }, /*#__PURE__*/React.createElement(Grid, {
     item: true
   }, /*#__PURE__*/React.createElement(Typography, {
     variant: "h6"
-  }, "Region")), /*#__PURE__*/React.createElement(Grid, {
+  }, label)), /*#__PURE__*/React.createElement(Grid, {
     item: true
-  }, /*#__PURE__*/React.createElement(GroupedButtons, {
+  }, /*#__PURE__*/React.createElement(SimpleSelect, {
     options: options,
     action: handleClick
-  }))));
+  })));
 };
 
-export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ProductMenu, ProductSelector, RegionSelector, ShyftModel, ShyftWx, SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme };
+export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ProductMenu, ProductSelector, RegionSelector, RunDropdown, ShyftModel, ShyftWx, SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme };
 //# sourceMappingURL=index.modern.js.map

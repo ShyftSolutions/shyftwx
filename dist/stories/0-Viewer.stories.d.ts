@@ -1,6 +1,6 @@
 declare namespace _default {
     export const title: string;
-    export const decorators: any[];
+    export const decorators: ((...args: any) => any)[];
 }
 export default _default;
 export function BaseWxViewer(): JSX.Element;

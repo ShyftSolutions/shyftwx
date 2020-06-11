@@ -1,4 +1,7 @@
 /// <reference types="react" />
-export declare const RunDropdown: (Props: {
+interface Props {
     options: string[];
-}) => JSX.Element;
+    label?: string;
+}
+export declare const RunDropdown: (props: Props) => JSX.Element;
+export default RunDropdown;

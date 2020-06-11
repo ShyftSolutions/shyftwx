@@ -6,5 +6,6 @@
  */
 export declare const RegionSelector: (Props: {
     options: string[];
+    label?: string;
 }) => JSX.Element;
 export default RegionSelector;

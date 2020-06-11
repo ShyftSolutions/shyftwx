@@ -11,6 +11,7 @@ import TimeControl from './components/time/TimeControl';
 import ShyftWx from './components/root/ShyftWx';
 import ShyftModel from './components/models/ShyftModel';
 import RegionSelector from './components/regions/RegionSelector';
+import RunDropdown from './components/runs/RunDropdown';
 import theme from './theme';
 import * as apis from './apis';
-export { BaseWxViewer, GroupedButtons, SimpleSelect, ProductMenu, ProductSelector, RegionSelector, ShyftModel, BackButton, ForwardButton, Slider, ShyftWx, StartStopButton, TimeControl, theme, apis, };
+export { BaseWxViewer, GroupedButtons, SimpleSelect, ProductMenu, ProductSelector, RegionSelector, ShyftModel, BackButton, ForwardButton, Slider, ShyftWx, StartStopButton, TimeControl, RunDropdown, theme, apis, };

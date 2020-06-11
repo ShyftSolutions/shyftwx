@@ -12,5 +12,6 @@ interface Product {
 export declare const ProductSelector: (Props: {
     options: Category[];
     action: Function;
+    label?: string;
 }) => JSX.Element;
 export default ProductSelector;

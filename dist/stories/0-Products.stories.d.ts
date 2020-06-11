@@ -1,7 +1,7 @@
 declare namespace _default {
     export { _ProductSelector as component };
     export const title: string;
-    export const decoration: any[];
+    export const decoration: ((...args: any) => any)[];
 }
 export default _default;
 export function ProductSelector(): JSX.Element;

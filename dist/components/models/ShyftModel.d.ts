@@ -6,5 +6,6 @@
  */
 export declare const ShyftModel: (Props: {
     options: string[];
+    label?: string;
 }) => JSX.Element;
 export default ShyftModel;
