@@ -77,7 +77,7 @@ export const ProductMenu = (Props: {options: Category[], action: Function}) => {
         setCategories(newCategories);
     };
 
-    const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product: string) => {
+    const handleListItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, product: object) => {
         setSelectedProduct(product);
         action(product);
     };
@@ -93,9 +93,7 @@ export const ProductMenu = (Props: {options: Category[], action: Function}) => {
                                 primary={
                                     <Box fontWeight={800} m={1} letterSpacing={1} fontSize={16}>
                                         <Typography>
-                                            
                                                 {cat.name}
-                                            
                                         </Typography>
                                     </Box>
                                 }
@@ -111,7 +109,7 @@ export const ProductMenu = (Props: {options: Category[], action: Function}) => {
                                     button
                                     className={classes.nested}
                                     selected={selectedProduct === cat.name + ' ' + product.name}
-                                    onClick={(event) => handleListItemClick(event, cat.name + ' ' + product.name)}
+                                    onClick={(event) => handleListItemClick(event, {level: cat.name, product: product.name})}
                                 >
                                     <ListItemIcon>
                                         {product.icon != undefined &&

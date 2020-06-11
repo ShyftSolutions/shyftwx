@@ -15,8 +15,10 @@ export const ShyftContext = React.createContext({});
 export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, customer, themeOverride }) => {
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
-    // const [index, setIndex] = React.useState<ShyftIndex>();
     const [index, setIndex] = React.useState<Index>({datasets: []});
+    const [selectedProduct, setSelectedProduct] = React.useState<string>('');
+    const [selectedLevel, setSelectedLevel] = React.useState<string>('');
+    const [selectedForecast, setSelectedForecast] = React.useState<string>('');
 
     React.useEffect(() => {
         if (url) {
@@ -104,6 +106,9 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         boop.run.levels = uniqueLevels;
                         const indexes = {datasets: [boop]};
                         setIndex(indexes);
+                        setSelectedLevel(indexes.datasets[0].run.levels[0].name)
+                        setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+                        setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour)
                         setLoading(false);
                     })
                 })
@@ -118,6 +123,48 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         console.log('pressed ', boop)
     }
 
+    const onProductSelect = (product: ProductSelectionResponse) => {
+        setSelectedLevel(product.level)
+        setSelectedProduct(product.product)
+        setSelectedForecast(getSelectedProduct().forecasts[0].hour)
+    }
+
+    const onSliderNavigationNext = () => {
+        // find index of the current selected forecast hour
+        const forecasts = getSelectedProduct().forecasts;
+        let forecastIndex = forecasts.findIndex(f => f.hour === selectedForecast);
+
+        if (forecastIndex + 1 == forecasts.length) {
+            return;
+        }
+        
+        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+    }
+
+    const onSliderNavigationBack = () => {
+        // find index of the current selected forecast hour
+        const forecasts = getSelectedProduct().forecasts;
+        let forecastIndex = forecasts.findIndex(f => f.hour === selectedForecast);
+
+        if (forecastIndex - 1 < 0) {
+            return;
+        }
+        
+        setSelectedForecast(forecasts[forecastIndex - 1].hour);
+    }
+
+    const getSelectedForecast = () => {
+        return getSelectedProduct().forecasts.filter(f => f.hour == selectedForecast);
+    }
+
+    const getSelectedLevel = () => {
+        return index.datasets[0].run.levels.filter(lvl => lvl.name == selectedLevel)[0];
+    }
+
+    const getSelectedProduct = () => {
+        return getSelectedLevel().products.filter(p => p.name == selectedProduct)[0]
+    }
+
     const generateContent = (): React.ReactNode => {
         if (error) {
             return <Typography color="error">{error}</Typography>;
@@ -127,85 +174,43 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return <CircularProgress />;
         }
 
-        const slider = [
-            {
-                value: 1,
-                label: '01'
-            },
-            {
-                value: 2,
-                label: '02'
-            },
-            {
-                value: 3,
-                label: '03'
-            },
-            {
-                value: 4,
-                label: '04'
-            },
-            {
-                value: 5,
-                label: '05'
-            },
-            {
-                value: 6,
-                label: '06'
-            },
-            {
-                value: 7,
-                label: '07'
-            },
-            {
-                value: 8,
-                label: '08'
-            },
-            {
-                value: 9,
-                label: '09'
-            },
-            {
-                value: 10,
-                label: '10'
-            },
-            {
-                value: 11,
-                label: '11'
-            },
-            {
-                value: 12,
-                label: '12'
-            },
-        ];
-
-        console.log(index.datasets[0].run.levels.map(lvl => lvl.name));
+        // console.log(index.datasets[0].run.levels.map(lvl => lvl.name));
+        // console.log(selectedLevel, selectedProduct);
+        let levelProductVals = index.datasets[0].run.levels.map(lvl => {return { name: lvl.name, open: false, products: lvl.products }})
+        let sliderVals = getSelectedProduct().forecasts.map((f) => {return {label: f.hour, value: f.hour}});
+        let activeForecastLayer = getSelectedProduct().forecasts.filter(f => f.hour === selectedForecast)[0].image;
+        
+        console.log(activeForecastLayer)
 
         return <React.Fragment>
             <Grid container item spacing={3}>
                 <Grid item xs={2} />
 
-                <Grid item xs={3}><ModelSelector options={['beep', 'boop']} action={tempAction} /></Grid>
-                <Grid item xs={3}><RegionSelector options={['meep', 'moop']} action={tempAction}/></Grid>
-                <Grid item xs={3}><RunDropdown label="Runs" options={['neep', 'noop']}/></Grid>
+                <Grid item xs={3}><ModelSelector options={[index.datasets[0].dataset]} action={tempAction} /></Grid>
+                <Grid item xs={3}><RegionSelector options={[index.datasets[0].region]} action={tempAction}/></Grid>
+                <Grid item xs={3}><RunDropdown label="Runs" options={[index.datasets[0].run.name]}/></Grid>
             </Grid>
 
             <Grid container item spacing={3}>
                 {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
                 <Grid item xs={2}>
-                    <ProductSelector categories={() => index.datasets[0].run.levels.map(lvl => {return { name: lvl.name, open: false, products: lvl.products }})} 
-                                     action={tempAction}/>
+                    <ProductSelector categories={levelProductVals} 
+                                     action={onProductSelect}/>
                 </Grid>
-                <Grid item xs={9}><BaseWxViewer neBounds={[0.0, 0.0]} swBounds={[-10.0, -10.0]} /></Grid>
+                <Grid item xs={9}><BaseWxViewer layers={activeForecastLayer} neBounds={[0.0, 0.0]} swBounds={[-10.0, -10.0]} /></Grid>
             </Grid>
 
             <Grid container item spacing={3}>
                 <Grid item xs={2} />
 
-                <Grid item xs={2}><TimeControl onBack={tempAction} onNext={tempAction} onPlay={tempAction} onPause={tempAction}/></Grid>
-                <Grid item xs={8}><Slider options={slider} /></Grid>
+                <Grid item xs={2}><TimeControl onBack={onSliderNavigationBack} onNext={onSliderNavigationNext} onPlay={tempAction} onPause={tempAction}/></Grid>
+                <Grid item xs={8}><Slider options={sliderVals} /></Grid>
             </Grid>
         </React.Fragment>;
     };
+
+    console.log(index);
+    console.log()
 
     return (
         <MuiThemeProvider theme={themeOverride || theme}>

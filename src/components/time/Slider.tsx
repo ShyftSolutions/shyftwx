@@ -64,9 +64,9 @@ function ValueLabelComponent(props: Props) {
 export const DiscreteSlider = (Props: { options: any }) => {
     const { options } = Props;
     const classes = useStyles();
-    const stepValue: number = options[1].value - options[0].value;
-    const defaultValue: number = options[0].value;
-    const maxValue: number = options[options.length - 1].value;
+    const stepValue: number = Number(options[1].value) - Number(options[0].value);
+    const defaultValue: number = Number(options[0].value);
+    const maxValue: number = Number(options[options.length - 1].value);
 
     const onChange = () => {};
 

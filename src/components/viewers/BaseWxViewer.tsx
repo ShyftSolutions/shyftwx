@@ -31,12 +31,10 @@ export const BaseWxViewer = ({ index, layers, neBounds, swBounds }) => {
                 className={classes.root}
                 dragging={false}
                 zoomControl={false}
-                scrollWheelZoom={false}
+                scrollWheelZoom={true}
             >
                 <ImageOverlay
-                    url={
-                        'https://wxchange-images.s3.us-east-2.amazonaws.com/GFS_2020-05-27T06_Temperature_US_850hPa_01.png.PNG'
-                    }
+                    url={layers}
                     bounds={bounds}
                     opacity={0.5}
                 />
