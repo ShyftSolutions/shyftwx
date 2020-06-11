@@ -2,7 +2,7 @@ import _ProductSelector from '../components/products/ProductSelector';
 import { object, text, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
-import theme from 'theme.js';
+import theme from './../theme';
 import { faPercent, faTint, faWind, faCloudShowersHeavy } from '@fortawesome/free-solid-svg-icons';
 
 export default {

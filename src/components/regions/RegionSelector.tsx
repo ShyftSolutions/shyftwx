@@ -8,7 +8,7 @@ import React from 'react';
  *
  * @param Props: { options: string[]}
  */
-export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label }) => {
+export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region' }) => {
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
     };
@@ -17,10 +17,10 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label }
         /* Region Grid Container */
         <Grid container direction="column">
             <Grid item>
-                <Typography variant='h6'>{label}</Typography>
+                <Typography variant="h6">{label}</Typography>
             </Grid>
             <Grid item>
-                <GroupedButtons options={options} action={handleClick}/>
+                <GroupedButtons options={options} action={handleClick} />
             </Grid>
         </Grid>
     );

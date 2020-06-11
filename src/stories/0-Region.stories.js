@@ -2,7 +2,7 @@ import _RegionSelector from 'components/regions/RegionSelector.tsx';
 import { object, text, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
-import theme from 'theme.js';
+import theme from './../theme';
 
 export default {
     component: _RegionSelector,
