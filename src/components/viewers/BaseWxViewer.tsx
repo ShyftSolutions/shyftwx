@@ -30,6 +30,9 @@ export const BaseWxViewer = ({ index, layers, neBounds, swBounds }) => {
                 dragging={false}
                 zoomControl={false}
                 scrollWheelZoom={true}
+                doubleClickZoom={false}
+                keyboard={false}
+                touchZoom={false}
             >
                 <ImageOverlay
                     url={layers}
