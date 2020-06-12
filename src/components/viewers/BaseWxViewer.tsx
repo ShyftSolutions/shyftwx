@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { latLngBounds } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React from 'react';
@@ -6,8 +6,8 @@ import { ImageOverlay, Map, TileLayer } from 'react-leaflet';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '70vh',
-        width: '70vw',
+        height: '40vw',
+        width: '100%'
     },
     paddingMiddle: {
         marginLeft: 15,
@@ -23,8 +23,6 @@ export const BaseWxViewer = ({ index, layers, neBounds, swBounds }) => {
     const bounds = latLngBounds(swBounds, neBounds);
 
     return (
-        <Grid item xs={9}>
-            {/* Map Container */}
             <Map
                 zoom={10}
                 bounds={bounds}
@@ -43,7 +41,6 @@ export const BaseWxViewer = ({ index, layers, neBounds, swBounds }) => {
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
             </Map>
-        </Grid>
     );
 };
 

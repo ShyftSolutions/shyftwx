@@ -22,106 +22,76 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
 
     React.useEffect(() => {
-        if (url) {
-            // https://api.shyftwx.com/datasets/lkjsdflsjd/Vision/
-            // -> this returns a list of runs
-
-            // https://api.shyftwx.com/datasets/lkjsdflsjd/Vision/{run}
-            // -> this return a list of regions for the given run
-
-            // https://api.shyftwx.com/datasets/lkjsdflsjd/Vision/{run}/{region}
-            // -> this returns a list of items (products/levels/forecastHours)
-            const customerUrl = `${url}/${customer}/${dataset}`
-            let tempIndex = [];
-
-
-            getIndexAsync(customerUrl).then((data: ShyftIndex) => {
-                console.log(data);
-                // setIndex(data);
-                // console.log(index);
-
-                data.datasets.map((dataset: ShyftDataset) => {
-                    // console.log(dataset);
-
-                    let boop: DatasetRegionRun = {
-                        dataset: dataset.name,
-                        region: dataset.region,
-                        run: {
-                            name: dataset.run,
-                            levels: []
-                        }
-                    }
-
-                    const runRegion = dataset.run.concat('-', dataset.region);
-                    const datasetUrl = `${customerUrl}/${runRegion}`
-                    getIndexAsync(datasetUrl).then((runRegionData: ShyftProductData) => {
-                        console.log(runRegionData);
-                        let items = runRegionData.items;
-
-                        let uniqueLevels: Level[] = [];
-                        // filter out levels
-                        items.map((item) => {
-                            // see if level is already in unique levels
-
-
-                            if (uniqueLevels.filter(l => l.name === item.level).length == 0) {
-                                uniqueLevels.push({name: item.level, products: []})
-                            }
-                        });
-
-
-                        // for every unique level, look for its products
-                        uniqueLevels.map((lvl) => {
-                            let lvlProducts: Product[] = [];
-
-                            items.map((item) => {
-                                if (item.level !== lvl.name) {
-                                    return;
-                                }
-
-                                // see if level is already in unique levels
-                                if (lvlProducts.filter(l => l.name === item.product).length == 0) {
-                                    lvlProducts.push({ name: item.product, forecasts: []})
-                                } else {
-                                    console.log(item.product)
-                                }
-                            });
-
-                           lvl.products = lvlProducts;
-                        })
-
-                        uniqueLevels.map((lvl) => {
-                            lvl.products.map((product) => {
-
-                                const filteredItems = items.filter((i) => i.level === lvl.name && i.product == product.name);
-                                let forecasts: ForecastHour[] = []
-                                filteredItems.map((item) => {
-                                    forecasts.push({hour: item.forecast, image: item.filename})
-                                });
-
-                                product.forecasts = forecasts;
-
-                            });
-                        });
-
-                        boop.run.levels = uniqueLevels;
-                        const indexes = {datasets: [boop]};
-                        setIndex(indexes);
-                        setSelectedLevel(indexes.datasets[0].run.levels[0].name)
-                        setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-                        setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour)
-                        setLoading(false);
-                    })
-                })
-
-            });
-        } else {
+        if (!url) {
             setError('No indexUrl or indexData provided.');
+            return;
         }
+
+        const customerUrl = `${url}/${customer}/${dataset}`
+
+        getIndexAsync(customerUrl).then((indexData: ShyftIndex) => {
+
+            indexData.datasets.forEach((dataset: ShyftDataset) => {
+                // dataset is synonamous w/ model
+                let datasetRegionRun: DatasetRegionRun = {
+                    dataset: dataset.name,
+                    region: dataset.region,
+                    run: {
+                        name: dataset.run,
+                        levels: []
+                    }
+                }
+
+                const runRegion = `${dataset.run}-${dataset.region}`;
+                const datasetUrl = `${customerUrl}/${runRegion}`
+
+                getIndexAsync(datasetUrl).then((runRegionData: ShyftProductData) => {
+                    let items = runRegionData.items;
+                    let uniqueLevels: Level[] = [];
+
+                    uniqueLevels = items.map(i => i.level)                              // get all level values
+                                        .filter((v, i, a) => a.indexOf(v) === i)        // filter down to unique levels
+                                        .map(l => {return {name: l, products: []}});    // return level obj arr
+
+                    uniqueLevels.forEach(lvl => {
+                        lvl.products = items.filter(item => item.level === lvl.name)                  // only look at items for this level
+                                            .map(i => i.product)                                      // gather all of the products
+                                            .filter((v, i, a) => a.indexOf(v) === i)                  // only get unique products
+                                            .map(product => { return {name: product, forecasts: []}}) // return product obj arr
+                    })
+
+                    uniqueLevels.forEach(lvl => {
+                        lvl.products.forEach(product => {
+                            product.forecasts = items.filter(item => item.level === lvl.name && 
+                                                                     item.product == product.name)   // only look at specific level and product
+                                                     .map(item => { return {hour: item.forecast, image: item.filename} }) // return forecast obj arr
+                        });
+                    });
+
+                    // uniqueLevels now have all of the products and forecasts hours for a given run
+                    datasetRegionRun.run.levels = uniqueLevels;
+
+                    const indexes = {datasets: [datasetRegionRun]};
+                    setIndex(indexes);
+
+                    // setting default values
+                    setSelectedLevel(indexes.datasets[0].run.levels[0].name)
+                    setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+                    setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour)
+
+                    setLoading(false);
+                })
+            })
+
+        });
     }, []);
 
-    const tempAction = (boop) => {
-        console.log('pressed ', boop)
+    const getSelectedLevel = () => {
+        return index.datasets[0].run.levels.filter(lvl => lvl.name == selectedLevel)[0];
+    }
+
+    const getSelectedProduct = () => {
+        return getSelectedLevel().products.filter(p => p.name == selectedProduct)[0]
     }
 
     const onProductSelect = (product: ProductSelectionResponse) => {
@@ -131,7 +101,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     }
 
     const onSliderNavigationNext = () => {
-        // find index of the current selected forecast hour
         const forecasts = getSelectedProduct().forecasts;
         let forecastIndex = forecasts.findIndex(f => f.hour === selectedForecast);
 
@@ -143,7 +112,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     }
 
     const onSliderNavigationBack = () => {
-        // find index of the current selected forecast hour
         const forecasts = getSelectedProduct().forecasts;
         let forecastIndex = forecasts.findIndex(f => f.hour === selectedForecast);
 
@@ -154,16 +122,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         setSelectedForecast(forecasts[forecastIndex - 1].hour);
     }
 
-    const getSelectedForecast = () => {
-        return getSelectedProduct().forecasts.filter(f => f.hour == selectedForecast);
-    }
-
-    const getSelectedLevel = () => {
-        return index.datasets[0].run.levels.filter(lvl => lvl.name == selectedLevel)[0];
-    }
-
-    const getSelectedProduct = () => {
-        return getSelectedLevel().products.filter(p => p.name == selectedProduct)[0]
+    const getOffset = (): React.ReactNode => {
+        return <Grid item xs={3} />
     }
 
     const generateContent = (): React.ReactNode => {
@@ -175,43 +135,51 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return <CircularProgress />;
         }
 
-        // console.log(index.datasets[0].run.levels.map(lvl => lvl.name));
-        // console.log(selectedLevel, selectedProduct);
-        let levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {return { name: lvl.name, open: index == 0, products: lvl.products }})
-        let sliderVals = getSelectedProduct().forecasts.map((f) => {return {label: f.hour, value: f.hour}});
-        let activeForecastLayer = getSelectedProduct().forecasts.filter(f => f.hour === selectedForecast)[0].image;
-
-        console.log(activeForecastLayer)
+        const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {return { name: lvl.name, open: index == 0, products: lvl.products }})
+        const sliderVals = getSelectedProduct().forecasts.map(f => {return {label: f.hour, value: f.hour}});
+        const activeForecastLayer = getSelectedProduct().forecasts.filter(f => f.hour === selectedForecast)[0].image;
 
         return <React.Fragment>
-            <Grid container item spacing={3}>
-                <Grid item xs={2} />
+                    <Grid container item>
+                        <Grid container item>
+                            {getOffset()}
+                            <Grid item xs={3}><ModelSelector options={[index.datasets[0].dataset]} action={() => {}} /></Grid>
+                            <Grid item xs={3}><RegionSelector options={[index.datasets[0].region]} action={() => {}}/></Grid>
+                            <Grid item xs={3}><RunsSelector options={[index.datasets[0].run.name]} action={() => {}}/></Grid>
+                        </Grid>
+                    </Grid>
 
-                <Grid item xs={3}><ModelSelector options={[index.datasets[0].dataset]} action={tempAction} /></Grid>
-                <Grid item xs={3}><RegionSelector options={[index.datasets[0].region]} action={tempAction}/></Grid>
-                <Grid item xs={3}><RunsSelector options={[index.datasets[0].run.name]} action={tempAction}/></Grid>
-            </Grid>
+                    <Grid container item>
+                        <Grid container item xs={3}>
+                            {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
+                            <Grid item>
+                                <ProductSelector categories={levelProductVals}
+                                                action={onProductSelect}/>
+                            </Grid>
+                        </Grid>
 
-            <Grid container item spacing={3}>
-                {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
-                <Grid item xs={2}>
-                    <ProductSelector categories={levelProductVals}
-                                     action={onProductSelect}/>
-                </Grid>
-                <Grid item xs={9}><BaseWxViewer layers={activeForecastLayer} neBounds={[0.0, 0.0]} swBounds={[-10.0, -10.0]} /></Grid>
-            </Grid>
+                        <Grid container item xs={9}>
+                            <Grid container item>
+                                <BaseWxViewer layers={activeForecastLayer} 
+                                            neBounds={[0.0, 0.0]} 
+                                            swBounds={[-10.0, -10.0]} />
+                            </Grid>
 
-            <Grid container item spacing={3}>
-                <Grid item xs={2} />
-
-                <Grid item xs={2}><TimeControl onBack={onSliderNavigationBack} onNext={onSliderNavigationNext} onPlay={tempAction} onPause={tempAction}/></Grid>
-                <Grid item xs={8}><Slider options={sliderVals} /></Grid>
-            </Grid>
-        </React.Fragment>;
+                            <Grid container item>
+                                <Grid item xs={2}>
+                                    <TimeControl onBack={onSliderNavigationBack} 
+                                                onNext={onSliderNavigationNext} 
+                                                onPlay={() => {}} 
+                                                onPause={() => {}}/>
+                                </Grid>
+                                <Grid item xs={10}>
+                                    <Slider options={sliderVals} />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </React.Fragment>;
     };
-
-    console.log(index);
-    console.log()
 
     return (
         <MuiThemeProvider theme={themeOverride || theme}>
