@@ -10,7 +10,7 @@ import ProductSelector from './components/products/ProductSelector';
 import RegionSelector from './components/regions/RegionSelector';
 import RunDropdown from './components/runs/RunDropdown';
 import ShyftWx from './components/root/ShyftWx';
-import SimpleSelect from './components/run/RunsSelector.tsx';
+import SimpleSelect from './components/run/RunsSelector';
 import Slider from './components/time/Slider';
 import StartStopButton from './components/time/StartStopButton';
 import TimeControl from './components/time/TimeControl';
