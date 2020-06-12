@@ -25,7 +25,13 @@ export default createMuiTheme({
                     },
                     color: '#868e96'
                 },
+                paddingTop: '6px',
+                paddingBottom: '6px'
             },
+            gutters: {
+                paddingLeft: '6px',
+                paddingRight: '6px'
+            }
         },
         MuiListItemIcon: {
             root: {

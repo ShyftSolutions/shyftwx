@@ -152,7 +152,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     <Grid container item>
                         <Grid container item xs={3}>
                             {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
-                            <Grid item>
+                            <Grid container item>
                                 <ProductSelector categories={levelProductVals}
                                                 action={onProductSelect}/>
                             </Grid>
