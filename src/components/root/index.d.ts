@@ -12,8 +12,21 @@ declare type ShyftIndex = {
 
 declare type ShyftDataset = {
     name: string;
-    region: string;
+    region: ShyftRegion;
     run: string;
+};
+
+declare type ShyftRegion = {
+    name: string;
+    bbox: BoundingBox;
+    selected: boolean;
+};
+
+declare type BoundingBox = {
+    xMin: number;
+    xMax: number;
+    yMin: number;
+    yMax: number;
 };
 
 declare type ShyftProductData = {
@@ -30,29 +43,29 @@ declare type ShyftProduct = {
 declare type ForecastHour = {
     image: string;
     hour: string;
-}
+};
 
 declare type Product = {
     name: string;
     forecasts: ForecastHour[];
-}
+};
 
 declare type Level = {
     name: string;
     products: Product[];
-}
+};
 
 declare type Run = {
     name: string;
     levels: Level[];
-}
+};
 
 declare type DatasetRegionRun = {
     region: string;
     dataset: string;
     run: Run;
-}
+};
 
 declare type Index = {
     datasets: DatasetRegionRun[];
-}
+};
