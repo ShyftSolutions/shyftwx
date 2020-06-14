@@ -3,7 +3,5 @@ export const getIndexAsync = (url) => {
 };
 
 export const getProductDataAsync = (url, region, run) => {
-    url = `${url}/${run}-${region}`;
-
-    return fetch(url).then((response) => response.json());
+    return fetch(`${url}/${run}-${region}`).then((response) => response.json());
 };

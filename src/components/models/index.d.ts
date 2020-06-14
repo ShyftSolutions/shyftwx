@@ -1,5 +1,5 @@
 declare type ModelSelectorProps = {
-    options: string[];
+    options?: string[];
     label?: string;
-    action: (option: string) => void;
+    action?: (option: string) => void;
 };

@@ -1,6 +1,6 @@
+import BaseWxViewer from './viewers/BaseWxViewer';
 import React from 'react';
 import ShyftWx from './root/ShyftWx';
-import BaseWxViewer from './viewers/BaseWxViewer';
 
 export const App = () => {
     return (

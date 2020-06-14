@@ -1,5 +1,5 @@
 declare type RegionSelectorProps = {
-    options: string[];
+    options?: number[];
     label?: string;
-    action: (option: string) => void;
+    setRuns?: Function;
 };

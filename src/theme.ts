@@ -6,19 +6,19 @@ export default createMuiTheme({
             light: '#72c3fc',
             main: '#329af0',
             dark: '#1c7cd6',
-            contrastText: '#f8f9fa',
+            contrastText: '#f8f9fa'
         },
         secondary: {
             light: '#e9ecef',
             main: '#ff922b',
             dark: '#868e96',
             contrastText: '#474545'
-        },
+        }
     },
     overrides: {
         MuiListItem: {
             root: {
-                "&$selected": {
+                '&$selected': {
                     backgroundColor: '#E9ECEF',
                     '&:hover': {
                         backgroundColor: '#E9ECEF'
@@ -35,14 +35,14 @@ export default createMuiTheme({
         },
         MuiListItemIcon: {
             root: {
-                color: '#000000',
+                color: '#000000'
             }
         },
         MuiTooltip: {
             tooltip: {
                 backgroundColor: '#329af0',
                 color: '#f8f9fa',
-                fontSize: 16,
+                fontSize: 16
             }
         }
     },
