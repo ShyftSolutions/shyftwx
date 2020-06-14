@@ -25,7 +25,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const customerUrl = `${url}/${customer}/${dataset}`;
 
     const loadAsync = async () => {
-        const indexData = await getIndexAsync(customerUrl);
+        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
             setError('No datasets available.');
@@ -37,7 +37,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
             const datasetRegionRun: DatasetRegionRun = {
                 dataset: dataset.name,
-                region: dataset.region.name,
+                region: dataset.region,
                 run: {
                     name: dataset.run,
                     levels: []
@@ -156,13 +156,15 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return <CircularProgress />;
         }
 
+        const selectedProduct = getSelectedProduct();
+
         const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
             return { name: lvl.name, open: index == 0, products: lvl.products };
         });
-        const sliderVals = getSelectedProduct().forecasts.map((f) => {
+        const sliderVals = selectedProduct.forecasts.map((f) => {
             return { label: f.hour, value: f.hour };
         });
-        const activeForecastLayer = getSelectedProduct().forecasts.filter((f) => f.hour === selectedForecast)[0].image;
+        const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 
         return (
             <React.Fragment>
@@ -173,7 +175,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <ModelSelector options={[index.datasets[0].dataset]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <RegionSelector options={[index.datasets[0].region]} action={() => {}} />
+                            <RegionSelector options={[index.datasets[0].region.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
                             <RunsSelector options={[index.datasets[0].run.name]} action={() => {}} />
@@ -193,8 +195,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         <Grid container item>
                             <BaseWxViewer
                                 layers={activeForecastLayer}
-                                neBounds={[0.0, 0.0]}
-                                swBounds={[-10.0, -10.0]}
+                                neBounds={[index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax]}
+                                swBounds={[index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]}
                             />
                         </Grid>
 

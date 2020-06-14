@@ -19,14 +19,13 @@ declare type ShyftDataset = {
 declare type ShyftRegion = {
     name: string;
     bbox: BoundingBox;
-    selected: boolean;
 };
 
 declare type BoundingBox = {
-    xMin: number;
-    xMax: number;
-    yMin: number;
-    yMax: number;
+    xmin: number;
+    xmax: number;
+    ymin: number;
+    ymax: number;
 };
 
 declare type ShyftProductData = {
@@ -61,7 +60,7 @@ declare type Run = {
 };
 
 declare type DatasetRegionRun = {
-    region: string;
+    region: ShyftRegion;
     dataset: string;
     run: Run;
 };
