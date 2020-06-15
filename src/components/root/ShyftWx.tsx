@@ -223,7 +223,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <RegionSelector options={[index.datasets[0].region.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <RunsSelector options={[index.datasets[0].run.name]} action={() => {}} />
+                            <RunsSelector options={[toUTCTime(+index.datasets[0].run.name)]} action={() => {}} />
                         </Grid>
                     </Grid>
                 </Grid>

@@ -14,14 +14,12 @@ export const RunsSelector: React.FC<RegionSelectorProps> = ({ options, label = '
         console.log(`clicked ${index}`);
     };
 
-    const dates = toDates(options);
-
     return (
         /* Run Grid Container */
         <Grid container item justify="flex-end">
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
-                <GroupedButtons options={dates} action={handleClick} />
+                <GroupedButtons options={options} action={handleClick} />
             </Grid>
         </Grid>
     );
