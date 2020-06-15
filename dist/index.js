@@ -388,14 +388,12 @@ var RegionSelector = function RegionSelector(_ref) {
     React__default.createElement(core.Grid, {
       container: true,
       item: true,
-      direction: "column"
+      justify: "center"
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true
     }, /*#__PURE__*/React__default.createElement(core.Typography, {
       variant: "h6"
-    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
       options: options,
       action: handleClick
     })))
@@ -436,14 +434,13 @@ var RunsSelector = function RunsSelector(_ref) {
     /*#__PURE__*/
     React__default.createElement(core.Grid, {
       container: true,
-      direction: "column"
+      item: true,
+      justify: "flex-end"
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true
     }, /*#__PURE__*/React__default.createElement(core.Typography, {
       variant: "h6"
-    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
       options: dates,
       action: handleClick
     })))
@@ -707,15 +704,19 @@ var toHour = function toHour(options) {
   });
 };
 
-var DiscreteSlider = function DiscreteSlider(Props) {
+var DiscreteSlider = function DiscreteSlider(_ref) {
+  var options = _ref.options,
+      action = _ref.action;
   var classes = useStyles$5();
-  var options = Props.options;
   options.sort(compare);
   toHour(options);
   var stepValue = Number(options[1].value) - Number(options[0].value);
   var defaultValue = Number(options[0].value);
   var maxValue = Number(options[options.length - 1].value);
-  console.log(stepValue);
+
+  var handleChangeCommitted = function handleChangeCommitted(e, value) {
+    action(value);
+  };
 
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
@@ -728,7 +729,8 @@ var DiscreteSlider = function DiscreteSlider(Props) {
     marks: options,
     defaultValue: defaultValue,
     max: maxValue,
-    ValueLabelComponent: ValueLabelComponent
+    ValueLabelComponent: ValueLabelComponent,
+    onChange: handleChangeCommitted
   }));
 };
 
@@ -895,6 +897,9 @@ var ShyftWx = function ShyftWx(_ref) {
       selectedForecast = _React$useState6[0],
       setSelectedForecast = _React$useState6[1];
 
+  var urlParams = React__default.useRef(new URLSearchParams(window.location.search));
+  customer = customer || urlParams.current.get('customer') || '';
+  dataset = dataset || urlParams.current.get('model') || '';
   var customerUrl = url + "/" + customer + "/" + dataset;
 
   var loadAsync = function loadAsync() {
@@ -993,6 +998,10 @@ var ShyftWx = function ShyftWx(_ref) {
       return;
     }
 
+    if (!customer || !dataset) {
+      setError('No customer or model provided.');
+    }
+
     setLoading(true);
     loadAsync();
   }, []);
@@ -1041,6 +1050,21 @@ var ShyftWx = function ShyftWx(_ref) {
     setSelectedForecast(forecasts[forecastIndex - 1].hour);
   };
 
+  var onSliderNavigation = function onSliderNavigation(value) {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort();
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === String(value * 360);
+    });
+    console.log(value, forecasts, forecastIndex);
+
+    if (forecastIndex + 1 == forecasts.length) {
+      return;
+    }
+
+    setSelectedForecast(forecasts[forecastIndex + 1].hour);
+  };
+
   var getOffset = function getOffset() {
     return /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
@@ -1070,7 +1094,7 @@ var ShyftWx = function ShyftWx(_ref) {
     var sliderVals = selectedProduct.forecasts.map(function (f) {
       return {
         label: f.hour,
-        value: f.hour
+        value: +f.hour
       };
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
@@ -1141,7 +1165,8 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 9
     }, /*#__PURE__*/React__default.createElement(DiscreteSlider, {
-      options: sliderVals
+      options: sliderVals,
+      action: onSliderNavigation
     })))));
   };
 

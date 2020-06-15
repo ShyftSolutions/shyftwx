@@ -1,5 +1,3 @@
-/// <reference types="react" />
-export declare const DiscreteSlider: (Props: {
-    options: any;
-}) => JSX.Element;
+import React from 'react';
+export declare const DiscreteSlider: React.FC<SliderProps>;
 export default DiscreteSlider;
