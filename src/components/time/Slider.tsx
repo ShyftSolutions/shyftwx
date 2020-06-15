@@ -82,13 +82,13 @@ const compare = (a, b) => {
 
 const toHour = (options) => {
     options.map((option) => {
-        //option.label = option.label / 3600;
-        option.value = option.label / 3600;
+        option.label = option.value/3600 + "H";
+        option.value = option.value;
     })
 }
 
 
-export const DiscreteSlider: React.FC<SliderProps> = ({ options, action }) => {
+export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected, modelTime }) => {
     const classes = useStyles();
 
     //sort the array of objects by the value property
@@ -116,6 +116,7 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action }) => {
                 max={maxValue}
                 ValueLabelComponent={ValueLabelComponent}
                 onChange={handleChangeCommitted}
+                value={selected}
             />
         </div>
     );

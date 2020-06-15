@@ -129,8 +129,28 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         setSelectedForecast(getSelectedProduct().forecasts[0].hour);
     };
 
+    /**
+     * Compares the hours of two forecasts
+     *
+     * @param a
+     * @param b
+     */
+    const compare = (a, b) => {
+        const valA = Number(a.hour);
+        const valB = Number(b.hour);
+
+        let comparison = 0;
+        if (valA > valB) {
+            comparison = 1;
+        } else if (valA < valB) {
+            comparison = -1;
+        }
+        return comparison;
+    };
+
     const onSliderNavigationNext = () => {
         const forecasts = getSelectedProduct().forecasts;
+        forecasts.sort(compare);
         let forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
         if (forecastIndex + 1 == forecasts.length) {
@@ -142,6 +162,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
     const onSliderNavigationBack = () => {
         const forecasts = getSelectedProduct().forecasts;
+        forecasts.sort(compare);
         const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
         if (forecastIndex - 1 < 0) {
@@ -153,15 +174,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
     const onSliderNavigation = (value: number) => {
         const forecasts = getSelectedProduct().forecasts;
-        forecasts.sort();
-        let forecastIndex = forecasts.findIndex((f) => f.hour === String(value * 360));
+        forecasts.sort(compare);
+        let forecastIndex = forecasts.findIndex((f) => +f.hour === +value);
 
-        console.log(value, forecasts, forecastIndex);
-        if (forecastIndex + 1 == forecasts.length) {
-            return;
-        }
-
-        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+        setSelectedForecast(forecasts[forecastIndex].hour);
     };
 
     const getOffset = (): React.ReactNode => {
@@ -192,6 +208,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         return time;
     };
 
+    const getValidTime = (forecastTime: string, modelTime: Date) => {
+        const validTime = new Date(modelTime.getTime() + (+forecastTime / 60) * 60000);
+        return validTime;
+    };
+
     const generateContent = (): React.ReactNode => {
         if (error) {
             return <Typography color="error">{error}</Typography>;
@@ -207,9 +228,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return { name: lvl.name, open: index == 0, products: lvl.products };
         });
         const sliderVals = selectedProduct.forecasts.map((f) => {
-            return { label: toUTCTime(+f.hour), value: toUTCTime(+f.hour) };
+            return { label: f.hour, value: f.hour };
         });
         const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
+
+        console.log(getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name)));
 
         return (
             <React.Fragment>
@@ -259,7 +282,12 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         <Grid item xs={1} />
 
                         <Grid item xs={9}>
-                            <Slider options={sliderVals} action={onSliderNavigation} />
+                            <Slider
+                                options={sliderVals}
+                                selected={selectedForecast}
+                                action={onSliderNavigation}
+                                modelTime={getDateFromEpoch(+index.datasets[0].run.name)}
+                            />
                         </Grid>
                     </Grid>
                 </Grid>
