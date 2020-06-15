@@ -168,6 +168,30 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         return <Grid item xs={3} />;
     };
 
+    const getDateFromEpoch = (epoch: number) => {
+        epoch = +index.datasets[0].run.name * 1000;
+        const date: Date = new Date(epoch);
+        return date;
+    };
+    /**
+     * Takes an epoch time value and converts it to UTC time string
+     *
+     * @param epoch
+     */
+    const toUTCTime = (epoch: number) => {
+        const date = getDateFromEpoch(epoch);
+        let time: string;
+        if (date.getUTCHours() === 0) {
+            time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T 00:${date.getUTCMinutes()}Z`;
+        } else if (date.getUTCMinutes() === 0) {
+            time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:00Z`;
+        } else {
+            time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:${date.getUTCMinutes()}Z`;
+        }
+
+        return time;
+    };
+
     const generateContent = (): React.ReactNode => {
         if (error) {
             return <Typography color="error">{error}</Typography>;
@@ -183,7 +207,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return { name: lvl.name, open: index == 0, products: lvl.products };
         });
         const sliderVals = selectedProduct.forecasts.map((f) => {
-            return { label: f.hour, value: +f.hour };
+            return { label: toUTCTime(+f.hour), value: toUTCTime(+f.hour) };
         });
         const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 

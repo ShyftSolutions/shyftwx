@@ -82,8 +82,8 @@ const compare = (a, b) => {
 
 const toHour = (options) => {
     options.map((option) => {
-        option.label /= 360;
-        option.value /= 360;
+        //option.label = option.label / 3600;
+        option.value = option.label / 3600;
     })
 }
 
