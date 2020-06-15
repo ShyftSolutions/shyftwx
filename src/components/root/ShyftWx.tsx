@@ -7,7 +7,7 @@ import React from 'react';
 import RegionSelector from './../regions/RegionSelector';
 import RunDropdown from './../runs/RunDropdown';
 import RunsSelector from './../run/RunsSelector';
-import Slider from './../time/Slider';
+import Slider from '../time/Slider';
 import TimeControl from './../time/TimeControl';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
@@ -143,6 +143,20 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     setSelectedForecast(forecasts[forecastIndex - 1].hour);
   };
 
+  const onSliderNavigation = (value: number) => {
+    
+    const forecasts = getSelectedProduct().forecasts;
+    forecasts.sort();
+    let forecastIndex = forecasts.findIndex((f) => f.hour === String(value * 360));
+
+    console.log(value, forecasts, forecastIndex);
+    if (forecastIndex + 1 == forecasts.length) {
+      return;
+    }
+
+    setSelectedForecast(forecasts[forecastIndex + 1].hour);
+  };
+
   const getOffset = (): React.ReactNode => {
     return <Grid item xs={3}/>;
   };
@@ -162,7 +176,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
       return { name: lvl.name, open: index == 0, products: lvl.products };
     });
     const sliderVals = selectedProduct.forecasts.map((f) => {
-      return { label: f.hour, value: f.hour };
+      return { label: f.hour, value: +f.hour };
     });
     const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 
@@ -218,7 +232,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             <Grid item xs={1} />
 
             <Grid item xs={9} >
-              <Slider options={sliderVals}/>
+              <Slider options={sliderVals} action={onSliderNavigation}/>
             </Grid>
           </Grid>
         </Grid>
