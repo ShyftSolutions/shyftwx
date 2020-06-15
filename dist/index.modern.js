@@ -9,6 +9,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Paper from '@material-ui/core/Paper';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles as makeStyles$1 } from '@material-ui/core/styles';
@@ -251,6 +252,16 @@ var useStyles$4 = makeStyles(function (theme) {
     }
   };
 });
+var ICON_MAP = {
+  Ceiling: fas.faCloud,
+  DewpointTemperature: fas.faTint,
+  Pressure: fas.faArrowDown,
+  RelativeHumidity: fas.faPercent,
+  Temperature: fas.faTemperatureHigh,
+  TotalPrecipitation: fas.faCloudShowersHeavy,
+  Visibility: fas.faEye,
+  Wind: fas.faWind
+};
 var emptyMenu = [{
   name: 'Menu',
   open: true,
@@ -330,9 +341,9 @@ var ProductMenu = function ProductMenu(_ref) {
             product: product.name
           });
         }
-      }, product.icon != undefined && /*#__PURE__*/React.createElement(ListItemIcon, null, /*#__PURE__*/React.createElement(FontAwesomeIcon, {
+      }, ICON_MAP[product.name] !== undefined && /*#__PURE__*/React.createElement(ListItemIcon, null, /*#__PURE__*/React.createElement(FontAwesomeIcon, {
         className: selectedProduct === cat.name + ' ' + product.name ? classes.selectedIcon : classes.icon,
-        icon: product.icon
+        icon: ICON_MAP[product.name]
       })), /*#__PURE__*/React.createElement(ListItemText, {
         primary: product.name
       }));
@@ -393,7 +404,16 @@ var toDates = function toDates(options) {
   options.map(function (option) {
     var epoch = option * 1000;
     var date = new Date(epoch);
-    var time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
+    var time;
+
+    if (date.getUTCHours() === 0) {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T 00:" + date.getUTCMinutes() + "Z";
+    } else if (date.getUTCMinutes() === 0) {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":00Z";
+    } else {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
+    }
+
     dates.push(time);
   });
   return dates;
@@ -680,6 +700,7 @@ var compare = function compare(a, b) {
 var toHour = function toHour(options) {
   options.map(function (option) {
     option.label /= 360;
+    option.value /= 360;
   });
 };
 
