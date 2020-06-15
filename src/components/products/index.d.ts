@@ -1,7 +1,7 @@
 declare type ProductSelectorProps = {
     categories: Category[];
     label?: string;
-    action: () => ProductSelectionResponse;
+    action: (ProductSelectionResponse) => void;
 };
 
 declare type ProductMenuProps = {
@@ -12,10 +12,10 @@ declare type ProductMenuProps = {
 declare type Category = {
     name: string;
     open: boolean;
-    products: MenuProduct[];
+    products: CategoryProduct[];
 };
 
-declare type MenuProduct = {
+declare type CategoryProduct = {
     name: string;
     icon?: IconProp;
 };

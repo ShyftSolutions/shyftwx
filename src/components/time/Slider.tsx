@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         color: theme.palette.primary.dark,
         height: 20,
-        margin: 0
     },
     thumb: {
         height: 24,

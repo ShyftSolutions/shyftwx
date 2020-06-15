@@ -1,14 +1,4 @@
-/// <reference types="react" />
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-interface Category {
-    name: string;
-    open: boolean;
-    products: Product[];
-}
-interface Product {
-    name: string;
-    icon?: IconProp;
-}
+import React from 'react';
 /**
  * Uses Material UI to create an accordian dropdown with main categories
  * and subcategories. 'defaultOptions' should be an array of objects in the
@@ -28,8 +18,5 @@ interface Product {
  *
  * @param Props: {options: string[]}
  */
-export declare const ProductMenu: (Props: {
-    options: Category[];
-    action: Function;
-}) => JSX.Element;
+export declare const ProductMenu: React.FC<ProductMenuProps>;
 export default ProductMenu;

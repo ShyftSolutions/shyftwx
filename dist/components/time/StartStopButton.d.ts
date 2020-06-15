@@ -1,3 +1,3 @@
-/// <reference types="react" />
-export declare const StartStopButton: () => JSX.Element;
+import React from 'react';
+export declare const StartStopButton: React.FC<TimeActivationButtonProps>;
 export default StartStopButton;

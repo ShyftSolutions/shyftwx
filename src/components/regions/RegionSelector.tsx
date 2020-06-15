@@ -15,7 +15,7 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label =
 
     return (
         /* Region Grid Container */
-        <Grid container direction="column">
+        <Grid container item direction="column">
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
             </Grid>

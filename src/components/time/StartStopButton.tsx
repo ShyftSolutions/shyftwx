@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
         background: theme.palette.secondary.dark,
         '&:hover': {
             background: theme.palette.secondary.dark,
-        }
+        },
     },
     pause: {
         label: 'pause',
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         background: theme.palette.secondary.dark,
         '&:hover': {
             background: theme.palette.secondary.dark,
-        }
+        },
     },
     icon: {
         color: theme.palette.primary.contrastText
@@ -41,10 +41,10 @@ export const StartStopButton: React.FC<TimeActivationButtonProps> = ({onStart, o
 
     return (
         playing ?
-            <Fab onClick={ handleClick } className={classes.pause}>
+            <Fab onClick={ handleClick } className={classes.pause} >
                 <PauseIcon className={classes.icon}/>
             </Fab> :
-            <Fab onClick={ handleClick } className={classes.play}>
+            <Fab onClick={ handleClick } className={classes.play} >
                 <PlayArrowIcon className={classes.icon}/>
             </Fab>
     );
