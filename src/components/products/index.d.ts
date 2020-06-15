@@ -12,10 +12,10 @@ declare type ProductMenuProps = {
 declare type Category = {
     name: string;
     open: boolean;
-    products: Product[];
+    products: MenuProduct[];
 };
 
-declare type Product = {
+declare type MenuProduct = {
     name: string;
     icon?: IconProp;
 };

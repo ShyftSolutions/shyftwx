@@ -101,7 +101,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
           </Paper>
           <Paper>
             <Collapse in={cat.open} timeout="auto" unmountOnExit>
-              {cat.products.map((product: Product, index: number) => (
+              {cat.products.map((product: MenuProduct, index: number) => (
                 <ListItem
                   key={index}
                   button
