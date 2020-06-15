@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
+import { BottomNavigationAction } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,9 +88,8 @@ const toHour = (options) => {
 }
 
 
-export const DiscreteSlider = (Props: { options: any }) => {
+export const DiscreteSlider: React.FC<SliderProps> = ({ options, action }) => {
     const classes = useStyles();
-    const { options } = Props;
 
     //sort the array of objects by the value property
     options.sort(compare);
@@ -99,9 +99,9 @@ export const DiscreteSlider = (Props: { options: any }) => {
     const defaultValue: number = Number(options[0].value);
     const maxValue: number = Number(options[options.length - 1].value);
 
-    console.log(stepValue);
-
-    const onChange = (val, z) => { console.log('changed!', val, z); };
+    const handleChangeCommitted = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+        action(value as number);
+    };
 
     return (
         <div className={classes.root}>
@@ -115,6 +115,7 @@ export const DiscreteSlider = (Props: { options: any }) => {
                 defaultValue={defaultValue}
                 max={maxValue}
                 ValueLabelComponent={ValueLabelComponent}
+                onChange={handleChangeCommitted}
             />
         </div>
     );
