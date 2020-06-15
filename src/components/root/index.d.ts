@@ -70,3 +70,8 @@ declare type DatasetRegionRun = {
 declare type Index = {
     datasets: DatasetRegionRun[];
 };
+
+declare type DataRun = {
+    run: number;
+    selected: boolean;
+};

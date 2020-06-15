@@ -1,5 +1,5 @@
 declare type RegionSelectorProps = {
-    options?: number[];
+    options?: DataRun[];
     label?: string;
     setRuns?: Function;
 };

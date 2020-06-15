@@ -1,5 +1,5 @@
 declare type RunsSelectorProps = {
-    options: string[];
+    options: DataRun[];
     label?: string;
-    action: (option: string) => void;
+    setRuns: Function;
 };

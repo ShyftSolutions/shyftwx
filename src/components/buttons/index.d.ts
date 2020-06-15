@@ -1,4 +1,9 @@
 declare type GroupedButtonsProps = {
-    options: string[];
-    action: (option: string) => void;
+    items: GroupedButtonItem[];
+    action: (item: GroupedButtonItem) => void;
+};
+
+declare type GroupedButtonItem = {
+    value: string;
+    selected: boolean;
 };

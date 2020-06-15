@@ -5,29 +5,6 @@ import React from 'react';
 import RunsSelector from './../run/RunsSelector';
 import theme from '../../theme';
 
-type ShyftContextType = {
-    products?: ShyftProduct[];
-    setProducts?: React.Dispatch<React.SetStateAction<ShyftProduct[]>>;
-    regions?: ShyftRegion[];
-    setRegions?: React.Dispatch<React.SetStateAction<ShyftRegion[]>>;
-    runs?: DataRun[];
-    setRuns?: React.Dispatch<React.SetStateAction<DataRun[]>>;
-};
-
-type DataRun = {
-    run: number;
-    selected: boolean;
-};
-
-export const ShyftContext = React.createContext<ShyftContextType>({
-    products: [],
-    setProducts: () => {},
-    regions: [],
-    setRegions: () => {},
-    runs: [],
-    setRuns: () => {}
-});
-
 export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, customer, themeOverride }) => {
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
@@ -91,10 +68,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         });
     }, []);
 
-    React.useEffect(() => {
-        loadProductDataAsync(regions, runs);
-    }, [regions, runs]);
-
     const getOffset = (): React.ReactNode => {
         return <Grid item xs={3} />;
     };
@@ -117,7 +90,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
         const levelProductVals: Category[] = [{ name: selectedProduct.product, open: true, products: [] }];
 
-        return <RunsSelector options={Array.from(new Set(runs.map((run) => run.run)))} setRuns={setRuns} />;
+        return <RunsSelector options={runs} setRuns={setRuns} />;
     };
 
     return (
