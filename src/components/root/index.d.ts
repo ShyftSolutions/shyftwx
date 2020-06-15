@@ -1,6 +1,6 @@
 declare type ShyftWxProps = {
-    dataset: string;
-    customer: string;
+    dataset?: string;
+    customer?: string;
     url: string;
     themeOverride?: Theme;
 };
