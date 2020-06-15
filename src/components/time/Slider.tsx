@@ -58,8 +58,15 @@ function ValueLabelComponent(props: Props) {
         </span>
     );
 }
+
+/**
+ * Sorts the objects by their values
+ * 
+ * @param a first comparator
+ * @param b second comparator
+ */
 const compare = (a, b) => {
-    // Use toUpperCase() to ignore character casing
+
     const valA = Number(a.value);
     const valB = Number(b.value);
 
@@ -75,6 +82,7 @@ const compare = (a, b) => {
 const toHour = (options) => {
     options.map((option) => {
         option.label /= 360;
+        option.value /= 360;
     })
 }
 

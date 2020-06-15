@@ -10,7 +10,14 @@ const toDates = (options: any) => {
     options.map(option => {
         const epoch: number = option * 1000;
         const date: Date = new Date(epoch);
-        const time: string = (`${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:${date.getUTCMinutes()}Z`); 
+        let time: string;
+        if(date.getUTCHours() === 0) {
+            time = (`${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T 00:${date.getUTCMinutes()}Z`);
+        } else if(date.getUTCMinutes() === 0) {
+            time = (`${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:00Z`);
+        } else {
+            time = (`${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:${date.getUTCMinutes()}Z`);
+        } 
         dates.push(time);
 
     });
