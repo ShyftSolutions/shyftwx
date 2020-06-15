@@ -1,2 +1,3 @@
-/// <reference types="react" />
-export default function TimeControl(): JSX.Element;
+import React from 'react';
+export declare const TimeControl: React.FC<TimeControlProps>;
+export default TimeControl;

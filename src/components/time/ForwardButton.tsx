@@ -4,10 +4,10 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: '35px',
-        maxHeight: '30px',
-        minWidth: '35px',
-        minHeight: '30px',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      minWidth: '100%',
+      minHeight: '100%',
         variant: 'contained',
         backgroundColor: theme.palette.primary.dark,
         boxShadow: theme.shadows[3],

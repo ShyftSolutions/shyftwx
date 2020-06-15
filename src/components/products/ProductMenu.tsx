@@ -86,11 +86,11 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
       {categories.map((cat: Category, index: number) => (
         <List key={index}>
           <Paper className={classes.category}>
-            <ListItem button onClick={() => handleClick(cat) }>
+            <ListItem button onClick={() => handleClick(cat)}>
               <ListItemText
                 primary={
-                  <Box m={1} >
-                    <Typography style={{fontWeight: 800, fontSize: 16, letterSpacing: 1}}>
+                  <Box m={1}>
+                    <Typography style={{ fontWeight: 800, fontSize: 16, letterSpacing: 1 }}>
                       {cat.name}
                     </Typography>
                   </Box>
@@ -101,7 +101,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
           </Paper>
           <Paper>
             <Collapse in={cat.open} timeout="auto" unmountOnExit>
-              {cat.products.map((product: Product, index: number) => (
+              {cat.products.map((product: CategoryProduct, index: number) => (
                 <ListItem
                   key={index}
                   button
@@ -109,18 +109,18 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                   selected={selectedProduct === cat.name + ' ' + product.name}
                   onClick={(event) => handleListItemClick(event, { level: cat.name, product: product.name })}
                 >
-                  <ListItemIcon>
-                    {product.icon != undefined &&
-                    <FontAwesomeIcon
-                      className={
-                        selectedProduct === cat.name + ' ' + product.name
-                          ? classes.selectedIcon
-                          : classes.icon
-                      }
-                      icon={product.icon}
-                    />
-                    }
-                  </ListItemIcon>
+                  {product.icon != undefined &&
+                    <ListItemIcon>
+                      <FontAwesomeIcon
+                        className={
+                          selectedProduct === cat.name + ' ' + product.name
+                            ? classes.selectedIcon
+                            : classes.icon
+                        }
+                        icon={product.icon}
+                      />
+                    </ListItemIcon>
+                  }
                   <ListItemText primary={product.name}/>
                 </ListItem>
               ))}

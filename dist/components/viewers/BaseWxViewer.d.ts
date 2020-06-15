@@ -1,7 +1,5 @@
-/// <reference types="react" />
 import 'leaflet/dist/leaflet.css';
-export declare const BaseWxViewer: ({ index, layers, neBounds, swBounds }: {
-    index: any;
+export declare const BaseWxViewer: ({ layers, neBounds, swBounds }: {
     layers: any;
     neBounds: any;
     swBounds: any;

@@ -5,19 +5,16 @@ var React__default = _interopDefault(React);
 var NavigateBeforeIcon = _interopDefault(require('@material-ui/icons/NavigateBefore'));
 var Button = _interopDefault(require('@material-ui/core/Button'));
 var core = require('@material-ui/core');
-var leaflet = require('leaflet');
 require('leaflet/dist/leaflet.css');
 var reactLeaflet = require('react-leaflet');
+var leaflet = require('leaflet');
 var NavigateNextIcon = _interopDefault(require('@material-ui/icons/NavigateNext'));
 var Paper = _interopDefault(require('@material-ui/core/Paper'));
 var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
-var FormControl = _interopDefault(require('@material-ui/core/FormControl'));
-var MenuItem = _interopDefault(require('@material-ui/core/MenuItem'));
-var Select = _interopDefault(require('@material-ui/core/Select'));
-var styles = require('@material-ui/core/styles');
 var Slider = _interopDefault(require('@material-ui/core/Slider'));
 var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
+var styles = require('@material-ui/core/styles');
 var PlayArrowIcon = _interopDefault(require('@material-ui/icons/PlayArrow'));
 var PauseIcon = _interopDefault(require('@material-ui/icons/Pause'));
 
@@ -42,10 +39,10 @@ var index = {
 var useStyles = core.makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: '35px',
-      maxHeight: '30px',
-      minWidth: '35px',
-      minHeight: '30px',
+      maxWidth: '200%',
+      maxHeight: '100%',
+      minWidth: '100%',
+      minHeight: '100%',
       variant: 'contained',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
@@ -59,20 +56,22 @@ var useStyles = core.makeStyles(function (theme) {
     }
   };
 });
-function BackButton() {
+var BackButton = function BackButton(_ref) {
+  var action = _ref.action;
   var classes = useStyles();
   return /*#__PURE__*/React__default.createElement(Button, {
+    onClick: action,
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(NavigateBeforeIcon, {
     className: classes.icon
   }));
-}
+};
 
 var useStyles$1 = core.makeStyles(function (theme) {
   return {
     root: {
-      height: '70vh',
-      width: '70vw'
+      height: '40vw',
+      width: '100%'
     },
     paddingMiddle: {
       marginLeft: 15,
@@ -82,37 +81,38 @@ var useStyles$1 = core.makeStyles(function (theme) {
   };
 });
 var BaseWxViewer = function BaseWxViewer(_ref) {
-  var neBounds = _ref.neBounds,
+  var layers = _ref.layers,
+      neBounds = _ref.neBounds,
       swBounds = _ref.swBounds;
   var classes = useStyles$1();
   var bounds = leaflet.latLngBounds(swBounds, neBounds);
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true,
-    xs: 9
-  }, /*#__PURE__*/React__default.createElement(reactLeaflet.Map, {
+  return /*#__PURE__*/React__default.createElement(reactLeaflet.Map, {
     zoom: 10,
     bounds: bounds,
     className: classes.root,
     dragging: false,
     zoomControl: false,
-    scrollWheelZoom: false
+    scrollWheelZoom: true,
+    doubleClickZoom: false,
+    keyboard: false,
+    touchZoom: false
   }, /*#__PURE__*/React__default.createElement(reactLeaflet.ImageOverlay, {
-    url: 'https://wxchange-images.s3.us-east-2.amazonaws.com/GFS_2020-05-27T06_Temperature_US_850hPa_01.png.PNG',
+    url: layers,
     bounds: bounds,
     opacity: 0.5
   }), /*#__PURE__*/React__default.createElement(reactLeaflet.TileLayer, {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "\xA9 <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
-  })));
+  }));
 };
 
 var useStyles$2 = core.makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: '35px',
-      maxHeight: '30px',
-      minWidth: '35px',
-      minHeight: '30px',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      minWidth: '100%',
+      minHeight: '100%',
       variant: 'contained',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
@@ -126,14 +126,16 @@ var useStyles$2 = core.makeStyles(function (theme) {
     }
   };
 });
-function ForwardButton() {
+var ForwardButton = function ForwardButton(_ref) {
+  var action = _ref.action;
   var classes = useStyles$2();
   return /*#__PURE__*/React__default.createElement(core.Button, {
+    onClick: action,
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(NavigateNextIcon, {
     className: classes.icon
   }));
-}
+};
 
 var useStyles$3 = core.makeStyles(function (theme) {
   return {
@@ -159,7 +161,8 @@ var useStyles$3 = core.makeStyles(function (theme) {
   };
 });
 var GroupedButtons = function GroupedButtons(_ref) {
-  var options = _ref.options,
+  var _ref$options = _ref.options,
+      options = _ref$options === void 0 ? ['1', '2', '3'] : _ref$options,
       action = _ref.action;
   var classes = useStyles$3();
 
@@ -251,12 +254,22 @@ var useStyles$4 = core.makeStyles(function (theme) {
     }
   };
 });
-var ProductMenu = function ProductMenu(Props) {
+var emptyMenu = [{
+  name: 'Menu',
+  open: true,
+  products: [{
+    name: 'A'
+  }, {
+    name: 'B'
+  }]
+}];
+var ProductMenu = function ProductMenu(_ref) {
+  var _ref$options = _ref.options,
+      options = _ref$options === void 0 ? emptyMenu : _ref$options,
+      action = _ref.action;
   var classes = useStyles$4();
-  var options = Props.options;
-  var action = Props.action;
 
-  var _React$useState = React__default.useState(""),
+  var _React$useState = React__default.useState(options[0].name + " " + options[0].products[0].name),
       selectedProduct = _React$useState[0],
       setSelectedProduct = _React$useState[1];
 
@@ -278,7 +291,7 @@ var ProductMenu = function ProductMenu(Props) {
   };
 
   var handleListItemClick = function handleListItemClick(event, product) {
-    setSelectedProduct(product);
+    setSelectedProduct(product.level + ' ' + product.product);
     action(product);
   };
 
@@ -295,26 +308,32 @@ var ProductMenu = function ProductMenu(Props) {
         return handleClick(cat);
       }
     }, /*#__PURE__*/React__default.createElement(core.ListItemText, {
-      disableTypography: true,
-      primary: /*#__PURE__*/React__default.createElement(core.Typography, null, /*#__PURE__*/React__default.createElement(core.Box, {
-        fontWeight: 800,
-        m: 1,
-        letterSpacing: 1,
-        fontSize: 16
+      primary: /*#__PURE__*/React__default.createElement(core.Box, {
+        m: 1
+      }, /*#__PURE__*/React__default.createElement(core.Typography, {
+        style: {
+          fontWeight: 800,
+          fontSize: 16,
+          letterSpacing: 1
+        }
       }, cat.name))
     }), cat.open ? /*#__PURE__*/React__default.createElement(icons.ExpandLess, null) : /*#__PURE__*/React__default.createElement(icons.ExpandMore, null))), /*#__PURE__*/React__default.createElement(Paper, null, /*#__PURE__*/React__default.createElement(core.Collapse, {
       "in": cat.open,
       timeout: "auto",
       unmountOnExit: true
-    }, cat.products.map(function (product) {
+    }, cat.products.map(function (product, index) {
       return /*#__PURE__*/React__default.createElement(core.ListItem, {
+        key: index,
         button: true,
         className: classes.nested,
         selected: selectedProduct === cat.name + ' ' + product.name,
         onClick: function onClick(event) {
-          return handleListItemClick(event, cat.name + ' ' + product.name);
+          return handleListItemClick(event, {
+            level: cat.name,
+            product: product.name
+          });
         }
-      }, /*#__PURE__*/React__default.createElement(core.ListItemIcon, null, product.icon != undefined && /*#__PURE__*/React__default.createElement(reactFontawesome.FontAwesomeIcon, {
+      }, product.icon != undefined && /*#__PURE__*/React__default.createElement(core.ListItemIcon, null, /*#__PURE__*/React__default.createElement(reactFontawesome.FontAwesomeIcon, {
         className: selectedProduct === cat.name + ' ' + product.name ? classes.selectedIcon : classes.icon,
         icon: product.icon
       })), /*#__PURE__*/React__default.createElement(core.ListItemText, {
@@ -357,6 +376,7 @@ var RegionSelector = function RegionSelector(_ref) {
     /*#__PURE__*/
     React__default.createElement(core.Grid, {
       container: true,
+      item: true,
       direction: "column"
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true
@@ -371,70 +391,49 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
-var useStyles$5 = styles.makeStyles(function (theme) {
-  return {
-    formControl: {
-      minWidth: 120,
-      boxShadow: theme.shadows[3]
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    },
-    label: {
-      align: 'center'
-    },
-    dropdown: {
-      background: theme.palette.primary.contrastText
-    },
-    items: {
-      background: theme.palette.primary.contrastText,
-      '&:hover': {
-        background: theme.palette.primary.main
-      }
-    }
-  };
-});
-var SimpleSelect = function SimpleSelect(_ref) {
+var toDates = function toDates(options) {
+  var dates = [];
+  options.map(function (option) {
+    var epoch = option * 1000;
+    var date = new Date(epoch);
+    var time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
+    dates.push(time);
+  });
+  return dates;
+};
+
+var RunsSelector = function RunsSelector(_ref) {
   var options = _ref.options,
-      action = _ref.action;
-  var classes = useStyles$5();
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Runs' : _ref$label;
 
-  var _React$useState = React__default.useState(options[0]),
-      selectedValue = _React$useState[0],
-      setSelectedValue = _React$useState[1];
-
-  var handleChange = function handleChange(event) {
-    var name = event.target.name;
-
-    if (name) {
-      setSelectedValue(name);
-      action(name);
-    }
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
   };
 
-  return /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement(FormControl, {
-    variant: "outlined",
-    className: classes.formControl
-  }, /*#__PURE__*/React__default.createElement(Select, {
-    classes: {
-      select: classes.dropdown
-    },
-    id: "simple-select",
-    value: selectedValue,
-    onChange: handleChange
-  }, options.map(function (option) {
-    return /*#__PURE__*/React__default.createElement(MenuItem, {
-      color: "primary",
-      key: option,
-      className: classes.items,
-      value: option
-    }, option);
-  }))));
+  var dates = toDates(options);
+  return (
+    /*#__PURE__*/
+    React__default.createElement(core.Grid, {
+      container: true,
+      direction: "column"
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(core.Typography, {
+      variant: "h6"
+    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+      options: dates,
+      action: handleClick
+    })))
+  );
 };
 
 var RunDropdown = function RunDropdown(_ref) {
   var options = _ref.options,
-      label = _ref.label;
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Model Run' : _ref$label;
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
@@ -449,124 +448,177 @@ var RunDropdown = function RunDropdown(_ref) {
     variant: "h6"
   }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
-  }, /*#__PURE__*/React__default.createElement(SimpleSelect, {
+  }, /*#__PURE__*/React__default.createElement(RunsSelector, {
     options: options,
     action: handleClick
   })));
 };
 
-var theme = core.createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#e9ecef',
-      main: '#ff922b',
-      dark: '#868e96',
-      contrastText: '#474545'
-    }
-  },
-  overrides: {
-    MuiListItem: {
-      root: {
-        "&$selected": {
-          backgroundColor: '#E9ECEF',
-          '&:hover': {
-            backgroundColor: '#E9ECEF'
-          },
-          color: '#868e96'
-        }
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#000000'
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#329af0',
-        color: '#f8f9fa',
-        fontSize: 16
-      }
-    }
-  },
-  spacing: 8
-});
+// A type of promise-like that resolves synchronously and supports only one observer
+const _Pact = /*#__PURE__*/(function() {
+	function _Pact() {}
+	_Pact.prototype.then = function(onFulfilled, onRejected) {
+		const result = new _Pact();
+		const state = this.s;
+		if (state) {
+			const callback = state & 1 ? onFulfilled : onRejected;
+			if (callback) {
+				try {
+					_settle(result, 1, callback(this.v));
+				} catch (e) {
+					_settle(result, 2, e);
+				}
+				return result;
+			} else {
+				return this;
+			}
+		}
+		this.o = function(_this) {
+			try {
+				const value = _this.v;
+				if (_this.s & 1) {
+					_settle(result, 1, onFulfilled ? onFulfilled(value) : value);
+				} else if (onRejected) {
+					_settle(result, 1, onRejected(value));
+				} else {
+					_settle(result, 2, value);
+				}
+			} catch (e) {
+				_settle(result, 2, e);
+			}
+		};
+		return result;
+	};
+	return _Pact;
+})();
 
-var ShyftContext = React__default.createContext({});
-var ShyftWx = function ShyftWx(_ref) {
-  var children = _ref.children,
-      indexData = _ref.indexData,
-      indexUrl = _ref.indexUrl,
-      themeOverride = _ref.themeOverride;
+// Settles a pact synchronously
+function _settle(pact, state, value) {
+	if (!pact.s) {
+		if (value instanceof _Pact) {
+			if (value.s) {
+				if (state & 1) {
+					state = value.s;
+				}
+				value = value.v;
+			} else {
+				value.o = _settle.bind(null, pact, state);
+				return;
+			}
+		}
+		if (value && value.then) {
+			value.then(_settle.bind(null, pact, state), _settle.bind(null, pact, 2));
+			return;
+		}
+		pact.s = state;
+		pact.v = value;
+		const observer = pact.o;
+		if (observer) {
+			observer(pact);
+		}
+	}
+}
 
-  var _React$useState = React__default.useState(''),
-      error = _React$useState[0],
-      setError = _React$useState[1];
+function _isSettledPact(thenable) {
+	return thenable instanceof _Pact && thenable.s & 1;
+}
 
-  var _React$useState2 = React__default.useState(true),
-      loading = _React$useState2[0],
-      setLoading = _React$useState2[1];
+const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
 
-  var _React$useState3 = React__default.useState(),
-      index = _React$useState3[0],
-      setIndex = _React$useState3[1];
+const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
 
-  React__default.useEffect(function () {
-    if (indexUrl) {
-      getIndexAsync(indexUrl).then(function (data) {
-        setIndex(data);
-        setLoading(false);
-      });
-    } else if (indexData) {
-      setIndex(indexData);
-      setLoading(false);
-    } else {
-      setError('No indexUrl or indexData provided.');
-    }
-  }, []);
+// Asynchronously implement a generic for loop
+function _for(test, update, body) {
+	var stage;
+	for (;;) {
+		var shouldContinue = test();
+		if (_isSettledPact(shouldContinue)) {
+			shouldContinue = shouldContinue.v;
+		}
+		if (!shouldContinue) {
+			return result;
+		}
+		if (shouldContinue.then) {
+			stage = 0;
+			break;
+		}
+		var result = body();
+		if (result && result.then) {
+			if (_isSettledPact(result)) {
+				result = result.s;
+			} else {
+				stage = 1;
+				break;
+			}
+		}
+		if (update) {
+			var updateValue = update();
+			if (updateValue && updateValue.then && !_isSettledPact(updateValue)) {
+				stage = 2;
+				break;
+			}
+		}
+	}
+	var pact = new _Pact();
+	var reject = _settle.bind(null, pact, 2);
+	(stage === 0 ? shouldContinue.then(_resumeAfterTest) : stage === 1 ? result.then(_resumeAfterBody) : updateValue.then(_resumeAfterUpdate)).then(void 0, reject);
+	return pact;
+	function _resumeAfterBody(value) {
+		result = value;
+		do {
+			if (update) {
+				updateValue = update();
+				if (updateValue && updateValue.then && !_isSettledPact(updateValue)) {
+					updateValue.then(_resumeAfterUpdate).then(void 0, reject);
+					return;
+				}
+			}
+			shouldContinue = test();
+			if (!shouldContinue || (_isSettledPact(shouldContinue) && !shouldContinue.v)) {
+				_settle(pact, 1, result);
+				return;
+			}
+			if (shouldContinue.then) {
+				shouldContinue.then(_resumeAfterTest).then(void 0, reject);
+				return;
+			}
+			result = body();
+			if (_isSettledPact(result)) {
+				result = result.v;
+			}
+		} while (!result || !result.then);
+		result.then(_resumeAfterBody).then(void 0, reject);
+	}
+	function _resumeAfterTest(shouldContinue) {
+		if (shouldContinue) {
+			result = body();
+			if (result && result.then) {
+				result.then(_resumeAfterBody).then(void 0, reject);
+			} else {
+				_resumeAfterBody(result);
+			}
+		} else {
+			_settle(pact, 1, result);
+		}
+	}
+	function _resumeAfterUpdate() {
+		if (shouldContinue = test()) {
+			if (shouldContinue.then) {
+				shouldContinue.then(_resumeAfterTest).then(void 0, reject);
+			} else {
+				_resumeAfterTest(shouldContinue);
+			}
+		} else {
+			_settle(pact, 1, result);
+		}
+	}
+}
 
-  var generateContent = function generateContent() {
-    if (error) {
-      return /*#__PURE__*/React__default.createElement(core.Typography, {
-        color: "error"
-      }, error);
-    }
-
-    if (loading) {
-      return /*#__PURE__*/React__default.createElement(core.CircularProgress, null);
-    }
-
-    return children;
-  };
-
-  return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
-    theme: themeOverride || theme
-  }, /*#__PURE__*/React__default.createElement(ShyftContext.Provider, {
-    value: {
-      data: index
-    }
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    direction: "row",
-    justify: "flex-end",
-    alignItems: "flex-start",
-    spacing: 3
-  }, generateContent())));
-};
-
-var useStyles$6 = styles.makeStyles(function (theme) {
+var useStyles$5 = styles.makeStyles(function (theme) {
   return {
     root: {
-      width: 600,
       color: theme.palette.primary.dark,
-      height: 20,
-      margin: 0
+      height: 20
     },
     thumb: {
       height: 24,
@@ -614,12 +666,35 @@ function ValueLabelComponent(props) {
   }, children));
 }
 
+var compare = function compare(a, b) {
+  var valA = Number(a.value);
+  var valB = Number(b.value);
+  var comparison = 0;
+
+  if (valA > valB) {
+    comparison = 1;
+  } else if (valA < valB) {
+    comparison = -1;
+  }
+
+  return comparison;
+};
+
+var toHour = function toHour(options) {
+  options.map(function (option) {
+    option.label /= 360;
+  });
+};
+
 var DiscreteSlider = function DiscreteSlider(Props) {
+  var classes = useStyles$5();
   var options = Props.options;
-  var classes = useStyles$6();
-  var stepValue = options[1].value - options[0].value;
-  var defaultValue = options[0].value;
-  var maxValue = options[options.length - 1].value;
+  options.sort(compare);
+  toHour(options);
+  var stepValue = Number(options[1].value) - Number(options[0].value);
+  var defaultValue = Number(options[0].value);
+  var maxValue = Number(options[options.length - 1].value);
+  console.log(stepValue);
 
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
@@ -636,7 +711,7 @@ var DiscreteSlider = function DiscreteSlider(Props) {
   }));
 };
 
-var useStyles$7 = core.makeStyles(function (theme) {
+var useStyles$6 = core.makeStyles(function (theme) {
   return {
     play: {
       label: 'play',
@@ -659,8 +734,10 @@ var useStyles$7 = core.makeStyles(function (theme) {
     }
   };
 });
-var StartStopButton = function StartStopButton() {
-  var classes = useStyles$7();
+var StartStopButton = function StartStopButton(_ref) {
+  var onStart = _ref.onStart,
+      onStop = _ref.onStop;
+  var classes = useStyles$6();
 
   var _useState = React.useState(false),
       playing = _useState[0],
@@ -669,8 +746,10 @@ var StartStopButton = function StartStopButton() {
   var handleClick = function handleClick() {
     if (playing) {
       setPlaying(false);
+      onStart();
     } else {
       setPlaying(true);
+      onStop();
     }
   };
 
@@ -687,21 +766,378 @@ var StartStopButton = function StartStopButton() {
   }));
 };
 
-function TimeControl() {
+var TimeControl = function TimeControl(_ref) {
+  var onBack = _ref.onBack,
+      onNext = _ref.onNext,
+      onPlay = _ref.onPlay,
+      onPause = _ref.onPause;
   return /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     direction: "row",
-    justify: "flex-start",
     alignItems: "center",
     spacing: 1
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
-  }, /*#__PURE__*/React__default.createElement(BackButton, null)), /*#__PURE__*/React__default.createElement(core.Grid, {
+  }, /*#__PURE__*/React__default.createElement(BackButton, {
+    action: onBack
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
-  }, /*#__PURE__*/React__default.createElement(StartStopButton, null)), /*#__PURE__*/React__default.createElement(core.Grid, {
+  }, /*#__PURE__*/React__default.createElement(StartStopButton, {
+    onStart: onPlay,
+    onStop: onPause
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
-  }, /*#__PURE__*/React__default.createElement(ForwardButton, null)));
-}
+  }, /*#__PURE__*/React__default.createElement(ForwardButton, {
+    action: onNext
+  })));
+};
+
+var theme = core.createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#e9ecef',
+      main: '#ff922b',
+      dark: '#868e96',
+      contrastText: '#474545'
+    }
+  },
+  overrides: {
+    MuiListItem: {
+      root: {
+        "&$selected": {
+          backgroundColor: '#E9ECEF',
+          '&:hover': {
+            backgroundColor: '#E9ECEF'
+          },
+          color: '#868e96'
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#000000'
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#329af0',
+        color: '#f8f9fa',
+        fontSize: 16
+      }
+    }
+  },
+  spacing: 8
+});
+
+var ShyftContext = React__default.createContext({});
+var ShyftWx = function ShyftWx(_ref) {
+  var dataset = _ref.dataset,
+      url = _ref.url,
+      customer = _ref.customer,
+      themeOverride = _ref.themeOverride;
+
+  var _React$useState = React__default.useState(''),
+      error = _React$useState[0],
+      setError = _React$useState[1];
+
+  var _React$useState2 = React__default.useState(true),
+      loading = _React$useState2[0],
+      setLoading = _React$useState2[1];
+
+  var _React$useState3 = React__default.useState({
+    datasets: []
+  }),
+      index = _React$useState3[0],
+      setIndex = _React$useState3[1];
+
+  var _React$useState4 = React__default.useState(''),
+      selectedProduct = _React$useState4[0],
+      setSelectedProduct = _React$useState4[1];
+
+  var _React$useState5 = React__default.useState(''),
+      selectedLevel = _React$useState5[0],
+      setSelectedLevel = _React$useState5[1];
+
+  var _React$useState6 = React__default.useState(''),
+      selectedForecast = _React$useState6[0],
+      setSelectedForecast = _React$useState6[1];
+
+  var customerUrl = url + "/" + customer + "/" + dataset;
+
+  var loadAsync = function loadAsync() {
+    try {
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+        function _temp2() {
+          setLoading(false);
+        }
+
+        if (!indexData || indexData.datasets.length === 0) {
+          setError('No datasets available.');
+          return;
+        }
+
+        var i = 0;
+
+        var _temp = _for(function () {
+          return i < indexData.datasets.length;
+        }, function () {
+          return i++;
+        }, function () {
+          var dataset = indexData.datasets[i];
+          var datasetRegionRun = {
+            dataset: dataset.name,
+            region: dataset.region,
+            run: {
+              name: dataset.run,
+              levels: []
+            }
+          };
+          var runRegion = dataset.run + "-" + dataset.region.name;
+          var datasetUrl = customerUrl + "/" + runRegion;
+          return Promise.resolve(getIndexAsync(datasetUrl)).then(function (runRegionData) {
+            var items = runRegionData.items;
+            var uniqueLevels = [];
+            uniqueLevels = items.map(function (i) {
+              return i.level;
+            }).filter(function (v, i, a) {
+              return a.indexOf(v) === i;
+            }).map(function (l) {
+              return {
+                name: l,
+                products: []
+              };
+            });
+            uniqueLevels.forEach(function (lvl) {
+              lvl.products = items.filter(function (item) {
+                return item.level === lvl.name;
+              }).map(function (i) {
+                return i.product;
+              }).filter(function (v, i, a) {
+                return a.indexOf(v) === i;
+              }).map(function (product) {
+                return {
+                  name: product,
+                  forecasts: []
+                };
+              });
+            });
+            uniqueLevels.forEach(function (lvl) {
+              lvl.products.forEach(function (product) {
+                product.forecasts = items.filter(function (item) {
+                  return item.level === lvl.name && item.product == product.name;
+                }).map(function (item) {
+                  return {
+                    hour: item.forecast,
+                    image: item.filename
+                  };
+                });
+              });
+            });
+            datasetRegionRun.run.levels = uniqueLevels;
+            var indexes = {
+              datasets: [datasetRegionRun]
+            };
+            setIndex(indexes);
+
+            if (i === 0) {
+              setSelectedLevel(indexes.datasets[0].run.levels[0].name);
+              setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+              setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+            }
+          });
+        });
+
+        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  React__default.useEffect(function () {
+    if (!url) {
+      setError('No indexUrl or indexData provided.');
+      return;
+    }
+
+    setLoading(true);
+    loadAsync();
+  }, []);
+
+  var getSelectedLevel = function getSelectedLevel() {
+    return index.datasets[0].run.levels.filter(function (lvl) {
+      return lvl.name == selectedLevel;
+    })[0];
+  };
+
+  var getSelectedProduct = function getSelectedProduct() {
+    return getSelectedLevel().products.filter(function (p) {
+      return p.name == selectedProduct;
+    })[0];
+  };
+
+  var onProductSelect = function onProductSelect(product) {
+    setSelectedLevel(product.level);
+    setSelectedProduct(product.product);
+    setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  };
+
+  var onSliderNavigationNext = function onSliderNavigationNext() {
+    var forecasts = getSelectedProduct().forecasts;
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === selectedForecast;
+    });
+
+    if (forecastIndex + 1 == forecasts.length) {
+      return;
+    }
+
+    setSelectedForecast(forecasts[forecastIndex + 1].hour);
+  };
+
+  var onSliderNavigationBack = function onSliderNavigationBack() {
+    var forecasts = getSelectedProduct().forecasts;
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === selectedForecast;
+    });
+
+    if (forecastIndex - 1 < 0) {
+      return;
+    }
+
+    setSelectedForecast(forecasts[forecastIndex - 1].hour);
+  };
+
+  var getOffset = function getOffset() {
+    return /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 3
+    });
+  };
+
+  var generateContent = function generateContent() {
+    if (error) {
+      return /*#__PURE__*/React__default.createElement(core.Typography, {
+        color: "error"
+      }, error);
+    }
+
+    if (loading) {
+      return /*#__PURE__*/React__default.createElement(core.CircularProgress, null);
+    }
+
+    var selectedProduct = getSelectedProduct();
+    var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
+      return {
+        name: lvl.name,
+        open: index == 0,
+        products: lvl.products
+      };
+    });
+    var sliderVals = selectedProduct.forecasts.map(function (f) {
+      return {
+        label: f.hour,
+        value: f.hour
+      };
+    });
+    var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
+      return f.hour === selectedForecast;
+    })[0].image;
+    return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true
+    }, getOffset(), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React__default.createElement(ModelSelector, {
+      options: [index.datasets[0].dataset],
+      action: function action() {}
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React__default.createElement(RegionSelector, {
+      options: [index.datasets[0].region.name],
+      action: function action() {}
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React__default.createElement(RunsSelector, {
+      options: [index.datasets[0].run.name],
+      action: function action() {}
+    })))), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true
+    }, /*#__PURE__*/React__default.createElement(ProductSelector, {
+      categories: levelProductVals,
+      action: onProductSelect
+    }))), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      xs: 9
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React__default.createElement(BaseWxViewer, {
+      layers: activeForecastLayer,
+      neBounds: [index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax],
+      swBounds: [index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true,
+      xs: 2
+    }, /*#__PURE__*/React__default.createElement(TimeControl, {
+      onBack: onSliderNavigationBack,
+      onNext: onSliderNavigationNext,
+      onPlay: function onPlay() {},
+      onPause: function onPause() {}
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 1
+    }), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 9
+    }, /*#__PURE__*/React__default.createElement(DiscreteSlider, {
+      options: sliderVals
+    })))));
+  };
+
+  return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
+    theme: themeOverride || theme
+  }, /*#__PURE__*/React__default.createElement(ShyftContext.Provider, {
+    value: {
+      data: index
+    }
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "row",
+    justify: "flex-end",
+    alignItems: "flex-start",
+    spacing: 3
+  }, generateContent())));
+};
 
 exports.BackButton = BackButton;
 exports.BaseWxViewer = BaseWxViewer;
@@ -713,7 +1149,7 @@ exports.ProductSelector = ProductSelector;
 exports.RegionSelector = RegionSelector;
 exports.RunDropdown = RunDropdown;
 exports.ShyftWx = ShyftWx;
-exports.SimpleSelect = SimpleSelect;
+exports.SimpleSelect = RunsSelector;
 exports.Slider = DiscreteSlider;
 exports.StartStopButton = StartStopButton;
 exports.TimeControl = TimeControl;

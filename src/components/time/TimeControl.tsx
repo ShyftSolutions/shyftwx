@@ -11,9 +11,8 @@ export const TimeControl: React.FC<TimeControlProps> = ({onBack, onNext, onPlay,
         <Grid
               container
               direction="row"
-              justify="flex-start"
               alignItems="center"
-              spacing={1}>
+              spacing={1} >
             <Grid item>
                 <BackButton action={onBack}/>
             </Grid>

@@ -1,33 +1,26 @@
 import React, { useState } from 'react';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
-import { makeStyles, Grid, Button as Button$1, ButtonGroup, Typography, List, ListItem, ListItemText, Box, Collapse, ListItemIcon, createMuiTheme, MuiThemeProvider, CircularProgress, Fab } from '@material-ui/core';
-import { latLngBounds } from 'leaflet';
+import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, List, ListItem, ListItemText, Box, Collapse, ListItemIcon, Fab, createMuiTheme, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import 'leaflet/dist/leaflet.css';
 import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
+import { latLngBounds } from 'leaflet';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Paper from '@material-ui/core/Paper';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import { makeStyles as makeStyles$1 } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
+import { makeStyles as makeStyles$1 } from '@material-ui/core/styles';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
-var getIndexAsync = function getIndexAsync(url) {
-  return fetch(url).then(function (response) {
-    return response.json();
-  });
+const getIndexAsync = url => {
+  return fetch(url).then(response => response.json());
 };
-var getProductDataAsync = function getProductDataAsync(url, region, run) {
-  url = url + "/" + run + "-" + region;
-  return fetch(url).then(function (response) {
-    return response.json();
-  });
+const getProductDataAsync = (url, region, run) => {
+  url = `${url}/${run}-${region}`;
+  return fetch(url).then(response => response.json());
 };
 
 var index = {
@@ -36,160 +29,154 @@ var index = {
     getProductDataAsync: getProductDataAsync
 };
 
-var useStyles = makeStyles(function (theme) {
-  return {
-    root: {
-      maxWidth: '35px',
-      maxHeight: '30px',
-      minWidth: '35px',
-      minHeight: '30px',
-      variant: 'contained',
-      backgroundColor: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark
-      },
-      ariaLabel: "back"
+const useStyles = makeStyles(theme => ({
+  root: {
+    maxWidth: '200%',
+    maxHeight: '100%',
+    minWidth: '100%',
+    minHeight: '100%',
+    variant: 'contained',
+    backgroundColor: theme.palette.primary.dark,
+    boxShadow: theme.shadows[3],
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark
     },
-    icon: {
-      color: theme.palette.primary.contrastText
-    }
-  };
-});
-function BackButton() {
-  var classes = useStyles();
+    ariaLabel: "back"
+  },
+  icon: {
+    color: theme.palette.primary.contrastText
+  }
+}));
+const BackButton = ({
+  action
+}) => {
+  const classes = useStyles();
   return /*#__PURE__*/React.createElement(Button, {
+    onClick: action,
     className: classes.root
   }, /*#__PURE__*/React.createElement(NavigateBeforeIcon, {
     className: classes.icon
   }));
-}
+};
 
-var useStyles$1 = makeStyles(function (theme) {
-  return {
-    root: {
-      height: '70vh',
-      width: '70vw'
-    },
-    paddingMiddle: {
-      marginLeft: 15,
-      marginBottom: 20,
-      marginTop: 15
-    }
-  };
-});
-var BaseWxViewer = function BaseWxViewer(_ref) {
-  var neBounds = _ref.neBounds,
-      swBounds = _ref.swBounds;
-  var classes = useStyles$1();
-  var bounds = latLngBounds(swBounds, neBounds);
-  return /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: 9
-  }, /*#__PURE__*/React.createElement(Map, {
+const useStyles$1 = makeStyles(theme => ({
+  root: {
+    height: '40vw',
+    width: '100%'
+  },
+  paddingMiddle: {
+    marginLeft: 15,
+    marginBottom: 20,
+    marginTop: 15
+  }
+}));
+const BaseWxViewer = ({
+  layers,
+  neBounds,
+  swBounds
+}) => {
+  const classes = useStyles$1();
+  const bounds = latLngBounds(swBounds, neBounds);
+  return /*#__PURE__*/React.createElement(Map, {
     zoom: 10,
     bounds: bounds,
     className: classes.root,
     dragging: false,
     zoomControl: false,
-    scrollWheelZoom: false
+    scrollWheelZoom: true,
+    doubleClickZoom: false,
+    keyboard: false,
+    touchZoom: false
   }, /*#__PURE__*/React.createElement(ImageOverlay, {
-    url: 'https://wxchange-images.s3.us-east-2.amazonaws.com/GFS_2020-05-27T06_Temperature_US_850hPa_01.png.PNG',
+    url: layers,
     bounds: bounds,
     opacity: 0.5
   }), /*#__PURE__*/React.createElement(TileLayer, {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "\xA9 <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
-  })));
+  }));
 };
 
-var useStyles$2 = makeStyles(function (theme) {
-  return {
-    root: {
-      maxWidth: '35px',
-      maxHeight: '30px',
-      minWidth: '35px',
-      minHeight: '30px',
-      variant: 'contained',
-      backgroundColor: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark
-      },
-      ariaLabel: "forward"
+const useStyles$2 = makeStyles(theme => ({
+  root: {
+    maxWidth: '100%',
+    maxHeight: '100%',
+    minWidth: '100%',
+    minHeight: '100%',
+    variant: 'contained',
+    backgroundColor: theme.palette.primary.dark,
+    boxShadow: theme.shadows[3],
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark
     },
-    icon: {
-      color: theme.palette.primary.contrastText
-    }
-  };
-});
-function ForwardButton() {
-  var classes = useStyles$2();
+    ariaLabel: "forward"
+  },
+  icon: {
+    color: theme.palette.primary.contrastText
+  }
+}));
+const ForwardButton = ({
+  action
+}) => {
+  const classes = useStyles$2();
   return /*#__PURE__*/React.createElement(Button$1, {
+    onClick: action,
     className: classes.root
   }, /*#__PURE__*/React.createElement(NavigateNextIcon, {
     className: classes.icon
   }));
-}
+};
 
-var useStyles$3 = makeStyles(function (theme) {
-  return {
-    root: {
-      margin: 0,
-      boxShadow: theme.shadows[3]
-    },
-    defaultButton: {
-      backgroundColor: theme.palette.primary.contrastText,
-      '&:hover': {
-        backgroundColor: theme.palette.secondary.light
-      }
-    },
-    selectedButton: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      fontWeight: 800,
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark,
-        color: theme.palette.primary.contrastText
-      }
+const useStyles$3 = makeStyles(theme => ({
+  root: {
+    margin: 0,
+    boxShadow: theme.shadows[3]
+  },
+  defaultButton: {
+    backgroundColor: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light
     }
-  };
-});
-var GroupedButtons = function GroupedButtons(_ref) {
-  var options = _ref.options,
-      action = _ref.action;
-  var classes = useStyles$3();
+  },
+  selectedButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    fontWeight: 800,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.primary.contrastText
+    }
+  }
+}));
+const GroupedButtons = ({
+  options: _options = ['1', '2', '3'],
+  action
+}) => {
+  const classes = useStyles$3();
+  const [selected, setSelected] = useState(_options[0]);
 
-  var _useState = useState(options[0]),
-      selected = _useState[0],
-      setSelected = _useState[1];
-
-  var handleClick = function handleClick(option) {
+  const handleClick = option => {
     setSelected(option);
     action(option);
   };
 
   return /*#__PURE__*/React.createElement(ButtonGroup, {
     className: classes.root
-  }, options.map(function (option) {
-    return /*#__PURE__*/React.createElement(Button$1, {
-      key: option,
-      name: "group-button",
-      onClick: function onClick() {
-        return handleClick(option);
-      },
-      className: selected === option ? classes.selectedButton : classes.defaultButton
-    }, option);
-  }));
+  }, _options.map(option => /*#__PURE__*/React.createElement(Button$1, {
+    key: option,
+    name: "group-button",
+    onClick: () => handleClick(option),
+    className: selected === option ? classes.selectedButton : classes.defaultButton
+  }, option)));
 };
 
-var ModelSelector = function ModelSelector(_ref) {
-  var options = _ref.options,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Model' : _ref$label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
+const ModelSelector = ({
+  options,
+  label: _label = 'Model',
+  action
+}) => {
+  const handleClick = index => {
+    console.log(`clicked ${index}`);
   };
 
   return (
@@ -201,7 +188,7 @@ var ModelSelector = function ModelSelector(_ref) {
       item: true
     }, /*#__PURE__*/React.createElement(Typography, {
       variant: "h6"
-    }, label)), /*#__PURE__*/React.createElement(Grid, {
+    }, _label)), /*#__PURE__*/React.createElement(Grid, {
       item: true
     }, /*#__PURE__*/React.createElement(GroupedButtons, {
       options: options,
@@ -210,122 +197,104 @@ var ModelSelector = function ModelSelector(_ref) {
   );
 };
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+const useStyles$4 = makeStyles(theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 300
+  },
+  category: {
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+    color: theme.palette.secondary.contrastText
+  },
+  icon: {},
+  selectedIcon: {
+    color: theme.palette.secondary.dark
+  }
+}));
+const emptyMenu = [{
+  name: 'Menu',
+  open: true,
+  products: [{
+    name: 'A'
+  }, {
+    name: 'B'
+  }]
+}];
+const ProductMenu = ({
+  options: _options = emptyMenu,
+  action
+}) => {
+  const classes = useStyles$4();
+  const [selectedProduct, setSelectedProduct] = React.useState(`${_options[0].name} ${_options[0].products[0].name}`);
+  const [categories, setCategories] = React.useState(_options || []);
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-var useStyles$4 = makeStyles(function (theme) {
-  return {
-    root: {
-      width: '100%',
-      maxWidth: 300
-    },
-    category: {
-      color: theme.palette.primary.contrastText,
-      backgroundColor: theme.palette.primary.main
-    },
-    nested: {
-      paddingLeft: theme.spacing(4),
-      color: theme.palette.secondary.contrastText
-    },
-    icon: {},
-    selectedIcon: {
-      color: theme.palette.secondary.dark
-    }
-  };
-});
-var ProductMenu = function ProductMenu(Props) {
-  var classes = useStyles$4();
-  var options = Props.options;
-  var action = Props.action;
-
-  var _React$useState = React.useState(""),
-      selectedProduct = _React$useState[0],
-      setSelectedProduct = _React$useState[1];
-
-  var _React$useState2 = React.useState(options || []),
-      categories = _React$useState2[0],
-      setCategories = _React$useState2[1];
-
-  var handleClick = function handleClick(cat) {
-    var newCategories = categories.map(function (item) {
+  const handleClick = cat => {
+    const newCategories = categories.map(item => {
       if (item !== cat) {
         return item;
       }
 
-      return _extends({}, item, {
+      return { ...item,
         open: !cat.open
-      });
+      };
     });
     setCategories(newCategories);
   };
 
-  var handleListItemClick = function handleListItemClick(event, product) {
-    setSelectedProduct(product);
+  const handleListItemClick = (event, product) => {
+    setSelectedProduct(product.level + ' ' + product.product);
     action(product);
   };
 
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
-  }, categories.map(function (cat, index) {
-    return /*#__PURE__*/React.createElement(List, {
-      key: index
-    }, /*#__PURE__*/React.createElement(Paper, {
-      className: classes.category
-    }, /*#__PURE__*/React.createElement(ListItem, {
-      button: true,
-      onClick: function onClick() {
-        return handleClick(cat);
-      }
-    }, /*#__PURE__*/React.createElement(ListItemText, {
-      disableTypography: true,
-      primary: /*#__PURE__*/React.createElement(Typography, null, /*#__PURE__*/React.createElement(Box, {
+  }, categories.map((cat, index) => /*#__PURE__*/React.createElement(List, {
+    key: index
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.category
+  }, /*#__PURE__*/React.createElement(ListItem, {
+    button: true,
+    onClick: () => handleClick(cat)
+  }, /*#__PURE__*/React.createElement(ListItemText, {
+    primary: /*#__PURE__*/React.createElement(Box, {
+      m: 1
+    }, /*#__PURE__*/React.createElement(Typography, {
+      style: {
         fontWeight: 800,
-        m: 1,
-        letterSpacing: 1,
-        fontSize: 16
-      }, cat.name))
-    }), cat.open ? /*#__PURE__*/React.createElement(ExpandLess, null) : /*#__PURE__*/React.createElement(ExpandMore, null))), /*#__PURE__*/React.createElement(Paper, null, /*#__PURE__*/React.createElement(Collapse, {
-      "in": cat.open,
-      timeout: "auto",
-      unmountOnExit: true
-    }, cat.products.map(function (product) {
-      return /*#__PURE__*/React.createElement(ListItem, {
-        button: true,
-        className: classes.nested,
-        selected: selectedProduct === cat.name + ' ' + product.name,
-        onClick: function onClick(event) {
-          return handleListItemClick(event, cat.name + ' ' + product.name);
-        }
-      }, /*#__PURE__*/React.createElement(ListItemIcon, null, product.icon != undefined && /*#__PURE__*/React.createElement(FontAwesomeIcon, {
-        className: selectedProduct === cat.name + ' ' + product.name ? classes.selectedIcon : classes.icon,
-        icon: product.icon
-      })), /*#__PURE__*/React.createElement(ListItemText, {
-        primary: product.name
-      }));
-    }))));
-  }));
+        fontSize: 16,
+        letterSpacing: 1
+      }
+    }, cat.name))
+  }), cat.open ? /*#__PURE__*/React.createElement(ExpandLess, null) : /*#__PURE__*/React.createElement(ExpandMore, null))), /*#__PURE__*/React.createElement(Paper, null, /*#__PURE__*/React.createElement(Collapse, {
+    in: cat.open,
+    timeout: "auto",
+    unmountOnExit: true
+  }, cat.products.map((product, index) => /*#__PURE__*/React.createElement(ListItem, {
+    key: index,
+    button: true,
+    className: classes.nested,
+    selected: selectedProduct === cat.name + ' ' + product.name,
+    onClick: event => handleListItemClick(event, {
+      level: cat.name,
+      product: product.name
+    })
+  }, product.icon != undefined && /*#__PURE__*/React.createElement(ListItemIcon, null, /*#__PURE__*/React.createElement(FontAwesomeIcon, {
+    className: selectedProduct === cat.name + ' ' + product.name ? classes.selectedIcon : classes.icon,
+    icon: product.icon
+  })), /*#__PURE__*/React.createElement(ListItemText, {
+    primary: product.name
+  }))))))));
 };
 
-var ProductSelector = function ProductSelector(_ref) {
-  var categories = _ref.categories,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Products' : _ref$label,
-      action = _ref.action;
+const ProductSelector = ({
+  categories,
+  label: _label = 'Products',
+  action
+}) => {
   return /*#__PURE__*/React.createElement(Grid, {
     container: true,
     direction: "column"
@@ -333,7 +302,7 @@ var ProductSelector = function ProductSelector(_ref) {
     item: true
   }, /*#__PURE__*/React.createElement(Typography, {
     variant: "h6"
-  }, label)), /*#__PURE__*/React.createElement(Grid, {
+  }, _label)), /*#__PURE__*/React.createElement(Grid, {
     item: true
   }, /*#__PURE__*/React.createElement(ProductMenu, {
     options: categories,
@@ -341,15 +310,53 @@ var ProductSelector = function ProductSelector(_ref) {
   })));
 };
 
-var RegionSelector = function RegionSelector(_ref) {
-  var options = _ref.options,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Region' : _ref$label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
+const RegionSelector = ({
+  options,
+  label: _label = 'Region'
+}) => {
+  const handleClick = index => {
+    console.log(`clicked ${index}`);
   };
 
+  return (
+    /*#__PURE__*/
+    React.createElement(Grid, {
+      container: true,
+      item: true,
+      direction: "column"
+    }, /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(Typography, {
+      variant: "h6"
+    }, _label)), /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(GroupedButtons, {
+      options: options,
+      action: handleClick
+    })))
+  );
+};
+
+const toDates = options => {
+  const dates = [];
+  options.map(option => {
+    const epoch = option * 1000;
+    const date = new Date(epoch);
+    const time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:${date.getUTCMinutes()}Z`;
+    dates.push(time);
+  });
+  return dates;
+};
+
+const RunsSelector = ({
+  options,
+  label: _label = 'Runs'
+}) => {
+  const handleClick = index => {
+    console.log(`clicked ${index}`);
+  };
+
+  const dates = toDates(options);
   return (
     /*#__PURE__*/
     React.createElement(Grid, {
@@ -359,82 +366,21 @@ var RegionSelector = function RegionSelector(_ref) {
       item: true
     }, /*#__PURE__*/React.createElement(Typography, {
       variant: "h6"
-    }, label)), /*#__PURE__*/React.createElement(Grid, {
+    }, _label)), /*#__PURE__*/React.createElement(Grid, {
       item: true
     }, /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: options,
+      options: dates,
       action: handleClick
     })))
   );
 };
 
-var useStyles$5 = makeStyles$1(function (theme) {
-  return {
-    formControl: {
-      minWidth: 120,
-      boxShadow: theme.shadows[3]
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    },
-    label: {
-      align: 'center'
-    },
-    dropdown: {
-      background: theme.palette.primary.contrastText
-    },
-    items: {
-      background: theme.palette.primary.contrastText,
-      '&:hover': {
-        background: theme.palette.primary.main
-      }
-    }
-  };
-});
-var SimpleSelect = function SimpleSelect(_ref) {
-  var options = _ref.options,
-      action = _ref.action;
-  var classes = useStyles$5();
-
-  var _React$useState = React.useState(options[0]),
-      selectedValue = _React$useState[0],
-      setSelectedValue = _React$useState[1];
-
-  var handleChange = function handleChange(event) {
-    var name = event.target.name;
-
-    if (name) {
-      setSelectedValue(name);
-      action(name);
-    }
-  };
-
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
-    variant: "outlined",
-    className: classes.formControl
-  }, /*#__PURE__*/React.createElement(Select, {
-    classes: {
-      select: classes.dropdown
-    },
-    id: "simple-select",
-    value: selectedValue,
-    onChange: handleChange
-  }, options.map(function (option) {
-    return /*#__PURE__*/React.createElement(MenuItem, {
-      color: "primary",
-      key: option,
-      className: classes.items,
-      value: option
-    }, option);
-  }))));
-};
-
-var RunDropdown = function RunDropdown(_ref) {
-  var options = _ref.options,
-      label = _ref.label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
+const RunDropdown = ({
+  options,
+  label: _label = 'Model Run'
+}) => {
+  const handleClick = index => {
+    console.log(`clicked ${index}`);
   };
 
   return /*#__PURE__*/React.createElement(Grid, {
@@ -444,11 +390,188 @@ var RunDropdown = function RunDropdown(_ref) {
     item: true
   }, /*#__PURE__*/React.createElement(Typography, {
     variant: "h6"
-  }, label)), /*#__PURE__*/React.createElement(Grid, {
+  }, _label)), /*#__PURE__*/React.createElement(Grid, {
     item: true
-  }, /*#__PURE__*/React.createElement(SimpleSelect, {
+  }, /*#__PURE__*/React.createElement(RunsSelector, {
     options: options,
     action: handleClick
+  })));
+};
+
+const useStyles$5 = makeStyles$1(theme => ({
+  root: {
+    color: theme.palette.primary.dark,
+    height: 20
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: theme.palette.primary.contrastText,
+    border: '2px solid currentColor',
+    marginTop: -8,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit'
+    }
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)'
+  },
+  rail: {
+    height: 5,
+    borderRadius: 4
+  },
+  markLabelActive: {
+    fontWeight: 700,
+    padding: 12
+  },
+  markLabel: {
+    fontWeight: 500,
+    padding: 12
+  },
+  mark: {
+    backgroundColor: theme.palette.primary.dark,
+    height: 5
+  }
+}));
+
+function ValueLabelComponent(props) {
+  const {
+    children,
+    open,
+    value
+  } = props;
+  return /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(Tooltip, {
+    open: open,
+    enterTouchDelay: 0,
+    placement: "top",
+    title: value + ' + Model Run'
+  }, children));
+}
+
+const compare = (a, b) => {
+  const valA = Number(a.value);
+  const valB = Number(b.value);
+  let comparison = 0;
+
+  if (valA > valB) {
+    comparison = 1;
+  } else if (valA < valB) {
+    comparison = -1;
+  }
+
+  return comparison;
+};
+
+const toHour = options => {
+  options.map(option => {
+    option.label /= 360;
+  });
+};
+
+const DiscreteSlider = Props => {
+  const classes = useStyles$5();
+  const {
+    options
+  } = Props;
+  options.sort(compare);
+  toHour(options);
+  const stepValue = Number(options[1].value) - Number(options[0].value);
+  const defaultValue = Number(options[0].value);
+  const maxValue = Number(options[options.length - 1].value);
+  console.log(stepValue);
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(Slider, {
+    classes: classes,
+    valueLabelDisplay: "auto",
+    "aria-label": "pretty slider",
+    track: false,
+    step: stepValue,
+    marks: options,
+    defaultValue: defaultValue,
+    max: maxValue,
+    ValueLabelComponent: ValueLabelComponent
+  }));
+};
+
+const useStyles$6 = makeStyles(theme => ({
+  play: {
+    label: 'play',
+    boxShadow: theme.shadows[3],
+    background: theme.palette.secondary.dark,
+    '&:hover': {
+      background: theme.palette.secondary.dark
+    }
+  },
+  pause: {
+    label: 'pause',
+    boxShadow: theme.shadows[3],
+    background: theme.palette.secondary.dark,
+    '&:hover': {
+      background: theme.palette.secondary.dark
+    }
+  },
+  icon: {
+    color: theme.palette.primary.contrastText
+  }
+}));
+const StartStopButton = ({
+  onStart,
+  onStop
+}) => {
+  const classes = useStyles$6();
+  const [playing, setPlaying] = useState(false);
+
+  const handleClick = () => {
+    if (playing) {
+      setPlaying(false);
+      onStart();
+    } else {
+      setPlaying(true);
+      onStop();
+    }
+  };
+
+  return playing ? /*#__PURE__*/React.createElement(Fab, {
+    onClick: handleClick,
+    className: classes.pause
+  }, /*#__PURE__*/React.createElement(PauseIcon, {
+    className: classes.icon
+  })) : /*#__PURE__*/React.createElement(Fab, {
+    onClick: handleClick,
+    className: classes.play
+  }, /*#__PURE__*/React.createElement(PlayArrowIcon, {
+    className: classes.icon
+  }));
+};
+
+const TimeControl = ({
+  onBack,
+  onNext,
+  onPlay,
+  onPause
+}) => {
+  return /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    direction: "row",
+    alignItems: "center",
+    spacing: 1
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(BackButton, {
+    action: onBack
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(StartStopButton, {
+    onStart: onPlay,
+    onStop: onPause
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(ForwardButton, {
+    action: onNext
   })));
 };
 
@@ -476,7 +599,13 @@ var theme = createMuiTheme({
             backgroundColor: '#E9ECEF'
           },
           color: '#868e96'
-        }
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
       }
     },
     MuiListItemIcon: {
@@ -495,40 +624,141 @@ var theme = createMuiTheme({
   spacing: 8
 });
 
-var ShyftContext = React.createContext({});
-var ShyftWx = function ShyftWx(_ref) {
-  var children = _ref.children,
-      indexData = _ref.indexData,
-      indexUrl = _ref.indexUrl,
-      themeOverride = _ref.themeOverride;
+const ShyftContext = React.createContext({});
+const ShyftWx = ({
+  children,
+  dataset,
+  url,
+  customer,
+  themeOverride
+}) => {
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
+  const [index, setIndex] = React.useState({
+    datasets: []
+  });
+  const [selectedProduct, setSelectedProduct] = React.useState('');
+  const [selectedLevel, setSelectedLevel] = React.useState('');
+  const [selectedForecast, setSelectedForecast] = React.useState('');
+  const customerUrl = `${url}/${customer}/${dataset}`;
 
-  var _React$useState = React.useState(''),
-      error = _React$useState[0],
-      setError = _React$useState[1];
+  const loadAsync = async () => {
+    const indexData = await getIndexAsync(customerUrl);
 
-  var _React$useState2 = React.useState(true),
-      loading = _React$useState2[0],
-      setLoading = _React$useState2[1];
-
-  var _React$useState3 = React.useState(),
-      index = _React$useState3[0],
-      setIndex = _React$useState3[1];
-
-  React.useEffect(function () {
-    if (indexUrl) {
-      getIndexAsync(indexUrl).then(function (data) {
-        setIndex(data);
-        setLoading(false);
-      });
-    } else if (indexData) {
-      setIndex(indexData);
-      setLoading(false);
-    } else {
-      setError('No indexUrl or indexData provided.');
+    if (!indexData || indexData.datasets.length === 0) {
+      setError('No datasets available.');
+      return;
     }
+
+    for (let i = 0; i < indexData.datasets.length; i++) {
+      const dataset = indexData.datasets[i];
+      const datasetRegionRun = {
+        dataset: dataset.name,
+        region: dataset.region,
+        run: {
+          name: dataset.run,
+          levels: []
+        }
+      };
+      const runRegion = `${dataset.run}-${dataset.region.name}`;
+      const datasetUrl = `${customerUrl}/${runRegion}`;
+      const runRegionData = await getIndexAsync(datasetUrl);
+      const items = runRegionData.items;
+      let uniqueLevels = [];
+      uniqueLevels = items.map(i => i.level).filter((v, i, a) => a.indexOf(v) === i).map(l => {
+        return {
+          name: l,
+          products: []
+        };
+      });
+      uniqueLevels.forEach(lvl => {
+        lvl.products = items.filter(item => item.level === lvl.name).map(i => i.product).filter((v, i, a) => a.indexOf(v) === i).map(product => {
+          return {
+            name: product,
+            forecasts: []
+          };
+        });
+      });
+      uniqueLevels.forEach(lvl => {
+        lvl.products.forEach(product => {
+          product.forecasts = items.filter(item => item.level === lvl.name && item.product == product.name).map(item => {
+            return {
+              hour: item.forecast,
+              image: item.filename
+            };
+          });
+        });
+      });
+      datasetRegionRun.run.levels = uniqueLevels;
+      const indexes = {
+        datasets: [datasetRegionRun]
+      };
+      setIndex(indexes);
+
+      if (i === 0) {
+        setSelectedLevel(indexes.datasets[0].run.levels[0].name);
+        setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+        setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    if (!url) {
+      setError('No indexUrl or indexData provided.');
+      return;
+    }
+
+    setLoading(true);
+    loadAsync();
   }, []);
 
-  var generateContent = function generateContent() {
+  const getSelectedLevel = () => {
+    return index.datasets[0].run.levels.filter(lvl => lvl.name == selectedLevel)[0];
+  };
+
+  const getSelectedProduct = () => {
+    return getSelectedLevel().products.filter(p => p.name == selectedProduct)[0];
+  };
+
+  const onProductSelect = product => {
+    setSelectedLevel(product.level);
+    setSelectedProduct(product.product);
+    setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  };
+
+  const onSliderNavigationNext = () => {
+    const forecasts = getSelectedProduct().forecasts;
+    let forecastIndex = forecasts.findIndex(f => f.hour === selectedForecast);
+
+    if (forecastIndex + 1 == forecasts.length) {
+      return;
+    }
+
+    setSelectedForecast(forecasts[forecastIndex + 1].hour);
+  };
+
+  const onSliderNavigationBack = () => {
+    const forecasts = getSelectedProduct().forecasts;
+    const forecastIndex = forecasts.findIndex(f => f.hour === selectedForecast);
+
+    if (forecastIndex - 1 < 0) {
+      return;
+    }
+
+    setSelectedForecast(forecasts[forecastIndex - 1].hour);
+  };
+
+  const getOffset = () => {
+    return /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 3
+    });
+  };
+
+  const generateContent = () => {
     if (error) {
       return /*#__PURE__*/React.createElement(Typography, {
         color: "error"
@@ -539,7 +769,88 @@ var ShyftWx = function ShyftWx(_ref) {
       return /*#__PURE__*/React.createElement(CircularProgress, null);
     }
 
-    return children;
+    const selectedProduct = getSelectedProduct();
+    const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
+      return {
+        name: lvl.name,
+        open: index == 0,
+        products: lvl.products
+      };
+    });
+    const sliderVals = selectedProduct.forecasts.map(f => {
+      return {
+        label: f.hour,
+        value: f.hour
+      };
+    });
+    const activeForecastLayer = selectedProduct.forecasts.filter(f => f.hour === selectedForecast)[0].image;
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true
+    }, getOffset(), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React.createElement(ModelSelector, {
+      options: [index.datasets[0].dataset],
+      action: () => {}
+    })), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React.createElement(RegionSelector, {
+      options: [index.datasets[0].region.name],
+      action: () => {}
+    })), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React.createElement(RunsSelector, {
+      options: [index.datasets[0].run.name],
+      action: () => {}
+    })))), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true
+    }, /*#__PURE__*/React.createElement(ProductSelector, {
+      categories: levelProductVals,
+      action: onProductSelect
+    }))), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      xs: 9
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React.createElement(BaseWxViewer, {
+      layers: activeForecastLayer,
+      neBounds: [index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax],
+      swBounds: [index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]
+    })), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: 2
+    }, /*#__PURE__*/React.createElement(TimeControl, {
+      onBack: onSliderNavigationBack,
+      onNext: onSliderNavigationNext,
+      onPlay: () => {},
+      onPause: () => {}
+    })), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 1
+    }), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 9
+    }, /*#__PURE__*/React.createElement(DiscreteSlider, {
+      options: sliderVals
+    })))));
   };
 
   return /*#__PURE__*/React.createElement(MuiThemeProvider, {
@@ -557,148 +868,5 @@ var ShyftWx = function ShyftWx(_ref) {
   }, generateContent())));
 };
 
-var useStyles$6 = makeStyles$1(function (theme) {
-  return {
-    root: {
-      width: 600,
-      color: theme.palette.primary.dark,
-      height: 20,
-      margin: 0
-    },
-    thumb: {
-      height: 24,
-      width: 24,
-      backgroundColor: theme.palette.primary.contrastText,
-      border: '2px solid currentColor',
-      marginTop: -8,
-      marginLeft: -12,
-      '&:focus, &:hover, &$active': {
-        boxShadow: 'inherit'
-      }
-    },
-    active: {},
-    valueLabel: {
-      left: 'calc(-50% + 4px)'
-    },
-    rail: {
-      height: 5,
-      borderRadius: 4
-    },
-    markLabelActive: {
-      fontWeight: 700,
-      padding: 12
-    },
-    markLabel: {
-      fontWeight: 500,
-      padding: 12
-    },
-    mark: {
-      backgroundColor: theme.palette.primary.dark,
-      height: 5
-    }
-  };
-});
-
-function ValueLabelComponent(props) {
-  var children = props.children,
-      open = props.open,
-      value = props.value;
-  return /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(Tooltip, {
-    open: open,
-    enterTouchDelay: 0,
-    placement: "top",
-    title: value + ' + Model Run'
-  }, children));
-}
-
-var DiscreteSlider = function DiscreteSlider(Props) {
-  var options = Props.options;
-  var classes = useStyles$6();
-  var stepValue = options[1].value - options[0].value;
-  var defaultValue = options[0].value;
-  var maxValue = options[options.length - 1].value;
-
-  return /*#__PURE__*/React.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/React.createElement(Slider, {
-    classes: classes,
-    valueLabelDisplay: "auto",
-    "aria-label": "pretty slider",
-    track: false,
-    step: stepValue,
-    marks: options,
-    defaultValue: defaultValue,
-    max: maxValue,
-    ValueLabelComponent: ValueLabelComponent
-  }));
-};
-
-var useStyles$7 = makeStyles(function (theme) {
-  return {
-    play: {
-      label: 'play',
-      boxShadow: theme.shadows[3],
-      background: theme.palette.secondary.dark,
-      '&:hover': {
-        background: theme.palette.secondary.dark
-      }
-    },
-    pause: {
-      label: 'pause',
-      boxShadow: theme.shadows[3],
-      background: theme.palette.secondary.dark,
-      '&:hover': {
-        background: theme.palette.secondary.dark
-      }
-    },
-    icon: {
-      color: theme.palette.primary.contrastText
-    }
-  };
-});
-var StartStopButton = function StartStopButton() {
-  var classes = useStyles$7();
-
-  var _useState = useState(false),
-      playing = _useState[0],
-      setPlaying = _useState[1];
-
-  var handleClick = function handleClick() {
-    if (playing) {
-      setPlaying(false);
-    } else {
-      setPlaying(true);
-    }
-  };
-
-  return playing ? /*#__PURE__*/React.createElement(Fab, {
-    onClick: handleClick,
-    className: classes.pause
-  }, /*#__PURE__*/React.createElement(PauseIcon, {
-    className: classes.icon
-  })) : /*#__PURE__*/React.createElement(Fab, {
-    onClick: handleClick,
-    className: classes.play
-  }, /*#__PURE__*/React.createElement(PlayArrowIcon, {
-    className: classes.icon
-  }));
-};
-
-function TimeControl() {
-  return /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    direction: "row",
-    justify: "flex-start",
-    alignItems: "center",
-    spacing: 1
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(BackButton, null)), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(StartStopButton, null)), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(ForwardButton, null)));
-}
-
-export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunDropdown, ShyftWx, SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme };
+export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunDropdown, ShyftWx, RunsSelector as SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme };
 //# sourceMappingURL=index.modern.js.map
