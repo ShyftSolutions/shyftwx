@@ -1,5 +1,5 @@
 declare namespace _default {
-    export { _ShyftModel as component };
+    export { _ModelSelector as component };
     export const title: string;
     export const decorators: ((...args: any) => any)[];
 }

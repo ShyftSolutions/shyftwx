@@ -1,2 +1,3 @@
-/// <reference types="react" />
-export default function BackButton(): JSX.Element;
+import React from 'react';
+export declare const BackButton: React.FC<TimeNavigationButtonProps>;
+export default BackButton;

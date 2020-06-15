@@ -1,2 +1,3 @@
-/// <reference types="react" />
-export default function ForwardButton(): JSX.Element;
+import React from 'react';
+export declare const ForwardButton: React.FC<TimeNavigationButtonProps>;
+export default ForwardButton;
