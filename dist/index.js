@@ -12,6 +12,7 @@ var NavigateNextIcon = _interopDefault(require('@material-ui/icons/NavigateNext'
 var Paper = _interopDefault(require('@material-ui/core/Paper'));
 var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
+var freeSolidSvgIcons = require('@fortawesome/free-solid-svg-icons');
 var Slider = _interopDefault(require('@material-ui/core/Slider'));
 var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
 var styles = require('@material-ui/core/styles');
@@ -254,6 +255,16 @@ var useStyles$4 = core.makeStyles(function (theme) {
     }
   };
 });
+var ICON_MAP = {
+  Ceiling: freeSolidSvgIcons.fas.faCloud,
+  DewpointTemperature: freeSolidSvgIcons.fas.faTint,
+  Pressure: freeSolidSvgIcons.fas.faArrowDown,
+  RelativeHumidity: freeSolidSvgIcons.fas.faPercent,
+  Temperature: freeSolidSvgIcons.fas.faTemperatureHigh,
+  TotalPrecipitation: freeSolidSvgIcons.fas.faCloudShowersHeavy,
+  Visibility: freeSolidSvgIcons.fas.faEye,
+  Wind: freeSolidSvgIcons.fas.faWind
+};
 var emptyMenu = [{
   name: 'Menu',
   open: true,
@@ -333,9 +344,9 @@ var ProductMenu = function ProductMenu(_ref) {
             product: product.name
           });
         }
-      }, product.icon != undefined && /*#__PURE__*/React__default.createElement(core.ListItemIcon, null, /*#__PURE__*/React__default.createElement(reactFontawesome.FontAwesomeIcon, {
+      }, ICON_MAP[product.name] !== undefined && /*#__PURE__*/React__default.createElement(core.ListItemIcon, null, /*#__PURE__*/React__default.createElement(reactFontawesome.FontAwesomeIcon, {
         className: selectedProduct === cat.name + ' ' + product.name ? classes.selectedIcon : classes.icon,
-        icon: product.icon
+        icon: ICON_MAP[product.name]
       })), /*#__PURE__*/React__default.createElement(core.ListItemText, {
         primary: product.name
       }));
@@ -396,7 +407,16 @@ var toDates = function toDates(options) {
   options.map(function (option) {
     var epoch = option * 1000;
     var date = new Date(epoch);
-    var time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
+    var time;
+
+    if (date.getUTCHours() === 0) {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T 00:" + date.getUTCMinutes() + "Z";
+    } else if (date.getUTCMinutes() === 0) {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":00Z";
+    } else {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
+    }
+
     dates.push(time);
   });
   return dates;
@@ -683,6 +703,7 @@ var compare = function compare(a, b) {
 var toHour = function toHour(options) {
   options.map(function (option) {
     option.label /= 360;
+    option.value /= 360;
   });
 };
 

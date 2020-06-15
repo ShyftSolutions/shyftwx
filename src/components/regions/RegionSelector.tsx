@@ -15,11 +15,9 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label =
 
     return (
         /* Region Grid Container */
-        <Grid container item direction="column">
+        <Grid container item justify="center">
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
-            </Grid>
-            <Grid item>
                 <GroupedButtons options={options} action={handleClick} />
             </Grid>
         </Grid>
