@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onStart, onStop }) => {
     const classes = useStyles();
     const [tick, isRunning, setIsRunning] = useTimer(600);
-    const [currentTick, setcurrentTick] = React.useState(tick);
 
     const handleClick = () => {
         if (isRunning) {
@@ -45,11 +44,9 @@ export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onStart, 
         }
     };
 
-    if(tick !== currentTick) {
-        setcurrentTick(tick);
+    React.useEffect(() => {
         onStart(setIsRunning, isRunning);
-    }
-
+    }, [tick])
 
     return isRunning ? (
         <Fab onClick={handleClick} className={classes.pause}>

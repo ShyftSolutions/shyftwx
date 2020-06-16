@@ -193,9 +193,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
       const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
       if(selectedForecast === forecasts[forecasts.length - 1].hour) {
-
-        setIsRunning(false);
-        console.log(isRunning);
+        setSelectedForecast(forecasts[0].hour);
         return;
 
       } else {
@@ -211,24 +209,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         epoch = +index.datasets[0].run.name * 1000;
         const date: Date = new Date(epoch);
         return date;
-    };
-    /**
-     * Takes an epoch time value and converts it to UTC time string
-     *
-     * @param epoch
-     */
-    const toUTCTime = (epoch: number) => {
-        const date = getDateFromEpoch(epoch);
-        let time: string;
-        if (date.getUTCHours() === 0) {
-            time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T 00:${date.getUTCMinutes()}Z`;
-        } else if (date.getUTCMinutes() === 0) {
-            time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:00Z`;
-        } else {
-            time = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T ${date.getUTCHours()}:${date.getUTCMinutes()}Z`;
-        }
-
-        return time;
     };
 
     const getValidTime = () => {
@@ -313,7 +293,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 options={sliderVals}
                                 selected={selectedForecast}
                                 action={onSliderNavigation}
-                                modelTime={getDateFromEpoch(+index.datasets[0].run.name)}
+                                validTime={getValidTime()}
                             />
                         </Grid>
                     </Grid>
