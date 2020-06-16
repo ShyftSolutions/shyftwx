@@ -5,5 +5,5 @@ import React from 'react';
  *
  * @param Props: { options: string[]}
  */
-export declare const RunsSelector: React.FC<RegionSelectorProps>;
+export declare const RunsSelector: React.FC<RunsSelectorProps>;
 export default RunsSelector;

@@ -1,4 +1,5 @@
 import { CircularProgress, Grid, MuiThemeProvider, Typography } from '@material-ui/core';
+
 import BaseWxViewer from './../viewers/BaseWxViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
@@ -8,9 +9,9 @@ import RunDropdown from './../runs/RunDropdown';
 import RunsSelector from './../run/RunsSelector';
 import Slider from '../time/Slider';
 import TimeControl from './../time/TimeControl';
+import ValidTime from '../time/ValidTime';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
-import ValidTime from '../time/ValidTime';
 
 export const ShyftContext = React.createContext({});
 
@@ -244,12 +245,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <RegionSelector options={[index.datasets[0].region.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <RunsSelector options={[toUTCTime(+index.datasets[0].run.name)]} action={() => {}} />
+                            <RunsSelector options={[+index.datasets[0].run.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <ValidTime
-                                time={getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name))}
-                            />
+                            <ValidTime unixSeconds={+index.datasets[0].run.name} />
                         </Grid>
                     </Grid>
                 </Grid>

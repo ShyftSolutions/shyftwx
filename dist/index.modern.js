@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles as makeStyles$1 } from '@material-ui/core/styles';
@@ -405,6 +406,9 @@ var RunsSelector = function RunsSelector(_ref) {
     console.log("clicked " + index);
   };
 
+  var newOptions = options.map(function (option) {
+    return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
+  });
   return (
     /*#__PURE__*/
     React.createElement(Grid, {
@@ -416,7 +420,7 @@ var RunsSelector = function RunsSelector(_ref) {
     }, /*#__PURE__*/React.createElement(Typography, {
       variant: "h6"
     }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: options,
+      options: newOptions,
       action: handleClick
     })))
   );
@@ -441,7 +445,9 @@ var RunDropdown = function RunDropdown(_ref) {
   }, label)), /*#__PURE__*/React.createElement(Grid, {
     item: true
   }, /*#__PURE__*/React.createElement(RunsSelector, {
-    options: options,
+    options: options.map(function (option) {
+      return Number(option);
+    }),
     action: handleClick
   })));
 };
@@ -793,6 +799,23 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
+var ValidTime = function ValidTime(_ref) {
+  var unixSeconds = _ref.unixSeconds;
+  var formattedDate = moment.unix(unixSeconds).utc().format('MM[/]DD hh:ss[Z]');
+  return /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "flex-end",
+    alignItems: "flex-end"
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Valid Time"), /*#__PURE__*/React.createElement(Typography, {
+    variant: "body1"
+  }, formattedDate)));
+};
+
 var theme = createMuiTheme({
   palette: {
     primary: {
@@ -847,33 +870,6 @@ var theme = createMuiTheme({
   },
   spacing: 8
 });
-
-var ValidTime = function ValidTime(_ref) {
-  var time = _ref.time;
-
-  var formattedDate = function formattedDate(date) {
-    if (date.getUTCHours() === 0) {
-      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " 00:" + date.getUTCMinutes() + "Z";
-    } else if (date.getUTCMinutes() === 0) {
-      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " " + date.getUTCHours() + ":00Z";
-    } else {
-      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
-    }
-  };
-
-  return /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "flex-end",
-    alignItems: "flex-end"
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
-  }, "Valid Time"), /*#__PURE__*/React.createElement(Typography, {
-    variant: "body1"
-  }, formattedDate(time))));
-};
 
 var ShyftContext = React.createContext({});
 var ShyftWx = function ShyftWx(_ref) {
@@ -1099,26 +1095,6 @@ var ShyftWx = function ShyftWx(_ref) {
     return date;
   };
 
-  var toUTCTime = function toUTCTime(epoch) {
-    var date = getDateFromEpoch(epoch);
-    var time;
-
-    if (date.getUTCHours() === 0) {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T 00:" + date.getUTCMinutes() + "Z";
-    } else if (date.getUTCMinutes() === 0) {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":00Z";
-    } else {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
-    }
-
-    return time;
-  };
-
-  var getValidTime = function getValidTime(forecastTime, modelTime) {
-    var validTime = new Date(modelTime.getTime() + +forecastTime / 60 * 60000);
-    return validTime;
-  };
-
   var generateContent = function generateContent() {
     if (error) {
       return /*#__PURE__*/React.createElement(Typography, {
@@ -1169,13 +1145,13 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 3
     }, /*#__PURE__*/React.createElement(RunsSelector, {
-      options: [toUTCTime(+index.datasets[0].run.name)],
+      options: [+index.datasets[0].run.name],
       action: function action() {}
     })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
       xs: 3
     }, /*#__PURE__*/React.createElement(ValidTime, {
-      time: getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name))
+      unixSeconds: +index.datasets[0].run.name
     })))), /*#__PURE__*/React.createElement(Grid, {
       container: true,
       item: true,

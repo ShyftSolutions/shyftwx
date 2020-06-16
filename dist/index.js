@@ -13,6 +13,7 @@ var Paper = _interopDefault(require('@material-ui/core/Paper'));
 var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
 var freeSolidSvgIcons = require('@fortawesome/free-solid-svg-icons');
+var moment = _interopDefault(require('moment'));
 var Slider = _interopDefault(require('@material-ui/core/Slider'));
 var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
 var styles = require('@material-ui/core/styles');
@@ -408,6 +409,9 @@ var RunsSelector = function RunsSelector(_ref) {
     console.log("clicked " + index);
   };
 
+  var newOptions = options.map(function (option) {
+    return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
+  });
   return (
     /*#__PURE__*/
     React__default.createElement(core.Grid, {
@@ -419,7 +423,7 @@ var RunsSelector = function RunsSelector(_ref) {
     }, /*#__PURE__*/React__default.createElement(core.Typography, {
       variant: "h6"
     }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
-      options: options,
+      options: newOptions,
       action: handleClick
     })))
   );
@@ -444,7 +448,9 @@ var RunDropdown = function RunDropdown(_ref) {
   }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
   }, /*#__PURE__*/React__default.createElement(RunsSelector, {
-    options: options,
+    options: options.map(function (option) {
+      return Number(option);
+    }),
     action: handleClick
   })));
 };
@@ -796,6 +802,23 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
+var ValidTime = function ValidTime(_ref) {
+  var unixSeconds = _ref.unixSeconds;
+  var formattedDate = moment.unix(unixSeconds).utc().format('MM[/]DD hh:ss[Z]');
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    justify: "flex-end",
+    alignItems: "flex-end"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "body1"
+  }, formattedDate)));
+};
+
 var theme = core.createMuiTheme({
   palette: {
     primary: {
@@ -850,33 +873,6 @@ var theme = core.createMuiTheme({
   },
   spacing: 8
 });
-
-var ValidTime = function ValidTime(_ref) {
-  var time = _ref.time;
-
-  var formattedDate = function formattedDate(date) {
-    if (date.getUTCHours() === 0) {
-      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " 00:" + date.getUTCMinutes() + "Z";
-    } else if (date.getUTCMinutes() === 0) {
-      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " " + date.getUTCHours() + ":00Z";
-    } else {
-      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
-    }
-  };
-
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    item: true,
-    justify: "flex-end",
-    alignItems: "flex-end"
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
-  }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "body1"
-  }, formattedDate(time))));
-};
 
 var ShyftContext = React__default.createContext({});
 var ShyftWx = function ShyftWx(_ref) {
@@ -1102,26 +1098,6 @@ var ShyftWx = function ShyftWx(_ref) {
     return date;
   };
 
-  var toUTCTime = function toUTCTime(epoch) {
-    var date = getDateFromEpoch(epoch);
-    var time;
-
-    if (date.getUTCHours() === 0) {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T 00:" + date.getUTCMinutes() + "Z";
-    } else if (date.getUTCMinutes() === 0) {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":00Z";
-    } else {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
-    }
-
-    return time;
-  };
-
-  var getValidTime = function getValidTime(forecastTime, modelTime) {
-    var validTime = new Date(modelTime.getTime() + +forecastTime / 60 * 60000);
-    return validTime;
-  };
-
   var generateContent = function generateContent() {
     if (error) {
       return /*#__PURE__*/React__default.createElement(core.Typography, {
@@ -1172,13 +1148,13 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 3
     }, /*#__PURE__*/React__default.createElement(RunsSelector, {
-      options: [toUTCTime(+index.datasets[0].run.name)],
+      options: [+index.datasets[0].run.name],
       action: function action() {}
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
       xs: 3
     }, /*#__PURE__*/React__default.createElement(ValidTime, {
-      time: getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name))
+      unixSeconds: +index.datasets[0].run.name
     })))), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,
