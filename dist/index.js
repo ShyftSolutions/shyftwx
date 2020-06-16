@@ -88,12 +88,11 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
   var classes = useStyles$1();
   var bounds = leaflet.latLngBounds(swBounds, neBounds);
   return /*#__PURE__*/React__default.createElement(reactLeaflet.Map, {
-    zoom: 10,
     bounds: bounds,
     className: classes.root,
     dragging: false,
     zoomControl: false,
-    scrollWheelZoom: true,
+    scrollWheelZoom: false,
     doubleClickZoom: false,
     keyboard: false,
     touchZoom: false
@@ -857,11 +856,11 @@ var ValidTime = function ValidTime(_ref) {
 
   var formattedDate = function formattedDate(date) {
     if (date.getUTCHours() === 0) {
-      return "00:" + date.getUTCMinutes() + " " + date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear();
+      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " 00:" + date.getUTCMinutes() + "Z";
     } else if (date.getUTCMinutes() === 0) {
-      return date.getUTCHours() + ":00 " + date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear();
+      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " " + date.getUTCHours() + ":00Z";
     } else {
-      return date.getUTCHours() + ":" + date.getUTCMinutes() + " " + date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear();
+      return date.getUTCMonth() + 1 + "/" + date.getUTCDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
     }
   };
 

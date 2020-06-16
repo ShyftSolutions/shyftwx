@@ -1,14 +1,15 @@
-import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
+
+import React from 'react';
 
 export const ValidTime: React.FC<ValidTimeProps> = ({ time }) => {
     const formattedDate = (date: Date) => {
         if (date.getUTCHours() === 0) {
-            return `00:${date.getUTCMinutes()} ${date.getUTCDate()}/${date.getUTCMonth()}/${date.getUTCFullYear()}`;
+            return `${date.getUTCMonth() + 1}/${date.getUTCDate()} 00:${date.getUTCMinutes()}Z`;
         } else if (date.getUTCMinutes() === 0) {
-            return `${date.getUTCHours()}:00 ${date.getUTCDate()}/${date.getUTCMonth()}/${date.getUTCFullYear()}`;
+            return `${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:00Z`;
         } else {
-            return `${date.getUTCHours()}:${date.getUTCMinutes()} ${date.getUTCDate()}/${date.getUTCMonth()}/${date.getUTCFullYear()}`;
+            return `${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}Z`;
         }
     };
 
