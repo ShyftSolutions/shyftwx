@@ -1,5 +1,4 @@
 import { CircularProgress, Grid, MuiThemeProvider, Typography } from '@material-ui/core';
-
 import BaseWxViewer from './../viewers/BaseWxViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
@@ -11,6 +10,7 @@ import Slider from '../time/Slider';
 import TimeControl from './../time/TimeControl';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
+import ValidTime from '../time/ValidTime';
 
 export const ShyftContext = React.createContext({});
 
@@ -232,28 +232,31 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         });
         const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 
-        console.log(getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name)));
-
         return (
             <React.Fragment>
                 <Grid container item>
                     <Grid container item>
                         {getOffset()}
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             <ModelSelector options={[index.datasets[0].dataset]} action={() => {}} />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={1}>
                             <RegionSelector options={[index.datasets[0].region.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
                             <RunsSelector options={[toUTCTime(+index.datasets[0].run.name)]} action={() => {}} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <ValidTime
+                                time={getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name))}
+                            />
                         </Grid>
                     </Grid>
                 </Grid>
 
                 {/* Product Menu Grid */}
                 <Grid container item xs={3}>
-                    {/* TODO: icons not coming - theme is maybe wrong?  color of text is off*/}
+                    {/* TODO: icons not coming - theme is maybe wrong?  color of text is off */}
                     <Grid container item>
                         <ProductSelector categories={levelProductVals} action={onProductSelect} />
                     </Grid>

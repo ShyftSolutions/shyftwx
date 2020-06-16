@@ -6,8 +6,8 @@ import { BottomNavigationAction } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        color: theme.palette.primary.dark,
-        height: 20,
+        color: theme.palette.primary.main,
+        height: 20
     },
     thumb: {
         height: 24,
@@ -62,12 +62,11 @@ function ValueLabelComponent(props: Props) {
 
 /**
  * Sorts the objects by their values
- * 
+ *
  * @param a first comparator
  * @param b second comparator
  */
 const compare = (a, b) => {
-
     const valA = Number(a.value);
     const valB = Number(b.value);
 
@@ -78,20 +77,19 @@ const compare = (a, b) => {
         comparison = -1;
     }
     return comparison;
-}
+};
 
 const toHour = (options) => {
     options.map((option) => {
         option.label = option.value/3600 + "H";
         option.value = option.value;
-    })
-}
-
+    });
+};
 
 export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected, modelTime }) => {
     const classes = useStyles();
 
-    //sort the array of objects by the value property
+    // sort the array of objects by the value property
     options.sort(compare);
     toHour(options);
 

@@ -5,31 +5,31 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: '200%',
-        maxHeight: '100%',
-        minWidth: '100%',
-        minHeight: '100%',
+        maxWidth: '25%',
+        maxHeight: '50%',
+        minWidth: '25%',
+        minHeight: '50%',
         variant: 'contained',
         backgroundColor: theme.palette.primary.dark,
         boxShadow: theme.shadows[3],
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         },
-        ariaLabel: "back",
+        ariaLabel: 'forward'
     },
     icon: {
         color: theme.palette.primary.contrastText
     }
-}))
+}));
 
-export const BackButton: React.FC<TimeNavigationButtonProps> = ({action}) => {
+export const BackButton: React.FC<TimeNavigationButtonProps> = ({ action }) => {
     const classes = useStyles();
 
     return (
-        <Button onClick={action} className={classes.root} >
-            <NavigateBeforeIcon className={classes.icon}/>
+        <Button onClick={action} className={classes.root}>
+            <NavigateBeforeIcon className={classes.icon} />
         </Button>
     );
-}
+};
 
-export default BackButton
+export default BackButton;

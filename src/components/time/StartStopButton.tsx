@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: theme.palette.secondary.dark,
         },
+        resize: 'inherit',
+        maxWidth: '45%',
+        margin: 5
     },
     pause: {
         label: 'pause',
@@ -19,13 +22,16 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: theme.palette.secondary.dark,
         },
+        resize: 'inherit',
+        maxWidth: '45%',
+        margin: 5
     },
     icon: {
         color: theme.palette.primary.contrastText
     }
 }));
 
-export const StartStopButton: React.FC<TimeActivationButtonProps> = ({onStart, onStop}) => {
+export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onStart, onStop }) => {
     const classes = useStyles();
     const [playing, setPlaying] = useState(false);
 
@@ -39,14 +45,14 @@ export const StartStopButton: React.FC<TimeActivationButtonProps> = ({onStart, o
         }
     };
 
-    return (
-        playing ?
-            <Fab onClick={ handleClick } className={classes.pause} >
-                <PauseIcon className={classes.icon}/>
-            </Fab> :
-            <Fab onClick={ handleClick } className={classes.play} >
-                <PlayArrowIcon className={classes.icon}/>
-            </Fab>
+    return playing ? (
+        <Fab onClick={handleClick} className={classes.pause}>
+            <PauseIcon className={classes.icon} />
+        </Fab>
+    ) : (
+        <Fab onClick={handleClick} className={classes.play}>
+            <PlayArrowIcon className={classes.icon} />
+        </Fab>
     );
 };
 

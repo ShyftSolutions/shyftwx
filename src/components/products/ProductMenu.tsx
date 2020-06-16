@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {},
     selectedIcon: {
-        color: theme.palette.secondary.dark
+        color: theme.palette.primary.contrastText
     }
 }));
 
