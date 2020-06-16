@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Fab, makeStyles } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
+import useTimer from '../../hooks/useTimer';
 
 const useStyles = makeStyles((theme) => ({
     play: {
@@ -33,19 +34,24 @@ const useStyles = makeStyles((theme) => ({
 
 export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onStart, onStop }) => {
     const classes = useStyles();
-    const [playing, setPlaying] = useState(false);
+    const [tick, isRunning, setIsRunning] = useTimer(600);
+    const [currentTick, setcurrentTick] = React.useState(tick);
 
     const handleClick = () => {
-        if (playing) {
-            setPlaying(false);
-            onStart();
+        if (isRunning) {
+            setIsRunning(false);
         } else {
-            setPlaying(true);
-            onStop();
+            setIsRunning(true);
         }
     };
 
-    return playing ? (
+    if(tick !== currentTick) {
+        setcurrentTick(tick);
+        onStart(setIsRunning, isRunning);
+    }
+
+
+    return isRunning ? (
         <Fab onClick={handleClick} className={classes.pause}>
             <PauseIcon className={classes.icon} />
         </Fab>

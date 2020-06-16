@@ -12,6 +12,7 @@ import TimeControl from './../time/TimeControl';
 import ValidTime from '../time/ValidTime';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
+import useTimer from '../../hooks/useTimer'
 
 export const ShyftContext = React.createContext({});
 
@@ -181,6 +182,27 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         setSelectedForecast(forecasts[forecastIndex].hour);
     };
 
+    const onToggleToPlay = (setIsRunning: Function, isRunning: boolean) => {
+      const forecasts = getSelectedProduct().forecasts;
+      forecasts.sort(compare);
+
+      if(!isRunning) {
+        setSelectedForecast(forecasts[0].hour);
+      }
+      
+      const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+
+      if(selectedForecast === forecasts[forecasts.length - 1].hour) {
+
+        setIsRunning(false);
+        console.log(isRunning);
+        return;
+
+      } else {
+        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+      }
+    }
+
     const getOffset = (): React.ReactNode => {
         return <Grid item xs={3} />;
     };
@@ -276,7 +298,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <TimeControl
                                 onBack={onSliderNavigationBack}
                                 onNext={onSliderNavigationNext}
-                                onPlay={() => {}}
+                                onPlay={onToggleToPlay}
                                 onPause={() => {}}
                             />
                         </Grid>
