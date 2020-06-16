@@ -28,6 +28,5 @@ declare type SliderProps = {
 
 
 declare type ValidTimeProps = {
-    forecastTime: number;
-    unixSeconds: number;
+    time: string;
 };

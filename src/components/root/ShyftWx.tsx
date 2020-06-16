@@ -12,7 +12,7 @@ import TimeControl from './../time/TimeControl';
 import ValidTime from '../time/ValidTime';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
-import useTimer from '../../hooks/useTimer'
+import moment from 'moment';
 
 export const ShyftContext = React.createContext({});
 
@@ -189,7 +189,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
       if(!isRunning) {
         setSelectedForecast(forecasts[0].hour);
       }
-      
+
       const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
       if(selectedForecast === forecasts[forecasts.length - 1].hour) {
@@ -231,8 +231,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         return time;
     };
 
-    const getValidTime = (forecastTime: string, modelTime: Date) => {
-        const validTime = new Date(modelTime.getTime() + (+forecastTime / 60) * 60000);
+    const getValidTime = () => {
+        const validTime = moment
+        .unix(+index.datasets[0].run.name + +selectedForecast)
+        .utc()
+        .format('MM/DD HH:mm[Z]');
         return validTime;
     };
 
@@ -270,7 +273,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <RunsSelector options={[+index.datasets[0].run.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <ValidTime unixSeconds={+index.datasets[0].run.name} forecastTime={+selectedForecast} />
+                            <ValidTime time={getValidTime()} />
                         </Grid>
                     </Grid>
                 </Grid>
