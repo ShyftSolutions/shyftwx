@@ -227,8 +227,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
             return { name: lvl.name, open: index == 0, products: lvl.products };
         });
-        const sliderVals = selectedProduct.forecasts.map((f) => {
-            return { label: f.hour, value: f.hour };
+        const sliderVals: sliderValueItem[] = selectedProduct.forecasts.map((f) => {
+            return { label: f.hour, value: parseInt(f.hour) };
         });
         const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 

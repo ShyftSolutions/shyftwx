@@ -114,7 +114,7 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
                 max={maxValue}
                 ValueLabelComponent={ValueLabelComponent}
                 onChange={handleChangeCommitted}
-                value={selected}
+                value={parseInt(selected)}
             />
         </div>
     );

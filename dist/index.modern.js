@@ -37,17 +37,17 @@ var index = {
 var useStyles = makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: '200%',
-      maxHeight: '100%',
-      minWidth: '100%',
-      minHeight: '100%',
+      maxWidth: '25%',
+      maxHeight: '50%',
+      minWidth: '25%',
+      minHeight: '50%',
       variant: 'contained',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
       '&:hover': {
         backgroundColor: theme.palette.primary.dark
       },
-      ariaLabel: "back"
+      ariaLabel: 'forward'
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -107,17 +107,17 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
 var useStyles$2 = makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: '100%',
-      maxHeight: '100%',
-      minWidth: '100%',
-      minHeight: '100%',
+      maxWidth: '25%',
+      maxHeight: '50%',
+      minWidth: '25%',
+      minHeight: '50%',
       variant: 'contained',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
       '&:hover': {
         backgroundColor: theme.palette.primary.dark
       },
-      ariaLabel: "forward"
+      ariaLabel: 'forward'
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -248,7 +248,7 @@ var useStyles$4 = makeStyles(function (theme) {
     },
     icon: {},
     selectedIcon: {
-      color: theme.palette.secondary.dark
+      color: theme.palette.primary.contrastText
     }
   };
 });
@@ -397,26 +397,6 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
-var toDates = function toDates(options) {
-  var dates = [];
-  options.map(function (option) {
-    var epoch = option * 1000;
-    var date = new Date(epoch);
-    var time;
-
-    if (date.getUTCHours() === 0) {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T 00:" + date.getUTCMinutes() + "Z";
-    } else if (date.getUTCMinutes() === 0) {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":00Z";
-    } else {
-      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
-    }
-
-    dates.push(time);
-  });
-  return dates;
-};
-
 var RunsSelector = function RunsSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
@@ -426,7 +406,6 @@ var RunsSelector = function RunsSelector(_ref) {
     console.log("clicked " + index);
   };
 
-  var dates = toDates(options);
   return (
     /*#__PURE__*/
     React.createElement(Grid, {
@@ -438,7 +417,7 @@ var RunsSelector = function RunsSelector(_ref) {
     }, /*#__PURE__*/React.createElement(Typography, {
       variant: "h6"
     }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: dates,
+      options: options,
       action: handleClick
     })))
   );
@@ -631,7 +610,7 @@ function _for(test, update, body) {
 var useStyles$5 = makeStyles$1(function (theme) {
   return {
     root: {
-      color: theme.palette.primary.dark,
+      color: theme.palette.primary.main,
       height: 20
     },
     thumb: {
@@ -696,14 +675,15 @@ var compare = function compare(a, b) {
 
 var toHour = function toHour(options) {
   options.map(function (option) {
-    option.label /= 360;
-    option.value /= 360;
+    option.label = option.value / 3600 + "H";
+    option.value = option.value;
   });
 };
 
 var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
-      action = _ref.action;
+      action = _ref.action,
+      selected = _ref.selected;
   var classes = useStyles$5();
   options.sort(compare);
   toHour(options);
@@ -727,7 +707,8 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     defaultValue: defaultValue,
     max: maxValue,
     ValueLabelComponent: ValueLabelComponent,
-    onChange: handleChangeCommitted
+    onChange: handleChangeCommitted,
+    value: parseInt(selected)
   }));
 };
 
@@ -739,7 +720,10 @@ var useStyles$6 = makeStyles(function (theme) {
       background: theme.palette.secondary.dark,
       '&:hover': {
         background: theme.palette.secondary.dark
-      }
+      },
+      resize: 'inherit',
+      maxWidth: '45%',
+      margin: 5
     },
     pause: {
       label: 'pause',
@@ -747,7 +731,10 @@ var useStyles$6 = makeStyles(function (theme) {
       background: theme.palette.secondary.dark,
       '&:hover': {
         background: theme.palette.secondary.dark
-      }
+      },
+      resize: 'inherit',
+      maxWidth: '45%',
+      margin: 5
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -793,21 +780,16 @@ var TimeControl = function TimeControl(_ref) {
       onPause = _ref.onPause;
   return /*#__PURE__*/React.createElement(Grid, {
     container: true,
-    direction: "row",
-    alignItems: "center",
-    spacing: 1
-  }, /*#__PURE__*/React.createElement(Grid, {
     item: true
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    alignItems: "center"
   }, /*#__PURE__*/React.createElement(BackButton, {
     action: onBack
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(StartStopButton, {
+  }), /*#__PURE__*/React.createElement(StartStopButton, {
     onStart: onPlay,
     onStop: onPause
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(ForwardButton, {
+  }), /*#__PURE__*/React.createElement(ForwardButton, {
     action: onNext
   })));
 };
@@ -821,21 +803,27 @@ var theme = createMuiTheme({
       contrastText: '#f8f9fa'
     },
     secondary: {
-      light: '#e9ecef',
-      main: '#ff922b',
+      light: '#ffffff',
+      main: '#e9ecef',
       dark: '#868e96',
       contrastText: '#474545'
     }
   },
   overrides: {
+    MuiTypography: {
+      body2: {
+        fontWeight: 500,
+        fontSize: 16
+      }
+    },
     MuiListItem: {
       root: {
-        "&$selected": {
-          backgroundColor: '#E9ECEF',
+        '&$selected': {
+          backgroundColor: '#868e96',
           '&:hover': {
-            backgroundColor: '#E9ECEF'
+            backgroundColor: '#868e96'
           },
-          color: '#868e96'
+          color: '#f8f9fa'
         },
         paddingTop: '6px',
         paddingBottom: '6px'
@@ -860,6 +848,33 @@ var theme = createMuiTheme({
   },
   spacing: 8
 });
+
+var ValidTime = function ValidTime(_ref) {
+  var time = _ref.time;
+
+  var formattedDate = function formattedDate(date) {
+    if (date.getUTCHours() === 0) {
+      return "00:" + date.getUTCMinutes() + " " + date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear();
+    } else if (date.getUTCMinutes() === 0) {
+      return date.getUTCHours() + ":00 " + date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear();
+    } else {
+      return date.getUTCHours() + ":" + date.getUTCMinutes() + " " + date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear();
+    }
+  };
+
+  return /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "flex-end",
+    alignItems: "flex-end"
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Valid Time"), /*#__PURE__*/React.createElement(Typography, {
+    variant: "body1"
+  }, formattedDate(time))));
+};
 
 var ShyftContext = React.createContext({});
 var ShyftWx = function ShyftWx(_ref) {
@@ -1021,8 +1036,23 @@ var ShyftWx = function ShyftWx(_ref) {
     setSelectedForecast(getSelectedProduct().forecasts[0].hour);
   };
 
+  var compare = function compare(a, b) {
+    var valA = Number(a.hour);
+    var valB = Number(b.hour);
+    var comparison = 0;
+
+    if (valA > valB) {
+      comparison = 1;
+    } else if (valA < valB) {
+      comparison = -1;
+    }
+
+    return comparison;
+  };
+
   var onSliderNavigationNext = function onSliderNavigationNext() {
     var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
       return f.hour === selectedForecast;
     });
@@ -1036,6 +1066,7 @@ var ShyftWx = function ShyftWx(_ref) {
 
   var onSliderNavigationBack = function onSliderNavigationBack() {
     var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
       return f.hour === selectedForecast;
     });
@@ -1049,17 +1080,11 @@ var ShyftWx = function ShyftWx(_ref) {
 
   var onSliderNavigation = function onSliderNavigation(value) {
     var forecasts = getSelectedProduct().forecasts;
-    forecasts.sort();
+    forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === String(value * 360);
+      return +f.hour === +value;
     });
-    console.log(value, forecasts, forecastIndex);
-
-    if (forecastIndex + 1 == forecasts.length) {
-      return;
-    }
-
-    setSelectedForecast(forecasts[forecastIndex + 1].hour);
+    setSelectedForecast(forecasts[forecastIndex].hour);
   };
 
   var getOffset = function getOffset() {
@@ -1067,6 +1092,32 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 3
     });
+  };
+
+  var getDateFromEpoch = function getDateFromEpoch(epoch) {
+    epoch = +index.datasets[0].run.name * 1000;
+    var date = new Date(epoch);
+    return date;
+  };
+
+  var toUTCTime = function toUTCTime(epoch) {
+    var date = getDateFromEpoch(epoch);
+    var time;
+
+    if (date.getUTCHours() === 0) {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T 00:" + date.getUTCMinutes() + "Z";
+    } else if (date.getUTCMinutes() === 0) {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":00Z";
+    } else {
+      time = date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getUTCDay() + "T " + date.getUTCHours() + ":" + date.getUTCMinutes() + "Z";
+    }
+
+    return time;
+  };
+
+  var getValidTime = function getValidTime(forecastTime, modelTime) {
+    var validTime = new Date(modelTime.getTime() + +forecastTime / 60 * 60000);
+    return validTime;
   };
 
   var generateContent = function generateContent() {
@@ -1091,7 +1142,7 @@ var ShyftWx = function ShyftWx(_ref) {
     var sliderVals = selectedProduct.forecasts.map(function (f) {
       return {
         label: f.hour,
-        value: +f.hour
+        value: parseInt(f.hour)
       };
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
@@ -1105,13 +1156,13 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true
     }, getOffset(), /*#__PURE__*/React.createElement(Grid, {
       item: true,
-      xs: 3
+      xs: 2
     }, /*#__PURE__*/React.createElement(ModelSelector, {
       options: [index.datasets[0].dataset],
       action: function action() {}
     })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
-      xs: 3
+      xs: 1
     }, /*#__PURE__*/React.createElement(RegionSelector, {
       options: [index.datasets[0].region.name],
       action: function action() {}
@@ -1119,8 +1170,13 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 3
     }, /*#__PURE__*/React.createElement(RunsSelector, {
-      options: [index.datasets[0].run.name],
+      options: [toUTCTime(+index.datasets[0].run.name)],
       action: function action() {}
+    })), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 3
+    }, /*#__PURE__*/React.createElement(ValidTime, {
+      time: getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name))
     })))), /*#__PURE__*/React.createElement(Grid, {
       container: true,
       item: true,
@@ -1163,7 +1219,9 @@ var ShyftWx = function ShyftWx(_ref) {
       xs: 9
     }, /*#__PURE__*/React.createElement(DiscreteSlider, {
       options: sliderVals,
-      action: onSliderNavigation
+      selected: selectedForecast,
+      action: onSliderNavigation,
+      modelTime: getDateFromEpoch(+index.datasets[0].run.name)
     })))));
   };
 
