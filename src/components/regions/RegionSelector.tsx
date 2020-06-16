@@ -8,9 +8,10 @@ import React from 'react';
  *
  * @param Props: { options: string[]}
  */
-export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region' }) => {
+export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region', action }) => {
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
+        action(index);
     };
 
     return (

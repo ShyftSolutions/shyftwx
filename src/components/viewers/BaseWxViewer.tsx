@@ -25,7 +25,6 @@ export const BaseWxViewer = ({ layers, neBounds, swBounds }) => {
 
     return (
         <Map
-            zoom={10}
             bounds={bounds}
             className={classes.root}
             dragging={false}

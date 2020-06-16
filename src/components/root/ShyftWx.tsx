@@ -18,6 +18,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     const [index, setIndex] = React.useState<Index>({ datasets: [] });
+    const [selectedRegion, setSelectedRegion] = React.useState<string>('');
     const [selectedProduct, setSelectedProduct] = React.useState<string>('');
     const [selectedLevel, setSelectedLevel] = React.useState<string>('');
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
@@ -27,6 +28,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     dataset = dataset || urlParams.current.get('model') || '';
 
     const customerUrl = `${url}/${customer}/${dataset}`;
+
+    let _index = { datasets: [] };
 
     const loadAsync = async () => {
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
@@ -86,17 +89,18 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             // uniqueLevels now have all of the products and forecasts hours for a given run
             datasetRegionRun.run.levels = uniqueLevels;
 
-            const indexes = { datasets: [datasetRegionRun] };
-            setIndex(indexes);
+            _index.datasets.push(datasetRegionRun)
 
             // setting default values
             if (i === 0) {
-                setSelectedLevel(indexes.datasets[0].run.levels[0].name);
-                setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-                setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+                setSelectedRegion(_index.datasets[0].region.name)
+                setSelectedLevel(_index.datasets[0].run.levels[0].name);
+                setSelectedProduct(_index.datasets[0].run.levels[0].products[0].name);
+                setSelectedForecast(_index.datasets[0].run.levels[0].products[0].forecasts[0].hour);
             }
         }
 
+        setIndex(_index);
         setLoading(false);
     };
 
@@ -116,18 +120,29 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     }, []);
 
     const getSelectedLevel = () => {
-        return index.datasets[0].run.levels.filter((lvl) => lvl.name == selectedLevel)[0];
+        return getSelectedRegion().run.levels.filter((lvl) => lvl.name == selectedLevel)[0];
     };
 
     const getSelectedProduct = () => {
         return getSelectedLevel().products.filter((p) => p.name == selectedProduct)[0];
     };
 
+    const getSelectedRegion = () => {
+        return index.datasets.filter(d => d.region.name == selectedRegion)[0];
+    }
+
     const onProductSelect = (product: ProductSelectionResponse) => {
         setSelectedLevel(product.level);
         setSelectedProduct(product.product);
         setSelectedForecast(getSelectedProduct().forecasts[0].hour);
     };
+
+    const onRegionSelect = (resp: any) => {
+        setSelectedRegion(resp)
+        // setSelectedLevel(getSelectedLevel().name)
+        // setSelectedProduct(getSelectedProduct().name)
+        // console.log(selectedRegion, selectedLevel, selectedProduct, selectedForecast);
+    }
 
     /**
      * Compares the hours of two forecasts
@@ -185,7 +200,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     };
 
     const getDateFromEpoch = (epoch: number) => {
-        epoch = +index.datasets[0].run.name * 1000;
+        epoch = +getSelectedRegion().run.name * 1000;
         const date: Date = new Date(epoch);
         return date;
     };
@@ -218,19 +233,19 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return <Typography color="error">{error}</Typography>;
         }
 
-        if (loading) {
+        if (loading || !selectedRegion || !selectedLevel || !selectedProduct || !selectedForecast) {
             return <CircularProgress />;
         }
 
-        const selectedProduct = getSelectedProduct();
+        const _selectedProduct = getSelectedProduct();
 
-        const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
+        const levelProductVals = getSelectedRegion().run.levels.map((lvl, index) => {
             return { name: lvl.name, open: index == 0, products: lvl.products };
         });
-        const sliderVals: sliderValueItem[] = selectedProduct.forecasts.map((f) => {
+        const sliderVals: sliderValueItem[] = _selectedProduct.forecasts.map((f) => {
             return { label: f.hour, value: parseInt(f.hour) };
         });
-        const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
+        const activeForecastLayer = _selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 
         return (
             <React.Fragment>
@@ -241,14 +256,14 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <ModelSelector options={[index.datasets[0].dataset]} action={() => {}} />
                         </Grid>
                         <Grid item xs={1}>
-                            <RegionSelector options={[index.datasets[0].region.name]} action={() => {}} />
+                            <RegionSelector options={index.datasets.map(d => d.region.name)} action={onRegionSelect} />
                         </Grid>
                         <Grid item xs={3}>
-                            <RunsSelector options={[toUTCTime(+index.datasets[0].run.name)]} action={() => {}} />
+                            <RunsSelector options={[toUTCTime(+getSelectedRegion().run.name)]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
                             <ValidTime
-                                time={getValidTime(selectedForecast, getDateFromEpoch(+index.datasets[0].run.name))}
+                                time={getValidTime(selectedForecast, getDateFromEpoch(+getSelectedRegion().run.name))}
                             />
                         </Grid>
                     </Grid>
@@ -267,8 +282,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     <Grid container item xs={12}>
                         <BaseWxViewer
                             layers={activeForecastLayer}
-                            neBounds={[index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax]}
-                            swBounds={[index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]}
+                            neBounds={[getSelectedRegion().region.bbox.ymax, getSelectedRegion().region.bbox.xmax]}
+                            swBounds={[getSelectedRegion().region.bbox.ymin, getSelectedRegion().region.bbox.xmin]}
                         />
                     </Grid>
 
@@ -289,7 +304,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 options={sliderVals}
                                 selected={selectedForecast}
                                 action={onSliderNavigation}
-                                modelTime={getDateFromEpoch(+index.datasets[0].run.name)}
+                                modelTime={getDateFromEpoch(+getSelectedRegion().run.name)}
                             />
                         </Grid>
                     </Grid>
