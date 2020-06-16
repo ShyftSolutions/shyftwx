@@ -800,8 +800,9 @@ var TimeControl = function TimeControl(_ref) {
 };
 
 var ValidTime = function ValidTime(_ref) {
-  var unixSeconds = _ref.unixSeconds;
-  var formattedDate = moment.unix(unixSeconds).utc().format('MM[/]DD hh:ss[Z]');
+  var unixSeconds = _ref.unixSeconds,
+      forecastTime = _ref.forecastTime;
+  var formattedDate = moment.unix(unixSeconds + forecastTime).utc().format('MM/DD HH:mm[Z]');
   return /*#__PURE__*/React.createElement(Grid, {
     container: true,
     item: true,
@@ -1151,7 +1152,8 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 3
     }, /*#__PURE__*/React.createElement(ValidTime, {
-      unixSeconds: +index.datasets[0].run.name
+      unixSeconds: +index.datasets[0].run.name,
+      forecastTime: +selectedForecast
     })))), /*#__PURE__*/React.createElement(Grid, {
       container: true,
       item: true,

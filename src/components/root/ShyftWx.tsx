@@ -248,7 +248,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <RunsSelector options={[+index.datasets[0].run.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <ValidTime unixSeconds={+index.datasets[0].run.name} />
+                            <ValidTime unixSeconds={+index.datasets[0].run.name} forecastTime={+selectedForecast} />
                         </Grid>
                     </Grid>
                 </Grid>

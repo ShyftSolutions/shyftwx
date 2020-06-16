@@ -3,8 +3,11 @@ import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import moment from 'moment';
 
-export const ValidTime: React.FC<ValidTimeProps> = ({ unixSeconds }) => {
-    const formattedDate = moment.unix(unixSeconds).utc().format('MM[/]DD hh:ss[Z]');
+export const ValidTime: React.FC<ValidTimeProps> = ({ unixSeconds, forecastTime }) => {
+    const formattedDate = moment
+        .unix(unixSeconds + forecastTime)
+        .utc()
+        .format('MM/DD HH:mm[Z]');
 
     return (
         <Grid container item justify="flex-end" alignItems="flex-end">
