@@ -11,6 +11,7 @@ export const useTimer = (interval: number): [number, boolean, Function] => {
             }, interval);
             return (): void => window.clearTimeout(timerId);
         }
+        return;
     }, [ticks, isRunning]);
     return [ticks, isRunning, setIsRunning];
 };

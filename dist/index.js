@@ -659,11 +659,12 @@ function ValueLabelComponent(props) {
   var children = props.children,
       open = props.open,
       value = props.value;
+  var validTime = moment.unix(value).utc().format('MM/DD HH:mm[Z]');
   return /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement(Tooltip, {
     open: open,
     enterTouchDelay: 0,
     placement: "top",
-    title: value + ' + Model Run'
+    title: validTime
   }, children));
 }
 
@@ -681,23 +682,16 @@ var compare = function compare(a, b) {
   return comparison;
 };
 
-var toHour = function toHour(options) {
-  options.map(function (option) {
-    option.label = option.value / 3600 + "H";
-    option.value = option.value;
-  });
-};
-
 var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
   var classes = useStyles$5();
   options.sort(compare);
-  toHour(options);
-  var stepValue = Number(options[1].value) - Number(options[0].value);
-  var defaultValue = Number(options[0].value);
-  var maxValue = Number(options[options.length - 1].value);
+  var stepValue = options[1].value - options[0].value;
+  var defaultValue = options[0].value;
+  var maxValue = options[options.length - 1].value;
+  var minValue = options[0].value;
 
   var handleChangeCommitted = function handleChangeCommitted(e, value) {
     action(value);
@@ -716,8 +710,33 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     max: maxValue,
     ValueLabelComponent: ValueLabelComponent,
     onChange: handleChangeCommitted,
-    value: parseInt(selected)
+    value: selected,
+    min: minValue
   }));
+};
+
+var useTimer = function useTimer(interval) {
+  var _React$useState = React__default.useState(0),
+      ticks = _React$useState[0],
+      setTicks = _React$useState[1];
+
+  var _React$useState2 = React__default.useState(false),
+      isRunning = _React$useState2[0],
+      setIsRunning = _React$useState2[1];
+
+  React__default.useEffect(function () {
+    if (isRunning) {
+      var timerId = window.setTimeout(function () {
+        setTicks(ticks + 1);
+      }, interval);
+      return function () {
+        return window.clearTimeout(timerId);
+      };
+    }
+
+    return;
+  }, [ticks, isRunning]);
+  return [ticks, isRunning, setIsRunning];
 };
 
 var useStyles$6 = core.makeStyles(function (theme) {
@@ -750,25 +769,26 @@ var useStyles$6 = core.makeStyles(function (theme) {
   };
 });
 var StartStopButton = function StartStopButton(_ref) {
-  var onStart = _ref.onStart,
-      onStop = _ref.onStop;
+  var onToggle = _ref.onToggle;
   var classes = useStyles$6();
 
-  var _useState = React.useState(false),
-      playing = _useState[0],
-      setPlaying = _useState[1];
+  var _useTimer = useTimer(600),
+      tick = _useTimer[0],
+      isRunning = _useTimer[1],
+      setIsRunning = _useTimer[2];
 
   var handleClick = function handleClick() {
-    if (playing) {
-      setPlaying(false);
-      onStart();
+    if (isRunning) {
+      setIsRunning(false);
     } else {
-      setPlaying(true);
-      onStop();
+      setIsRunning(true);
     }
   };
 
-  return playing ? /*#__PURE__*/React__default.createElement(core.Fab, {
+  React__default.useEffect(function () {
+    onToggle(isRunning);
+  }, [tick]);
+  return isRunning ? /*#__PURE__*/React__default.createElement(core.Fab, {
     onClick: handleClick,
     className: classes.pause
   }, /*#__PURE__*/React__default.createElement(PauseIcon, {
@@ -784,8 +804,7 @@ var StartStopButton = function StartStopButton(_ref) {
 var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
-      onPlay = _ref.onPlay,
-      onPause = _ref.onPause;
+      onToggle = _ref.onToggle;
   return /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     item: true
@@ -795,17 +814,14 @@ var TimeControl = function TimeControl(_ref) {
   }, /*#__PURE__*/React__default.createElement(BackButton, {
     action: onBack
   }), /*#__PURE__*/React__default.createElement(StartStopButton, {
-    onStart: onPlay,
-    onStop: onPause
+    onToggle: onToggle
   }), /*#__PURE__*/React__default.createElement(ForwardButton, {
     action: onNext
   })));
 };
 
 var ValidTime = function ValidTime(_ref) {
-  var unixSeconds = _ref.unixSeconds,
-      forecastTime = _ref.forecastTime;
-  var formattedDate = moment.unix(unixSeconds + forecastTime).utc().format('MM/DD HH:mm[Z]');
+  var time = _ref.time;
   return /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     item: true,
@@ -817,7 +833,7 @@ var ValidTime = function ValidTime(_ref) {
     variant: "h6"
   }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Typography, {
     variant: "body1"
-  }, formattedDate)));
+  }, time)));
 };
 
 var theme = core.createMuiTheme({
@@ -1057,10 +1073,10 @@ var ShyftWx = function ShyftWx(_ref) {
     });
 
     if (forecastIndex + 1 == forecasts.length) {
-      return;
+      setSelectedForecast(forecasts[0].hour);
+    } else {
+      setSelectedForecast(forecasts[forecastIndex + 1].hour);
     }
-
-    setSelectedForecast(forecasts[forecastIndex + 1].hour);
   };
 
   var onSliderNavigationBack = function onSliderNavigationBack() {
@@ -1071,19 +1087,40 @@ var ShyftWx = function ShyftWx(_ref) {
     });
 
     if (forecastIndex - 1 < 0) {
-      return;
+      setSelectedForecast(forecasts[forecasts.length - 1].hour);
+    } else {
+      setSelectedForecast(forecasts[forecastIndex - 1].hour);
     }
-
-    setSelectedForecast(forecasts[forecastIndex - 1].hour);
   };
 
   var onSliderNavigation = function onSliderNavigation(value) {
+    value -= +index.datasets[0].run.name;
     var forecasts = getSelectedProduct().forecasts;
     forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
       return +f.hour === +value;
     });
     setSelectedForecast(forecasts[forecastIndex].hour);
+  };
+
+  var onToggleToPlay = function onToggleToPlay(isRunning) {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+
+    if (!isRunning) {
+      setSelectedForecast(forecasts[0].hour);
+    }
+
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === selectedForecast;
+    });
+
+    if (selectedForecast === forecasts[forecasts.length - 1].hour) {
+      setSelectedForecast(forecasts[0].hour);
+      return;
+    } else {
+      setSelectedForecast(forecasts[forecastIndex + 1].hour);
+    }
   };
 
   var getOffset = function getOffset() {
@@ -1093,10 +1130,9 @@ var ShyftWx = function ShyftWx(_ref) {
     });
   };
 
-  var getDateFromEpoch = function getDateFromEpoch(epoch) {
-    epoch = +index.datasets[0].run.name * 1000;
-    var date = new Date(epoch);
-    return date;
+  var getValidTime = function getValidTime() {
+    var validTime = moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
+    return validTime;
   };
 
   var generateContent = function generateContent() {
@@ -1120,8 +1156,8 @@ var ShyftWx = function ShyftWx(_ref) {
     });
     var sliderVals = selectedProduct.forecasts.map(function (f) {
       return {
-        label: f.hour,
-        value: parseInt(f.hour)
+        value: +f.hour + +index.datasets[0].run.name,
+        label: moment.unix(+f.hour + +index.datasets[0].run.name).utc().format('MM/DD HH:mm[Z]')
       };
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
@@ -1155,8 +1191,7 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 3
     }, /*#__PURE__*/React__default.createElement(ValidTime, {
-      unixSeconds: +index.datasets[0].run.name,
-      forecastTime: +selectedForecast
+      time: getValidTime()
     })))), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,
@@ -1189,8 +1224,7 @@ var ShyftWx = function ShyftWx(_ref) {
     }, /*#__PURE__*/React__default.createElement(TimeControl, {
       onBack: onSliderNavigationBack,
       onNext: onSliderNavigationNext,
-      onPlay: function onPlay() {},
-      onPause: function onPause() {}
+      onToggle: onToggleToPlay
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
       xs: 1
@@ -1199,9 +1233,8 @@ var ShyftWx = function ShyftWx(_ref) {
       xs: 9
     }, /*#__PURE__*/React__default.createElement(DiscreteSlider, {
       options: sliderVals,
-      selected: selectedForecast,
-      action: onSliderNavigation,
-      modelTime: getDateFromEpoch(+index.datasets[0].run.name)
+      selected: +selectedForecast + +index.datasets[0].run.name,
+      action: onSliderNavigation
     })))));
   };
 
