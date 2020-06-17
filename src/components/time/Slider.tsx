@@ -2,7 +2,7 @@ import React from 'react';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
-import { BottomNavigationAction } from '@material-ui/core';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,10 +50,11 @@ interface Props {
 
 function ValueLabelComponent(props: Props) {
     const { children, open, value } = props;
+    const validTime = moment.unix(value).utc().format('MM/DD HH:mm[Z]');
 
     return (
         <span>
-            <Tooltip open={open} enterTouchDelay={0} placement="top" title={value + ' + Model Run'}>
+            <Tooltip open={open} enterTouchDelay={0} placement="top" title={validTime}>
                 {children}
             </Tooltip>
         </span>
@@ -79,23 +80,16 @@ const compare = (a, b) => {
     return comparison;
 };
 
-const toHour = (options) => {
-    options.map((option) => {
-        option.label = option.value/3600 + "H";
-        option.value = option.value;
-    });
-};
-
-export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected, modelTime }) => {
+export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected }) => {
     const classes = useStyles();
 
     // sort the array of objects by the value property
     options.sort(compare);
-    toHour(options);
 
-    const stepValue: number = Number(options[1].value) - Number(options[0].value);
-    const defaultValue: number = Number(options[0].value);
-    const maxValue: number = Number(options[options.length - 1].value);
+    const stepValue: number = options[1].value - options[0].value;
+    const defaultValue: number = options[0].value;
+    const maxValue: number = options[options.length - 1].value;
+    const minValue: number = options[0].value;
 
     const handleChangeCommitted = (e: React.ChangeEvent<{}>, value: number | number[]) => {
         action(value as number);
@@ -114,7 +108,8 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
                 max={maxValue}
                 ValueLabelComponent={ValueLabelComponent}
                 onChange={handleChangeCommitted}
-                value={parseInt(selected)}
+                value={selected}
+                min={minValue}
             />
         </div>
     );

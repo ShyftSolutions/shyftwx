@@ -156,10 +156,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         let forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
         if (forecastIndex + 1 == forecasts.length) {
-            return;
+            setSelectedForecast(forecasts[0].hour);
+        } else {
+            setSelectedForecast(forecasts[forecastIndex + 1].hour);
         }
-
-        setSelectedForecast(forecasts[forecastIndex + 1].hour);
     };
 
     const onSliderNavigationBack = () => {
@@ -168,13 +168,14 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
         if (forecastIndex - 1 < 0) {
-            return;
+            setSelectedForecast(forecasts[forecasts.length - 1].hour);
+        } else {
+            setSelectedForecast(forecasts[forecastIndex - 1].hour);
         }
-
-        setSelectedForecast(forecasts[forecastIndex - 1].hour);
     };
 
     const onSliderNavigation = (value: number) => {
+        value -= +index.datasets[0].run.name;
         const forecasts = getSelectedProduct().forecasts;
         forecasts.sort(compare);
         let forecastIndex = forecasts.findIndex((f) => +f.hour === +value);
@@ -234,7 +235,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return { name: lvl.name, open: index == 0, products: lvl.products };
         });
         const sliderVals: sliderValueItem[] = selectedProduct.forecasts.map((f) => {
-            return { label: f.hour, value: parseInt(f.hour) };
+            return { value: (+f.hour + +index.datasets[0].run.name), label: moment
+                .unix(+f.hour + +index.datasets[0].run.name)
+                .utc()
+                .format('MM/DD HH:mm[Z]')};
         });
         const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 
@@ -291,9 +295,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         <Grid item xs={9}>
                             <Slider
                                 options={sliderVals}
-                                selected={selectedForecast}
+                                selected={+selectedForecast + +index.datasets[0].run.name}
                                 action={onSliderNavigation}
-                                validTime={getValidTime()}
                             />
                         </Grid>
                     </Grid>

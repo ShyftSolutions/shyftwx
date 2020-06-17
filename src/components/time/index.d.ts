@@ -22,8 +22,7 @@ declare type sliderValueItem = {
 declare type SliderProps = {
     options: sliderValueItem[];
     action: (value: number) => void;
-    selected: string;
-    modelTime: Date;
+    selected: number;
 };
 
 
