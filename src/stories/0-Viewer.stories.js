@@ -3,6 +3,7 @@ import _BaseWxViewer from 'components/viewers/BaseWxViewer';
 import _DynamicWxViewer from 'components/viewers/DynamicWxViewer';
 import _StaticWxViewer from 'components/viewers/StaticWxViewer';
 import _WxViewer from '../components/viewers/WxViewer';
+import _ImageViewer from '../components/viewers/ImageViewer';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
 import theme from './../theme';
@@ -164,6 +165,13 @@ export const BaseWxViewer = () => {
     );
 }
 
+export const ImageViewer = () => {
+    return (
+        <MuiThemeProvider>
+            <_ImageViewer image="https://s3-us-east-2.amazonaws.com/wxchange-images/5b4daa25-3d9f-4f83-ade4-ee6976b259e1/TQIConus/images/AAAD00_1591524000_TQI_Temperature_2m_900.PNG" />
+        </MuiThemeProvider>
+    );
+}
 export const WxViewer = () => <_WxViewer />;
 
 export const StaticWxViewer = () => <_StaticWxViewer />;

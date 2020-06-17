@@ -1,6 +1,7 @@
 import { CircularProgress, Grid, MuiThemeProvider, Typography } from '@material-ui/core';
 
 import BaseWxViewer from './../viewers/BaseWxViewer';
+import ImageViewer from './../viewers/ImageViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
 import React from 'react';
@@ -272,6 +273,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             neBounds={[index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax]}
                             swBounds={[index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]}
                         />
+                        {/* <ImageViewer image={activeForecastLayer}/> */}
                     </Grid>
 
                     <Grid container item xs={12}>
