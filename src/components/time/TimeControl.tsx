@@ -4,12 +4,12 @@ import BackButton from './BackButton';
 import ForwardButton from './ForwardButton';
 import StartStopButton from './StartStopButton';
 
-export const TimeControl: React.FC<TimeControlProps> = ({ onBack, onNext, onPlay, onPause }) => {
+export const TimeControl: React.FC<TimeControlProps> = ({ onBack, onNext, onToggle}) => {
     return (
         <Grid container item>
             <Grid item alignItems="center">
                 <BackButton action={onBack} />
-                <StartStopButton onStart={onPlay} onStop={onPause} />
+                <StartStopButton onToggle={onToggle}/>
                 <ForwardButton action={onNext} />
             </Grid>
         </Grid>

@@ -183,7 +183,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         setSelectedForecast(forecasts[forecastIndex].hour);
     };
 
-    const onToggleToPlay = (setIsRunning: Function, isRunning: boolean) => {
+    const onToggleToPlay = (isRunning: boolean) => {
       const forecasts = getSelectedProduct().forecasts;
       forecasts.sort(compare);
 
@@ -204,12 +204,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
     const getOffset = (): React.ReactNode => {
         return <Grid item xs={3} />;
-    };
-
-    const getDateFromEpoch = (epoch: number) => {
-        epoch = +index.datasets[0].run.name * 1000;
-        const date: Date = new Date(epoch);
-        return date;
     };
 
     const getValidTime = () => {
@@ -285,8 +279,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <TimeControl
                                 onBack={onSliderNavigationBack}
                                 onNext={onSliderNavigationNext}
-                                onPlay={onToggleToPlay}
-                                onPause={() => {}}
+                                onToggle={onToggleToPlay}
                             />
                         </Grid>
 

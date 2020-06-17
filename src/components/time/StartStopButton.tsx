@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onStart, onStop }) => {
+export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onToggle }) => {
     const classes = useStyles();
     const [tick, isRunning, setIsRunning] = useTimer(600);
 
@@ -45,7 +45,7 @@ export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onStart, 
     };
 
     React.useEffect(() => {
-        onStart(setIsRunning, isRunning);
+        onToggle(isRunning);
     }, [tick])
 
     return isRunning ? (

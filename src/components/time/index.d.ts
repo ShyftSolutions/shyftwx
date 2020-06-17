@@ -1,17 +1,15 @@
 declare type TimeControlProps = {
-    onBack: any;
-    onNext: any;
-    onPlay: any;
-    onPause: any;
+    onBack: () => void;
+    onNext: () => void;
+    onToggle: (isRunning: boolean) => void;
 };
 
 declare type TimeNavigationButtonProps = {
-    action: any;
+    action: () => void;
 };
 
 declare type TimeActivationButtonProps = {
-    onStart: any;
-    onStop: any;
+    onToggle: (isRunning: boolean) => void;
 };
 
 declare type sliderValueItem = {
