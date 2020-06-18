@@ -6,7 +6,6 @@ import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
 import React from 'react';
 import RegionSelector from './../regions/RegionSelector';
-import RunDropdown from './../runs/RunDropdown';
 import RunsSelector from './../run/RunsSelector';
 import Slider from '../time/Slider';
 import TimeControl from './../time/TimeControl';
@@ -18,6 +17,7 @@ import moment from 'moment';
 export const ShyftContext = React.createContext({});
 
 export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, customer, themeOverride }) => {
+    
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     const [index, setIndex] = React.useState<Index>({ datasets: [] });

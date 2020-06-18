@@ -1,3 +1,7 @@
+/**
+ * Defines the types of the values used in the root file
+ */
+
 declare type ShyftWxProps = {
     dataset?: string;
     customer?: string;

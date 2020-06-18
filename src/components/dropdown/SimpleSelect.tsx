@@ -4,6 +4,11 @@ import React from 'react';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 
+/**
+ * SimpleSelect creates a vertical dropdown menu where the options on the menu
+ * are defined in an array of strings called 'options'
+ */
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
         minWidth: 120,
@@ -30,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
  * Uses Material UI to create a dropdown menu option with
  * the options of the String values in 'options'
  *
- * @param Props: {options: string[]}
+ * @param options string[]
+ * @param action function to be executed to set the selected value
  */
 export const SimpleSelect: React.FC<SimpleSelectProps> = ({ options =[''], action }) => {
     const classes = useStyles();

@@ -1,3 +1,7 @@
+/**
+ * Defines the types for the values used in the products file
+ */
+
 declare type ProductSelectorProps = {
     categories: Category[];
     label?: string;

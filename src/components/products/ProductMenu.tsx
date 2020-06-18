@@ -35,6 +35,9 @@ const ICON_MAP = {
     Wind: fas.faWind
 };
 
+/**
+ * Default settings for a menu with no populating options
+ */
 const emptyMenu = [
     {
         name: 'Menu',
@@ -51,29 +54,36 @@ const emptyMenu = [
 ];
 
 /**
- * Uses Material UI to create an accordian dropdown with main categories
- * and subcategories. 'defaultOptions' should be an array of objects in the
- * form of:
- *
- * {
-            name: STRING,
-            open: BOOLEAN,
-            products: [{
-                name: STRING,
-                icon: FAICON,
-            }, {
-                name: STRING,
-                icon: FAICON,
-            }]
-        },
- *
- * @param Props: {options: string[]}
+ * Uses Material UI to create a product menu with categories and subcategories
+ * 
+ * @param options [
+    {
+        name: 'Menu',
+        open: true,
+        products: [
+            {
+                name: 'A'
+            },
+            {
+                name: 'B'
+            }
+        ]
+    }
+  ]
+  * @param action function that handles the selected product in the parent component
  */
 export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, action }) => {
     const classes = useStyles();
+
     const [selectedProduct, setSelectedProduct] = React.useState(`${options[0].name} ${options[0].products[0].name}`);
     const [categories, setCategories] = React.useState(options || []);
 
+    /**
+     * Creates a new set of categories with 'cat' open property toggled.
+     * Set the new categories to the categories state
+     *
+     * @param cat the category that was clicked on
+     */
     const handleClick = (cat: Category) => {
         const newCategories = categories.map((item: Category) => {
             if (item !== cat) {
@@ -88,6 +98,13 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
         setCategories(newCategories);
     };
 
+    /**
+     * Handles the click on a list item by setting the selected product
+     * and performing action
+     *
+     * @param event
+     * @param product
+     */
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
         product: ProductSelectionResponse
@@ -98,6 +115,9 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
 
     return (
         <div className={classes.root}>
+            {/**
+             * Loop through the list of categories and create the labels for each
+             */}
             {categories.map((cat: Category, index: number) => (
                 <List key={index}>
                     <Paper className={classes.category}>
@@ -116,6 +136,10 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                     </Paper>
                     <Paper>
                         <Collapse in={cat.open} timeout="auto" unmountOnExit>
+                            {/**
+                             * Loop through the current category's products, and display each
+                             * underneath their category.
+                             */}
                             {cat.products.map((product: CategoryProduct, index: number) => (
                                 <ListItem
                                     key={index}
@@ -126,6 +150,9 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                                         handleListItemClick(event, { level: cat.name, product: product.name })
                                     }
                                 >
+                                    {/**
+                                     * If there is an icon for this product, display it before the product name
+                                     */}
                                     {ICON_MAP[product.name] !== undefined && (
                                         <ListItemIcon>
                                             <FontAwesomeIcon

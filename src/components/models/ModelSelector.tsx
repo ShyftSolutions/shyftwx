@@ -1,14 +1,14 @@
 import { Grid, Typography } from '@material-ui/core';
-
 import GroupedButtons from '../buttons/GroupedButtons';
 import React from 'react';
 
 /**
- * Creates a Material UI Grid Item for a Model and its button group
+ * Creates a Material UI Grid Item for a Model button group selector and its label
  *
- * @param Props: {options: string[]}
+ * @param options string[]
+ * @param label string
  */
-export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = 'Model', action }) => {
+export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = 'Model' }) => {
     const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
     };
