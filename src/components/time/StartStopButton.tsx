@@ -4,6 +4,11 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import useTimer from '../../hooks/useTimer';
 
+/**
+ * Uses Material UI FAB and icon to create a toggle-able play/pause button 
+ * with a timer hook to give the button functionality
+ */
+
 const useStyles = makeStyles((theme) => ({
     play: {
         label: 'play',
@@ -32,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/**
+ * Creates two buttons (play and pause) using material ui. When the button is clicked,
+ * the button switches to the other button. 'useTimer' hook creates a timer to keep track of 
+ * whether or not the button is playing/paused, and a useEffect calls onToggle for every new tick
+ * 
+ * @param onToggle function to be called when tick changes values
+ */
 export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onToggle }) => {
     const classes = useStyles();
     const [tick, isRunning, setIsRunning] = useTimer(600);

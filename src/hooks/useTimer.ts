@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Creates a timer hook with millisecond time intervals
+ * 
+ * @param interval time (in milliseconds) between each tick
+ */
 export const useTimer = (interval: number): [number, boolean, Function] => {
     const [ticks, setTicks] = React.useState(0);
     const [isRunning, setIsRunning] = React.useState(false);

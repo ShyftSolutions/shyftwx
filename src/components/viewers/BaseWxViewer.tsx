@@ -1,11 +1,12 @@
 import 'leaflet/dist/leaflet.css';
-
 import { ImageOverlay, Map, TileLayer } from 'react-leaflet';
-
 import React from 'react';
 import { latLngBounds } from 'leaflet';
 import { makeStyles } from '@material-ui/core';
 
+/**
+ * Uses Leaflet and Material UI styling to create a map with prop overlays and bounds
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '40vw',

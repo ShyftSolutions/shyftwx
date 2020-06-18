@@ -1,3 +1,7 @@
+/**
+ * Defines the types for the values used in the time folder
+ */
+
 declare type TimeControlProps = {
     onBack: () => void;
     onNext: () => void;

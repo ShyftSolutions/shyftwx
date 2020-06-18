@@ -2,6 +2,10 @@ import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
+/**
+ * Uses Material UI to create a next button
+ */
+
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: '25%',
@@ -21,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/**
+ * Creates a Material UI button with a next button 
+ * 
+ * @param action to be executed upon clicking the NextButton
+ */
 export const ForwardButton: React.FC<TimeNavigationButtonProps> = ({ action }) => {
     const classes = useStyles();
 
