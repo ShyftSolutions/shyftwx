@@ -213,6 +213,7 @@ var ModelSelector = function ModelSelector(_ref) {
     /*#__PURE__*/
     React__default.createElement(core.Grid, {
       container: true,
+      "data-cy": "model-selector",
       direction: "column",
       className: classes.root
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -439,22 +440,18 @@ var RunsSelector = function RunsSelector(_ref) {
   var newOptions = options.map(function (option) {
     return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
   });
-  return (
-    /*#__PURE__*/
-    React__default.createElement(core.Grid, {
-      container: true,
-      item: true,
-      justify: "flex-end",
-      className: classes.root
-    }, /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(core.Typography, {
-      variant: "h6"
-    }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
-      options: newOptions,
-      action: handleClick
-    })))
-  );
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    justify: "flex-end"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    options: newOptions,
+    action: handleClick
+  })));
 };
 
 var RunDropdown = function RunDropdown(_ref) {

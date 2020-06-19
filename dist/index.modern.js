@@ -210,8 +210,9 @@ var ModelSelector = function ModelSelector(_ref) {
     /*#__PURE__*/
     React.createElement(Grid, {
       container: true,
+      "data-cy": "model-selector",
       direction: "column",
-      className: classes.root
+      className: classes.root,
     }, /*#__PURE__*/React.createElement(Grid, {
       item: true
     }, /*#__PURE__*/React.createElement(Typography, {
@@ -436,22 +437,19 @@ var RunsSelector = function RunsSelector(_ref) {
   var newOptions = options.map(function (option) {
     return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
   });
-  return (
-    /*#__PURE__*/
-    React.createElement(Grid, {
-      container: true,
-      item: true,
-      justify: "flex-end",
-      className: classes.root
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true
-    }, /*#__PURE__*/React.createElement(Typography, {
-      variant: "h6"
-    }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: newOptions,
-      action: handleClick
-    })))
-  );
+  return /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "flex-end",
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
+    options: newOptions,
+    action: handleClick
+  })));
 };
 
 var RunDropdown = function RunDropdown(_ref) {

@@ -25,7 +25,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = '
 
     return (
         /* Region Grid Container */
-        <Grid container direction="column" className={classes.root}>
+        <Grid container data-cy="model-selector" direction="column" className={classes.root}>
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
                 <GroupedButtons options={options} action={handleClick} />
