@@ -7,7 +7,6 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
         maxWidth: 300
     },
     category: {
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.secondary.contrastText
+        color: theme.palette.secondary.contrastText,
     },
     icon: {},
     selectedIcon: {
@@ -55,7 +54,7 @@ const emptyMenu = [
 
 /**
  * Uses Material UI to create a product menu with categories and subcategories
- * 
+ *
  * @param options [
     {
         name: 'Menu',

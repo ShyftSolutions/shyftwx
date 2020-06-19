@@ -1,6 +1,6 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
 
-export default createMuiTheme({
+let theme = createMuiTheme({
     palette: {
         primary: {
             light: '#72c3fc',
@@ -50,7 +50,16 @@ export default createMuiTheme({
                 color: '#f8f9fa',
                 fontSize: 16
             }
-        }
+        },
     },
+
     spacing: 8
 });
+
+const options = {
+    disableAlign: true,
+    factor: 5
+};
+
+theme = responsiveFontSizes(theme, options);
+export default theme;

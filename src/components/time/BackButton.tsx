@@ -9,17 +9,16 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: '25%',
-        maxHeight: '50%',
-        minWidth: '25%',
-        minHeight: '50%',
         variant: 'contained',
+        size: 'small',
         backgroundColor: theme.palette.primary.dark,
         boxShadow: theme.shadows[3],
         '&:hover': {
-            backgroundColor: theme.palette.primary.dark,
+            backgroundColor: theme.palette.primary.dark
         },
-        ariaLabel: 'forward'
+        ariaLabel: 'back',
+        maxWidth: 50,
+        minWidth: 15
     },
     icon: {
         color: theme.palette.primary.contrastText
@@ -27,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Creates a Material UI button with a backwards-facing button 
- * 
- * @param action to be executed upon clicking the BackButton 
+ * Creates a Material UI button with a backwards-facing button
+ *
+ * @param action to be executed upon clicking the BackButton
  */
 export const BackButton: React.FC<TimeNavigationButtonProps> = ({ action }) => {
     const classes = useStyles();

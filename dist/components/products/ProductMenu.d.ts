@@ -1,22 +1,22 @@
 import React from 'react';
 /**
- * Uses Material UI to create an accordian dropdown with main categories
- * and subcategories. 'defaultOptions' should be an array of objects in the
- * form of:
+ * Uses Material UI to create a product menu with categories and subcategories
  *
- * {
-            name: STRING,
-            open: BOOLEAN,
-            products: [{
-                name: STRING,
-                icon: FAICON,
-            }, {
-                name: STRING,
-                icon: FAICON,
-            }]
-        },
- *
- * @param Props: {options: string[]}
+ * @param options [
+    {
+        name: 'Menu',
+        open: true,
+        products: [
+            {
+                name: 'A'
+            },
+            {
+                name: 'B'
+            }
+        ]
+    }
+  ]
+  * @param action function that handles the selected product in the parent component
  */
 export declare const ProductMenu: React.FC<ProductMenuProps>;
 export default ProductMenu;

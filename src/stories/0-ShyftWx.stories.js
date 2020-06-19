@@ -1,6 +1,6 @@
 import { Container, MuiThemeProvider } from '@material-ui/core';
 import { object, withKnobs } from '@storybook/addon-knobs/react';
-
+import responsiveFontSizes from '@material-ui/core/styles/responsiveFontSizes';
 import React from 'react';
 import _ShyftWx from '../components/root/ShyftWx';
 import { text } from '@storybook/addon-knobs';
