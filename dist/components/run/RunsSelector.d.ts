@@ -2,8 +2,8 @@ import React from 'react';
 /**
  * Creates a Material UI Grid Item for the Region button group
  *
- *
- * @param Props: { options: string[]}
+ * @param options string[] of options for the button group
+ * @param label text displayed over the button group
  */
 export declare const RunsSelector: React.FC<RunsSelectorProps>;
 export default RunsSelector;
