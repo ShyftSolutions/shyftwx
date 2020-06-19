@@ -15,11 +15,11 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.secondary.contrastText,
+        color: theme.palette.secondary.contrastText
     },
     icon: {},
     selectedIcon: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText,
     }
 }));
 

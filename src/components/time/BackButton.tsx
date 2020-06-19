@@ -10,18 +10,19 @@ import { makeStyles } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     root: {
         variant: 'contained',
-        size: 'small',
         backgroundColor: theme.palette.primary.dark,
         boxShadow: theme.shadows[3],
         '&:hover': {
             backgroundColor: theme.palette.primary.dark
         },
         ariaLabel: 'back',
-        maxWidth: 50,
-        minWidth: 15
+        maxWidth: '100%',
+        minWidth: '100%',
+        maxHeight: 30,
+        minHeight: 15
     },
     icon: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText,
     }
 }));
 

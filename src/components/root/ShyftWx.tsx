@@ -16,7 +16,7 @@ import moment from 'moment';
 
 export const ShyftContext = React.createContext({});
 
-const drawerWidth = 225;
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
@@ -262,7 +262,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     <div className={classes.toolbar} />
 
                     {/* Model/Region/Run/Valid Menu Grid */}
-                    <Grid container item justify={'space-between'}>
+                    <Grid container item justify="space-between">
                         <Grid item xs>
                             <ModelSelector options={[index.datasets[0].dataset]} action={() => {}} />
                         </Grid>
@@ -289,8 +289,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             {/* <ImageViewer image={activeForecastLayer}/> */}
                         </Grid>
 
-                        <Grid container item style={{ border: '1px solid red' }} justify="center">
-                            <Grid item sm={3} xs={5} style={{ border: '1px solid red' }}>
+                        <Grid container item justify="center">
+                            <Grid item sm={3} xs={5}>
                                 <TimeControl
                                     onBack={onSliderNavigationBack}
                                     onNext={onSliderNavigationNext}
@@ -298,7 +298,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 />
                             </Grid>
 
-                            <Grid item sm={9} xs={12} style={{ border: '1px solid red' }}>
+                            <Grid item sm={9} xs={12}>
                                 <Slider
                                     options={sliderVals}
                                     selected={+selectedForecast + +index.datasets[0].run.name}

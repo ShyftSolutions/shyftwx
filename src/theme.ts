@@ -41,7 +41,8 @@ let theme = createMuiTheme({
         },
         MuiListItemIcon: {
             root: {
-                color: '#000000'
+                color: '#000000',
+                minWidth: 30
             }
         },
         MuiTooltip: {

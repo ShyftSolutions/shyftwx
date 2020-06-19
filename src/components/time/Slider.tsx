@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 
 /**
- * Uses Material UI slider to create a responsive time for forecast hours and 
+ * Uses Material UI slider to create a responsive time for forecast hours and
  * valid times
  */
 
@@ -39,7 +39,10 @@ const useStyles = makeStyles((theme) => ({
     },
     markLabel: {
         fontWeight: 500,
-        padding: 12
+        padding: 12,
+        [theme.breakpoints.down('xs')]: {
+            display: 'none'
+        }
     },
     mark: {
         backgroundColor: theme.palette.primary.dark,
@@ -56,10 +59,10 @@ interface Props {
 /**
  * Component that displays the valid time as a popup above the appropriate knob
  * on the slider component
- * 
+ *
  * @param children
  * @param open boolean stating whether or not the popup is open
- * @param value displayed on the popup 
+ * @param value displayed on the popup
  */
 function ValueLabelComponent(props: Props) {
     const { children, open, value } = props;
@@ -96,10 +99,10 @@ const compare = (a, b) => {
 /**
  * Creates a material UI slider with marks and props based on the values
  * passed in through the options prop
- * 
+ *
  * @param options array of objects consisting of a value and a label property
  * @param action function to be executed when a change occurs on the slider
- * @param selected the current selected value on the slider based on parent component 
+ * @param selected the current selected value on the slider based on parent component
  */
 export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected }) => {
     const classes = useStyles();

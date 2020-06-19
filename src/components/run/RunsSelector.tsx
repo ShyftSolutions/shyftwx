@@ -6,7 +6,7 @@ import moment from 'moment';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-      maxWidth: '100%'
+        maxWidth: '100%'
     }
 }));
 

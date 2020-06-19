@@ -11,7 +11,7 @@ import useTimer from '../../hooks/useTimer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     play: {
         label: 'play',
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: theme.palette.secondary.dark
         },
-        resize: 'inherit',
+        resize: 'inherit'
     },
     icon: {
         color: theme.palette.primary.contrastText
