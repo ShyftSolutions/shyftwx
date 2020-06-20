@@ -243,16 +243,16 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     <Grid container item>
                         {getOffset()}
                         <Grid item xs={2}>
-                            <ModelSelector options={[index.datasets[0].dataset]} action={() => {}} />
+                            <ModelSelector data-cy="model-selector" options={[index.datasets[0].dataset]} action={() => {}} />
                         </Grid>
                         <Grid item xs={1}>
-                            <RegionSelector options={[index.datasets[0].region.name]} action={() => {}} />
+                            <RegionSelector data-cy="region-selector" options={[index.datasets[0].region.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <RunsSelector options={[+index.datasets[0].run.name]} action={() => {}} />
+                            <RunsSelector data-cy="runs-selector" options={[+index.datasets[0].run.name]} action={() => {}} />
                         </Grid>
                         <Grid item xs={3}>
-                            <ValidTime time={getValidTime()} />
+                            <ValidTime data-cy="valid-time" time={getValidTime()} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -261,24 +261,24 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                 <Grid container item xs={3}>
                     {/* TODO: icons not coming - theme is maybe wrong?  color of text is off */}
                     <Grid container item>
-                        <ProductSelector categories={levelProductVals} action={onProductSelect} />
+                        <ProductSelector data-cy="product-selector" categories={levelProductVals} action={onProductSelect} />
                     </Grid>
                 </Grid>
 
                 {/* Viewer/Time Grid */}
                 <Grid container xs={9}>
                     <Grid container item xs={12}>
-                        <BaseWxViewer
+                        <BaseWxViewer data-cy="base-wx-viewer"
                             layers={activeForecastLayer}
                             neBounds={[index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax]}
                             swBounds={[index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]}
                         />
-                        {/* <ImageViewer image={activeForecastLayer}/> */}
+                        {/* <ImageViewer data-cy="image-viewer image={activeForecastLayer}/> */}
                     </Grid>
 
                     <Grid container item xs={12}>
                         <Grid container item xs={2}>
-                            <TimeControl
+                            <TimeControl data-cy="time-control"
                                 onBack={onSliderNavigationBack}
                                 onNext={onSliderNavigationNext}
                                 onToggle={onToggleToPlay}
@@ -288,7 +288,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         <Grid item xs={1} />
 
                         <Grid item xs={9}>
-                            <Slider
+                            <Slider data-cy="slider"
                                 options={sliderVals}
                                 selected={+selectedForecast + +index.datasets[0].run.name}
                                 action={onSliderNavigation}
