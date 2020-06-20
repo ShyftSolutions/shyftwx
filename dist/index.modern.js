@@ -1168,24 +1168,28 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 2
     }, /*#__PURE__*/React.createElement(ModelSelector, {
+      "data-cy": "model-selector",
       options: [index.datasets[0].dataset],
       action: function action() {}
     })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
       xs: 1
     }, /*#__PURE__*/React.createElement(RegionSelector, {
+      "data-cy": "region-selector",
       options: [index.datasets[0].region.name],
       action: function action() {}
     })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
       xs: 3
     }, /*#__PURE__*/React.createElement(RunsSelector, {
+      "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
       action: function action() {}
     })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
       xs: 3
     }, /*#__PURE__*/React.createElement(ValidTime, {
+      "data-cy": "valid-time",
       time: getValidTime()
     })))), /*#__PURE__*/React.createElement(Grid, {
       container: true,
@@ -1195,6 +1199,7 @@ var ShyftWx = function ShyftWx(_ref) {
       container: true,
       item: true
     }, /*#__PURE__*/React.createElement(ProductSelector, {
+      "data-cy": "product-selector",
       categories: levelProductVals,
       action: onProductSelect
     }))), /*#__PURE__*/React.createElement(Grid, {
@@ -1205,6 +1210,7 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 12
     }, /*#__PURE__*/React.createElement(BaseWxViewer, {
+      "data-cy": "base-wx-viewer",
       layers: activeForecastLayer,
       neBounds: [index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax],
       swBounds: [index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]
@@ -1217,6 +1223,7 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 2
     }, /*#__PURE__*/React.createElement(TimeControl, {
+      "data-cy": "time-control",
       onBack: onSliderNavigationBack,
       onNext: onSliderNavigationNext,
       onToggle: onToggleToPlay
@@ -1227,6 +1234,7 @@ var ShyftWx = function ShyftWx(_ref) {
       item: true,
       xs: 9
     }, /*#__PURE__*/React.createElement(DiscreteSlider, {
+      "data-cy": "slider",
       options: sliderVals,
       selected: +selectedForecast + +index.datasets[0].run.name,
       action: onSliderNavigation
