@@ -9,10 +9,10 @@ require('leaflet/dist/leaflet.css');
 var reactLeaflet = require('react-leaflet');
 var leaflet = require('leaflet');
 var NavigateNextIcon = _interopDefault(require('@material-ui/icons/NavigateNext'));
-var Paper = _interopDefault(require('@material-ui/core/Paper'));
 var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
 var freeSolidSvgIcons = require('@fortawesome/free-solid-svg-icons');
+var MenuIcon = _interopDefault(require('@material-ui/icons/Menu'));
 var moment = _interopDefault(require('moment'));
 var Slider = _interopDefault(require('@material-ui/core/Slider'));
 var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
@@ -41,17 +41,17 @@ var index = {
 var useStyles = core.makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: '25%',
-      maxHeight: '50%',
-      minWidth: '25%',
-      minHeight: '50%',
       variant: 'contained',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
       '&:hover': {
         backgroundColor: theme.palette.primary.dark
       },
-      ariaLabel: 'forward'
+      ariaLabel: 'back',
+      maxWidth: '100%',
+      minWidth: '100%',
+      maxHeight: 30,
+      minHeight: 15
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -110,17 +110,21 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
 var useStyles$2 = core.makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: '25%',
-      maxHeight: '50%',
-      minWidth: '25%',
-      minHeight: '50%',
+      flexShrink: 3
+    },
+    button: {
       variant: 'contained',
+      size: 'small',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
       '&:hover': {
         backgroundColor: theme.palette.primary.dark
       },
-      ariaLabel: 'forward'
+      ariaLabel: 'forward',
+      maxWidth: '100%',
+      minWidth: '100%',
+      maxHeight: 30,
+      minHeight: 15
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -132,7 +136,7 @@ var ForwardButton = function ForwardButton(_ref) {
   var classes = useStyles$2();
   return /*#__PURE__*/React__default.createElement(core.Button, {
     onClick: action,
-    className: classes.root
+    className: classes.button
   }, /*#__PURE__*/React__default.createElement(NavigateNextIcon, {
     className: classes.icon
   }));
@@ -142,7 +146,8 @@ var useStyles$3 = core.makeStyles(function (theme) {
   return {
     root: {
       margin: 0,
-      boxShadow: theme.shadows[3]
+      boxShadow: theme.shadows[3],
+      maxWidth: '100%'
     },
     defaultButton: {
       backgroundColor: theme.palette.primary.contrastText,
@@ -190,10 +195,19 @@ var GroupedButtons = function GroupedButtons(_ref) {
   }));
 };
 
+var useStyles$4 = core.makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%'
+    }
+  };
+});
 var ModelSelector = function ModelSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Model' : _ref$label;
+  var classes = useStyles$4();
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
@@ -204,14 +218,14 @@ var ModelSelector = function ModelSelector(_ref) {
     React__default.createElement(core.Grid, {
       container: true,
       "data-cy": "model-selector",
-      direction: "column"
+      direction: "column",
+      className: classes.root
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true
     }, /*#__PURE__*/React__default.createElement(core.Typography, {
       variant: "h6"
-    }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
-    }, /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
+      "data-cy": "model-selector-buttons",
       options: options,
       action: handleClick
     })))
@@ -236,15 +250,16 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var useStyles$4 = core.makeStyles(function (theme) {
+var useStyles$5 = core.makeStyles(function (theme) {
   return {
     root: {
-      width: '100%',
       maxWidth: 300
     },
-    category: {
-      color: theme.palette.primary.contrastText,
-      backgroundColor: theme.palette.primary.main
+    categoryStyle: {
+      fontWeight: 800,
+      fontSize: 16,
+      letterSpacing: 1,
+      color: theme.palette.secondary.main
     },
     nested: {
       paddingLeft: theme.spacing(4),
@@ -279,7 +294,7 @@ var ProductMenu = function ProductMenu(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? emptyMenu : _ref$options,
       action = _ref.action;
-  var classes = useStyles$4();
+  var classes = useStyles$5();
 
   var _React$useState = React__default.useState(options[0].name + " " + options[0].products[0].name),
       selectedProduct = _React$useState[0],
@@ -312,29 +327,23 @@ var ProductMenu = function ProductMenu(_ref) {
   }, categories.map(function (cat, index) {
     return /*#__PURE__*/React__default.createElement(core.List, {
       key: index
-    }, /*#__PURE__*/React__default.createElement(Paper, {
-      className: classes.category
     }, /*#__PURE__*/React__default.createElement(core.ListItem, {
+      "data-cy": cat.name,
       button: true,
       onClick: function onClick() {
         return handleClick(cat);
       }
     }, /*#__PURE__*/React__default.createElement(core.ListItemText, {
-      primary: /*#__PURE__*/React__default.createElement(core.Box, {
-        m: 1
-      }, /*#__PURE__*/React__default.createElement(core.Typography, {
-        style: {
-          fontWeight: 800,
-          fontSize: 16,
-          letterSpacing: 1
-        }
-      }, cat.name))
-    }), cat.open ? /*#__PURE__*/React__default.createElement(icons.ExpandLess, null) : /*#__PURE__*/React__default.createElement(icons.ExpandMore, null))), /*#__PURE__*/React__default.createElement(Paper, null, /*#__PURE__*/React__default.createElement(core.Collapse, {
+      primary: /*#__PURE__*/React__default.createElement(core.Typography, {
+        className: classes.categoryStyle
+      }, cat.name)
+    }), cat.open ? /*#__PURE__*/React__default.createElement(icons.ExpandLess, null) : /*#__PURE__*/React__default.createElement(icons.ExpandMore, null)), /*#__PURE__*/React__default.createElement(core.Collapse, {
       "in": cat.open,
       timeout: "auto",
       unmountOnExit: true
     }, cat.products.map(function (product, index) {
       return /*#__PURE__*/React__default.createElement(core.ListItem, {
+        "data-cy": cat.name + ' ' + product.name,
         key: index,
         button: true,
         className: classes.nested,
@@ -351,34 +360,116 @@ var ProductMenu = function ProductMenu(_ref) {
       })), /*#__PURE__*/React__default.createElement(core.ListItemText, {
         primary: product.name
       }));
-    }))));
+    })));
   }));
 };
 
+var drawerWidth = 250;
+var useStyles$6 = core.makeStyles(function (theme) {
+  var _drawer, _appBar, _menuButton;
+
+  return {
+    root: {
+      display: 'flex'
+    },
+    drawer: (_drawer = {}, _drawer[theme.breakpoints.up('sm')] = {
+      width: drawerWidth,
+      flexShrink: 0
+    }, _drawer),
+    appBar: (_appBar = {}, _appBar[theme.breakpoints.up('sm')] = {
+      display: 'none'
+    }, _appBar),
+    menuButton: (_menuButton = {
+      marginRight: theme.spacing(2)
+    }, _menuButton[theme.breakpoints.up('sm')] = {
+      display: 'none'
+    }, _menuButton),
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+      width: drawerWidth
+    }
+  };
+});
 var ProductSelector = function ProductSelector(_ref) {
   var categories = _ref.categories,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Products' : _ref$label,
-      action = _ref.action;
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+      action = _ref.action,
+      window = _ref.window;
+  var classes = useStyles$6();
+
+  var _React$useState = React__default.useState(false),
+      mobileOpen = _React$useState[0],
+      setMobileOpen = _React$useState[1];
+
+  var handleDrawerToggle = function handleDrawerToggle() {
+    setMobileOpen(!mobileOpen);
+  };
+
+  var menu = /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement("div", {
+    className: classes.toolbar
+  }), /*#__PURE__*/React__default.createElement(core.Divider, null), /*#__PURE__*/React__default.createElement(core.Typography, {
     variant: "h6"
-  }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(ProductMenu, {
+  }, label), /*#__PURE__*/React__default.createElement(ProductMenu, {
     options: categories,
     action: action
-  })));
+  }));
+  var container = window !== undefined ? function () {
+    return window().document.body;
+  } : undefined;
+  return /*#__PURE__*/React__default.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.AppBar, {
+    position: "fixed",
+    className: classes.appBar
+  }, /*#__PURE__*/React__default.createElement(core.Toolbar, null, /*#__PURE__*/React__default.createElement(core.IconButton, {
+    color: "inherit",
+    "aria-label": "open drawer",
+    edge: "start",
+    onClick: handleDrawerToggle,
+    className: classes.menuButton
+  }, /*#__PURE__*/React__default.createElement(MenuIcon, null)))), /*#__PURE__*/React__default.createElement("nav", {
+    className: classes.drawer
+  }, /*#__PURE__*/React__default.createElement(core.Hidden, {
+    smUp: true,
+    implementation: "css"
+  }, /*#__PURE__*/React__default.createElement(core.Drawer, {
+    container: container,
+    variant: "temporary",
+    anchor: "left",
+    open: mobileOpen,
+    onClose: handleDrawerToggle,
+    classes: {
+      paper: classes.drawerPaper
+    },
+    ModalProps: {
+      keepMounted: true
+    }
+  }, menu)), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    xsDown: true,
+    implementation: "css"
+  }, /*#__PURE__*/React__default.createElement(core.Drawer, {
+    classes: {
+      paper: classes.drawerPaper
+    },
+    variant: "permanent",
+    open: true
+  }, menu))));
 };
 
+var useStyles$7 = core.makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%'
+    }
+  };
+});
 var RegionSelector = function RegionSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Region' : _ref$label;
+  var classes = useStyles$7();
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
@@ -389,7 +480,8 @@ var RegionSelector = function RegionSelector(_ref) {
     React__default.createElement(core.Grid, {
       container: true,
       item: true,
-      justify: "center"
+      justify: "center",
+      className: classes.root
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true
     }, /*#__PURE__*/React__default.createElement(core.Typography, {
@@ -401,10 +493,19 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
+var useStyles$8 = core.makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%'
+    }
+  };
+});
 var RunsSelector = function RunsSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Runs' : _ref$label;
+  var classes = useStyles$8();
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
@@ -413,18 +514,22 @@ var RunsSelector = function RunsSelector(_ref) {
   var newOptions = options.map(function (option) {
     return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
   });
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    item: true,
-    justify: "flex-end"
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
-  }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
-    options: newOptions,
-    action: handleClick
-  })));
+  return (
+    /*#__PURE__*/
+    React__default.createElement(core.Grid, {
+      container: true,
+      item: true,
+      justify: "flex-end",
+      className: classes.root
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true
+    }, /*#__PURE__*/React__default.createElement(core.Typography, {
+      variant: "h6"
+    }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
+      options: newOptions,
+      action: handleClick
+    })))
+  );
 };
 
 var RunDropdown = function RunDropdown(_ref) {
@@ -613,7 +718,9 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$5 = styles.makeStyles(function (theme) {
+var useStyles$9 = styles.makeStyles(function (theme) {
+  var _markLabel, _tooltip;
+
   return {
     root: {
       color: theme.palette.primary.main,
@@ -642,14 +749,21 @@ var useStyles$5 = styles.makeStyles(function (theme) {
       fontWeight: 700,
       padding: 12
     },
-    markLabel: {
+    markLabel: (_markLabel = {
       fontWeight: 500,
       padding: 12
-    },
+    }, _markLabel[theme.breakpoints.down('xs')] = {
+      display: 'none'
+    }, _markLabel),
     mark: {
       backgroundColor: theme.palette.primary.dark,
       height: 5
-    }
+    },
+    tooltip: (_tooltip = {
+      placement: 'top'
+    }, _tooltip[theme.breakpoints.down('sm')] = {
+      placement: 'bottom'
+    }, _tooltip)
   };
 });
 
@@ -661,7 +775,6 @@ function ValueLabelComponent(props) {
   return /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement(Tooltip, {
     open: open,
     enterTouchDelay: 0,
-    placement: "top",
     title: validTime
   }, children));
 }
@@ -684,7 +797,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$5();
+  var classes = useStyles$9();
   options.sort(compare);
   var stepValue = options[1].value - options[0].value;
   var defaultValue = options[0].value;
@@ -737,8 +850,11 @@ var useTimer = function useTimer(interval) {
   return [ticks, isRunning, setIsRunning];
 };
 
-var useStyles$6 = core.makeStyles(function (theme) {
+var useStyles$a = core.makeStyles(function (theme) {
   return {
+    root: {
+      flexGrow: 1
+    },
     play: {
       label: 'play',
       boxShadow: theme.shadows[3],
@@ -746,9 +862,7 @@ var useStyles$6 = core.makeStyles(function (theme) {
       '&:hover': {
         background: theme.palette.secondary.dark
       },
-      resize: 'inherit',
-      maxWidth: '45%',
-      margin: 5
+      resize: 'inherit'
     },
     pause: {
       label: 'pause',
@@ -757,9 +871,7 @@ var useStyles$6 = core.makeStyles(function (theme) {
       '&:hover': {
         background: theme.palette.secondary.dark
       },
-      resize: 'inherit',
-      maxWidth: '45%',
-      margin: 5
+      resize: 'inherit'
     },
     icon: {
       color: theme.palette.primary.contrastText
@@ -768,7 +880,7 @@ var useStyles$6 = core.makeStyles(function (theme) {
 });
 var StartStopButton = function StartStopButton(_ref) {
   var onToggle = _ref.onToggle;
-  var classes = useStyles$6();
+  var classes = useStyles$a();
 
   var _useTimer = useTimer(600),
       tick = _useTimer[0],
@@ -799,39 +911,91 @@ var StartStopButton = function StartStopButton(_ref) {
   }));
 };
 
+var useStyles$b = core.makeStyles(function (theme) {
+  var _offset;
+
+  return {
+    root: {
+      flexGrow: 1
+    },
+    offset: (_offset = {}, _offset[theme.breakpoints.up('md')] = {
+      display: 'none'
+    }, _offset)
+  };
+});
 var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
       onToggle = _ref.onToggle;
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
+  var classes = useStyles$b();
+  return /*#__PURE__*/React__default.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
-    item: true
+    item: true,
+    direction: "row",
+    alignItems: "center",
+    justify: "center",
+    wrap: "nowrap",
+    spacing: 1
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true,
-    alignItems: "center"
+    xs: true,
+    className: classes.offset
+  }), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    xs: 3
   }, /*#__PURE__*/React__default.createElement(BackButton, {
+    "data-cy": "back-button",
     action: onBack
-  }), /*#__PURE__*/React__default.createElement(StartStopButton, {
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    container: true,
+    xs: true,
+    justify: "center"
+  }, /*#__PURE__*/React__default.createElement(StartStopButton, {
+    "data-cy": "play-button",
     onToggle: onToggle
-  }), /*#__PURE__*/React__default.createElement(ForwardButton, {
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React__default.createElement(ForwardButton, {
+    "data-cy": "forward-button",
     action: onNext
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true,
+    xs: true
   })));
 };
 
+var useStyles$c = core.makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%'
+    },
+    paper: {
+      padding: 5
+    }
+  };
+});
 var ValidTime = function ValidTime(_ref) {
   var time = _ref.time;
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
+  var classes = useStyles$c();
+  return /*#__PURE__*/React__default.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
-    item: true,
-    justify: "flex-end",
-    alignItems: "flex-end"
+    direction: "row",
+    justify: "flex-start",
+    alignItems: "center"
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
+  }, /*#__PURE__*/React__default.createElement(core.Paper, {
+    className: classes.paper
   }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
-  }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Typography, {
     variant: "body1"
-  }, time)));
+  }, "Valid Time: ", time)))));
 };
 
 var theme = core.createMuiTheme({
@@ -844,9 +1008,9 @@ var theme = core.createMuiTheme({
     },
     secondary: {
       light: '#ffffff',
-      main: '#e9ecef',
+      main: '#F76707',
       dark: '#868e96',
-      contrastText: '#474545'
+      contrastText: '#212529'
     }
   },
   overrides: {
@@ -859,9 +1023,9 @@ var theme = core.createMuiTheme({
     MuiListItem: {
       root: {
         '&$selected': {
-          backgroundColor: '#868e96',
+          backgroundColor: '#329af0',
           '&:hover': {
-            backgroundColor: '#868e96'
+            backgroundColor: '#329af0'
           },
           color: '#f8f9fa'
         },
@@ -875,7 +1039,8 @@ var theme = core.createMuiTheme({
     },
     MuiListItemIcon: {
       root: {
-        color: '#000000'
+        color: '#000000',
+        minWidth: 30
       }
     },
     MuiTooltip: {
@@ -888,13 +1053,75 @@ var theme = core.createMuiTheme({
   },
   spacing: 8
 });
+var options = {
+  disableAlign: true,
+  factor: 5
+};
+theme = core.responsiveFontSizes(theme, options);
+var theme$1 = theme;
+
+function toVal(mix) {
+	var k, y, str='';
+
+	if (typeof mix === 'string' || typeof mix === 'number') {
+		str += mix;
+	} else if (typeof mix === 'object') {
+		if (Array.isArray(mix)) {
+			for (k=0; k < mix.length; k++) {
+				if (mix[k]) {
+					if (y = toVal(mix[k])) {
+						str && (str += ' ');
+						str += y;
+					}
+				}
+			}
+		} else {
+			for (k in mix) {
+				if (mix[k]) {
+					str && (str += ' ');
+					str += k;
+				}
+			}
+		}
+	}
+
+	return str;
+}
+
+function clsx () {
+	var i=0, tmp, x, str='';
+	while (i < arguments.length) {
+		if (tmp = arguments[i++]) {
+			if (x = toVal(tmp)) {
+				str && (str += ' ');
+				str += x;
+			}
+		}
+	}
+	return str;
+}
 
 var ShyftContext = React__default.createContext({});
+var drawerWidth$1 = 250;
+var useStyles$d = core.makeStyles(function (theme) {
+  var _content;
+
+  return {
+    toolbar: theme.mixins.toolbar,
+    content: (_content = {
+      flexGrow: 1,
+      padding: theme.spacing(3)
+    }, _content[theme.breakpoints.up('sm')] = {
+      marginLeft: drawerWidth$1
+    }, _content)
+  };
+});
 var ShyftWx = function ShyftWx(_ref) {
   var dataset = _ref.dataset,
       url = _ref.url,
       customer = _ref.customer,
       themeOverride = _ref.themeOverride;
+  var classes = useStyles$d();
 
   var _React$useState = React__default.useState(''),
       error = _React$useState[0],
@@ -987,7 +1214,7 @@ var ShyftWx = function ShyftWx(_ref) {
             uniqueLevels.forEach(function (lvl) {
               lvl.products.forEach(function (product) {
                 product.forecasts = items.filter(function (item) {
-                  return item.level === lvl.name && item.product == product.name;
+                  return item.level === lvl.name && item.product === product.name;
                 }).map(function (item) {
                   return {
                     hour: item.forecast,
@@ -1033,13 +1260,13 @@ var ShyftWx = function ShyftWx(_ref) {
 
   var getSelectedLevel = function getSelectedLevel() {
     return index.datasets[0].run.levels.filter(function (lvl) {
-      return lvl.name == selectedLevel;
+      return lvl.name === selectedLevel;
     })[0];
   };
 
   var getSelectedProduct = function getSelectedProduct() {
     return getSelectedLevel().products.filter(function (p) {
-      return p.name == selectedProduct;
+      return p.name === selectedProduct;
     })[0];
   };
 
@@ -1070,7 +1297,7 @@ var ShyftWx = function ShyftWx(_ref) {
       return f.hour === selectedForecast;
     });
 
-    if (forecastIndex + 1 == forecasts.length) {
+    if (forecastIndex + 1 === forecasts.length) {
       setSelectedForecast(forecasts[0].hour);
     } else {
       setSelectedForecast(forecasts[forecastIndex + 1].hour);
@@ -1115,17 +1342,9 @@ var ShyftWx = function ShyftWx(_ref) {
 
     if (selectedForecast === forecasts[forecasts.length - 1].hour) {
       setSelectedForecast(forecasts[0].hour);
-      return;
     } else {
       setSelectedForecast(forecasts[forecastIndex + 1].hour);
     }
-  };
-
-  var getOffset = function getOffset() {
-    return /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true,
-      xs: 3
-    });
   };
 
   var getValidTime = function getValidTime() {
@@ -1148,7 +1367,7 @@ var ShyftWx = function ShyftWx(_ref) {
     var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
       return {
         name: lvl.name,
-        open: index == 0,
+        open: index === 0,
         products: lvl.products
       };
     });
@@ -1162,52 +1381,46 @@ var ShyftWx = function ShyftWx(_ref) {
       return f.hour === selectedForecast;
     })[0].image;
     return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true
+    }, /*#__PURE__*/React__default.createElement(ProductSelector, {
+      "data-cy": "product-selector",
+      categories: levelProductVals,
+      action: onProductSelect
+    })), /*#__PURE__*/React__default.createElement("main", {
+      className: clsx(classes.content)
+    }, /*#__PURE__*/React__default.createElement("div", {
+      className: classes.toolbar
+    }), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
-      item: true
-    }, /*#__PURE__*/React__default.createElement(core.Grid, {
-      container: true,
-      item: true
-    }, getOffset(), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: 2
+      justify: "space-between"
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: true
     }, /*#__PURE__*/React__default.createElement(ModelSelector, {
       "data-cy": "model-selector",
       options: [index.datasets[0].dataset],
       action: function action() {}
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: 1
+      xs: true
     }, /*#__PURE__*/React__default.createElement(RegionSelector, {
       "data-cy": "region-selector",
       options: [index.datasets[0].region.name],
       action: function action() {}
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: 3
+      xs: 5
     }, /*#__PURE__*/React__default.createElement(RunsSelector, {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
       action: function action() {}
-    })), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true,
-      xs: 3
-    }, /*#__PURE__*/React__default.createElement(ValidTime, {
-      "data-cy": "valid-time",
-      time: getValidTime()
-    })))), /*#__PURE__*/React__default.createElement(core.Grid, {
-      container: true,
-      item: true,
-      xs: 3
-    }, /*#__PURE__*/React__default.createElement(core.Grid, {
-      container: true,
-      item: true
-    }, /*#__PURE__*/React__default.createElement(ProductSelector, {
-      "data-cy": "product-selector",
-      categories: levelProductVals,
-      action: onProductSelect
     }))), /*#__PURE__*/React__default.createElement(core.Grid, {
-      container: true,
-      xs: 9
+      item: true
+    }, /*#__PURE__*/React__default.createElement(ValidTime, {
+      time: getValidTime()
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,
@@ -1220,11 +1433,12 @@ var ShyftWx = function ShyftWx(_ref) {
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,
-      xs: 12
+      justify: "center"
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
-      container: true,
       item: true,
-      xs: 2
+      md: 3,
+      sm: 5,
+      xs: 5
     }, /*#__PURE__*/React__default.createElement(TimeControl, {
       "data-cy": "time-control",
       onBack: onSliderNavigationBack,
@@ -1232,20 +1446,19 @@ var ShyftWx = function ShyftWx(_ref) {
       onToggle: onToggleToPlay
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: 1
-    }), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true,
-      xs: 9
+      md: 9,
+      sm: 11,
+      xs: 12
     }, /*#__PURE__*/React__default.createElement(DiscreteSlider, {
       "data-cy": "slider",
       options: sliderVals,
       selected: +selectedForecast + +index.datasets[0].run.name,
       action: onSliderNavigation
-    })))));
+    }))))));
   };
 
   return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
-    theme: themeOverride || theme
+    theme: themeOverride || theme$1
   }, /*#__PURE__*/React__default.createElement(ShyftContext.Provider, {
     value: {
       data: index
@@ -1274,5 +1487,5 @@ exports.Slider = DiscreteSlider;
 exports.StartStopButton = StartStopButton;
 exports.TimeControl = TimeControl;
 exports.apis = index;
-exports.theme = theme;
+exports.theme = theme$1;
 //# sourceMappingURL=index.js.map
