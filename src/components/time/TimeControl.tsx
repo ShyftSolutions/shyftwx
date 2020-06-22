@@ -32,13 +32,13 @@ export const TimeControl: React.FC<TimeControlProps> = ({ onBack, onNext, onTogg
                 <Grid item xs className={classes.offset} />
 
                 <Grid item xs={3}>
-                    <BackButton action={onBack} />
+                    <BackButton data-cy="back-button" action={onBack} />
                 </Grid>
                 <Grid item container xs justify="center">
-                    <StartStopButton onToggle={onToggle} />
+                    <StartStopButton data-cy="play-button" onToggle={onToggle} />
                 </Grid>
                 <Grid item xs={3}>
-                    <ForwardButton action={onNext} />
+                    <ForwardButton data-cy="forward-button" action={onNext} />
                 </Grid>
 
                 {/* add space to the right of the component */}

@@ -28,7 +28,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = '
         <Grid container data-cy="model-selector" direction="column" className={classes.root}>
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
-                <GroupedButtons options={options} action={handleClick} />
+                <GroupedButtons data-cy="model-selector-buttons" options={options} action={handleClick} />
             </Grid>
         </Grid>
     );

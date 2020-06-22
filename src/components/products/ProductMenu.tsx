@@ -121,7 +121,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
              */}
             {categories.map((cat: Category, index: number) => (
                 <List key={index}>
-                    <ListItem button onClick={() => handleClick(cat)}>
+                    <ListItem data-cy={cat.name} button onClick={() => handleClick(cat)}>
                         <ListItemText primary={<Typography className={classes.categoryStyle}>{cat.name}</Typography>} />
                         {cat.open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
@@ -132,6 +132,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                          */}
                         {cat.products.map((product: CategoryProduct, index: number) => (
                             <ListItem
+                                data-cy={cat.name + ' ' + product.name}
                                 key={index}
                                 button
                                 className={classes.nested}
