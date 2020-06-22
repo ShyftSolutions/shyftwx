@@ -7,12 +7,13 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
         maxWidth: 300
     },
-    category: {
-        color: theme.palette.primary.contrastText,
-        backgroundColor: theme.palette.primary.main
+    categoryStyle: {
+        fontWeight: 800,
+        fontSize: 16,
+        letterSpacing: 1,
+        color: theme.palette.secondary.main
     },
     nested: {
         paddingLeft: theme.spacing(4),
@@ -55,7 +56,7 @@ const emptyMenu = [
 
 /**
  * Uses Material UI to create a product menu with categories and subcategories
- * 
+ *
  * @param options [
     {
         name: 'Menu',
@@ -120,56 +121,44 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
              */}
             {categories.map((cat: Category, index: number) => (
                 <List key={index}>
-                    <Paper className={classes.category}>
-                        <ListItem button onClick={() => handleClick(cat)}>
-                            <ListItemText
-                                primary={
-                                    <Box m={1}>
-                                        <Typography style={{ fontWeight: 800, fontSize: 16, letterSpacing: 1 }}>
-                                            {cat.name}
-                                        </Typography>
-                                    </Box>
+                    <ListItem button onClick={() => handleClick(cat)}>
+                        <ListItemText primary={<Typography className={classes.categoryStyle}>{cat.name}</Typography>} />
+                        {cat.open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    <Collapse in={cat.open} timeout="auto" unmountOnExit>
+                        {/**
+                         * Loop through the current category's products, and display each
+                         * underneath their category.
+                         */}
+                        {cat.products.map((product: CategoryProduct, index: number) => (
+                            <ListItem
+                                key={index}
+                                button
+                                className={classes.nested}
+                                selected={selectedProduct === cat.name + ' ' + product.name}
+                                onClick={(event) =>
+                                    handleListItemClick(event, { level: cat.name, product: product.name })
                                 }
-                            />
-                            {cat.open ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                    </Paper>
-                    <Paper>
-                        <Collapse in={cat.open} timeout="auto" unmountOnExit>
-                            {/**
-                             * Loop through the current category's products, and display each
-                             * underneath their category.
-                             */}
-                            {cat.products.map((product: CategoryProduct, index: number) => (
-                                <ListItem
-                                    key={index}
-                                    button
-                                    className={classes.nested}
-                                    selected={selectedProduct === cat.name + ' ' + product.name}
-                                    onClick={(event) =>
-                                        handleListItemClick(event, { level: cat.name, product: product.name })
-                                    }
-                                >
-                                    {/**
-                                     * If there is an icon for this product, display it before the product name
-                                     */}
-                                    {ICON_MAP[product.name] !== undefined && (
-                                        <ListItemIcon>
-                                            <FontAwesomeIcon
-                                                className={
-                                                    selectedProduct === cat.name + ' ' + product.name
-                                                        ? classes.selectedIcon
-                                                        : classes.icon
-                                                }
-                                                icon={ICON_MAP[product.name]}
-                                            />
-                                        </ListItemIcon>
-                                    )}
-                                    <ListItemText primary={product.name} />
-                                </ListItem>
-                            ))}
-                        </Collapse>
-                    </Paper>
+                            >
+                                {/**
+                                 * If there is an icon for this product, display it before the product name
+                                 */}
+                                {ICON_MAP[product.name] !== undefined && (
+                                    <ListItemIcon>
+                                        <FontAwesomeIcon
+                                            className={
+                                                selectedProduct === cat.name + ' ' + product.name
+                                                    ? classes.selectedIcon
+                                                    : classes.icon
+                                            }
+                                            icon={ICON_MAP[product.name]}
+                                        />
+                                    </ListItemIcon>
+                                )}
+                                <ListItemText primary={product.name} />
+                            </ListItem>
+                        ))}
+                    </Collapse>
                 </List>
             ))}
         </div>

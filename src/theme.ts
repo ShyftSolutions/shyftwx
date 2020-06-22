@@ -1,6 +1,6 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
 
-export default createMuiTheme({
+let theme = createMuiTheme({
     palette: {
         primary: {
             light: '#72c3fc',
@@ -10,9 +10,9 @@ export default createMuiTheme({
         },
         secondary: {
             light: '#ffffff',
-            main: '#e9ecef',
+            main: '#F76707',
             dark: '#868e96',
-            contrastText: '#474545'
+            contrastText: '#212529'
         }
     },
     overrides: {
@@ -25,9 +25,9 @@ export default createMuiTheme({
         MuiListItem: {
             root: {
                 '&$selected': {
-                    backgroundColor: '#868e96',
+                    backgroundColor: '#329af0',
                     '&:hover': {
-                        backgroundColor: '#868e96'
+                        backgroundColor: '#329af0'
                     },
                     color: '#f8f9fa'
                 },
@@ -37,11 +37,12 @@ export default createMuiTheme({
             gutters: {
                 paddingLeft: '6px',
                 paddingRight: '6px'
-            }
+            },
         },
         MuiListItemIcon: {
             root: {
-                color: '#000000'
+                color: '#000000',
+                minWidth: 30
             }
         },
         MuiTooltip: {
@@ -52,5 +53,14 @@ export default createMuiTheme({
             }
         }
     },
+
     spacing: 8
 });
+
+const options = {
+    disableAlign: true,
+    factor: 5
+};
+
+theme = responsiveFontSizes(theme, options);
+export default theme;

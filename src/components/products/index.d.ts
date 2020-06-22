@@ -2,6 +2,13 @@
  * Defines the types for the values used in the products file
  */
 
+declare type ProductDrawerProps = {
+    categories: Category[];
+    label?: string;
+    action: (ProductSelectionResponse) => void;
+    window?: () => Window;
+};
+
 declare type ProductSelectorProps = {
     categories: Category[];
     label?: string;
@@ -9,9 +16,9 @@ declare type ProductSelectorProps = {
 };
 
 declare type ProductMenuProps = {
-  options: Category[];
-  action: (product: object) => void;
-}
+    options: Category[];
+    action: (product: object) => void;
+};
 
 declare type Category = {
     name: string;
@@ -27,4 +34,4 @@ declare type CategoryProduct = {
 declare type ProductSelectionResponse = {
     level: string;
     product: string;
-}
+};

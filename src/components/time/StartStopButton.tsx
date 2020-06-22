@@ -5,32 +5,31 @@ import PauseIcon from '@material-ui/icons/Pause';
 import useTimer from '../../hooks/useTimer';
 
 /**
- * Uses Material UI FAB and icon to create a toggle-able play/pause button 
+ * Uses Material UI FAB and icon to create a toggle-able play/pause button
  * with a timer hook to give the button functionality
  */
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
     play: {
         label: 'play',
         boxShadow: theme.shadows[3],
         background: theme.palette.secondary.dark,
         '&:hover': {
-            background: theme.palette.secondary.dark,
+            background: theme.palette.secondary.dark
         },
         resize: 'inherit',
-        maxWidth: '45%',
-        margin: 5
     },
     pause: {
         label: 'pause',
         boxShadow: theme.shadows[3],
         background: theme.palette.secondary.dark,
         '&:hover': {
-            background: theme.palette.secondary.dark,
+            background: theme.palette.secondary.dark
         },
-        resize: 'inherit',
-        maxWidth: '45%',
-        margin: 5
+        resize: 'inherit'
     },
     icon: {
         color: theme.palette.primary.contrastText
@@ -39,9 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 /**
  * Creates two buttons (play and pause) using material ui. When the button is clicked,
- * the button switches to the other button. 'useTimer' hook creates a timer to keep track of 
+ * the button switches to the other button. 'useTimer' hook creates a timer to keep track of
  * whether or not the button is playing/paused, and a useEffect calls onToggle for every new tick
- * 
+ *
  * @param onToggle function to be called when tick changes values
  */
 export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onToggle }) => {
@@ -58,7 +57,7 @@ export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onToggle 
 
     React.useEffect(() => {
         onToggle(isRunning);
-    }, [tick])
+    }, [tick]);
 
     return isRunning ? (
         <Fab onClick={handleClick} className={classes.pause}>

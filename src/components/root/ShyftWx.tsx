@@ -1,7 +1,5 @@
-import { CircularProgress, Grid, MuiThemeProvider, Typography } from '@material-ui/core';
-
+import { CircularProgress, Grid, MuiThemeProvider, Typography, makeStyles } from '@material-ui/core';
 import BaseWxViewer from './../viewers/BaseWxViewer';
-import ImageViewer from './../viewers/ImageViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
 import React from 'react';
@@ -12,12 +10,28 @@ import TimeControl from './../time/TimeControl';
 import ValidTime from '../time/ValidTime';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
+import clsx from 'clsx';
 import moment from 'moment';
 
 export const ShyftContext = React.createContext({});
 
+const drawerWidth = 250;
+
+const useStyles = makeStyles((theme) => ({
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: drawerWidth
+        }
+    }
+}));
+
 export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, customer, themeOverride }) => {
-    
+    const classes = useStyles();
+
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     const [index, setIndex] = React.useState<Index>({ datasets: [] });
@@ -79,7 +93,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             uniqueLevels.forEach((lvl) => {
                 lvl.products.forEach((product) => {
                     product.forecasts = items
-                        .filter((item) => item.level === lvl.name && item.product == product.name) // only look at specific level and product
+                        .filter((item) => item.level === lvl.name && item.product === product.name) // only look at specific level and product
                         .map((item) => {
                             return { hour: item.forecast, image: item.filename };
                         }); // return forecast obj arr
@@ -119,11 +133,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     }, []);
 
     const getSelectedLevel = () => {
-        return index.datasets[0].run.levels.filter((lvl) => lvl.name == selectedLevel)[0];
+        return index.datasets[0].run.levels.filter((lvl) => lvl.name === selectedLevel)[0];
     };
 
     const getSelectedProduct = () => {
-        return getSelectedLevel().products.filter((p) => p.name == selectedProduct)[0];
+        return getSelectedLevel().products.filter((p) => p.name === selectedProduct)[0];
     };
 
     const onProductSelect = (product: ProductSelectionResponse) => {
@@ -154,9 +168,9 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const onSliderNavigationNext = () => {
         const forecasts = getSelectedProduct().forecasts;
         forecasts.sort(compare);
-        let forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+        const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
-        if (forecastIndex + 1 == forecasts.length) {
+        if (forecastIndex + 1 === forecasts.length) {
             setSelectedForecast(forecasts[0].hour);
         } else {
             setSelectedForecast(forecasts[forecastIndex + 1].hour);
@@ -179,39 +193,33 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         value -= +index.datasets[0].run.name;
         const forecasts = getSelectedProduct().forecasts;
         forecasts.sort(compare);
-        let forecastIndex = forecasts.findIndex((f) => +f.hour === +value);
+        const forecastIndex = forecasts.findIndex((f) => +f.hour === +value);
 
         setSelectedForecast(forecasts[forecastIndex].hour);
     };
 
     const onToggleToPlay = (isRunning: boolean) => {
-      const forecasts = getSelectedProduct().forecasts;
-      forecasts.sort(compare);
+        const forecasts = getSelectedProduct().forecasts;
+        forecasts.sort(compare);
 
-      if(!isRunning) {
-        setSelectedForecast(forecasts[0].hour);
-      }
+        if (!isRunning) {
+            setSelectedForecast(forecasts[0].hour);
+        }
 
-      const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+        const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
 
-      if(selectedForecast === forecasts[forecasts.length - 1].hour) {
-        setSelectedForecast(forecasts[0].hour);
-        return;
-
-      } else {
-        setSelectedForecast(forecasts[forecastIndex + 1].hour);
-      }
-    }
-
-    const getOffset = (): React.ReactNode => {
-        return <Grid item xs={3} />;
+        if (selectedForecast === forecasts[forecasts.length - 1].hour) {
+            setSelectedForecast(forecasts[0].hour);
+        } else {
+            setSelectedForecast(forecasts[forecastIndex + 1].hour);
+        }
     };
 
     const getValidTime = () => {
         const validTime = moment
-        .unix(+index.datasets[0].run.name + +selectedForecast)
-        .utc()
-        .format('MM/DD HH:mm[Z]');
+            .unix(+index.datasets[0].run.name + +selectedForecast)
+            .utc()
+            .format('MM/DD HH:mm[Z]');
         return validTime;
     };
 
@@ -227,75 +235,97 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         const selectedProduct = getSelectedProduct();
 
         const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
-            return { name: lvl.name, open: index == 0, products: lvl.products };
+            return { name: lvl.name, open: index === 0, products: lvl.products };
         });
+
         const sliderVals: sliderValueItem[] = selectedProduct.forecasts.map((f) => {
-            return { value: (+f.hour + +index.datasets[0].run.name), label: moment
-                .unix(+f.hour + +index.datasets[0].run.name)
-                .utc()
-                .format('MM/DD HH:mm[Z]')};
+            return {
+                value: +f.hour + +index.datasets[0].run.name,
+                label: moment
+                    .unix(+f.hour + +index.datasets[0].run.name)
+                    .utc()
+                    .format('MM/DD HH:mm[Z]')
+            };
         });
+
         const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
 
         return (
             <React.Fragment>
-                <Grid container item>
-                    <Grid container item>
-                        {getOffset()}
-                        <Grid item xs={2}>
-                            <ModelSelector data-cy="model-selector" options={[index.datasets[0].dataset]} action={() => {}} />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <RegionSelector data-cy="region-selector" options={[index.datasets[0].region.name]} action={() => {}} />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <RunsSelector data-cy="runs-selector" options={[+index.datasets[0].run.name]} action={() => {}} />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <ValidTime data-cy="valid-time" time={getValidTime()} />
-                        </Grid>
-                    </Grid>
-                </Grid>
-
                 {/* Product Menu Grid */}
-                <Grid container item xs={3}>
-                    {/* TODO: icons not coming - theme is maybe wrong?  color of text is off */}
-                    <Grid container item>
-                        <ProductSelector data-cy="product-selector" categories={levelProductVals} action={onProductSelect} />
-                    </Grid>
+                <Grid container>
+                    <ProductSelector
+                        data-cy="product-selector"
+                        categories={levelProductVals}
+                        action={onProductSelect}
+                    />
                 </Grid>
 
-                {/* Viewer/Time Grid */}
-                <Grid container xs={9}>
-                    <Grid container item xs={12}>
-                        <BaseWxViewer data-cy="base-wx-viewer"
-                            layers={activeForecastLayer}
-                            neBounds={[index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax]}
-                            swBounds={[index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]}
-                        />
-                        {/* <ImageViewer data-cy="image-viewer image={activeForecastLayer}/> */}
-                    </Grid>
+                <main className={clsx(classes.content)}>
+                    <div className={classes.toolbar} />
 
-                    <Grid container item xs={12}>
-                        <Grid container item xs={2}>
-                            <TimeControl data-cy="time-control"
-                                onBack={onSliderNavigationBack}
-                                onNext={onSliderNavigationNext}
-                                onToggle={onToggleToPlay}
+                    {/* Model/Region/Run/Valid Menu Grid */}
+                    <Grid container item justify="space-between">
+                        <Grid item xs>
+                            <ModelSelector
+                                data-cy="model-selector"
+                                options={[index.datasets[0].dataset]}
+                                action={() => {}}
                             />
                         </Grid>
-
-                        <Grid item xs={1} />
-
-                        <Grid item xs={9}>
-                            <Slider data-cy="slider"
-                                options={sliderVals}
-                                selected={+selectedForecast + +index.datasets[0].run.name}
-                                action={onSliderNavigation}
+                        <Grid item xs>
+                            <RegionSelector
+                                data-cy="region-selector"
+                                options={[index.datasets[0].region.name]}
+                                action={() => {}}
+                            />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <RunsSelector
+                                data-cy="runs-selector"
+                                options={[+index.datasets[0].run.name]}
+                                action={() => {}}
                             />
                         </Grid>
                     </Grid>
-                </Grid>
+
+                    <Grid item>
+                        <ValidTime time={getValidTime()} />
+                    </Grid>
+
+                    {/* Viewer/Time Grid */}
+                    <Grid container>
+                        <Grid container item xs={12}>
+                            <BaseWxViewer
+                                data-cy="base-wx-viewer"
+                                layers={activeForecastLayer}
+                                neBounds={[index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax]}
+                                swBounds={[index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]}
+                            />
+                            {/* <ImageViewer image={activeForecastLayer}/> */}
+                        </Grid>
+
+                        <Grid container item justify="center">
+                            <Grid item md={3} sm={5} xs={5}>
+                                <TimeControl
+                                    data-cy="time-control"
+                                    onBack={onSliderNavigationBack}
+                                    onNext={onSliderNavigationNext}
+                                    onToggle={onToggleToPlay}
+                                />
+                            </Grid>
+
+                            <Grid item md={9} sm={11} xs={12}>
+                                <Slider
+                                    data-cy="slider"
+                                    options={sliderVals}
+                                    selected={+selectedForecast + +index.datasets[0].run.name}
+                                    action={onSliderNavigation}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </main>
             </React.Fragment>
         );
     };
