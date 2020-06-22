@@ -10,9 +10,9 @@ let theme = createMuiTheme({
         },
         secondary: {
             light: '#ffffff',
-            main: '#e9ecef',
+            main: '#F76707',
             dark: '#868e96',
-            contrastText: '#474545'
+            contrastText: '#212529'
         }
     },
     overrides: {
@@ -25,9 +25,9 @@ let theme = createMuiTheme({
         MuiListItem: {
             root: {
                 '&$selected': {
-                    backgroundColor: '#868e96',
+                    backgroundColor: '#329af0',
                     '&:hover': {
-                        backgroundColor: '#868e96'
+                        backgroundColor: '#329af0'
                     },
                     color: '#f8f9fa'
                 },
@@ -37,7 +37,7 @@ let theme = createMuiTheme({
             gutters: {
                 paddingLeft: '6px',
                 paddingRight: '6px'
-            }
+            },
         },
         MuiListItemIcon: {
             root: {
@@ -51,7 +51,7 @@ let theme = createMuiTheme({
                 color: '#f8f9fa',
                 fontSize: 16
             }
-        },
+        }
     },
 
     spacing: 8

@@ -63,7 +63,9 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ categories, label 
         <div>
             <div className={classes.toolbar} />
             <Divider />
-            <Typography variant="h6">{label}</Typography>
+            <Typography variant="h6">
+                {label}
+            </Typography>
             <ProductMenu options={categories} action={action} />
         </div>
     );

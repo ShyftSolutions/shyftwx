@@ -290,7 +290,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                         </Grid>
 
                         <Grid container item justify="center">
-                            <Grid item sm={3} xs={5}>
+                            <Grid item md={3} sm={5} xs={5}>
                                 <TimeControl
                                     onBack={onSliderNavigationBack}
                                     onNext={onSliderNavigationNext}
@@ -298,7 +298,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 />
                             </Grid>
 
-                            <Grid item sm={9} xs={12}>
+                            <Grid item md={9} sm={11} xs={12}>
                                 <Slider
                                     options={sliderVals}
                                     selected={+selectedForecast + +index.datasets[0].run.name}

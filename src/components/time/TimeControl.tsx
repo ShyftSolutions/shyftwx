@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1
     },
     offset: {
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             display: 'none'
         }
     }
@@ -27,7 +27,7 @@ export const TimeControl: React.FC<TimeControlProps> = ({ onBack, onNext, onTogg
 
     return (
         <div className={classes.root}>
-            <Grid container item direction="row" alignItems="center" justify="center" wrap="nowrap">
+            <Grid container item direction="row" alignItems="center" justify="center" wrap="nowrap" spacing={1}>
                 {/* add space to center time control when screen is small */}
                 <Grid item xs className={classes.offset} />
 
