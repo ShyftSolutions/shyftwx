@@ -16,18 +16,18 @@ const useStyles = makeStyles((theme) => ({
     play: {
         label: 'play',
         boxShadow: theme.shadows[3],
-        background: theme.palette.secondary.dark,
+        background: theme.palette.primary.dark,
         '&:hover': {
-            background: theme.palette.secondary.dark
+            background: theme.palette.primary.dark
         },
-        resize: 'inherit',
+        resize: 'inherit'
     },
     pause: {
         label: 'pause',
         boxShadow: theme.shadows[3],
-        background: theme.palette.secondary.dark,
+        background: theme.palette.primary.dark,
         '&:hover': {
-            background: theme.palette.secondary.dark
+            background: theme.palette.primary.dark
         },
         resize: 'inherit'
     },

@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 800,
         fontSize: 16,
         letterSpacing: 1,
+        paddingLeft: 8,
         color: theme.palette.secondary.main
     },
     nested: {

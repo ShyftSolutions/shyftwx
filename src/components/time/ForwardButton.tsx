@@ -8,24 +8,14 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexShrink: 3
-    },
-    button: {
-        variant: 'contained',
-        size: 'small',
-        backgroundColor: theme.palette.primary.dark,
+        backgroundColor: theme.palette.secondary.light,
+        color: theme.palette.primary.dark,
         boxShadow: theme.shadows[3],
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark
-        },
-        ariaLabel: 'forward',
+        ariaLabel: 'back',
         maxWidth: '100%',
         minWidth: '100%',
         maxHeight: 30,
         minHeight: 15
-    },
-    icon: {
-        color: theme.palette.primary.contrastText
     }
 }));
 
@@ -38,8 +28,8 @@ export const ForwardButton: React.FC<TimeNavigationButtonProps> = ({ action }) =
     const classes = useStyles();
 
     return (
-        <Button onClick={action} className={classes.button}>
-            <NavigateNextIcon className={classes.icon} />
+        <Button onClick={action} className={classes.root} variant="outlined" color="primary">
+            <NavigateNextIcon />
         </Button>
     );
 };

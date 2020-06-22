@@ -20,6 +20,10 @@ let theme = createMuiTheme({
             body2: {
                 fontWeight: 500,
                 fontSize: 16
+            },
+            button: {
+                color: '#FFFFFF',
+                fontWeight: 800
             }
         },
         MuiListItem: {
@@ -37,17 +41,17 @@ let theme = createMuiTheme({
             gutters: {
                 paddingLeft: '6px',
                 paddingRight: '6px'
-            },
+            }
         },
         MuiListItemIcon: {
             root: {
-                color: '#000000',
+                color: '#329af0',
                 minWidth: 30
             }
         },
         MuiTooltip: {
             tooltip: {
-                backgroundColor: '#329af0',
+                backgroundColor: '#F76707',
                 color: '#f8f9fa',
                 fontSize: 16
             }

@@ -6,7 +6,7 @@ import React from 'react';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        maxWidth: '100%'
+        maxWidth: '100%',
     }
 }));
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region' }) => {
     const classes = useStyles();
 
-  const handleClick = (index: string) => {
+    const handleClick = (index: string) => {
         console.log(`clicked ${index}`);
     };
 

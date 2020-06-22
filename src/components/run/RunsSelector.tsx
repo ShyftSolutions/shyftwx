@@ -6,7 +6,7 @@ import moment from 'moment';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        maxWidth: '100%'
+        maxWidth: '100%',
     }
 }));
 
@@ -27,7 +27,7 @@ export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Ru
 
     return (
         /* Run Grid Container */
-        <Grid container item justify="flex-end" className={classes.root} >
+        <Grid container item justify="flex-end" className={classes.root}>
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
                 <GroupedButtons options={newOptions} action={handleClick} />

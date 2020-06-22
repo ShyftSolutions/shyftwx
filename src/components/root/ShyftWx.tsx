@@ -19,7 +19,9 @@ const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
+    [theme.breakpoints.down('xs')]: {
+        toolbar: theme.mixins.toolbar
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -266,35 +268,34 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container item justify="space-between">
-                        <Grid item xs>
+                        <Grid item xs sm={3} md>
                             <ModelSelector
                                 data-cy="model-selector"
                                 options={[index.datasets[0].dataset]}
                                 action={() => {}}
                             />
                         </Grid>
-                        <Grid item xs>
+                        <Grid item xs md>
                             <RegionSelector
                                 data-cy="region-selector"
                                 options={[index.datasets[0].region.name]}
                                 action={() => {}}
                             />
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={6} sm={6} md>
                             <RunsSelector
                                 data-cy="runs-selector"
                                 options={[+index.datasets[0].run.name]}
                                 action={() => {}}
                             />
                         </Grid>
-                    </Grid>
-
-                    <Grid item>
-                        <ValidTime time={getValidTime()} />
+                        <Grid item md>
+                            <ValidTime time={getValidTime()} />
+                        </Grid>
                     </Grid>
 
                     {/* Viewer/Time Grid */}
-                    <Grid container>
+                    <Grid container direction="column" spacing={1}>
                         <Grid container item xs={12}>
                             <BaseWxViewer
                                 data-cy="base-wx-viewer"
