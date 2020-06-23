@@ -41,20 +41,14 @@ var index = {
 var useStyles = core.makeStyles(function (theme) {
   return {
     root: {
-      variant: 'contained',
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark
-      },
       ariaLabel: 'back',
       maxWidth: '100%',
       minWidth: '100%',
       maxHeight: 30,
       minHeight: 15
-    },
-    icon: {
-      color: theme.palette.primary.contrastText
     }
   };
 });
@@ -63,10 +57,10 @@ var BackButton = function BackButton(_ref) {
   var classes = useStyles();
   return /*#__PURE__*/React__default.createElement(Button, {
     onClick: action,
-    className: classes.root
-  }, /*#__PURE__*/React__default.createElement(NavigateBeforeIcon, {
-    className: classes.icon
-  }));
+    className: classes.root,
+    variant: "outlined",
+    color: "primary"
+  }, /*#__PURE__*/React__default.createElement(NavigateBeforeIcon, null));
 };
 
 var useStyles$1 = core.makeStyles(function (theme) {
@@ -110,24 +104,14 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
 var useStyles$2 = core.makeStyles(function (theme) {
   return {
     root: {
-      flexShrink: 3
-    },
-    button: {
-      variant: 'contained',
-      size: 'small',
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.primary.dark,
       boxShadow: theme.shadows[3],
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark
-      },
-      ariaLabel: 'forward',
+      ariaLabel: 'back',
       maxWidth: '100%',
       minWidth: '100%',
       maxHeight: 30,
       minHeight: 15
-    },
-    icon: {
-      color: theme.palette.primary.contrastText
     }
   };
 });
@@ -136,10 +120,10 @@ var ForwardButton = function ForwardButton(_ref) {
   var classes = useStyles$2();
   return /*#__PURE__*/React__default.createElement(core.Button, {
     onClick: action,
-    className: classes.button
-  }, /*#__PURE__*/React__default.createElement(NavigateNextIcon, {
-    className: classes.icon
-  }));
+    className: classes.root,
+    variant: "outlined",
+    color: "primary"
+  }, /*#__PURE__*/React__default.createElement(NavigateNextIcon, null));
 };
 
 var useStyles$3 = core.makeStyles(function (theme) {
@@ -259,6 +243,7 @@ var useStyles$5 = core.makeStyles(function (theme) {
       fontWeight: 800,
       fontSize: 16,
       letterSpacing: 1,
+      paddingLeft: 8,
       color: theme.palette.secondary.main
     },
     nested: {
@@ -343,7 +328,7 @@ var ProductMenu = function ProductMenu(_ref) {
       unmountOnExit: true
     }, cat.products.map(function (product, index) {
       return /*#__PURE__*/React__default.createElement(core.ListItem, {
-        "data-cy": cat.name + ' ' + product.name,
+        "data-cy": cat.name + '-' + product.name,
         key: index,
         button: true,
         className: classes.nested,
@@ -409,7 +394,10 @@ var ProductSelector = function ProductSelector(_ref) {
   var menu = /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement("div", {
     className: classes.toolbar
   }), /*#__PURE__*/React__default.createElement(core.Divider, null), /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
+    variant: "h6",
+    style: {
+      paddingLeft: '6px'
+    }
   }, label), /*#__PURE__*/React__default.createElement(ProductMenu, {
     options: categories,
     action: action
@@ -858,18 +846,18 @@ var useStyles$a = core.makeStyles(function (theme) {
     play: {
       label: 'play',
       boxShadow: theme.shadows[3],
-      background: theme.palette.secondary.dark,
+      background: theme.palette.primary.dark,
       '&:hover': {
-        background: theme.palette.secondary.dark
+        background: theme.palette.primary.dark
       },
       resize: 'inherit'
     },
     pause: {
       label: 'pause',
       boxShadow: theme.shadows[3],
-      background: theme.palette.secondary.dark,
+      background: theme.palette.primary.dark,
       '&:hover': {
-        background: theme.palette.secondary.dark
+        background: theme.palette.primary.dark
       },
       resize: 'inherit'
     },
@@ -972,9 +960,19 @@ var useStyles$c = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
-      maxWidth: '100%'
+      maxWidth: '100%',
+      paddingTop: 5,
+      paddingBottom: 5
+    },
+    style: {
+      fontWeight: 800,
+      fontSize: 16,
+      letterSpacing: 1,
+      paddingLeft: 5,
+      color: theme.palette.primary.contrastText
     },
     paper: {
+      backgroundColor: theme.palette.secondary.main,
       padding: 5
     }
   };
@@ -987,15 +985,17 @@ var ValidTime = function ValidTime(_ref) {
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     direction: "row",
-    justify: "flex-start",
+    justify: "flex-end",
     alignItems: "center"
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
-  }, /*#__PURE__*/React__default.createElement(core.Paper, {
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Paper, {
     className: classes.paper
   }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "body1"
-  }, "Valid Time: ", time)))));
+    variant: "button"
+  }, time)))));
 };
 
 var theme = core.createMuiTheme({
@@ -1018,6 +1018,10 @@ var theme = core.createMuiTheme({
       body2: {
         fontWeight: 500,
         fontSize: 16
+      },
+      button: {
+        color: '#FFFFFF',
+        fontWeight: 800
       }
     },
     MuiListItem: {
@@ -1039,13 +1043,13 @@ var theme = core.createMuiTheme({
     },
     MuiListItemIcon: {
       root: {
-        color: '#000000',
+        color: '#329af0',
         minWidth: 30
       }
     },
     MuiTooltip: {
       tooltip: {
-        backgroundColor: '#329af0',
+        backgroundColor: '#F76707',
         color: '#f8f9fa',
         fontSize: 16
       }
@@ -1104,23 +1108,22 @@ function clsx () {
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
 var useStyles$d = core.makeStyles(function (theme) {
-  var _content;
+  var _content, _ref;
 
-  return {
-    toolbar: theme.mixins.toolbar,
-    content: (_content = {
-      flexGrow: 1,
-      padding: theme.spacing(3)
-    }, _content[theme.breakpoints.up('sm')] = {
-      marginLeft: drawerWidth$1
-    }, _content)
-  };
+  return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
+    toolbar: theme.mixins.toolbar
+  }, _ref.content = (_content = {
+    flexGrow: 1,
+    padding: theme.spacing(3)
+  }, _content[theme.breakpoints.up('sm')] = {
+    marginLeft: drawerWidth$1
+  }, _content), _ref;
 });
-var ShyftWx = function ShyftWx(_ref) {
-  var dataset = _ref.dataset,
-      url = _ref.url,
-      customer = _ref.customer,
-      themeOverride = _ref.themeOverride;
+var ShyftWx = function ShyftWx(_ref2) {
+  var dataset = _ref2.dataset,
+      url = _ref2.url,
+      customer = _ref2.customer,
+      themeOverride = _ref2.themeOverride;
   var classes = useStyles$d();
 
   var _React$useState = React__default.useState(''),
@@ -1396,31 +1399,39 @@ var ShyftWx = function ShyftWx(_ref) {
       justify: "space-between"
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: true
+      xs: true,
+      sm: 3,
+      md: true
     }, /*#__PURE__*/React__default.createElement(ModelSelector, {
       "data-cy": "model-selector",
       options: [index.datasets[0].dataset],
       action: function action() {}
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: true
+      xs: true,
+      md: true
     }, /*#__PURE__*/React__default.createElement(RegionSelector, {
       "data-cy": "region-selector",
       options: [index.datasets[0].region.name],
       action: function action() {}
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
-      xs: 5
+      xs: 6,
+      sm: 6,
+      md: true
     }, /*#__PURE__*/React__default.createElement(RunsSelector, {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
       action: function action() {}
-    }))), /*#__PURE__*/React__default.createElement(core.Grid, {
-      item: true
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      md: true
     }, /*#__PURE__*/React__default.createElement(ValidTime, {
       time: getValidTime()
-    })), /*#__PURE__*/React__default.createElement(core.Grid, {
-      container: true
+    }))), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      direction: "column",
+      spacing: 1
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,

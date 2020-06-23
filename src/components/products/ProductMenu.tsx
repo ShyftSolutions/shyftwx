@@ -133,7 +133,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                          */}
                         {cat.products.map((product: CategoryProduct, index: number) => (
                             <ListItem
-                                data-cy={cat.name + ' ' + product.name}
+                                data-cy={cat.name + '-' + product.name}
                                 key={index}
                                 button
                                 className={classes.nested}
