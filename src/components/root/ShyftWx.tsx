@@ -12,6 +12,7 @@ import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
 import clsx from 'clsx';
 import moment from 'moment';
+import HiddenCss from '@material-ui/core/Hidden/HiddenCss';
 
 export const ShyftContext = React.createContext({});
 

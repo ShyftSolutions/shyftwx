@@ -53,7 +53,11 @@ let theme = createMuiTheme({
             tooltip: {
                 backgroundColor: '#F76707',
                 color: '#f8f9fa',
-                fontSize: 16
+                fontSize: 16,
+                fontWeight: 800
+            },
+            tooltipPlacementBottom: {
+                marginTop: 15
             }
         }
     },

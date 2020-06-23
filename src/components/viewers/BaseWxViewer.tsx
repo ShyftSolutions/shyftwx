@@ -31,7 +31,7 @@ export const BaseWxViewer = ({ layers, neBounds, swBounds }) => {
             dragging={false}
             zoomControl={false}
             scrollWheelZoom={false}
-            doubleClickZoom={false}            
+            doubleClickZoom={false}
             keyboard={false}
             touchZoom={false}
         >

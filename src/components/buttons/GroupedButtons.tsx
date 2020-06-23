@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, makeStyles } from '@material-ui/core'
-import React, { useState } from 'react'
+import { Button, ButtonGroup, makeStyles } from '@material-ui/core';
+import React, { useState } from 'react';
 
 /**
  * GroupedButtons creates a horizontal group of buttons using the Material UI component library.
@@ -9,14 +9,13 @@ const useStyles = makeStyles((theme) => ({
     root: {
         margin: 0,
         boxShadow: theme.shadows[3],
-        maxWidth: '100%',
-
+        maxWidth: '100%'
     },
     defaultButton: {
         backgroundColor: theme.palette.primary.contrastText,
         '&:hover': {
             backgroundColor: theme.palette.secondary.light
-        },
+        }
     },
     selectedButton: {
         backgroundColor: theme.palette.primary.main,
