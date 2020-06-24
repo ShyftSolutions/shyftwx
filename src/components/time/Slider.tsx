@@ -48,12 +48,6 @@ const useStyles = makeStyles((theme) => ({
     mark: {
         backgroundColor: theme.palette.primary.dark,
         height: 5
-    },
-    tooltip: {
-        placement: 'top',
-        [theme.breakpoints.down('sm')]: {
-            placement: 'bottom'
-        }
     }
 }));
 
@@ -77,9 +71,17 @@ function ValueLabelComponent(props: Props) {
 
     return (
         <span>
-            <Tooltip open={open} enterTouchDelay={0} title={validTime}>
-                {children}
-            </Tooltip>
+            <CssBaseline />
+            <Hidden smDown>
+                <Tooltip open={open} enterTouchDelay={0} title={validTime} placement="top">
+                    {children}
+                </Tooltip>
+            </Hidden>
+            <Hidden mdUp>
+                <Tooltip open={open} enterTouchDelay={0} title={validTime} placement="bottom">
+                    {children}
+                </Tooltip>
+            </Hidden>
         </span>
     );
 }

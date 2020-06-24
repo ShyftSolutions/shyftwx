@@ -58,7 +58,7 @@ let theme = createMuiTheme({
             },
             tooltipPlacementBottom: {
                 marginTop: 15
-            }
+            },
         }
     },
 

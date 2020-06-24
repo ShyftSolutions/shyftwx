@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     play: {
-        label: 'play',
+        ariaLabel: 'play',
         boxShadow: theme.shadows[3],
         background: theme.palette.primary.dark,
         '&:hover': {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         resize: 'inherit'
     },
     pause: {
-        label: 'pause',
+        ariaLabel: 'pause',
         boxShadow: theme.shadows[3],
         background: theme.palette.primary.dark,
         '&:hover': {
