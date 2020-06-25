@@ -58,7 +58,12 @@ let theme = createMuiTheme({
             },
             tooltipPlacementBottom: {
                 marginTop: 15
-            },
+            }
+        },
+        MuiSlider: {
+            markLabel: {
+                // transform: 'translateX(-12%)'
+            }
         }
     },
 

@@ -27,9 +27,6 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     active: {},
-    valueLabel: {
-        left: 'calc(-50% + 4px)'
-    },
     rail: {
         height: 5,
         borderRadius: 4
