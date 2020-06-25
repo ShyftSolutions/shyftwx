@@ -11,7 +11,7 @@ import useTimer from '../../hooks/useTimer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     play: {
         ariaLabel: 'play',
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onToggle }) => {
     const classes = useStyles();
     const [tick, isRunning, setIsRunning] = useTimer(600);
+
 
     const handleClick = () => {
         if (isRunning) {

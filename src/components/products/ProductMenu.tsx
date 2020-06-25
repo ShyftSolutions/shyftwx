@@ -1,5 +1,4 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
 import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon, Typography, Box } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -76,7 +75,6 @@ const emptyMenu = [
  */
 export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, action }) => {
     const classes = useStyles();
-
     const [selectedProduct, setSelectedProduct] = React.useState(`${options[0].name} ${options[0].products[0].name}`);
     const [categories, setCategories] = React.useState(options || []);
 

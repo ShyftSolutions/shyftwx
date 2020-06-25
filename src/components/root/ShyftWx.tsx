@@ -12,7 +12,6 @@ import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
 import clsx from 'clsx';
 import moment from 'moment';
-import HiddenCss from '@material-ui/core/Hidden/HiddenCss';
 
 export const ShyftContext = React.createContext({});
 
@@ -207,14 +206,14 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
         if (!isRunning) {
             setSelectedForecast(forecasts[0].hour);
-        }
-
-        const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
-
-        if (selectedForecast === forecasts[forecasts.length - 1].hour) {
-            setSelectedForecast(forecasts[0].hour);
         } else {
-            setSelectedForecast(forecasts[forecastIndex + 1].hour);
+            const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+
+            if (selectedForecast === forecasts[forecasts.length - 1].hour) {
+                setSelectedForecast(forecasts[0].hour);
+            } else {
+                setSelectedForecast(forecasts[forecastIndex + 1].hour);
+            }
         }
     };
 
