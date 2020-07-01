@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) =>
         root: {
             '& > *': {
                 margin: theme.spacing(1),
-                width: '25ch'
+                width: '30ch'
             }
         },
         textField: {
@@ -18,25 +18,41 @@ const useStyles = makeStyles((theme) =>
     })
 );
 
-export const BasicTextField: React.FC<TextFieldProps> = ({ action, label }) => {
+export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, helperText }) => {
     const classes = useStyles();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         action(event.target.value);
     };
 
-    return (
-        <form className={classes.root} noValidate autoComplete="off">
-            <TextField
-                className={classes.textField}
-                id="outlined-basic"
-                label={label}
-                variant="outlined"
-                color="secondary"
-                onChange={handleChange}
-            />
-        </form>
-    );
+    if (state === 'empty') {
+        return (
+            <form className={classes.root} noValidate autoComplete="off">
+                <TextField
+                    error
+                    id="outlined-error"
+                    label={label}
+                    variant="outlined"
+                    onChange={handleChange}
+                    helperText={helperText}
+                />
+            </form>
+        );
+    } else {
+        return (
+            <form className={classes.root} noValidate autoComplete="off">
+                <TextField
+                    className={classes.textField}
+                    id="outlined-basic"
+                    label={label}
+                    variant="outlined"
+                    color="secondary"
+                    onChange={handleChange}
+                    helperText={helperText}
+                />
+            </form>
+        );
+    }
 };
 
 export default BasicTextField;
