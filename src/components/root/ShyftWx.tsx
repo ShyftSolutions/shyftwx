@@ -1,4 +1,4 @@
-import { CircularProgress, Grid, MuiThemeProvider, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Grid, MuiThemeProvider, Typography, makeStyles, Hidden } from '@material-ui/core';
 import BaseWxViewer from './../viewers/BaseWxViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
@@ -267,7 +267,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     <div className={classes.toolbar} />
 
                     {/* Model/Region/Run/Valid Menu Grid */}
-                    <Grid container item justify="space-between">
+                    <Grid container justify="space-between" spacing={1}>
                         <Grid item xs sm={3} md>
                             <ModelSelector
                                 data-cy="model-selector"
@@ -289,9 +289,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 action={() => {}}
                             />
                         </Grid>
-                        <Grid item md>
-                            <ValidTime time={getValidTime()} />
-                        </Grid>
+                        <Hidden xsDown>
+                            <Grid item xs={12} md>
+                                <ValidTime time={getValidTime()} />
+                            </Grid>
+                        </Hidden>
                     </Grid>
 
                     {/* Viewer/Time Grid */}
@@ -325,6 +327,12 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 />
                             </Grid>
                         </Grid>
+
+                        <Hidden smUp>
+                            <Grid item xs={12}>
+                                <ValidTime time={getValidTime()} />
+                            </Grid>
+                        </Hidden>
                     </Grid>
                 </main>
             </React.Fragment>

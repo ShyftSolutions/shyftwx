@@ -19,13 +19,16 @@ const useStyles = makeStyles((theme) => ({
 
 export const LandingPage = (themeOverride) => {
     const classes = useStyles();
-    // const [incorrect, setIncorrect] = React.useState(false);
+    const [incorrect, setIncorrect] = React.useState(false);
     const [customerValue, setCustomerValue] = React.useState('');
     const [datasetValue, setDatasetValue] = React.useState('');
     // https://tqi.shyftwx.com/?customer=5b4daa25-3d9f-4f83-ade4-ee6976b259e1&model=TQIConus
 
     const onClick = () => {
         alert(customerValue + datasetValue);
+        if (customerValue === '' || datasetValue === '') {
+            setIncorrect(true);
+        }
     };
 
     const updateCustomerValue = (input: string) => {

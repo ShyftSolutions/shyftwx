@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography, Paper } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Paper, CssBaseline, Hidden } from '@material-ui/core';
 
 import React from 'react';
 
@@ -9,16 +9,18 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: 5,
         paddingBottom: 5
     },
-    style: {
-        fontWeight: 800,
-        fontSize: 16,
-        letterSpacing: 1,
-        paddingLeft: 5,
-        color: theme.palette.primary.contrastText
-    },
     paper: {
         backgroundColor: theme.palette.secondary.main,
         padding: 5
+    },
+    mobilePaper: {
+        backgroundColor: theme.palette.secondary.light,
+        color: theme.palette.primary.light,
+        border: '1px solid currentColor',
+        padding: 5
+    },
+    text: {
+        color: theme.palette.primary.dark
     }
 }));
 
@@ -32,14 +34,26 @@ export const ValidTime: React.FC<ValidTimeProps> = ({ time }) => {
 
     return (
         <div className={classes.root}>
-            <Grid container direction="row" justify="flex-end" alignItems="center">
-                <Grid item>
-                    <Typography variant="h6">Valid Time</Typography>
-                    <Paper className={classes.paper}>
-                        <Typography variant="button">{time}</Typography>
-                    </Paper>
+            <CssBaseline />
+            <Hidden xsDown>
+                <Grid container direction="row" justify="flex-end" alignItems="center">
+                    <Grid item>
+                        <Typography variant="h6">Valid Time</Typography>
+                        <Paper className={classes.paper}>
+                            <Typography variant="button">{time}</Typography>
+                        </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Hidden>
+            <Hidden smUp>
+                <Paper className={classes.mobilePaper}>
+                    <Grid container item xs={12} justify="center">
+                        <Typography className={classes.text} variant="h6">
+                            {time}
+                        </Typography>
+                    </Grid>
+                </Paper>
+            </Hidden>
         </div>
     );
 };

@@ -146,13 +146,11 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
             <Hidden smUp>
                 <Slider
                     classes={classes}
-                    valueLabelDisplay="on"
                     aria-label="pretty slider"
                     track={false}
                     step={stepValue}
                     marks={options}
                     max={maxValue}
-                    ValueLabelComponent={ValueLabelComponent}
                     onChange={handleChangeCommitted}
                     value={selected}
                     min={minValue}
