@@ -306,7 +306,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             {/* <ImageViewer image={activeForecastLayer}/> */}
                         </Grid>
 
-                        <Grid container item justify="center" alignItems={'center'}>
+                        <Grid container item justify="center" alignItems="center">
                             <Grid item md={3} sm={5} xs={5}>
                                 <TimeControl
                                     data-cy="time-control"

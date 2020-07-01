@@ -17,6 +17,10 @@ let theme = createMuiTheme({
     },
     overrides: {
         MuiTypography: {
+            h1: {
+                fontSize: '1rem',
+                fontWeight: 400,
+            },
             body2: {
                 fontWeight: 500,
                 fontSize: 16
@@ -28,11 +32,8 @@ let theme = createMuiTheme({
         },
         MuiListItem: {
             root: {
-                '&$selected': {
+                '&$selected, &$selected:hover': {
                     backgroundColor: '#329af0',
-                    '&:hover': {
-                        backgroundColor: '#329af0'
-                    },
                     color: '#f8f9fa'
                 },
                 paddingTop: '6px',
@@ -60,11 +61,6 @@ let theme = createMuiTheme({
                 marginTop: 15
             }
         },
-        MuiSlider: {
-            markLabel: {
-                // transform: 'translateX(-12%)'
-            }
-        }
     },
 
     spacing: 8
