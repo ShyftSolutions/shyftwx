@@ -349,7 +349,8 @@ var LandingPage = function LandingPage(themeOverride) {
 
   var checkInput = function checkInput() {
     try {
-      return Promise.resolve(getIndexAsync(window.location.href)).then(function (indexData) {
+      var customerUrl = window.location.href + "/" + customerValue + "/" + datasetValue;
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         if (!indexData || indexData.datasets.length === 0) {
           setIncorrect(true);
         }
@@ -1401,11 +1402,6 @@ var ShyftWx = function ShyftWx(_ref2) {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         function _temp2() {
           setLoading(false);
-        }
-
-        if (!indexData || indexData.datasets.length === 0) {
-          setError('No datasets available.');
-          return;
         }
 
         var i = 0;

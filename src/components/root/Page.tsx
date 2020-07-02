@@ -46,7 +46,8 @@ export const LandingPage = (themeOverride) => {
     };
 
     const checkInput = async () => {
-        const indexData = (await getIndexAsync(window.location.href)) as ShyftIndex;
+        const customerUrl = `${window.location.href}/${customerValue}/${datasetValue}`;
+        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
             setIncorrect(true);
