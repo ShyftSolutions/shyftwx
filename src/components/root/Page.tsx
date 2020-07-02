@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const LandingPage = (themeOverride) => {
+export const LandingPage = (themeOverride, url) => {
     const classes = useStyles();
     const [empty, setEmpty] = React.useState(false);
     const [incorrect, setIncorrect] = React.useState(false);
@@ -30,8 +30,7 @@ export const LandingPage = (themeOverride) => {
         if (customerValue === '' || datasetValue === '') {
             setEmpty(true);
         } else {
-            // checkInput();
-            window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
+            checkInput();
         }
     };
 
@@ -43,9 +42,8 @@ export const LandingPage = (themeOverride) => {
         setDatasetValue(input);
     };
 
-    /*
     const checkInput = async () => {
-        const customerUrl = `${window.location.href}/${customerValue}/${datasetValue}`;
+        const customerUrl = `${url}/${customerValue}/${datasetValue}`;
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
@@ -54,7 +52,6 @@ export const LandingPage = (themeOverride) => {
             window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
         }
     };
-     */
 
     return (
         <Grid

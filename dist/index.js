@@ -311,7 +311,7 @@ var useStyles$7 = core.makeStyles(function (theme) {
     }, _paper)
   };
 });
-var LandingPage = function LandingPage(themeOverride) {
+var LandingPage = function LandingPage(themeOverride, url) {
   var classes = useStyles$7();
 
   var _React$useState = React__default.useState(false),
@@ -319,7 +319,8 @@ var LandingPage = function LandingPage(themeOverride) {
       setEmpty = _React$useState[1];
 
   var _React$useState2 = React__default.useState(false),
-      incorrect = _React$useState2[0];
+      incorrect = _React$useState2[0],
+      setIncorrect = _React$useState2[1];
 
   var _React$useState3 = React__default.useState(''),
       customerValue = _React$useState3[0],
@@ -333,7 +334,7 @@ var LandingPage = function LandingPage(themeOverride) {
     if (customerValue === '' || datasetValue === '') {
       setEmpty(true);
     } else {
-      window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
+      checkInput();
     }
   };
 
@@ -343,6 +344,21 @@ var LandingPage = function LandingPage(themeOverride) {
 
   var updateDatasetValue = function updateDatasetValue(input) {
     setDatasetValue(input);
+  };
+
+  var checkInput = function checkInput() {
+    try {
+      var customerUrl = url + "/" + customerValue + "/" + datasetValue;
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+        if (!indexData || indexData.datasets.length === 0) {
+          setIncorrect(true);
+        } else {
+          window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
+        }
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
   };
 
   return /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -1390,7 +1406,7 @@ var ShyftWx = function ShyftWx(_ref2) {
         }
 
         if (!indexData || indexData.datasets.length === 0) {
-          window.location.href = url;
+          setError('No datasets available.');
           return;
         }
 

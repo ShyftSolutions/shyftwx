@@ -1,2 +1,2 @@
-export declare const LandingPage: (themeOverride: any) => JSX.Element;
+export declare const LandingPage: (themeOverride: any, url: any) => JSX.Element;
 export default LandingPage;

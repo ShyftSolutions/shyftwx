@@ -51,10 +51,9 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
-            window.location.href = url;
+            setError('No datasets available.');
             return;
         }
-
 
         for (let i = 0; i < indexData.datasets.length; i++) {
             const dataset = indexData.datasets[i];
