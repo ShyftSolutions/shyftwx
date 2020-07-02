@@ -41,7 +41,7 @@ export const LandingPage = (themeOverride) => {
         setDatasetValue(input);
     };
 
-    const content = (
+    return (
         <Grid
             container
             spacing={0}
@@ -62,7 +62,9 @@ export const LandingPage = (themeOverride) => {
                     >
                         <Grid item />
                         <Grid container item justify="center">
-                            <Typography color="primary" variant="h5" gutterBottom>Please enter the following:</Typography>
+                            <Typography color="primary" variant="h5" gutterBottom>
+                                Please enter the following:
+                            </Typography>
                         </Grid>
                         <Grid container item alignItems="center" direction="column">
                             <TextField
@@ -92,8 +94,6 @@ export const LandingPage = (themeOverride) => {
             </Grid>
         </Grid>
     );
-
-    return <MuiThemeProvider theme={themeOverride || theme}>{content}</MuiThemeProvider>;
 };
 
 export default LandingPage;

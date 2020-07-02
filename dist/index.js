@@ -298,80 +298,6 @@ var BasicTextField = function BasicTextField(_ref) {
   }
 };
 
-var theme = core.createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#ffffff',
-      main: '#F76707',
-      dark: '#868e96',
-      contrastText: '#212529'
-    }
-  },
-  overrides: {
-    MuiTypography: {
-      h1: {
-        fontSize: '1rem',
-        fontWeight: 400
-      },
-      h5: {
-        fontWeight: 500
-      },
-      body2: {
-        fontWeight: 500,
-        fontSize: 16
-      },
-      button: {
-        color: '#FFFFFF',
-        fontWeight: 800
-      }
-    },
-    MuiListItem: {
-      root: {
-        '&$selected, &$selected:hover, &$selected:focus': {
-          backgroundColor: '#329af0',
-          color: '#f8f9fa'
-        },
-        paddingTop: '6px',
-        paddingBottom: '6px'
-      },
-      gutters: {
-        paddingLeft: '6px',
-        paddingRight: '6px'
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#329af0',
-        minWidth: 30
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#F76707',
-        color: '#f8f9fa',
-        fontSize: 16,
-        fontWeight: 800
-      },
-      tooltipPlacementBottom: {
-        marginTop: 15
-      }
-    }
-  },
-  spacing: 8
-});
-var options = {
-  disableAlign: true,
-  factor: 5
-};
-theme = core.responsiveFontSizes(theme, options);
-var theme$1 = theme;
-
 var useStyles$7 = core.makeStyles(function (theme) {
   var _paper;
 
@@ -419,7 +345,7 @@ var LandingPage = function LandingPage(themeOverride) {
     setDatasetValue(input);
   };
 
-  var content = /*#__PURE__*/React__default.createElement(core.Grid, {
+  return /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     spacing: 0,
     direction: "column",
@@ -478,9 +404,6 @@ var LandingPage = function LandingPage(themeOverride) {
   })), /*#__PURE__*/React__default.createElement(core.Grid, {
     item: true
   })))));
-  return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
-    theme: themeOverride || theme$1
-  }, content);
 };
 
 function _extends() {
@@ -1294,6 +1217,80 @@ var ValidTime = function ValidTime(_ref) {
     variant: "h6"
   }, time)))));
 };
+
+var theme = core.createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#F76707',
+      dark: '#868e96',
+      contrastText: '#212529'
+    }
+  },
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontSize: '1rem',
+        fontWeight: 400
+      },
+      h5: {
+        fontWeight: 500
+      },
+      body2: {
+        fontWeight: 500,
+        fontSize: 16
+      },
+      button: {
+        color: '#FFFFFF',
+        fontWeight: 800
+      }
+    },
+    MuiListItem: {
+      root: {
+        '&$selected, &$selected:hover, &$selected:focus': {
+          backgroundColor: '#329af0',
+          color: '#f8f9fa'
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#329af0',
+        minWidth: 30
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#F76707',
+        color: '#f8f9fa',
+        fontSize: 16,
+        fontWeight: 800
+      },
+      tooltipPlacementBottom: {
+        marginTop: 15
+      }
+    }
+  },
+  spacing: 8
+});
+var options = {
+  disableAlign: true,
+  factor: 5
+};
+theme = core.responsiveFontSizes(theme, options);
+var theme$1 = theme;
 
 function toVal(mix) {
 	var k, y, str='';

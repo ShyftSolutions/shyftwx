@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
-import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, createMuiTheme, responsiveFontSizes, MuiThemeProvider, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, Fab, CircularProgress } from '@material-ui/core';
+import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, Fab, createMuiTheme, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import 'leaflet/dist/leaflet.css';
 import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
 import { latLngBounds } from 'leaflet';
@@ -295,80 +295,6 @@ var BasicTextField = function BasicTextField(_ref) {
   }
 };
 
-var theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#ffffff',
-      main: '#F76707',
-      dark: '#868e96',
-      contrastText: '#212529'
-    }
-  },
-  overrides: {
-    MuiTypography: {
-      h1: {
-        fontSize: '1rem',
-        fontWeight: 400
-      },
-      h5: {
-        fontWeight: 500
-      },
-      body2: {
-        fontWeight: 500,
-        fontSize: 16
-      },
-      button: {
-        color: '#FFFFFF',
-        fontWeight: 800
-      }
-    },
-    MuiListItem: {
-      root: {
-        '&$selected, &$selected:hover, &$selected:focus': {
-          backgroundColor: '#329af0',
-          color: '#f8f9fa'
-        },
-        paddingTop: '6px',
-        paddingBottom: '6px'
-      },
-      gutters: {
-        paddingLeft: '6px',
-        paddingRight: '6px'
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#329af0',
-        minWidth: 30
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#F76707',
-        color: '#f8f9fa',
-        fontSize: 16,
-        fontWeight: 800
-      },
-      tooltipPlacementBottom: {
-        marginTop: 15
-      }
-    }
-  },
-  spacing: 8
-});
-var options = {
-  disableAlign: true,
-  factor: 5
-};
-theme = responsiveFontSizes(theme, options);
-var theme$1 = theme;
-
 var useStyles$7 = makeStyles(function (theme) {
   var _paper;
 
@@ -416,7 +342,7 @@ var LandingPage = function LandingPage(themeOverride) {
     setDatasetValue(input);
   };
 
-  var content = /*#__PURE__*/React.createElement(Grid, {
+  return /*#__PURE__*/React.createElement(Grid, {
     container: true,
     spacing: 0,
     direction: "column",
@@ -475,9 +401,6 @@ var LandingPage = function LandingPage(themeOverride) {
   })), /*#__PURE__*/React.createElement(Grid, {
     item: true
   })))));
-  return /*#__PURE__*/React.createElement(MuiThemeProvider, {
-    theme: themeOverride || theme$1
-  }, content);
 };
 
 function _extends() {
@@ -1291,6 +1214,80 @@ var ValidTime = function ValidTime(_ref) {
     variant: "h6"
   }, time)))));
 };
+
+var theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#F76707',
+      dark: '#868e96',
+      contrastText: '#212529'
+    }
+  },
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontSize: '1rem',
+        fontWeight: 400
+      },
+      h5: {
+        fontWeight: 500
+      },
+      body2: {
+        fontWeight: 500,
+        fontSize: 16
+      },
+      button: {
+        color: '#FFFFFF',
+        fontWeight: 800
+      }
+    },
+    MuiListItem: {
+      root: {
+        '&$selected, &$selected:hover, &$selected:focus': {
+          backgroundColor: '#329af0',
+          color: '#f8f9fa'
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#329af0',
+        minWidth: 30
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#F76707',
+        color: '#f8f9fa',
+        fontSize: 16,
+        fontWeight: 800
+      },
+      tooltipPlacementBottom: {
+        marginTop: 15
+      }
+    }
+  },
+  spacing: 8
+});
+var options = {
+  disableAlign: true,
+  factor: 5
+};
+theme = responsiveFontSizes(theme, options);
+var theme$1 = theme;
 
 function toVal(mix) {
 	var k, y, str='';
