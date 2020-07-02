@@ -19,7 +19,7 @@ let theme = createMuiTheme({
         MuiTypography: {
             h1: {
                 fontSize: '1rem',
-                fontWeight: 400,
+                fontWeight: 400
             },
             h5: {
                 fontWeight: 500
@@ -35,7 +35,7 @@ let theme = createMuiTheme({
         },
         MuiListItem: {
             root: {
-                '&$selected, &$selected:hover': {
+                '&$selected, &$selected:hover, &$selected:focus': {
                     backgroundColor: '#329af0',
                     color: '#f8f9fa'
                 },
@@ -63,7 +63,7 @@ let theme = createMuiTheme({
             tooltipPlacementBottom: {
                 marginTop: 15
             }
-        },
+        }
     },
 
     spacing: 8

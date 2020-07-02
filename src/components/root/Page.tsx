@@ -29,8 +29,7 @@ export const LandingPage = (themeOverride) => {
         if (customerValue === '' || datasetValue === '') {
             setEmpty(true);
         } else {
-            alert(customerValue + datasetValue);
-            setEmpty(false);
+            window.location.href += `/?customer=${customerValue}&model=${datasetValue}`;
         }
     };
 
