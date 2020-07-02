@@ -31,9 +31,6 @@ export const LandingPage = (themeOverride) => {
             setEmpty(true);
         } else {
             checkInput();
-            if (!incorrect) {
-                window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
-            }
         }
     };
 
@@ -51,6 +48,8 @@ export const LandingPage = (themeOverride) => {
 
         if (!indexData || indexData.datasets.length === 0) {
             setIncorrect(true);
+        } else {
+            window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
         }
     };
 

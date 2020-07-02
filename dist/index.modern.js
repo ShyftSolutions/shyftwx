@@ -332,10 +332,6 @@ var LandingPage = function LandingPage(themeOverride) {
       setEmpty(true);
     } else {
       checkInput();
-
-      if (!incorrect) {
-        window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
-      }
     }
   };
 
@@ -353,6 +349,8 @@ var LandingPage = function LandingPage(themeOverride) {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         if (!indexData || indexData.datasets.length === 0) {
           setIncorrect(true);
+        } else {
+          window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
         }
       });
     } catch (e) {
@@ -1402,6 +1400,11 @@ var ShyftWx = function ShyftWx(_ref2) {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         function _temp2() {
           setLoading(false);
+        }
+
+        if (!indexData || indexData.datasets.length === 0) {
+          setError('No datasets available.');
+          return;
         }
 
         var i = 0;
