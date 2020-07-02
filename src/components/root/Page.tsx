@@ -30,7 +30,8 @@ export const LandingPage = (themeOverride) => {
         if (customerValue === '' || datasetValue === '') {
             setEmpty(true);
         } else {
-            checkInput();
+            // checkInput();
+            window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
         }
     };
 
@@ -42,6 +43,7 @@ export const LandingPage = (themeOverride) => {
         setDatasetValue(input);
     };
 
+    /*
     const checkInput = async () => {
         const customerUrl = `${window.location.href}/${customerValue}/${datasetValue}`;
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
@@ -52,6 +54,7 @@ export const LandingPage = (themeOverride) => {
             window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
         }
     };
+     */
 
     return (
         <Grid
