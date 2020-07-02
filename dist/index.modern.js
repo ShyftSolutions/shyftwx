@@ -1719,5 +1719,5 @@ var ShyftWx = function ShyftWx(_ref2) {
   }, generateContent())));
 };
 
-export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, ModelSelector, LandingPage as Page, ProductMenu, ProductSelector, RegionSelector, RunDropdown, ShyftWx, RunsSelector as SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme$1 as theme };
+export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, LandingPage, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunDropdown, ShyftWx, RunsSelector as SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme$1 as theme };
 //# sourceMappingURL=index.modern.js.map
