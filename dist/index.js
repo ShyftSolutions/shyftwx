@@ -9,6 +9,7 @@ require('leaflet/dist/leaflet.css');
 var reactLeaflet = require('react-leaflet');
 var leaflet = require('leaflet');
 var NavigateNextIcon = _interopDefault(require('@material-ui/icons/NavigateNext'));
+var _ = require('@material-ui/core/');
 var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
 var freeSolidSvgIcons = require('@fortawesome/free-solid-svg-icons');
@@ -216,6 +217,272 @@ var ModelSelector = function ModelSelector(_ref) {
   );
 };
 
+var useStyles$5 = core.makeStyles(function (theme) {
+  return core.createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1)
+      }
+    }
+  });
+});
+var BasicButton = function BasicButton(_ref) {
+  var action = _ref.action,
+      _ref$text = _ref.text,
+      text = _ref$text === void 0 ? 'Next' : _ref$text;
+  var classes = useStyles$5();
+  return /*#__PURE__*/React__default.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.Button, {
+    variant: "contained",
+    color: "primary",
+    size: "large",
+    onClick: action
+  }, text));
+};
+
+var useStyles$6 = _.makeStyles(function (theme) {
+  return _.createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+        width: '30ch'
+      }
+    },
+    textField: {
+      '& label.Mui-focused': {
+        color: theme.palette.secondary.main,
+        fontWeight: 700
+      }
+    }
+  });
+});
+var BasicTextField = function BasicTextField(_ref) {
+  var action = _ref.action,
+      label = _ref.label,
+      state = _ref.state,
+      helperText = _ref.helperText;
+  var classes = useStyles$6();
+
+  var handleChange = function handleChange(event) {
+    action(event.target.value);
+  };
+
+  if (state === 'empty') {
+    return /*#__PURE__*/React__default.createElement("form", {
+      className: classes.root,
+      noValidate: true,
+      autoComplete: "off"
+    }, /*#__PURE__*/React__default.createElement(_.TextField, {
+      error: true,
+      id: "outlined-error",
+      label: label,
+      variant: "outlined",
+      onChange: handleChange,
+      helperText: helperText
+    }));
+  } else {
+    return /*#__PURE__*/React__default.createElement("form", {
+      className: classes.root,
+      noValidate: true,
+      autoComplete: "off"
+    }, /*#__PURE__*/React__default.createElement(_.TextField, {
+      className: classes.textField,
+      id: "outlined-basic",
+      label: label,
+      variant: "outlined",
+      color: "secondary",
+      onChange: handleChange,
+      helperText: helperText
+    }));
+  }
+};
+
+var theme = core.createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#F76707',
+      dark: '#868e96',
+      contrastText: '#212529'
+    }
+  },
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontSize: '1rem',
+        fontWeight: 400
+      },
+      h5: {
+        fontWeight: 500
+      },
+      body2: {
+        fontWeight: 500,
+        fontSize: 16
+      },
+      button: {
+        color: '#FFFFFF',
+        fontWeight: 800
+      }
+    },
+    MuiListItem: {
+      root: {
+        '&$selected, &$selected:hover, &$selected:focus': {
+          backgroundColor: '#329af0',
+          color: '#f8f9fa'
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#329af0',
+        minWidth: 30
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#F76707',
+        color: '#f8f9fa',
+        fontSize: 16,
+        fontWeight: 800
+      },
+      tooltipPlacementBottom: {
+        marginTop: 15
+      }
+    }
+  },
+  spacing: 8
+});
+var options = {
+  disableAlign: true,
+  factor: 5
+};
+theme = core.responsiveFontSizes(theme, options);
+var theme$1 = theme;
+
+var useStyles$7 = core.makeStyles(function (theme) {
+  var _paper;
+
+  return {
+    paper: (_paper = {}, _paper[theme.breakpoints.down('sm')] = {
+      minHeight: '40vh',
+      minWidth: '80vw'
+    }, _paper[theme.breakpoints.up('md')] = {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }, _paper)
+  };
+});
+var LandingPage = function LandingPage(themeOverride) {
+  var classes = useStyles$7();
+
+  var _React$useState = React__default.useState(false),
+      empty = _React$useState[0],
+      setEmpty = _React$useState[1];
+
+  var _React$useState2 = React__default.useState(false),
+      incorrect = _React$useState2[0];
+
+  var _React$useState3 = React__default.useState(''),
+      customerValue = _React$useState3[0],
+      setCustomerValue = _React$useState3[1];
+
+  var _React$useState4 = React__default.useState(''),
+      datasetValue = _React$useState4[0],
+      setDatasetValue = _React$useState4[1];
+
+  var onClick = function onClick() {
+    if (customerValue === '' || datasetValue === '') {
+      setEmpty(true);
+    } else {
+      window.location.href += "/?customer=" + customerValue + "&model=" + datasetValue;
+    }
+  };
+
+  var updateCustomerValue = function updateCustomerValue(input) {
+    setCustomerValue(input);
+  };
+
+  var updateDatasetValue = function updateDatasetValue(input) {
+    setDatasetValue(input);
+  };
+
+  var content = /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    spacing: 0,
+    direction: "column",
+    alignItems: "center",
+    justify: "center",
+    style: {
+      minHeight: '80vh'
+    }
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    alignItems: "center"
+  }, /*#__PURE__*/React__default.createElement(core.Paper, {
+    className: classes.paper
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    justify: "space-evenly",
+    spacing: 2,
+    style: {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }), /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    color: "primary",
+    variant: "h5",
+    gutterBottom: true
+  }, "Please enter the following:")), /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    alignItems: "center",
+    direction: "column"
+  }, /*#__PURE__*/React__default.createElement(BasicTextField, {
+    label: "Customer ID",
+    action: updateCustomerValue,
+    state: empty ? 'empty' : incorrect ? 'incorrect' : undefined
+  }), /*#__PURE__*/React__default.createElement(BasicTextField, {
+    label: "Dataset ID",
+    action: updateDatasetValue,
+    state: empty ? 'empty' : incorrect ? 'incorrect' : undefined,
+    helperText: empty ? 'Enter a customer and dataset ID' : incorrect ? 'Customer or dataset ID is incorrect' : ' '
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React__default.createElement(BasicButton, {
+    action: onClick
+  })), /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  })))));
+  return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
+    theme: themeOverride || theme$1
+  }, content);
+};
+
 function _extends() {
   _extends = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -234,7 +501,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var useStyles$5 = core.makeStyles(function (theme) {
+var useStyles$8 = core.makeStyles(function (theme) {
   return {
     root: {
       maxWidth: 300
@@ -279,7 +546,7 @@ var ProductMenu = function ProductMenu(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? emptyMenu : _ref$options,
       action = _ref.action;
-  var classes = useStyles$5();
+  var classes = useStyles$8();
 
   var _React$useState = React__default.useState(options[0].name + " " + options[0].products[0].name),
       selectedProduct = _React$useState[0],
@@ -350,7 +617,7 @@ var ProductMenu = function ProductMenu(_ref) {
 };
 
 var drawerWidth = 250;
-var useStyles$6 = core.makeStyles(function (theme) {
+var useStyles$9 = core.makeStyles(function (theme) {
   var _drawer, _appBar, _menuButton;
 
   return {
@@ -381,7 +648,7 @@ var ProductSelector = function ProductSelector(_ref) {
       label = _ref$label === void 0 ? 'Products' : _ref$label,
       action = _ref.action,
       window = _ref.window;
-  var classes = useStyles$6();
+  var classes = useStyles$9();
 
   var _React$useState = React__default.useState(false),
       mobileOpen = _React$useState[0],
@@ -445,7 +712,7 @@ var ProductSelector = function ProductSelector(_ref) {
   }, menu))));
 };
 
-var useStyles$7 = core.makeStyles(function (theme) {
+var useStyles$a = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -457,7 +724,7 @@ var RegionSelector = function RegionSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Region' : _ref$label;
-  var classes = useStyles$7();
+  var classes = useStyles$a();
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
@@ -481,7 +748,7 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
-var useStyles$8 = core.makeStyles(function (theme) {
+var useStyles$b = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -493,7 +760,7 @@ var RunsSelector = function RunsSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Runs' : _ref$label;
-  var classes = useStyles$8();
+  var classes = useStyles$b();
 
   var handleClick = function handleClick(index) {
     console.log("clicked " + index);
@@ -706,8 +973,8 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$9 = styles.makeStyles(function (theme) {
-  var _markLabel, _tooltip;
+var useStyles$c = styles.makeStyles(function (theme) {
+  var _markLabel;
 
   return {
     root: {
@@ -726,9 +993,6 @@ var useStyles$9 = styles.makeStyles(function (theme) {
       }
     },
     active: {},
-    valueLabel: {
-      left: 'calc(-50% + 4px)'
-    },
     rail: {
       height: 5,
       borderRadius: 4
@@ -746,12 +1010,7 @@ var useStyles$9 = styles.makeStyles(function (theme) {
     mark: {
       backgroundColor: theme.palette.primary.dark,
       height: 5
-    },
-    tooltip: (_tooltip = {
-      placement: 'top'
-    }, _tooltip[theme.breakpoints.down('sm')] = {
-      placement: 'bottom'
-    }, _tooltip)
+    }
   };
 });
 
@@ -760,11 +1019,21 @@ function ValueLabelComponent(props) {
       open = props.open,
       value = props.value;
   var validTime = moment.unix(value).utc().format('MM/DD HH:mm[Z]');
-  return /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement(Tooltip, {
+  return /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    smDown: true
+  }, /*#__PURE__*/React__default.createElement(Tooltip, {
     open: open,
     enterTouchDelay: 0,
-    title: validTime
-  }, children));
+    title: validTime,
+    placement: "top"
+  }, children)), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    mdUp: true
+  }, /*#__PURE__*/React__default.createElement(Tooltip, {
+    open: open,
+    enterTouchDelay: 0,
+    title: validTime,
+    placement: "bottom"
+  }, children)));
 }
 
 var compare = function compare(a, b) {
@@ -785,10 +1054,9 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$9();
+  var classes = useStyles$c();
   options.sort(compare);
   var stepValue = options[1].value - options[0].value;
-  var defaultValue = options[0].value;
   var maxValue = options[options.length - 1].value;
   var minValue = options[0].value;
 
@@ -798,6 +1066,8 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
 
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    xsDown: true
   }, /*#__PURE__*/React__default.createElement(Slider, {
     classes: classes,
     valueLabelDisplay: "auto",
@@ -805,13 +1075,24 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     track: false,
     step: stepValue,
     marks: options,
-    defaultValue: defaultValue,
     max: maxValue,
     ValueLabelComponent: ValueLabelComponent,
     onChange: handleChangeCommitted,
     value: selected,
     min: minValue
-  }));
+  })), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    smUp: true
+  }, /*#__PURE__*/React__default.createElement(Slider, {
+    classes: classes,
+    "aria-label": "pretty slider",
+    track: false,
+    step: stepValue,
+    marks: options,
+    max: maxValue,
+    onChange: handleChangeCommitted,
+    value: selected,
+    min: minValue
+  })));
 };
 
 var useTimer = function useTimer(interval) {
@@ -838,13 +1119,13 @@ var useTimer = function useTimer(interval) {
   return [ticks, isRunning, setIsRunning];
 };
 
-var useStyles$a = core.makeStyles(function (theme) {
+var useStyles$d = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1
     },
     play: {
-      label: 'play',
+      ariaLabel: 'play',
       boxShadow: theme.shadows[3],
       background: theme.palette.primary.dark,
       '&:hover': {
@@ -853,7 +1134,7 @@ var useStyles$a = core.makeStyles(function (theme) {
       resize: 'inherit'
     },
     pause: {
-      label: 'pause',
+      ariaLabel: 'pause',
       boxShadow: theme.shadows[3],
       background: theme.palette.primary.dark,
       '&:hover': {
@@ -868,7 +1149,7 @@ var useStyles$a = core.makeStyles(function (theme) {
 });
 var StartStopButton = function StartStopButton(_ref) {
   var onToggle = _ref.onToggle;
-  var classes = useStyles$a();
+  var classes = useStyles$d();
 
   var _useTimer = useTimer(600),
       tick = _useTimer[0],
@@ -899,7 +1180,7 @@ var StartStopButton = function StartStopButton(_ref) {
   }));
 };
 
-var useStyles$b = core.makeStyles(function (theme) {
+var useStyles$e = core.makeStyles(function (theme) {
   var _offset;
 
   return {
@@ -915,7 +1196,7 @@ var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
       onToggle = _ref.onToggle;
-  var classes = useStyles$b();
+  var classes = useStyles$e();
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -956,7 +1237,7 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
-var useStyles$c = core.makeStyles(function (theme) {
+var useStyles$f = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -964,24 +1245,28 @@ var useStyles$c = core.makeStyles(function (theme) {
       paddingTop: 5,
       paddingBottom: 5
     },
-    style: {
-      fontWeight: 800,
-      fontSize: 16,
-      letterSpacing: 1,
-      paddingLeft: 5,
-      color: theme.palette.primary.contrastText
-    },
     paper: {
       backgroundColor: theme.palette.secondary.main,
       padding: 5
+    },
+    mobilePaper: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.primary.light,
+      border: '1px solid currentColor',
+      padding: 5
+    },
+    text: {
+      color: theme.palette.primary.dark
     }
   };
 });
 var ValidTime = function ValidTime(_ref) {
   var time = _ref.time;
-  var classes = useStyles$c();
+  var classes = useStyles$f();
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    xsDown: true
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     direction: "row",
@@ -995,111 +1280,54 @@ var ValidTime = function ValidTime(_ref) {
     className: classes.paper
   }, /*#__PURE__*/React__default.createElement(core.Typography, {
     variant: "button"
+  }, time))))), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    smUp: true
+  }, /*#__PURE__*/React__default.createElement(core.Paper, {
+    className: classes.mobilePaper
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    xs: 12,
+    justify: "center"
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    className: classes.text,
+    variant: "h6"
   }, time)))));
 };
 
-var theme = core.createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#ffffff',
-      main: '#F76707',
-      dark: '#868e96',
-      contrastText: '#212529'
-    }
-  },
-  overrides: {
-    MuiTypography: {
-      body2: {
-        fontWeight: 500,
-        fontSize: 16
-      },
-      button: {
-        color: '#FFFFFF',
-        fontWeight: 800
-      }
-    },
-    MuiListItem: {
-      root: {
-        '&$selected': {
-          backgroundColor: '#329af0',
-          '&:hover': {
-            backgroundColor: '#329af0'
-          },
-          color: '#f8f9fa'
-        },
-        paddingTop: '6px',
-        paddingBottom: '6px'
-      },
-      gutters: {
-        paddingLeft: '6px',
-        paddingRight: '6px'
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#329af0',
-        minWidth: 30
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#F76707',
-        color: '#f8f9fa',
-        fontSize: 16
-      }
-    }
-  },
-  spacing: 8
-});
-var options = {
-  disableAlign: true,
-  factor: 5
-};
-theme = core.responsiveFontSizes(theme, options);
-var theme$1 = theme;
-
 function toVal(mix) {
 	var k, y, str='';
-
-	if (typeof mix === 'string' || typeof mix === 'number') {
-		str += mix;
-	} else if (typeof mix === 'object') {
-		if (Array.isArray(mix)) {
-			for (k=0; k < mix.length; k++) {
-				if (mix[k]) {
-					if (y = toVal(mix[k])) {
+	if (mix) {
+		if (typeof mix === 'object') {
+			if (Array.isArray(mix)) {
+				for (k=0; k < mix.length; k++) {
+					if (mix[k] && (y = toVal(mix[k]))) {
+						str && (str += ' ');
+						str += y;
+					}
+				}
+			} else {
+				for (k in mix) {
+					if (mix[k] && (y = toVal(k))) {
 						str && (str += ' ');
 						str += y;
 					}
 				}
 			}
-		} else {
-			for (k in mix) {
-				if (mix[k]) {
-					str && (str += ' ');
-					str += k;
-				}
-			}
+		} else if (typeof mix !== 'boolean' && !mix.call) {
+			str && (str += ' ');
+			str += mix;
 		}
 	}
-
 	return str;
 }
 
 function clsx () {
-	var i=0, tmp, x, str='';
+	var i=0, x, str='';
 	while (i < arguments.length) {
-		if (tmp = arguments[i++]) {
-			if (x = toVal(tmp)) {
-				str && (str += ' ');
-				str += x;
-			}
+		if (x = toVal(arguments[i++])) {
+			str && (str += ' ');
+			str += x;
 		}
 	}
 	return str;
@@ -1107,7 +1335,7 @@ function clsx () {
 
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
-var useStyles$d = core.makeStyles(function (theme) {
+var useStyles$g = core.makeStyles(function (theme) {
   var _content, _ref;
 
   return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
@@ -1124,7 +1352,7 @@ var ShyftWx = function ShyftWx(_ref2) {
       url = _ref2.url,
       customer = _ref2.customer,
       themeOverride = _ref2.themeOverride;
-  var classes = useStyles$d();
+  var classes = useStyles$g();
 
   var _React$useState = React__default.useState(''),
       error = _React$useState[0],
@@ -1337,16 +1565,16 @@ var ShyftWx = function ShyftWx(_ref2) {
 
     if (!isRunning) {
       setSelectedForecast(forecasts[0].hour);
-    }
-
-    var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === selectedForecast;
-    });
-
-    if (selectedForecast === forecasts[forecasts.length - 1].hour) {
-      setSelectedForecast(forecasts[0].hour);
     } else {
-      setSelectedForecast(forecasts[forecastIndex + 1].hour);
+      var forecastIndex = forecasts.findIndex(function (f) {
+        return f.hour === selectedForecast;
+      });
+
+      if (selectedForecast === forecasts[forecasts.length - 1].hour) {
+        setSelectedForecast(forecasts[0].hour);
+      } else {
+        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+      }
     }
   };
 
@@ -1395,8 +1623,8 @@ var ShyftWx = function ShyftWx(_ref2) {
       className: classes.toolbar
     }), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
-      item: true,
-      justify: "space-between"
+      justify: "space-between",
+      spacing: 1
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
       xs: true,
@@ -1423,12 +1651,15 @@ var ShyftWx = function ShyftWx(_ref2) {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
       action: function action() {}
-    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+    })), /*#__PURE__*/React__default.createElement(core.Hidden, {
+      xsDown: true
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
+      xs: 12,
       md: true
     }, /*#__PURE__*/React__default.createElement(ValidTime, {
       time: getValidTime()
-    }))), /*#__PURE__*/React__default.createElement(core.Grid, {
+    })))), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       direction: "column",
       spacing: 1
@@ -1444,7 +1675,8 @@ var ShyftWx = function ShyftWx(_ref2) {
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,
-      justify: "center"
+      justify: "center",
+      alignItems: "center"
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
       item: true,
       md: 3,
@@ -1465,6 +1697,13 @@ var ShyftWx = function ShyftWx(_ref2) {
       options: sliderVals,
       selected: +selectedForecast + +index.datasets[0].run.name,
       action: onSliderNavigation
+    }))), /*#__PURE__*/React__default.createElement(core.Hidden, {
+      smUp: true
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React__default.createElement(ValidTime, {
+      time: getValidTime()
     }))))));
   };
 
@@ -1477,7 +1716,7 @@ var ShyftWx = function ShyftWx(_ref2) {
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     direction: "row",
-    justify: "flex-end",
+    justify: "center",
     alignItems: "flex-start",
     spacing: 3
   }, generateContent())));
@@ -1488,6 +1727,7 @@ exports.BaseWxViewer = BaseWxViewer;
 exports.ForwardButton = ForwardButton;
 exports.GroupedButtons = GroupedButtons;
 exports.ModelSelector = ModelSelector;
+exports.Page = LandingPage;
 exports.ProductMenu = ProductMenu;
 exports.ProductSelector = ProductSelector;
 exports.RegionSelector = RegionSelector;
