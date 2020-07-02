@@ -1,2 +1,3 @@
-export declare const LandingPage: (themeOverride: any, url: any) => JSX.Element;
+import React from 'react';
+export declare const LandingPage: React.FC<LandingPageProps>;
 export default LandingPage;

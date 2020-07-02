@@ -308,7 +308,7 @@ var useStyles$7 = makeStyles(function (theme) {
     }, _paper)
   };
 });
-var LandingPage = function LandingPage(themeOverride, url) {
+var LandingPage = function LandingPage(themeOverride) {
   var classes = useStyles$7();
 
   var _React$useState = React.useState(false),
@@ -330,7 +330,7 @@ var LandingPage = function LandingPage(themeOverride, url) {
     if (customerValue === '' || datasetValue === '') {
       setEmpty(true);
     } else {
-      window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
+      window.location.href += "customer=" + customerValue + "&model=" + datasetValue;
     }
   };
 
