@@ -316,8 +316,7 @@ var LandingPage = function LandingPage(themeOverride, url) {
       setEmpty = _React$useState[1];
 
   var _React$useState2 = React.useState(false),
-      incorrect = _React$useState2[0],
-      setIncorrect = _React$useState2[1];
+      incorrect = _React$useState2[0];
 
   var _React$useState3 = React.useState(''),
       customerValue = _React$useState3[0],
@@ -331,7 +330,7 @@ var LandingPage = function LandingPage(themeOverride, url) {
     if (customerValue === '' || datasetValue === '') {
       setEmpty(true);
     } else {
-      checkInput();
+      window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
     }
   };
 
@@ -341,21 +340,6 @@ var LandingPage = function LandingPage(themeOverride, url) {
 
   var updateDatasetValue = function updateDatasetValue(input) {
     setDatasetValue(input);
-  };
-
-  var checkInput = function checkInput() {
-    try {
-      var customerUrl = url + "/" + customerValue + "/" + datasetValue;
-      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        if (!indexData || indexData.datasets.length === 0) {
-          setIncorrect(true);
-        } else {
-          window.location.href += "?customer=" + customerValue + "&model=" + datasetValue;
-        }
-      });
-    } catch (e) {
-      return Promise.reject(e);
-    }
   };
 
   return /*#__PURE__*/React.createElement(Grid, {

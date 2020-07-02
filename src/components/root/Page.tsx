@@ -3,7 +3,6 @@ import BasicButton from './../buttons/BasicButton';
 import TextField from './../textfield/TextField';
 import { Paper, Grid, Typography, MuiThemeProvider, makeStyles } from '@material-ui/core';
 import theme from '../../theme';
-import { getIndexAsync } from '../../apis';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -30,7 +29,7 @@ export const LandingPage = (themeOverride, url) => {
         if (customerValue === '' || datasetValue === '') {
             setEmpty(true);
         } else {
-            checkInput();
+            window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
         }
     };
 
@@ -40,17 +39,6 @@ export const LandingPage = (themeOverride, url) => {
 
     const updateDatasetValue = (input: string) => {
         setDatasetValue(input);
-    };
-
-    const checkInput = async () => {
-        const customerUrl = `${url}/${customerValue}/${datasetValue}`;
-        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
-
-        if (!indexData || indexData.datasets.length === 0) {
-            setIncorrect(true);
-        } else {
-            window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
-        }
     };
 
     return (
