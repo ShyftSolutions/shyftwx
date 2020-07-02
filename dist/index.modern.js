@@ -305,10 +305,13 @@ var useStyles$7 = makeStyles(function (theme) {
     }, _paper[theme.breakpoints.up('md')] = {
       minHeight: '40vh',
       minWidth: '40vw'
-    }, _paper)
+    }, _paper),
+    text: {
+      color: theme.palette.secondary.contrastText
+    }
   };
 });
-var LandingPage = function LandingPage(themeOverride) {
+var LandingPage = function LandingPage() {
   var classes = useStyles$7();
 
   var _React$useState = React.useState(false),
@@ -330,7 +333,7 @@ var LandingPage = function LandingPage(themeOverride) {
     if (customerValue === '' || datasetValue === '') {
       setEmpty(true);
     } else {
-      window.location.href += "customer=" + customerValue + "&model=" + datasetValue;
+      window.location.href += "/?customer=" + customerValue + "&model=" + datasetValue;
     }
   };
 
@@ -375,7 +378,7 @@ var LandingPage = function LandingPage(themeOverride) {
     item: true,
     justify: "center"
   }, /*#__PURE__*/React.createElement(Typography, {
-    color: "primary",
+    className: classes.text,
     variant: "h5",
     gutterBottom: true
   }, "Please enter the following:")), /*#__PURE__*/React.createElement(Grid, {
@@ -438,7 +441,9 @@ var useStyles$8 = makeStyles(function (theme) {
       color: theme.palette.secondary.contrastText
     },
     icon: {},
-    selectedIcon: {
+    text: {},
+    selected: {
+      fontWeight: 600,
       color: theme.palette.primary.contrastText
     }
   };
@@ -527,10 +532,12 @@ var ProductMenu = function ProductMenu(_ref) {
           });
         }
       }, ICON_MAP[product.name] !== undefined && /*#__PURE__*/React.createElement(ListItemIcon, null, /*#__PURE__*/React.createElement(FontAwesomeIcon, {
-        className: selectedProduct === cat.name + ' ' + product.name ? classes.selectedIcon : classes.icon,
+        className: selectedProduct === cat.name + ' ' + product.name ? classes.selected : classes.icon,
         icon: ICON_MAP[product.name]
       })), /*#__PURE__*/React.createElement(ListItemText, {
-        primary: product.name
+        primary: /*#__PURE__*/React.createElement(Typography, {
+          className: selectedProduct === cat.name + ' ' + product.name ? classes.selected : classes.text
+        }, product.name)
       }));
     })));
   }));
@@ -1250,7 +1257,7 @@ var theme = createMuiTheme({
     },
     MuiListItem: {
       root: {
-        '&$selected, &$selected:hover, &$selected:focus': {
+        '&$selected, &$selected:hover': {
           backgroundColor: '#329af0',
           color: '#f8f9fa'
         },

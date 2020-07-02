@@ -72,7 +72,3 @@ declare type DatasetRegionRun = {
 declare type Index = {
     datasets: DatasetRegionRun[];
 };
-
-declare type LandingPageProps = {
-    themeOverride?: Theme;
-};

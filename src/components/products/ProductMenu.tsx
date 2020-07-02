@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon, Typography, Box } from '@material-ui/core';
+import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon, Typography } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -17,10 +17,12 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.secondary.contrastText,
+        color: theme.palette.secondary.contrastText
     },
     icon: {},
-    selectedIcon: {
+    text: {},
+    selected: {
+        fontWeight: 600,
         color: theme.palette.primary.contrastText
     }
 }));
@@ -148,14 +150,26 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                                         <FontAwesomeIcon
                                             className={
                                                 selectedProduct === cat.name + ' ' + product.name
-                                                    ? classes.selectedIcon
+                                                    ? classes.selected
                                                     : classes.icon
                                             }
                                             icon={ICON_MAP[product.name]}
                                         />
                                     </ListItemIcon>
                                 )}
-                                <ListItemText primary={product.name} />
+                                <ListItemText
+                                    primary={
+                                        <Typography
+                                            className={
+                                                selectedProduct === cat.name + ' ' + product.name
+                                                    ? classes.selected
+                                                    : classes.text
+                                            }
+                                        >
+                                            {product.name}
+                                        </Typography>
+                                    }
+                                />
                             </ListItem>
                         ))}
                     </Collapse>

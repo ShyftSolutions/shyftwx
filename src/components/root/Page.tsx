@@ -1,8 +1,7 @@
 import React from 'react';
 import BasicButton from './../buttons/BasicButton';
 import TextField from './../textfield/TextField';
-import { Paper, Grid, Typography, MuiThemeProvider, makeStyles } from '@material-ui/core';
-import theme from '../../theme';
+import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -14,10 +13,13 @@ const useStyles = makeStyles((theme) => ({
             minHeight: '40vh',
             minWidth: '40vw'
         }
+    },
+    text: {
+        color: theme.palette.secondary.contrastText
     }
 }));
 
-export const LandingPage: React.FC<LandingPageProps> = (themeOverride) => {
+export const LandingPage = () => {
     const classes = useStyles();
     const [empty, setEmpty] = React.useState(false);
     const [incorrect, setIncorrect] = React.useState(false);
@@ -29,7 +31,7 @@ export const LandingPage: React.FC<LandingPageProps> = (themeOverride) => {
         if (customerValue === '' || datasetValue === '') {
             setEmpty(true);
         } else {
-            window.location.href += `customer=${customerValue}&model=${datasetValue}`;
+            window.location.href += `/?customer=${customerValue}&model=${datasetValue}`;
         }
     };
 
@@ -62,7 +64,7 @@ export const LandingPage: React.FC<LandingPageProps> = (themeOverride) => {
                     >
                         <Grid item />
                         <Grid container item justify="center">
-                            <Typography color="primary" variant="h5" gutterBottom>
+                            <Typography className={classes.text} variant="h5" gutterBottom>
                                 Please enter the following:
                             </Typography>
                         </Grid>

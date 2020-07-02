@@ -1,3 +1,2 @@
-import React from 'react';
-export declare const LandingPage: React.FC<LandingPageProps>;
+export declare const LandingPage: () => JSX.Element;
 export default LandingPage;
