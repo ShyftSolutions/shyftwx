@@ -75,5 +75,4 @@ declare type Index = {
 
 declare type LandingPageProps = {
     themeOverride?: Theme;
-    url: string;
 };

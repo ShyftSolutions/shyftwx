@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const LandingPage = (themeOverride, url) => {
+export const LandingPage: React.FC<LandingPageProps> = (themeOverride) => {
     const classes = useStyles();
     const [empty, setEmpty] = React.useState(false);
     const [incorrect, setIncorrect] = React.useState(false);
@@ -29,7 +29,7 @@ export const LandingPage = (themeOverride, url) => {
         if (customerValue === '' || datasetValue === '') {
             setEmpty(true);
         } else {
-            window.location.href += `?customer=${customerValue}&model=${datasetValue}`;
+            window.location.href += `customer=${customerValue}&model=${datasetValue}`;
         }
     };
 
