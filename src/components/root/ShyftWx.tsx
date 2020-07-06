@@ -228,7 +228,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
     const generateContent = (): React.ReactNode => {
         if (landingPage) {
-            return <LandingPage url={url}/>;
+            return <LandingPage url={url} />;
         }
 
         if (loading) {

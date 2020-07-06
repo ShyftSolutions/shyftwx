@@ -248,7 +248,7 @@ var useStyles$6 = makeStyles$1(function (theme) {
     },
     textField: {
       '& label.Mui-focused': {
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
         fontWeight: 700
       }
     }
@@ -258,15 +258,28 @@ var BasicTextField = function BasicTextField(_ref) {
   var action = _ref.action,
       label = _ref.label,
       state = _ref.state,
-      helperText = _ref.helperText;
+      value = _ref.value;
   var classes = useStyles$6();
 
   var handleChange = function handleChange(event) {
     action(event.target.value);
   };
 
-  if (state === 'empty') {
-    return /*#__PURE__*/React.createElement("form", {
+  var textFieldStates = {
+    initial: /*#__PURE__*/React.createElement("form", {
+      className: classes.root,
+      noValidate: true,
+      autoComplete: "off"
+    }, /*#__PURE__*/React.createElement(TextField, {
+      className: classes.textField,
+      id: "outlined-basic",
+      label: label,
+      variant: "outlined",
+      color: "primary",
+      onChange: handleChange,
+      helperText: ' '
+    })),
+    empty: /*#__PURE__*/React.createElement("form", {
       className: classes.root,
       noValidate: true,
       autoComplete: "off"
@@ -276,10 +289,9 @@ var BasicTextField = function BasicTextField(_ref) {
       label: label,
       variant: "outlined",
       onChange: handleChange,
-      helperText: helperText
-    }));
-  } else {
-    return /*#__PURE__*/React.createElement("form", {
+      helperText: "Enter a " + label
+    })),
+    edit: /*#__PURE__*/React.createElement("form", {
       className: classes.root,
       noValidate: true,
       autoComplete: "off"
@@ -287,12 +299,27 @@ var BasicTextField = function BasicTextField(_ref) {
       className: classes.textField,
       id: "outlined-basic",
       label: label,
+      defaultValue: value,
       variant: "outlined",
-      color: "secondary",
+      color: "primary",
       onChange: handleChange,
-      helperText: helperText
-    }));
-  }
+      helperText: ' '
+    })),
+    invalid: /*#__PURE__*/React.createElement("form", {
+      className: classes.root,
+      noValidate: true,
+      autoComplete: "off"
+    }, /*#__PURE__*/React.createElement(TextField, {
+      error: true,
+      id: "outlined-error",
+      label: label,
+      defaultValue: value,
+      variant: "outlined",
+      onChange: handleChange,
+      helperText: "Enter a " + label
+    }))
+  };
+  return textFieldStates[state];
 };
 
 var useStyles$7 = makeStyles(function (theme) {
@@ -306,46 +333,156 @@ var useStyles$7 = makeStyles(function (theme) {
       minHeight: '40vh',
       minWidth: '40vw'
     }, _paper),
+    textPaper: {
+      paddingTop: 20
+    },
     text: {
       color: theme.palette.secondary.contrastText
+    },
+    subtitle: {
+      color: theme.palette.secondary.dark
     }
   };
 });
-var LandingPage = function LandingPage() {
+var LandingPage = function LandingPage(_ref) {
+  var url = _ref.url;
   var classes = useStyles$7();
 
-  var _React$useState = React.useState(false),
-      empty = _React$useState[0],
-      setEmpty = _React$useState[1];
+  var _React$useState = React.useState(''),
+      customerInput = _React$useState[0],
+      setCustomerInput = _React$useState[1];
 
-  var _React$useState2 = React.useState(false),
-      incorrect = _React$useState2[0];
+  var _React$useState2 = React.useState('initial'),
+      customerInputState = _React$useState2[0],
+      setCustomerState = _React$useState2[1];
 
   var _React$useState3 = React.useState(''),
-      customerValue = _React$useState3[0],
-      setCustomerValue = _React$useState3[1];
+      datasetInput = _React$useState3[0],
+      setDatasetInput = _React$useState3[1];
 
-  var _React$useState4 = React.useState(''),
-      datasetValue = _React$useState4[0],
-      setDatasetValue = _React$useState4[1];
+  var _React$useState4 = React.useState('initial'),
+      datasetInputState = _React$useState4[0],
+      setDatasetInputState = _React$useState4[1];
 
-  var onClick = function onClick() {
-    if (customerValue === '' || datasetValue === '') {
-      setEmpty(true);
+  var _React$useState5 = React.useState('customer'),
+      content = _React$useState5[0],
+      setContent = _React$useState5[1];
+
+  var redirect = function redirect() {
+    if (customerInput === '') {
+      setDatasetInputState('empty');
     } else {
-      window.location.href += "/?customer=" + customerValue + "&model=" + datasetValue;
+      window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
+    }
+  };
+
+  var clickBack = function clickBack() {
+    setContent('customer');
+    setCustomerState('edit');
+  };
+
+  var clickNext = function clickNext() {
+    if (customerInput === '') {
+      setCustomerState('empty');
+    }
+
+    checkCustomerId();
+
+    if (customerInputState === 'valid') {
+      setContent('dataset');
+    }
+  };
+
+  var checkCustomerId = function checkCustomerId() {
+    try {
+      var customerUrl = url + "/" + customerInput;
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+        console.log(indexData);
+
+        if (!indexData || indexData.datasets.length === 0) {
+          setCustomerState('invalid');
+        } else {
+          setCustomerState('valid');
+        }
+      });
+    } catch (e) {
+      return Promise.reject(e);
     }
   };
 
   var updateCustomerValue = function updateCustomerValue(input) {
-    setCustomerValue(input);
+    setCustomerInput(input);
   };
 
   var updateDatasetValue = function updateDatasetValue(input) {
-    setDatasetValue(input);
+    setDatasetInput(input);
   };
 
-  return /*#__PURE__*/React.createElement(Grid, {
+  var customerContent = /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.textPaper,
+    elevation: 0
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Enter your customer ID:"))), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    alignItems: "center",
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(BasicTextField, {
+    label: "Customer ID",
+    action: updateCustomerValue,
+    state: customerInputState,
+    value: customerInput
+  })), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(BasicButton, {
+    action: clickNext
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }));
+  var datasetContent = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.textPaper,
+    elevation: 0
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Enter your dataset ID:"), /*#__PURE__*/React.createElement(Typography, {
+    className: classes.subtitle,
+    variant: "subtitle2",
+    align: "center"
+  }, "Customer ID: ", customerInput))), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    alignItems: "center",
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(BasicTextField, {
+    label: "Dataset ID",
+    action: updateDatasetValue,
+    state: datasetInputState,
+    value: datasetInput
+  })), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(BasicButton, {
+    action: clickBack,
+    text: "back"
+  }), /*#__PURE__*/React.createElement(BasicButton, {
+    action: redirect,
+    text: "next"
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }));
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     spacing: 0,
     direction: "column",
@@ -371,39 +508,7 @@ var LandingPage = function LandingPage() {
       minHeight: '40vh',
       minWidth: '40vw'
     }
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Typography, {
-    className: classes.text,
-    variant: "h5",
-    gutterBottom: true
-  }, "Please enter the following:")), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    alignItems: "center",
-    direction: "column"
-  }, /*#__PURE__*/React.createElement(BasicTextField, {
-    label: "Customer ID",
-    action: updateCustomerValue,
-    state: empty ? 'empty' : incorrect ? 'incorrect' : undefined
-  }), /*#__PURE__*/React.createElement(BasicTextField, {
-    label: "Dataset ID",
-    action: updateDatasetValue,
-    state: empty ? 'empty' : incorrect ? 'incorrect' : undefined,
-    helperText: empty ? 'Enter a customer and dataset ID' : incorrect ? 'Customer or dataset ID is incorrect' : ' '
-  })), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(BasicButton, {
-    action: onClick
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  })))));
+  }, content === 'customer' ? customerContent : datasetContent)))));
 };
 
 function _extends() {
@@ -1355,31 +1460,31 @@ var ShyftWx = function ShyftWx(_ref2) {
       themeOverride = _ref2.themeOverride;
   var classes = useStyles$g();
 
-  var _React$useState = React.useState(''),
-      error = _React$useState[0],
-      setError = _React$useState[1];
+  var _React$useState = React.useState(true),
+      loading = _React$useState[0],
+      setLoading = _React$useState[1];
 
-  var _React$useState2 = React.useState(true),
-      loading = _React$useState2[0],
-      setLoading = _React$useState2[1];
-
-  var _React$useState3 = React.useState({
+  var _React$useState2 = React.useState({
     datasets: []
   }),
-      index = _React$useState3[0],
-      setIndex = _React$useState3[1];
+      index = _React$useState2[0],
+      setIndex = _React$useState2[1];
+
+  var _React$useState3 = React.useState(''),
+      selectedProduct = _React$useState3[0],
+      setSelectedProduct = _React$useState3[1];
 
   var _React$useState4 = React.useState(''),
-      selectedProduct = _React$useState4[0],
-      setSelectedProduct = _React$useState4[1];
+      selectedLevel = _React$useState4[0],
+      setSelectedLevel = _React$useState4[1];
 
   var _React$useState5 = React.useState(''),
-      selectedLevel = _React$useState5[0],
-      setSelectedLevel = _React$useState5[1];
+      selectedForecast = _React$useState5[0],
+      setSelectedForecast = _React$useState5[1];
 
-  var _React$useState6 = React.useState(''),
-      selectedForecast = _React$useState6[0],
-      setSelectedForecast = _React$useState6[1];
+  var _React$useState6 = React.useState(false),
+      landingPage = _React$useState6[0],
+      setLandingPage = _React$useState6[1];
 
   var urlParams = React.useRef(new URLSearchParams(window.location.search));
   customer = customer || urlParams.current.get('customer') || '';
@@ -1394,7 +1499,7 @@ var ShyftWx = function ShyftWx(_ref2) {
         }
 
         if (!indexData || indexData.datasets.length === 0) {
-          setError('No datasets available.');
+          setLandingPage(true);
           return;
         }
 
@@ -1478,12 +1583,12 @@ var ShyftWx = function ShyftWx(_ref2) {
 
   React.useEffect(function () {
     if (!url) {
-      setError('No indexUrl or indexData provided.');
+      setLandingPage(true);
       return;
     }
 
     if (!customer || !dataset) {
-      setError('No customer or model provided.');
+      setLandingPage(true);
     }
 
     setLoading(true);
@@ -1585,10 +1690,10 @@ var ShyftWx = function ShyftWx(_ref2) {
   };
 
   var generateContent = function generateContent() {
-    if (error) {
-      return /*#__PURE__*/React.createElement(Typography, {
-        color: "error"
-      }, error);
+    if (landingPage) {
+      return /*#__PURE__*/React.createElement(LandingPage, {
+        url: url
+      });
     }
 
     if (loading) {
@@ -1718,7 +1823,6 @@ var ShyftWx = function ShyftWx(_ref2) {
     container: true,
     direction: "row",
     justify: "center",
-    alignItems: "flex-start",
     spacing: 3
   }, generateContent())));
 };

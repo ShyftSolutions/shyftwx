@@ -100,7 +100,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
     );
 
     const datasetContent = (
-        <>
+        <div>
             <Grid container item justify="center">
                 <Paper className={classes.textPaper} elevation={0}>
                     <Typography variant="h6">Enter your dataset ID:</Typography>
@@ -122,7 +122,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                 <BasicButton action={redirect} text="next" />
             </Grid>
             <Grid item />
-        </>
+        </div>
     );
 
     return (
