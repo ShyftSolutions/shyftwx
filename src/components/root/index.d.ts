@@ -72,3 +72,7 @@ declare type DatasetRegionRun = {
 declare type Index = {
     datasets: DatasetRegionRun[];
 };
+
+declare type PageProps = {
+    url: string;
+};

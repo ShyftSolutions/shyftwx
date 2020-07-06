@@ -1,4 +1,4 @@
-import { CircularProgress, Grid, MuiThemeProvider, Typography, makeStyles, Hidden } from '@material-ui/core';
+import { CircularProgress, Grid, MuiThemeProvider, makeStyles, Hidden } from '@material-ui/core';
 import BaseWxViewer from './../viewers/BaseWxViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
@@ -12,6 +12,7 @@ import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
 import clsx from 'clsx';
 import moment from 'moment';
+import LandingPage from './Page';
 
 export const ShyftContext = React.createContext({});
 
@@ -34,12 +35,12 @@ const useStyles = makeStyles((theme) => ({
 export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, customer, themeOverride }) => {
     const classes = useStyles();
 
-    const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     const [index, setIndex] = React.useState<Index>({ datasets: [] });
     const [selectedProduct, setSelectedProduct] = React.useState<string>('');
     const [selectedLevel, setSelectedLevel] = React.useState<string>('');
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
+    const [landingPage, setLandingPage] = React.useState(false);
 
     const urlParams = React.useRef(new URLSearchParams(window.location.search));
     customer = customer || urlParams.current.get('customer') || '';
@@ -51,7 +52,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
-            setError('No datasets available.');
+            setLandingPage(true);
             return;
         }
 
@@ -121,12 +122,12 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
     React.useEffect(() => {
         if (!url) {
-            setError('No indexUrl or indexData provided.');
+            setLandingPage(true);
             return;
         }
 
         if (!customer || !dataset) {
-            setError('No customer or model provided.');
+            setLandingPage(true);
         }
 
         setLoading(true);
@@ -226,8 +227,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     };
 
     const generateContent = (): React.ReactNode => {
-        if (error) {
-            return <Typography color="error">{error}</Typography>;
+        if (landingPage) {
+            return <LandingPage url={url}/>;
         }
 
         if (loading) {

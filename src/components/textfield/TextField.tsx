@@ -11,22 +11,35 @@ const useStyles = makeStyles((theme) =>
         },
         textField: {
             '& label.Mui-focused': {
-                color: theme.palette.secondary.main,
+                color: theme.palette.primary.main,
                 fontWeight: 700
             }
         }
     })
 );
 
-export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, helperText }) => {
+export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, value }) => {
     const classes = useStyles();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         action(event.target.value);
     };
 
-    if (state === 'empty') {
-        return (
+    const textFieldStates = {
+        initial: (
+            <form className={classes.root} noValidate autoComplete="off">
+                <TextField
+                    className={classes.textField}
+                    id="outlined-basic"
+                    label={label}
+                    variant="outlined"
+                    color="primary"
+                    onChange={handleChange}
+                    helperText={' '}
+                />
+            </form>
+        ),
+        empty: (
             <form className={classes.root} noValidate autoComplete="off">
                 <TextField
                     error
@@ -34,25 +47,40 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     label={label}
                     variant="outlined"
                     onChange={handleChange}
-                    helperText={helperText}
+                    helperText={`Enter a ${label}`}
                 />
             </form>
-        );
-    } else {
-        return (
+        ),
+        edit: (
             <form className={classes.root} noValidate autoComplete="off">
                 <TextField
                     className={classes.textField}
                     id="outlined-basic"
                     label={label}
+                    defaultValue={value}
                     variant="outlined"
-                    color="secondary"
+                    color="primary"
                     onChange={handleChange}
-                    helperText={helperText}
+                    helperText={' '}
                 />
             </form>
-        );
-    }
+        ),
+        invalid: (
+            <form className={classes.root} noValidate autoComplete="off">
+                <TextField
+                    error
+                    id="outlined-error"
+                    label={label}
+                    defaultValue={value}
+                    variant="outlined"
+                    onChange={handleChange}
+                    helperText={`Enter a ${label}`}
+                />
+            </form>
+        )
+    };
+
+    return textFieldStates[state];
 };
 
 export default BasicTextField;
