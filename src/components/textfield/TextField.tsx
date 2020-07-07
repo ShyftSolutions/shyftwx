@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) =>
         },
         textField: {
             '& label.Mui-focused': {
-                color: theme.palette.primary.main,
+                color: theme.palette.secondary.main,
                 fontWeight: 700
             }
         }
@@ -43,7 +43,7 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     id="outlined-basic"
                     label={label}
                     variant="outlined"
-                    color="primary"
+                    color="secondary"
                     onChange={handleChange}
                     helperText={helperText}
                 />

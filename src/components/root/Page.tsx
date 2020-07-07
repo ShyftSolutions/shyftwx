@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         [theme.breakpoints.down('sm')]: {
             minHeight: '40vh',
-            minWidth: '80vw'
+            minWidth: '60vw'
         },
         [theme.breakpoints.up('md')]: {
             minHeight: '40vh',
@@ -37,13 +37,13 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
     const onClick = () => {
         if (customerInput === '' && datasetInput === '') {
             setState('error');
-            setErrorMessage('enter a customer and dataset id');
+            setErrorMessage('Enter a customer and dataset id');
         } else if (customerInput === '') {
             setState('error');
-            setErrorMessage('enter a customer id');
+            setErrorMessage('Enter a customer id');
         } else if (datasetInput === '') {
             setState('error');
-            setErrorMessage('enter a dataset id');
+            setErrorMessage('Enter a dataset id');
         } else {
             checkInput();
         }
@@ -55,7 +55,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
 
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
             setState('error');
-            setErrorMessage('customer or dataset id is invalid');
+            setErrorMessage('Customer or dataset id is invalid');
         } else {
             window.location.href += `/?customer=${customerInput}&model=${datasetInput}`;
         }
@@ -91,11 +91,11 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                         >
                             <Grid container item justify="center">
                                 <Paper className={classes.textPaper} elevation={0}>
-                                    <Typography align="center" variant="h4" gutterBottom>
+                                    <Typography align="center" variant="h5" gutterBottom>
                                         Welcome
                                     </Typography>
-                                    <Typography variant="h6" color="textSecondary">
-                                        please enter the following to continue:
+                                    <Typography variant="body1" color="textSecondary">
+                                        Enter the following to continue:
                                     </Typography>
                                 </Paper>
                             </Grid>

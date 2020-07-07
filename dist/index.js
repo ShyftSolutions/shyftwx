@@ -251,7 +251,7 @@ var useStyles$6 = _.makeStyles(function (theme) {
     },
     textField: {
       '& label.Mui-focused': {
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.main,
         fontWeight: 700
       }
     }
@@ -278,7 +278,7 @@ var BasicTextField = function BasicTextField(_ref) {
       id: "outlined-basic",
       label: label,
       variant: "outlined",
-      color: "primary",
+      color: "secondary",
       onChange: handleChange,
       helperText: helperText
     })),
@@ -304,7 +304,7 @@ var useStyles$7 = core.makeStyles(function (theme) {
   return {
     paper: (_paper = {}, _paper[theme.breakpoints.down('sm')] = {
       minHeight: '40vh',
-      minWidth: '80vw'
+      minWidth: '60vw'
     }, _paper[theme.breakpoints.up('md')] = {
       minHeight: '40vh',
       minWidth: '40vw'
@@ -343,13 +343,13 @@ var LandingPage = function LandingPage(_ref) {
   var onClick = function onClick() {
     if (customerInput === '' && datasetInput === '') {
       setState('error');
-      setErrorMessage('enter a customer and dataset id');
+      setErrorMessage('Enter a customer and dataset id');
     } else if (customerInput === '') {
       setState('error');
-      setErrorMessage('enter a customer id');
+      setErrorMessage('Enter a customer id');
     } else if (datasetInput === '') {
       setState('error');
-      setErrorMessage('enter a dataset id');
+      setErrorMessage('Enter a dataset id');
     } else {
       checkInput();
     }
@@ -361,7 +361,7 @@ var LandingPage = function LandingPage(_ref) {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
           setState('error');
-          setErrorMessage('customer or dataset id is invalid');
+          setErrorMessage('Customer or dataset id is invalid');
         } else {
           window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
         }
@@ -415,12 +415,12 @@ var LandingPage = function LandingPage(_ref) {
     elevation: 0
   }, /*#__PURE__*/React__default.createElement(core.Typography, {
     align: "center",
-    variant: "h4",
+    variant: "h5",
     gutterBottom: true
   }, "Welcome"), /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6",
+    variant: "body1",
     color: "textSecondary"
-  }, "please enter the following to continue:"))), /*#__PURE__*/React__default.createElement(core.Grid, {
+  }, "Enter the following to continue:"))), /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     item: true,
     alignItems: "center",
