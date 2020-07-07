@@ -243,7 +243,7 @@ var useStyles$6 = makeStyles$1(function (theme) {
     root: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '30ch'
+        width: '35ch'
       }
     },
     textField: {
@@ -258,7 +258,7 @@ var BasicTextField = function BasicTextField(_ref) {
   var action = _ref.action,
       label = _ref.label,
       state = _ref.state,
-      value = _ref.value;
+      helperText = _ref.helperText;
   var classes = useStyles$6();
 
   var handleChange = function handleChange(event) {
@@ -277,9 +277,9 @@ var BasicTextField = function BasicTextField(_ref) {
       variant: "outlined",
       color: "primary",
       onChange: handleChange,
-      helperText: ' '
+      helperText: helperText
     })),
-    empty: /*#__PURE__*/React.createElement("form", {
+    error: /*#__PURE__*/React.createElement("form", {
       className: classes.root,
       noValidate: true,
       autoComplete: "off"
@@ -289,34 +289,7 @@ var BasicTextField = function BasicTextField(_ref) {
       label: label,
       variant: "outlined",
       onChange: handleChange,
-      helperText: "Enter a " + label
-    })),
-    edit: /*#__PURE__*/React.createElement("form", {
-      className: classes.root,
-      noValidate: true,
-      autoComplete: "off"
-    }, /*#__PURE__*/React.createElement(TextField, {
-      className: classes.textField,
-      id: "outlined-basic",
-      label: label,
-      defaultValue: value,
-      variant: "outlined",
-      color: "primary",
-      onChange: handleChange,
-      helperText: ' '
-    })),
-    invalid: /*#__PURE__*/React.createElement("form", {
-      className: classes.root,
-      noValidate: true,
-      autoComplete: "off"
-    }, /*#__PURE__*/React.createElement(TextField, {
-      error: true,
-      id: "outlined-error",
-      label: label,
-      defaultValue: value,
-      variant: "outlined",
-      onChange: handleChange,
-      helperText: "Invalid customer or dataset ID entered"
+      helperText: helperText
     }))
   };
   return textFieldStates[state];
@@ -348,53 +321,44 @@ var LandingPage = function LandingPage(_ref) {
   var url = _ref.url;
   var classes = useStyles$7();
 
-  var _React$useState = React.useState(''),
-      customerInput = _React$useState[0],
-      setCustomerInput = _React$useState[1];
+  var _React$useState = React.useState('initial'),
+      state = _React$useState[0],
+      setState = _React$useState[1];
 
-  var _React$useState2 = React.useState('initial'),
-      customerInputState = _React$useState2[0],
-      setCustomerState = _React$useState2[1];
+  var _React$useState2 = React.useState(''),
+      customerInput = _React$useState2[0],
+      setCustomerInput = _React$useState2[1];
 
   var _React$useState3 = React.useState(''),
       datasetInput = _React$useState3[0],
       setDatasetInput = _React$useState3[1];
 
-  var _React$useState4 = React.useState('initial'),
-      datasetInputState = _React$useState4[0],
-      setDatasetInputState = _React$useState4[1];
+  var _React$useState4 = React.useState(' '),
+      errorMessage = _React$useState4[0],
+      setErrorMessage = _React$useState4[1];
 
-  var _React$useState5 = React.useState('customer'),
-      content = _React$useState5[0],
-      setContent = _React$useState5[1];
-
-  var redirect = function redirect() {
-    if (customerInput === '') {
-      setDatasetInputState('empty');
+  var onClick = function onClick() {
+    if (customerInput === '' && datasetInput === '') {
+      setState('error');
+      setErrorMessage('enter a customer and dataset id');
+    } else if (customerInput === '') {
+      setState('error');
+      setErrorMessage('enter a customer id');
+    } else if (datasetInput === '') {
+      setState('error');
+      setErrorMessage('enter a dataset id');
     } else {
-      checkDatasetId();
+      checkInput();
     }
   };
 
-  var clickBack = function clickBack() {
-    setContent('customer');
-    setCustomerState('edit');
-  };
-
-  var clickNext = function clickNext() {
-    if (customerInput === '') {
-      setCustomerState('empty');
-    } else {
-      setContent('dataset');
-    }
-  };
-
-  var checkDatasetId = function checkDatasetId() {
+  var checkInput = function checkInput() {
     try {
       var customerUrl = url + "/" + customerInput + "/" + datasetInput;
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
-          setDatasetInputState('invalid');
+          setState('error');
+          setErrorMessage('customer or dataset id is invalid');
         } else {
           window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
         }
@@ -412,91 +376,6 @@ var LandingPage = function LandingPage(_ref) {
     setDatasetInput(input);
   };
 
-  var customerContent = /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    direction: "column",
-    justify: "space-evenly",
-    spacing: 2,
-    style: {
-      minHeight: '40vh',
-      minWidth: '40vw'
-    }
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Paper, {
-    className: classes.textPaper,
-    elevation: 0
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
-  }, "Enter your customer ID:"))), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    alignItems: "center",
-    direction: "column"
-  }, /*#__PURE__*/React.createElement(BasicTextField, {
-    label: "Customer ID",
-    action: updateCustomerValue,
-    state: customerInputState,
-    value: customerInput
-  })), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(BasicButton, {
-    action: clickNext
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }));
-  var datasetContent = /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    direction: "column",
-    justify: "space-evenly",
-    spacing: 2,
-    style: {
-      minHeight: '40vh',
-      minWidth: '40vw'
-    }
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Paper, {
-    className: classes.textPaper,
-    elevation: 0
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6",
-    align: "center"
-  }, "Enter your dataset ID:"), /*#__PURE__*/React.createElement(Typography, {
-    className: classes.subtitle,
-    variant: "subtitle2",
-    align: "center"
-  }, "Customer ID: ", customerInput))), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    alignItems: "center",
-    direction: "column"
-  }, /*#__PURE__*/React.createElement(BasicTextField, {
-    label: "Dataset ID",
-    action: updateDatasetValue,
-    state: datasetInputState,
-    value: datasetInput
-  })), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(BasicButton, {
-    action: clickBack,
-    text: "back"
-  }), /*#__PURE__*/React.createElement(BasicButton, {
-    action: redirect,
-    text: "next"
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }));
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     spacing: 0,
@@ -514,7 +393,53 @@ var LandingPage = function LandingPage(_ref) {
     justify: "center"
   }, /*#__PURE__*/React.createElement(Paper, {
     className: classes.paper
-  }, content === 'customer' ? customerContent : datasetContent))));
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    justify: "space-evenly",
+    spacing: 2,
+    style: {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.textPaper,
+    elevation: 0
+  }, /*#__PURE__*/React.createElement(Typography, {
+    align: "center",
+    variant: "h4",
+    gutterBottom: true
+  }, "Welcome"), /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6",
+    color: "textSecondary"
+  }, "please enter the following to continue:"))), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    alignItems: "center",
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(BasicTextField, {
+    label: "Customer ID",
+    action: updateCustomerValue,
+    state: state
+  }), /*#__PURE__*/React.createElement(BasicTextField, {
+    label: "Dataset ID",
+    action: updateDatasetValue,
+    state: state,
+    helperText: errorMessage
+  })), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(BasicButton, {
+    action: onClick
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }))))));
 };
 
 function _extends() {

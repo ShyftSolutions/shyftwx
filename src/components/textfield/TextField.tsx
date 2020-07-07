@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) =>
         root: {
             '& > *': {
                 margin: theme.spacing(1),
-                width: '30ch'
+                width: '35ch'
             }
         },
         textField: {
@@ -18,7 +18,17 @@ const useStyles = makeStyles((theme) =>
     })
 );
 
-export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, value }) => {
+/**
+ *
+ * Uses Material UI to create a textfield labeled with the string
+ * value stored in the 'label' parameter
+ *
+ * @param action
+ * @param label
+ * @param state
+ * @param value
+ */
+export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, helperText }) => {
     const classes = useStyles();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,11 +45,11 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     variant="outlined"
                     color="primary"
                     onChange={handleChange}
-                    helperText={' '}
+                    helperText={helperText}
                 />
             </form>
         ),
-        empty: (
+        error: (
             <form className={classes.root} noValidate autoComplete="off">
                 <TextField
                     error
@@ -47,34 +57,7 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     label={label}
                     variant="outlined"
                     onChange={handleChange}
-                    helperText={`Enter a ${label}`}
-                />
-            </form>
-        ),
-        edit: (
-            <form className={classes.root} noValidate autoComplete="off">
-                <TextField
-                    className={classes.textField}
-                    id="outlined-basic"
-                    label={label}
-                    defaultValue={value}
-                    variant="outlined"
-                    color="primary"
-                    onChange={handleChange}
-                    helperText={' '}
-                />
-            </form>
-        ),
-        invalid: (
-            <form className={classes.root} noValidate autoComplete="off">
-                <TextField
-                    error
-                    id="outlined-error"
-                    label={label}
-                    defaultValue={value}
-                    variant="outlined"
-                    onChange={handleChange}
-                    helperText="Invalid customer or dataset ID entered"
+                    helperText={helperText}
                 />
             </form>
         )

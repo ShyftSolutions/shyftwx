@@ -29,54 +29,33 @@ const useStyles = makeStyles((theme) => ({
 export const LandingPage: React.FC<PageProps> = ({ url }) => {
     const classes = useStyles();
 
+    const [state, setState] = React.useState('initial');
     const [customerInput, setCustomerInput] = React.useState('');
-    const [customerInputState, setCustomerState] = React.useState('initial');
     const [datasetInput, setDatasetInput] = React.useState('');
-    const [datasetInputState, setDatasetInputState] = React.useState('initial');
-    const [content, setContent] = React.useState('customer');
+    const [errorMessage, setErrorMessage] = React.useState(' ');
 
-    const redirect = () => {
-        if (customerInput === '') {
-            setDatasetInputState('empty');
+    const onClick = () => {
+        if (customerInput === '' && datasetInput === '') {
+            setState('error');
+            setErrorMessage('enter a customer and dataset id');
+        } else if (customerInput === '') {
+            setState('error');
+            setErrorMessage('enter a customer id');
+        } else if (datasetInput === '') {
+            setState('error');
+            setErrorMessage('enter a dataset id');
         } else {
-            checkDatasetId();
+            checkInput();
         }
     };
 
-    const clickBack = () => {
-        setContent('customer');
-        setCustomerState('edit');
-    };
-
-    const clickNext = () => {
-        if (customerInput === '') {
-            setCustomerState('empty');
-        } else {
-            // checkCustomerId();
-            setContent('dataset');
-        }
-    };
-
-    /*
-    const checkCustomerId = async () => {
-        const customerUrl = `${url}/${customerInput}/TQIConus`;
-        const indexData = await getIndexAsync(customerUrl);
-        console.log(await getIndexAsync(customerUrl))
-
-        if (indexData === undefined || indexData.datasets.length === 0) {
-            setCustomerState('invalid');
-        } else {
-            setContent('dataset');
-        }
-    };
-     */
-
-    const checkDatasetId = async () => {
+    const checkInput = async () => {
         const customerUrl = `${url}/${customerInput}/${datasetInput}`;
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
-            setDatasetInputState('invalid');
+            setState('error');
+            setErrorMessage('customer or dataset id is invalid');
         } else {
             window.location.href += `/?customer=${customerInput}&model=${datasetInput}`;
         }
@@ -90,70 +69,6 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
         setDatasetInput(input);
     };
 
-    const customerContent = (
-        <Grid
-            container
-            item
-            direction="column"
-            justify="space-evenly"
-            spacing={2}
-            style={{ minHeight: '40vh', minWidth: '40vw' }}
-        >
-            <Grid container item justify="center">
-                <Paper className={classes.textPaper} elevation={0}>
-                    <Typography variant="h6">Enter your customer ID:</Typography>
-                </Paper>
-            </Grid>
-            <Grid container item alignItems="center" direction="column">
-                <TextField
-                    label="Customer ID"
-                    action={updateCustomerValue}
-                    state={customerInputState}
-                    value={customerInput}
-                />
-            </Grid>
-            <Grid container item justify="center">
-                <BasicButton action={clickNext} />
-            </Grid>
-            <Grid item />
-        </Grid>
-    );
-
-    const datasetContent = (
-        <Grid
-            container
-            item
-            direction="column"
-            justify="space-evenly"
-            spacing={2}
-            style={{ minHeight: '40vh', minWidth: '40vw' }}
-        >
-            <Grid container item justify="center">
-                <Paper className={classes.textPaper} elevation={0}>
-                    <Typography variant="h6" align="center">
-                        Enter your dataset ID:
-                    </Typography>
-                    <Typography className={classes.subtitle} variant="subtitle2" align="center">
-                        Customer ID: {customerInput}
-                    </Typography>
-                </Paper>
-            </Grid>
-            <Grid container item alignItems="center" direction="column">
-                <TextField
-                    label="Dataset ID"
-                    action={updateDatasetValue}
-                    state={datasetInputState}
-                    value={datasetInput}
-                />
-            </Grid>
-            <Grid container item justify="center">
-                <BasicButton action={clickBack} text="back" />
-                <BasicButton action={redirect} text="next" />
-            </Grid>
-            <Grid item />
-        </Grid>
-    );
-
     return (
         <div>
             <Grid
@@ -165,7 +80,40 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                 style={{ minHeight: '80vh' }}
             >
                 <Grid container item direction="column" alignItems="center" justify="center">
-                    <Paper className={classes.paper}>{content === 'customer' ? customerContent : datasetContent}</Paper>
+                    <Paper className={classes.paper}>
+                        <Grid
+                            container
+                            item
+                            direction="column"
+                            justify="space-evenly"
+                            spacing={2}
+                            style={{ minHeight: '40vh', minWidth: '40vw' }}
+                        >
+                            <Grid container item justify="center">
+                                <Paper className={classes.textPaper} elevation={0}>
+                                    <Typography align="center" variant="h4" gutterBottom>
+                                        Welcome
+                                    </Typography>
+                                    <Typography variant="h6" color="textSecondary">
+                                        please enter the following to continue:
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid container item alignItems="center" direction="column">
+                                <TextField label="Customer ID" action={updateCustomerValue} state={state} />
+                                <TextField
+                                    label="Dataset ID"
+                                    action={updateDatasetValue}
+                                    state={state}
+                                    helperText={errorMessage}
+                                />
+                            </Grid>
+                            <Grid container item justify="center">
+                                <BasicButton action={onClick} />
+                            </Grid>
+                            <Grid item />
+                        </Grid>
+                    </Paper>
                 </Grid>
             </Grid>
         </div>

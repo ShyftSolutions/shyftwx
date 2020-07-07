@@ -6,5 +6,5 @@ declare type TextFieldProps = {
     label: string;
     action: (input: string) => void;
     state: string;
-    value?: string;
+    helperText?: string;
 };
