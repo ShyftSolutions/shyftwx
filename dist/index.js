@@ -396,7 +396,7 @@ var LandingPage = function LandingPage(_ref) {
     try {
       var customerUrl = url + "/" + customerInput + "/" + datasetInput;
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        if (indexData === undefined || indexData.datasets.length === 0) {
+        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
           setDatasetInputState('invalid');
         } else {
           window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
@@ -1832,6 +1832,7 @@ var ShyftWx = function ShyftWx(_ref2) {
     container: true,
     direction: "row",
     justify: "center",
+    alignItems: "center",
     spacing: 3
   }, generateContent())));
 };

@@ -5,4 +5,5 @@ declare namespace _default {
 }
 export default _default;
 export function ShyftWx(): JSX.Element;
+export function LandingPageToShyftWx(): JSX.Element;
 import _ShyftWx from "../components/root/ShyftWx";

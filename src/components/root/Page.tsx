@@ -75,7 +75,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
         const customerUrl = `${url}/${customerInput}/${datasetInput}`;
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
-        if (indexData === undefined || indexData.datasets.length === 0) {
+        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
             setDatasetInputState('invalid');
         } else {
             window.location.href += `/?customer=${customerInput}&model=${datasetInput}`;
