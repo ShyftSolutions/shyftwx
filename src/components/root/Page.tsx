@@ -55,7 +55,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
 
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
             setState('error');
-            setErrorMessage('Customer or dataset id is invalid');
+            setErrorMessage('Customer or dataset id does not exist');
         } else {
             window.location.href += `/?customer=${customerInput}&model=${datasetInput}`;
         }
@@ -94,8 +94,9 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                                     <Typography align="center" variant="h5" gutterBottom>
                                         Welcome
                                     </Typography>
-                                    <Typography variant="body1" color="textSecondary">
-                                        Enter the following to continue:
+                                    <Typography variant="body1" color="textSecondary" align="center">
+                                        Please enter your information below to
+                                        <br /> access the viewer
                                     </Typography>
                                 </Paper>
                             </Grid>

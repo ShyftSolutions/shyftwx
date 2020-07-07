@@ -358,7 +358,7 @@ var LandingPage = function LandingPage(_ref) {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
           setState('error');
-          setErrorMessage('Customer or dataset id is invalid');
+          setErrorMessage('Customer or dataset id does not exist');
         } else {
           window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
         }
@@ -416,8 +416,9 @@ var LandingPage = function LandingPage(_ref) {
     gutterBottom: true
   }, "Welcome"), /*#__PURE__*/React.createElement(Typography, {
     variant: "body1",
-    color: "textSecondary"
-  }, "Enter the following to continue:"))), /*#__PURE__*/React.createElement(Grid, {
+    color: "textSecondary",
+    align: "center"
+  }, "Please enter your information below to", /*#__PURE__*/React.createElement("br", null), " access the viewer"))), /*#__PURE__*/React.createElement(Grid, {
     container: true,
     item: true,
     alignItems: "center",
