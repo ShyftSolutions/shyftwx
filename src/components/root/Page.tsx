@@ -39,7 +39,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
         if (customerInput === '') {
             setDatasetInputState('empty');
         } else {
-            window.location.href += `/?customer=${customerInput}&model=${datasetInput}`;
+            checkDatasetId();
         }
     };
 
@@ -51,21 +51,34 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
     const clickNext = () => {
         if (customerInput === '') {
             setCustomerState('empty');
-        }
-        checkCustomerId();
-        if (customerInputState === 'valid') {
+        } else {
+            // checkCustomerId();
             setContent('dataset');
         }
     };
 
+    /*
     const checkCustomerId = async () => {
-        const customerUrl = `${url}/${customerInput}`;
-        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
-        console.log(indexData);
-        if (!indexData || indexData.datasets.length === 0) {
+        const customerUrl = `${url}/${customerInput}/TQIConus`;
+        const indexData = await getIndexAsync(customerUrl);
+        console.log(await getIndexAsync(customerUrl))
+
+        if (indexData === undefined || indexData.datasets.length === 0) {
             setCustomerState('invalid');
         } else {
-            setCustomerState('valid');
+            setContent('dataset');
+        }
+    };
+     */
+
+    const checkDatasetId = async () => {
+        const customerUrl = `${url}/${customerInput}/${datasetInput}`;
+        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
+
+        if (indexData === undefined || indexData.datasets.length === 0) {
+            setDatasetInputState('invalid');
+        } else {
+            window.location.href += `/?customer=${customerInput}&model=${datasetInput}`;
         }
     };
 
@@ -78,7 +91,14 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
     };
 
     const customerContent = (
-        <div>
+        <Grid
+            container
+            item
+            direction="column"
+            justify="space-evenly"
+            spacing={2}
+            style={{ minHeight: '40vh', minWidth: '40vw' }}
+        >
             <Grid container item justify="center">
                 <Paper className={classes.textPaper} elevation={0}>
                     <Typography variant="h6">Enter your customer ID:</Typography>
@@ -96,14 +116,23 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                 <BasicButton action={clickNext} />
             </Grid>
             <Grid item />
-        </div>
+        </Grid>
     );
 
     const datasetContent = (
-        <div>
+        <Grid
+            container
+            item
+            direction="column"
+            justify="space-evenly"
+            spacing={2}
+            style={{ minHeight: '40vh', minWidth: '40vw' }}
+        >
             <Grid container item justify="center">
                 <Paper className={classes.textPaper} elevation={0}>
-                    <Typography variant="h6">Enter your dataset ID:</Typography>
+                    <Typography variant="h6" align="center">
+                        Enter your dataset ID:
+                    </Typography>
                     <Typography className={classes.subtitle} variant="subtitle2" align="center">
                         Customer ID: {customerInput}
                     </Typography>
@@ -122,7 +151,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                 <BasicButton action={redirect} text="next" />
             </Grid>
             <Grid item />
-        </div>
+        </Grid>
     );
 
     return (
@@ -135,19 +164,8 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                 justify="center"
                 style={{ minHeight: '80vh' }}
             >
-                <Grid container item direction="column" alignItems="center">
-                    <Paper className={classes.paper}>
-                        <Grid
-                            container
-                            item
-                            direction="column"
-                            justify="space-evenly"
-                            spacing={2}
-                            style={{ minHeight: '40vh', minWidth: '40vw' }}
-                        >
-                            {content === 'customer' ? customerContent : datasetContent}
-                        </Grid>
-                    </Paper>
+                <Grid container item direction="column" alignItems="center" justify="center">
+                    <Paper className={classes.paper}>{content === 'customer' ? customerContent : datasetContent}</Paper>
                 </Grid>
             </Grid>
         </div>

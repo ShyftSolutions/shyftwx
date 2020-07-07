@@ -25,3 +25,13 @@ export const ShyftWx = () => {
         </MuiThemeProvider>
     );
 };
+
+export const LandingPageToShyftWx = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <Container>
+                <_ShyftWx dataset={dataset} url={url} />
+            </Container>
+        </MuiThemeProvider>
+    );
+};

@@ -74,7 +74,7 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     defaultValue={value}
                     variant="outlined"
                     onChange={handleChange}
-                    helperText={`Enter a ${label}`}
+                    helperText="Invalid customer or dataset ID entered"
                 />
             </form>
         )

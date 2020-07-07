@@ -316,7 +316,7 @@ var BasicTextField = function BasicTextField(_ref) {
       defaultValue: value,
       variant: "outlined",
       onChange: handleChange,
-      helperText: "Enter a " + label
+      helperText: "Invalid customer or dataset ID entered"
     }))
   };
   return textFieldStates[state];
@@ -372,7 +372,7 @@ var LandingPage = function LandingPage(_ref) {
     if (customerInput === '') {
       setDatasetInputState('empty');
     } else {
-      window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
+      checkDatasetId();
     }
   };
 
@@ -384,25 +384,19 @@ var LandingPage = function LandingPage(_ref) {
   var clickNext = function clickNext() {
     if (customerInput === '') {
       setCustomerState('empty');
-    }
-
-    checkCustomerId();
-
-    if (customerInputState === 'valid') {
+    } else {
       setContent('dataset');
     }
   };
 
-  var checkCustomerId = function checkCustomerId() {
+  var checkDatasetId = function checkDatasetId() {
     try {
-      var customerUrl = url + "/" + customerInput;
+      var customerUrl = url + "/" + customerInput + "/" + datasetInput;
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        console.log(indexData);
-
-        if (!indexData || indexData.datasets.length === 0) {
-          setCustomerState('invalid');
+        if (indexData === undefined || indexData.datasets.length === 0) {
+          setDatasetInputState('invalid');
         } else {
-          setCustomerState('valid');
+          window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
         }
       });
     } catch (e) {
@@ -418,7 +412,17 @@ var LandingPage = function LandingPage(_ref) {
     setDatasetInput(input);
   };
 
-  var customerContent = /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(Grid, {
+  var customerContent = /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    justify: "space-evenly",
+    spacing: 2,
+    style: {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }
+  }, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     item: true,
     justify: "center"
@@ -446,7 +450,17 @@ var LandingPage = function LandingPage(_ref) {
   })), /*#__PURE__*/React.createElement(Grid, {
     item: true
   }));
-  var datasetContent = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
+  var datasetContent = /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    justify: "space-evenly",
+    spacing: 2,
+    style: {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }
+  }, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     item: true,
     justify: "center"
@@ -454,7 +468,8 @@ var LandingPage = function LandingPage(_ref) {
     className: classes.textPaper,
     elevation: 0
   }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
+    variant: "h6",
+    align: "center"
   }, "Enter your dataset ID:"), /*#__PURE__*/React.createElement(Typography, {
     className: classes.subtitle,
     variant: "subtitle2",
@@ -495,20 +510,11 @@ var LandingPage = function LandingPage(_ref) {
     container: true,
     item: true,
     direction: "column",
-    alignItems: "center"
+    alignItems: "center",
+    justify: "center"
   }, /*#__PURE__*/React.createElement(Paper, {
     className: classes.paper
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    direction: "column",
-    justify: "space-evenly",
-    spacing: 2,
-    style: {
-      minHeight: '40vh',
-      minWidth: '40vw'
-    }
-  }, content === 'customer' ? customerContent : datasetContent)))));
+  }, content === 'customer' ? customerContent : datasetContent))));
 };
 
 function _extends() {
