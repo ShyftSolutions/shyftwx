@@ -13,12 +13,15 @@ import { CssBaseline, Hidden } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     root: {
         color: theme.palette.primary.main,
-        height: 20
+        height: 20,
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: 20
+        }
     },
     thumb: {
         height: 24,
         width: 24,
-        backgroundColor: theme.palette.primary.contrastText,
+        backgroundColor: theme.palette.secondary.light,
         border: '2px solid currentColor',
         marginTop: -8,
         marginLeft: -12,

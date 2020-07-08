@@ -940,18 +940,37 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$c = styles.makeStyles(function (theme) {
-  var _markLabel;
+var useStyles$c = core.makeStyles(function (theme) {
+  return {
+    media: {
+      height: '40vw',
+      width: '100%'
+    }
+  };
+});
+var ImageViewer = function ImageViewer(_ref) {
+  var image = _ref.image;
+  var classes = useStyles$c();
+  return /*#__PURE__*/React__default.createElement(core.CardMedia, {
+    className: classes.media,
+    image: image
+  });
+};
+
+var useStyles$d = styles.makeStyles(function (theme) {
+  var _root, _markLabel;
 
   return {
-    root: {
+    root: (_root = {
       color: theme.palette.primary.main,
       height: 20
-    },
+    }, _root[theme.breakpoints.down('xs')] = {
+      marginBottom: 20
+    }, _root),
     thumb: {
       height: 24,
       width: 24,
-      backgroundColor: theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.secondary.light,
       border: '2px solid currentColor',
       marginTop: -8,
       marginLeft: -12,
@@ -1021,7 +1040,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$c();
+  var classes = useStyles$d();
   options.sort(compare);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
@@ -1086,7 +1105,7 @@ var useTimer = function useTimer(interval) {
   return [ticks, isRunning, setIsRunning];
 };
 
-var useStyles$d = core.makeStyles(function (theme) {
+var useStyles$e = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1
@@ -1116,7 +1135,7 @@ var useStyles$d = core.makeStyles(function (theme) {
 });
 var StartStopButton = function StartStopButton(_ref) {
   var onToggle = _ref.onToggle;
-  var classes = useStyles$d();
+  var classes = useStyles$e();
 
   var _useTimer = useTimer(600),
       tick = _useTimer[0],
@@ -1147,7 +1166,7 @@ var StartStopButton = function StartStopButton(_ref) {
   }));
 };
 
-var useStyles$e = core.makeStyles(function (theme) {
+var useStyles$f = core.makeStyles(function (theme) {
   var _offset;
 
   return {
@@ -1163,7 +1182,7 @@ var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
       onToggle = _ref.onToggle;
-  var classes = useStyles$e();
+  var classes = useStyles$f();
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -1204,7 +1223,7 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
-var useStyles$f = core.makeStyles(function (theme) {
+var useStyles$g = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -1218,18 +1237,18 @@ var useStyles$f = core.makeStyles(function (theme) {
     },
     mobilePaper: {
       backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.primary.light,
+      color: theme.palette.secondary.main,
       border: '1px solid currentColor',
       padding: 5
     },
     text: {
-      color: theme.palette.primary.dark
+      color: theme.palette.secondary.main
     }
   };
 });
 var ValidTime = function ValidTime(_ref) {
   var time = _ref.time;
-  var classes = useStyles$f();
+  var classes = useStyles$g();
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
@@ -1275,6 +1294,15 @@ var theme = core.createMuiTheme({
       main: '#F76707',
       dark: '#868e96',
       contrastText: '#212529'
+    }
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 768,
+      md: 960,
+      lg: 1280,
+      xl: 1920
     }
   },
   overrides: {
@@ -1376,7 +1404,7 @@ function clsx () {
 
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
-var useStyles$g = core.makeStyles(function (theme) {
+var useStyles$h = core.makeStyles(function (theme) {
   var _content, _ref;
 
   return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
@@ -1393,7 +1421,7 @@ var ShyftWx = function ShyftWx(_ref2) {
       url = _ref2.url,
       customer = _ref2.customer,
       themeOverride = _ref2.themeOverride;
-  var classes = useStyles$g();
+  var classes = useStyles$h();
 
   var _React$useState = React__default.useState(true),
       loading = _React$useState[0],
@@ -1708,11 +1736,8 @@ var ShyftWx = function ShyftWx(_ref2) {
       container: true,
       item: true,
       xs: 12
-    }, /*#__PURE__*/React__default.createElement(BaseWxViewer, {
-      "data-cy": "base-wx-viewer",
-      layers: activeForecastLayer,
-      neBounds: [index.datasets[0].region.bbox.ymax, index.datasets[0].region.bbox.xmax],
-      swBounds: [index.datasets[0].region.bbox.ymin, index.datasets[0].region.bbox.xmin]
+    }, /*#__PURE__*/React__default.createElement(ImageViewer, {
+      image: activeForecastLayer
     })), /*#__PURE__*/React__default.createElement(core.Grid, {
       container: true,
       item: true,

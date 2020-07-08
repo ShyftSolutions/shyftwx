@@ -15,6 +15,15 @@ let theme = createMuiTheme({
             contrastText: '#212529'
         }
     },
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 768,
+            md: 960,
+            lg: 1280,
+            xl: 1920
+        }
+    },
     overrides: {
         MuiTypography: {
             h1: {
@@ -37,7 +46,7 @@ let theme = createMuiTheme({
             root: {
                 '&$selected, &$selected:hover': {
                     backgroundColor: '#329af0',
-                    color: '#f8f9fa',
+                    color: '#f8f9fa'
                 },
                 paddingTop: '6px',
                 paddingBottom: '6px'
@@ -45,7 +54,7 @@ let theme = createMuiTheme({
             gutters: {
                 paddingLeft: '6px',
                 paddingRight: '6px'
-            },
+            }
         },
         MuiListItemIcon: {
             root: {

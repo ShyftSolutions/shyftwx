@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
     },
     mobilePaper: {
         backgroundColor: theme.palette.secondary.light,
-        color: theme.palette.primary.light,
+        color: theme.palette.secondary.main,
         border: '1px solid currentColor',
         padding: 5
     },
     text: {
-        color: theme.palette.primary.dark
+        color: theme.palette.secondary.main
     }
 }));
 
