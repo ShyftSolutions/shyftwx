@@ -14,10 +14,13 @@ var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
 var freeSolidSvgIcons = require('@fortawesome/free-solid-svg-icons');
 var MenuIcon = _interopDefault(require('@material-ui/icons/Menu'));
+var FormControl = _interopDefault(require('@material-ui/core/FormControl'));
+var MenuItem = _interopDefault(require('@material-ui/core/MenuItem'));
+var Select = _interopDefault(require('@material-ui/core/Select'));
+var styles = require('@material-ui/core/styles');
 var moment = _interopDefault(require('moment'));
 var Slider = _interopDefault(require('@material-ui/core/Slider'));
 var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
-var styles = require('@material-ui/core/styles');
 var PlayArrowIcon = _interopDefault(require('@material-ui/icons/PlayArrow'));
 var PauseIcon = _interopDefault(require('@material-ui/icons/Pause'));
 
@@ -715,7 +718,68 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
-var useStyles$b = core.makeStyles(function (theme) {
+var useStyles$b = styles.makeStyles(function (theme) {
+  return {
+    formControl: {
+      minWidth: 120,
+      boxShadow: theme.shadows[3]
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    label: {
+      align: 'center'
+    },
+    dropdown: {
+      background: theme.palette.primary.contrastText
+    },
+    items: {
+      background: theme.palette.primary.contrastText,
+      '&:hover': {
+        background: theme.palette.primary.main
+      }
+    }
+  };
+});
+var SimpleSelect = function SimpleSelect(_ref) {
+  var choices = _ref.choices,
+      action = _ref.action;
+  var classes = useStyles$b();
+
+  var _React$useState = React__default.useState(choices[0]),
+      selectedValue = _React$useState[0],
+      setSelectedValue = _React$useState[1];
+
+  var handleChange = function handleChange(event) {
+    var name = event.target.name;
+
+    if (name) {
+      setSelectedValue(name);
+      action(name);
+    }
+  };
+
+  return /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement(FormControl, {
+    variant: "outlined",
+    className: classes.formControl
+  }, /*#__PURE__*/React__default.createElement(Select, {
+    classes: {
+      select: classes.dropdown
+    },
+    id: "simple-select",
+    value: selectedValue,
+    onChange: handleChange
+  }, choices.map(function (option) {
+    return /*#__PURE__*/React__default.createElement(MenuItem, {
+      color: "primary",
+      key: option,
+      className: classes.items,
+      value: option
+    }, option);
+  }))));
+};
+
+var useStyles$c = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -726,13 +790,9 @@ var useStyles$b = core.makeStyles(function (theme) {
 var RunsSelector = function RunsSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Runs' : _ref$label;
-  var classes = useStyles$b();
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
+      label = _ref$label === void 0 ? 'Runs' : _ref$label,
+      action = _ref.action;
+  var classes = useStyles$c();
   var newOptions = options.map(function (option) {
     return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
   });
@@ -747,37 +807,14 @@ var RunsSelector = function RunsSelector(_ref) {
       item: true
     }, /*#__PURE__*/React__default.createElement(core.Typography, {
       variant: "h6"
-    }, label), /*#__PURE__*/React__default.createElement(GroupedButtons, {
+    }, label), newOptions.length === 1 ? /*#__PURE__*/React__default.createElement(GroupedButtons, {
       options: newOptions,
-      action: handleClick
+      action: action
+    }) : /*#__PURE__*/React__default.createElement(SimpleSelect, {
+      choices: newOptions,
+      action: action
     })))
   );
-};
-
-var RunDropdown = function RunDropdown(_ref) {
-  var options = _ref.options,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Model Run' : _ref$label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
-  return /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
-  }, label)), /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(RunsSelector, {
-    options: options.map(function (option) {
-      return Number(option);
-    }),
-    action: handleClick
-  })));
 };
 
 // A type of promise-like that resolves synchronously and supports only one observer
@@ -940,7 +977,7 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$c = core.makeStyles(function (theme) {
+var useStyles$d = core.makeStyles(function (theme) {
   return {
     media: {
       height: '40vw',
@@ -950,14 +987,14 @@ var useStyles$c = core.makeStyles(function (theme) {
 });
 var ImageViewer = function ImageViewer(_ref) {
   var image = _ref.image;
-  var classes = useStyles$c();
+  var classes = useStyles$d();
   return /*#__PURE__*/React__default.createElement(core.CardMedia, {
     className: classes.media,
     image: image
   });
 };
 
-var useStyles$d = styles.makeStyles(function (theme) {
+var useStyles$e = styles.makeStyles(function (theme) {
   var _root, _markLabel;
 
   return {
@@ -1040,7 +1077,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$d();
+  var classes = useStyles$e();
   options.sort(compare);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
@@ -1105,7 +1142,7 @@ var useTimer = function useTimer(interval) {
   return [ticks, isRunning, setIsRunning];
 };
 
-var useStyles$e = core.makeStyles(function (theme) {
+var useStyles$f = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1
@@ -1135,7 +1172,7 @@ var useStyles$e = core.makeStyles(function (theme) {
 });
 var StartStopButton = function StartStopButton(_ref) {
   var onToggle = _ref.onToggle;
-  var classes = useStyles$e();
+  var classes = useStyles$f();
 
   var _useTimer = useTimer(600),
       tick = _useTimer[0],
@@ -1166,7 +1203,7 @@ var StartStopButton = function StartStopButton(_ref) {
   }));
 };
 
-var useStyles$f = core.makeStyles(function (theme) {
+var useStyles$g = core.makeStyles(function (theme) {
   var _offset;
 
   return {
@@ -1182,7 +1219,7 @@ var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
       onToggle = _ref.onToggle;
-  var classes = useStyles$f();
+  var classes = useStyles$g();
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -1223,7 +1260,7 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
-var useStyles$g = core.makeStyles(function (theme) {
+var useStyles$h = core.makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -1248,7 +1285,7 @@ var useStyles$g = core.makeStyles(function (theme) {
 });
 var ValidTime = function ValidTime(_ref) {
   var time = _ref.time;
-  var classes = useStyles$g();
+  var classes = useStyles$h();
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
@@ -1404,7 +1441,7 @@ function clsx () {
 
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
-var useStyles$h = core.makeStyles(function (theme) {
+var useStyles$i = core.makeStyles(function (theme) {
   var _content, _ref;
 
   return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
@@ -1421,7 +1458,7 @@ var ShyftWx = function ShyftWx(_ref2) {
       url = _ref2.url,
       customer = _ref2.customer,
       themeOverride = _ref2.themeOverride;
-  var classes = useStyles$h();
+  var classes = useStyles$i();
 
   var _React$useState = React__default.useState(true),
       loading = _React$useState[0],
@@ -1445,9 +1482,11 @@ var ShyftWx = function ShyftWx(_ref2) {
       selectedForecast = _React$useState5[0],
       setSelectedForecast = _React$useState5[1];
 
-  var _React$useState6 = React__default.useState(false),
-      landingPage = _React$useState6[0],
-      setLandingPage = _React$useState6[1];
+  var _React$useState6 = React__default.useState('');
+
+  var _React$useState7 = React__default.useState(false),
+      landingPage = _React$useState7[0],
+      setLandingPage = _React$useState7[1];
 
   var urlParams = React__default.useRef(new URLSearchParams(window.location.search));
   customer = customer || urlParams.current.get('customer') || '';
@@ -1574,6 +1613,10 @@ var ShyftWx = function ShyftWx(_ref2) {
     setSelectedLevel(product.level);
     setSelectedProduct(product.product);
     setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  };
+
+  var onRunSelect = function onRunSelect(buttonText) {
+    console.log(buttonText);
   };
 
   var compare = function compare(a, b) {
@@ -1719,7 +1762,7 @@ var ShyftWx = function ShyftWx(_ref2) {
     }, /*#__PURE__*/React__default.createElement(RunsSelector, {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
-      action: function action() {}
+      action: onRunSelect
     })), /*#__PURE__*/React__default.createElement(core.Hidden, {
       xsDown: true
     }, /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -1797,9 +1840,8 @@ exports.ModelSelector = ModelSelector;
 exports.ProductMenu = ProductMenu;
 exports.ProductSelector = ProductSelector;
 exports.RegionSelector = RegionSelector;
-exports.RunDropdown = RunDropdown;
+exports.RunsSelector = RunsSelector;
 exports.ShyftWx = ShyftWx;
-exports.SimpleSelect = RunsSelector;
 exports.Slider = DiscreteSlider;
 exports.StartStopButton = StartStopButton;
 exports.TimeControl = TimeControl;

@@ -9,9 +9,8 @@ import LandingPage from './components/root/Page';
 import ProductMenu from './components/products/ProductMenu';
 import ProductSelector from './components/products/ProductSelector';
 import RegionSelector from './components/regions/RegionSelector';
-import RunDropdown from './components/runs/RunDropdown';
+import RunsSelector from './components/run/RunsSelector';
 import ShyftWx from './components/root/ShyftWx';
-import SimpleSelect from './components/run/RunsSelector';
 import Slider from './components/time/Slider';
 import StartStopButton from './components/time/StartStopButton';
 import TimeControl from './components/time/TimeControl';
@@ -20,7 +19,6 @@ import theme from './theme';
 export {
     BaseWxViewer,
     GroupedButtons,
-    SimpleSelect,
     LandingPage,
     ProductMenu,
     ProductSelector,
@@ -28,11 +26,11 @@ export {
     ModelSelector,
     BackButton,
     ForwardButton,
+    RunsSelector,
     Slider,
     ShyftWx,
     StartStopButton,
     TimeControl,
-    RunDropdown,
     theme,
     apis
 };

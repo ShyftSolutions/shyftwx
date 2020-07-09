@@ -11,10 +11,13 @@ import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import MenuIcon from '@material-ui/icons/Menu';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { makeStyles as makeStyles$2 } from '@material-ui/core/styles';
 import moment from 'moment';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
-import { makeStyles as makeStyles$2 } from '@material-ui/core/styles';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
@@ -712,7 +715,68 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
-var useStyles$b = makeStyles(function (theme) {
+var useStyles$b = makeStyles$2(function (theme) {
+  return {
+    formControl: {
+      minWidth: 120,
+      boxShadow: theme.shadows[3]
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    label: {
+      align: 'center'
+    },
+    dropdown: {
+      background: theme.palette.primary.contrastText
+    },
+    items: {
+      background: theme.palette.primary.contrastText,
+      '&:hover': {
+        background: theme.palette.primary.main
+      }
+    }
+  };
+});
+var SimpleSelect = function SimpleSelect(_ref) {
+  var choices = _ref.choices,
+      action = _ref.action;
+  var classes = useStyles$b();
+
+  var _React$useState = React.useState(choices[0]),
+      selectedValue = _React$useState[0],
+      setSelectedValue = _React$useState[1];
+
+  var handleChange = function handleChange(event) {
+    var name = event.target.name;
+
+    if (name) {
+      setSelectedValue(name);
+      action(name);
+    }
+  };
+
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
+    variant: "outlined",
+    className: classes.formControl
+  }, /*#__PURE__*/React.createElement(Select, {
+    classes: {
+      select: classes.dropdown
+    },
+    id: "simple-select",
+    value: selectedValue,
+    onChange: handleChange
+  }, choices.map(function (option) {
+    return /*#__PURE__*/React.createElement(MenuItem, {
+      color: "primary",
+      key: option,
+      className: classes.items,
+      value: option
+    }, option);
+  }))));
+};
+
+var useStyles$c = makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -723,13 +787,9 @@ var useStyles$b = makeStyles(function (theme) {
 var RunsSelector = function RunsSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Runs' : _ref$label;
-  var classes = useStyles$b();
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
+      label = _ref$label === void 0 ? 'Runs' : _ref$label,
+      action = _ref.action;
+  var classes = useStyles$c();
   var newOptions = options.map(function (option) {
     return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
   });
@@ -744,37 +804,14 @@ var RunsSelector = function RunsSelector(_ref) {
       item: true
     }, /*#__PURE__*/React.createElement(Typography, {
       variant: "h6"
-    }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
+    }, label), newOptions.length === 1 ? /*#__PURE__*/React.createElement(GroupedButtons, {
       options: newOptions,
-      action: handleClick
+      action: action
+    }) : /*#__PURE__*/React.createElement(SimpleSelect, {
+      choices: newOptions,
+      action: action
     })))
   );
-};
-
-var RunDropdown = function RunDropdown(_ref) {
-  var options = _ref.options,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Model Run' : _ref$label;
-
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
-
-  return /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    direction: "column"
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
-  }, label)), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(RunsSelector, {
-    options: options.map(function (option) {
-      return Number(option);
-    }),
-    action: handleClick
-  })));
 };
 
 // A type of promise-like that resolves synchronously and supports only one observer
@@ -937,7 +974,7 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$c = makeStyles(function (theme) {
+var useStyles$d = makeStyles(function (theme) {
   return {
     media: {
       height: '40vw',
@@ -947,14 +984,14 @@ var useStyles$c = makeStyles(function (theme) {
 });
 var ImageViewer = function ImageViewer(_ref) {
   var image = _ref.image;
-  var classes = useStyles$c();
+  var classes = useStyles$d();
   return /*#__PURE__*/React.createElement(CardMedia, {
     className: classes.media,
     image: image
   });
 };
 
-var useStyles$d = makeStyles$2(function (theme) {
+var useStyles$e = makeStyles$2(function (theme) {
   var _root, _markLabel;
 
   return {
@@ -1037,7 +1074,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$d();
+  var classes = useStyles$e();
   options.sort(compare);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
@@ -1102,7 +1139,7 @@ var useTimer = function useTimer(interval) {
   return [ticks, isRunning, setIsRunning];
 };
 
-var useStyles$e = makeStyles(function (theme) {
+var useStyles$f = makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1
@@ -1132,7 +1169,7 @@ var useStyles$e = makeStyles(function (theme) {
 });
 var StartStopButton = function StartStopButton(_ref) {
   var onToggle = _ref.onToggle;
-  var classes = useStyles$e();
+  var classes = useStyles$f();
 
   var _useTimer = useTimer(600),
       tick = _useTimer[0],
@@ -1163,7 +1200,7 @@ var StartStopButton = function StartStopButton(_ref) {
   }));
 };
 
-var useStyles$f = makeStyles(function (theme) {
+var useStyles$g = makeStyles(function (theme) {
   var _offset;
 
   return {
@@ -1179,7 +1216,7 @@ var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
       onToggle = _ref.onToggle;
-  var classes = useStyles$f();
+  var classes = useStyles$g();
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React.createElement(Grid, {
@@ -1220,7 +1257,7 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
-var useStyles$g = makeStyles(function (theme) {
+var useStyles$h = makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -1245,7 +1282,7 @@ var useStyles$g = makeStyles(function (theme) {
 });
 var ValidTime = function ValidTime(_ref) {
   var time = _ref.time;
-  var classes = useStyles$g();
+  var classes = useStyles$h();
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
@@ -1401,7 +1438,7 @@ function clsx () {
 
 var ShyftContext = React.createContext({});
 var drawerWidth$1 = 250;
-var useStyles$h = makeStyles(function (theme) {
+var useStyles$i = makeStyles(function (theme) {
   var _content, _ref;
 
   return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
@@ -1418,7 +1455,7 @@ var ShyftWx = function ShyftWx(_ref2) {
       url = _ref2.url,
       customer = _ref2.customer,
       themeOverride = _ref2.themeOverride;
-  var classes = useStyles$h();
+  var classes = useStyles$i();
 
   var _React$useState = React.useState(true),
       loading = _React$useState[0],
@@ -1442,9 +1479,11 @@ var ShyftWx = function ShyftWx(_ref2) {
       selectedForecast = _React$useState5[0],
       setSelectedForecast = _React$useState5[1];
 
-  var _React$useState6 = React.useState(false),
-      landingPage = _React$useState6[0],
-      setLandingPage = _React$useState6[1];
+  var _React$useState6 = React.useState('');
+
+  var _React$useState7 = React.useState(false),
+      landingPage = _React$useState7[0],
+      setLandingPage = _React$useState7[1];
 
   var urlParams = React.useRef(new URLSearchParams(window.location.search));
   customer = customer || urlParams.current.get('customer') || '';
@@ -1571,6 +1610,10 @@ var ShyftWx = function ShyftWx(_ref2) {
     setSelectedLevel(product.level);
     setSelectedProduct(product.product);
     setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  };
+
+  var onRunSelect = function onRunSelect(buttonText) {
+    console.log(buttonText);
   };
 
   var compare = function compare(a, b) {
@@ -1716,7 +1759,7 @@ var ShyftWx = function ShyftWx(_ref2) {
     }, /*#__PURE__*/React.createElement(RunsSelector, {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
-      action: function action() {}
+      action: onRunSelect
     })), /*#__PURE__*/React.createElement(Hidden, {
       xsDown: true
     }, /*#__PURE__*/React.createElement(Grid, {
@@ -1785,5 +1828,5 @@ var ShyftWx = function ShyftWx(_ref2) {
   }, generateContent())));
 };
 
-export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, LandingPage, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunDropdown, ShyftWx, RunsSelector as SimpleSelect, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme$1 as theme };
+export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, LandingPage, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunsSelector, ShyftWx, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme$1 as theme };
 //# sourceMappingURL=index.modern.js.map
