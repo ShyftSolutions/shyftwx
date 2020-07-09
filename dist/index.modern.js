@@ -357,7 +357,7 @@ var LandingPage = function LandingPage(_ref) {
 
   var checkInput = function checkInput() {
     try {
-      var customerUrl = url + "/" + customerInput + "/" + datasetInput;
+      var customerUrl = url + "/" + customerInput + "/" + datasetInput + "/products";
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {
           setState('error');
@@ -1488,7 +1488,7 @@ var ShyftWx = function ShyftWx(_ref2) {
   var urlParams = React.useRef(new URLSearchParams(window.location.search));
   customer = customer || urlParams.current.get('customer') || '';
   dataset = dataset || urlParams.current.get('model') || '';
-  var customerUrl = url + "/" + customer + "/" + dataset;
+  var customerUrl = url + "/" + customer + "/" + dataset + "/products";
 
   var loadAsync = function loadAsync() {
     try {

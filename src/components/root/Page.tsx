@@ -50,7 +50,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
     };
 
     const checkInput = async () => {
-        const customerUrl = `${url}/${customerInput}/${datasetInput}`;
+        const customerUrl = `${url}/${customerInput}/${datasetInput}/products`;
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
 
         if (indexData.datasets === undefined || indexData.datasets.length === 0) {

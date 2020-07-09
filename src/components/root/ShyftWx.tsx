@@ -47,7 +47,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     customer = customer || urlParams.current.get('customer') || '';
     dataset = dataset || urlParams.current.get('model') || '';
 
-    const customerUrl = `${url}/${customer}/${dataset}`;
+    const customerUrl = `${url}/${customer}/${dataset}/products`;
 
     const loadAsync = async () => {
         const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
