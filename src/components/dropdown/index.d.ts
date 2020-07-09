@@ -3,6 +3,6 @@
  */
 
 declare type SimpleSelectProps = {
-    options: string[];
+    choices: string[];
     action: (option: string) => void;
 };

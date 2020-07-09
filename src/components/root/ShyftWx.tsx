@@ -40,6 +40,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const [selectedProduct, setSelectedProduct] = React.useState<string>('');
     const [selectedLevel, setSelectedLevel] = React.useState<string>('');
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
+    const [selectedRun, setSelectedRun] = React.useState<string>('');
     const [landingPage, setLandingPage] = React.useState(false);
 
     const urlParams = React.useRef(new URLSearchParams(window.location.search));
@@ -147,6 +148,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
         setSelectedLevel(product.level);
         setSelectedProduct(product.product);
         setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+    };
+
+    const onRunSelect = (buttonText: string) => {
+        console.log(buttonText);
+        //setSelectedRun(buttonText);
     };
 
     /**
@@ -287,7 +293,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                             <RunsSelector
                                 data-cy="runs-selector"
                                 options={[+index.datasets[0].run.name]}
-                                action={() => {}}
+                                action={onRunSelect}
                             />
                         </Grid>
                         <Hidden xsDown>
