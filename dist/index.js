@@ -363,7 +363,7 @@ var LandingPage = function LandingPage(_ref) {
           setState('error');
           setErrorMessage('Customer or dataset id does not exist');
         } else {
-          window.location.href += "/?customer=" + customerInput + "&model=" + datasetInput;
+          window.location.href += "?customer=" + customerInput + "&model=" + datasetInput;
         }
       });
     } catch (e) {
@@ -421,7 +421,7 @@ var LandingPage = function LandingPage(_ref) {
     variant: "body1",
     color: "textSecondary",
     align: "center"
-  }, "Please enter your information below to", /*#__PURE__*/React__default.createElement("br", null), " access the viewer"))), /*#__PURE__*/React__default.createElement(core.Grid, {
+  }, "Enter your information below to access the viewer:"))), /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     item: true,
     alignItems: "center",
