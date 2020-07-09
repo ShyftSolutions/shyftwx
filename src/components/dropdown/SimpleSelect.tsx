@@ -38,10 +38,10 @@ const useStyles = makeStyles((theme) => ({
  * @param options string[]
  * @param action function to be executed to set the selected value
  */
-export const SimpleSelect: React.FC<SimpleSelectProps> = ({ options =[''], action }) => {
+export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) => {
     const classes = useStyles();
 
-    const [selectedValue, setSelectedValue] = React.useState(options[0]);
+    const [selectedValue, setSelectedValue] = React.useState(choices[0]);
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const name = event.target.name;
@@ -61,7 +61,7 @@ export const SimpleSelect: React.FC<SimpleSelectProps> = ({ options =[''], actio
                     value={selectedValue}
                     onChange={handleChange}
                 >
-                    {options.map((option: string) => (
+                    {choices.map((option: string) => (
                         <MenuItem color="primary" key={option} className={classes.items} value={option}>
                             {option}
                         </MenuItem>

@@ -1,5 +1,6 @@
 import { Grid, Typography, makeStyles } from '@material-ui/core';
 import GroupedButtons from '../buttons/GroupedButtons';
+import SimpleSelect from '../dropdown/SimpleSelect';
 import React from 'react';
 import moment from 'moment';
 
@@ -16,12 +17,9 @@ const useStyles = makeStyles((theme) => ({
  * @param options string[] of options for the button group
  * @param label text displayed over the button group
  */
-export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Runs' }) => {
+export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Runs', action }) => {
     const classes = useStyles();
 
-    const handleClick = (index: string) => {
-        console.log(`clicked ${index}`);
-    };
 
     const newOptions = options.map((option) => moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]'));
 
@@ -30,7 +28,11 @@ export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Ru
         <Grid container item justify="flex-end" className={classes.root}>
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
-                <GroupedButtons options={newOptions} action={handleClick} />
+                {newOptions.length === 1 ? (
+                    <GroupedButtons options={newOptions} action={action} />
+                ) : (
+                    <SimpleSelect choices={newOptions} action={action} />
+                )}
             </Grid>
         </Grid>
     );
