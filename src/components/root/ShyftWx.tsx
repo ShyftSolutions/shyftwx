@@ -1,5 +1,4 @@
 import { CircularProgress, Grid, MuiThemeProvider, makeStyles, Hidden } from '@material-ui/core';
-import BaseWxViewer from './../viewers/BaseWxViewer';
 import ImageViewer from './../viewers/ImageViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';

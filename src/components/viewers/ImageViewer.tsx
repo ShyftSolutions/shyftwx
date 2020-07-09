@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 /**
  * Creates a single image component
- * 
+ *
  * @param image to be displayed on the cardMedia component
  */
 export const ImageViewer: React.FC<ImageViewerProps> = ({ image }) => {
