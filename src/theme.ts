@@ -75,7 +75,7 @@ let theme = createMuiTheme({
         }
     },
 
-    spacing: 8
+    spacing: 10
 });
 
 const options = {

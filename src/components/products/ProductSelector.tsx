@@ -13,7 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ProductMenu from './ProductMenu';
 import React from 'react';
 
-const drawerWidth = 250;
+const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
     root: {

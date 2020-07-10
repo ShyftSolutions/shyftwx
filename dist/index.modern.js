@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
-import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, CardMedia, Fab, createMuiTheme, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
+import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, Fab, createMuiTheme, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import 'leaflet/dist/leaflet.css';
 import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
 import { latLngBounds } from 'leaflet';
@@ -583,7 +583,7 @@ var ProductMenu = function ProductMenu(_ref) {
   }));
 };
 
-var drawerWidth = 250;
+var drawerWidth = 260;
 var useStyles$9 = makeStyles(function (theme) {
   var _drawer, _appBar, _menuButton;
 
@@ -973,19 +973,21 @@ function _for(test, update, body) {
 }
 
 var useStyles$d = makeStyles(function (theme) {
+  var _media;
+
   return {
-    media: {
-      height: '40vw',
+    media: (_media = {}, _media[theme.breakpoints.down('sm')] = {
       width: '100%'
-    }
+    }, _media)
   };
 });
 var ImageViewer = function ImageViewer(_ref) {
   var image = _ref.image;
   var classes = useStyles$d();
-  return /*#__PURE__*/React.createElement(CardMedia, {
+  return /*#__PURE__*/React.createElement("img", {
     className: classes.media,
-    image: image
+    src: image,
+    alt: "weather viewer"
   });
 };
 
@@ -1387,7 +1389,7 @@ var theme = createMuiTheme({
       }
     }
   },
-  spacing: 8
+  spacing: 10
 });
 var options = {
   disableAlign: true,
@@ -1435,7 +1437,7 @@ function clsx () {
 }
 
 var ShyftContext = React.createContext({});
-var drawerWidth$1 = 250;
+var drawerWidth$1 = 260;
 var useStyles$i = makeStyles(function (theme) {
   var _content, _ref;
 

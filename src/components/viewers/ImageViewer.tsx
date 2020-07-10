@@ -1,13 +1,14 @@
 import React from 'react';
-import { makeStyles, CardMedia, Card} from '@material-ui/core';
+import { makeStyles, CardMedia, Card } from '@material-ui/core';
 
 /**
  * Uses Material UI to display an image
  */
 const useStyles = makeStyles((theme) => ({
     media: {
-        height: '40vw',
-        width: '100%'
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
     }
 }));
 
@@ -19,9 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export const ImageViewer: React.FC<ImageViewerProps> = ({ image }) => {
     const classes = useStyles();
 
-    return (
-            <CardMedia className={classes.media} image={image} />
-    );
+    return <img className={classes.media} src={image} alt="weather viewer" />;
 };
 
 export default ImageViewer;

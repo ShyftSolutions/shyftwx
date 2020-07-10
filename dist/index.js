@@ -586,7 +586,7 @@ var ProductMenu = function ProductMenu(_ref) {
   }));
 };
 
-var drawerWidth = 250;
+var drawerWidth = 260;
 var useStyles$9 = core.makeStyles(function (theme) {
   var _drawer, _appBar, _menuButton;
 
@@ -976,19 +976,21 @@ function _for(test, update, body) {
 }
 
 var useStyles$d = core.makeStyles(function (theme) {
+  var _media;
+
   return {
-    media: {
-      height: '40vw',
+    media: (_media = {}, _media[theme.breakpoints.down('sm')] = {
       width: '100%'
-    }
+    }, _media)
   };
 });
 var ImageViewer = function ImageViewer(_ref) {
   var image = _ref.image;
   var classes = useStyles$d();
-  return /*#__PURE__*/React__default.createElement(core.CardMedia, {
+  return /*#__PURE__*/React__default.createElement("img", {
     className: classes.media,
-    image: image
+    src: image,
+    alt: "weather viewer"
   });
 };
 
@@ -1390,7 +1392,7 @@ var theme = core.createMuiTheme({
       }
     }
   },
-  spacing: 8
+  spacing: 10
 });
 var options = {
   disableAlign: true,
@@ -1438,7 +1440,7 @@ function clsx () {
 }
 
 var ShyftContext = React__default.createContext({});
-var drawerWidth$1 = 250;
+var drawerWidth$1 = 260;
 var useStyles$i = core.makeStyles(function (theme) {
   var _content, _ref;
 

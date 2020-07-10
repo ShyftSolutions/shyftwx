@@ -16,7 +16,7 @@ import LandingPage from './Page';
 
 export const ShyftContext = React.createContext({});
 
-const drawerWidth = 250;
+const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
