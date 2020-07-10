@@ -586,7 +586,7 @@ var ProductMenu = function ProductMenu(_ref) {
   }));
 };
 
-var drawerWidth = 260;
+var drawerWidth = 250;
 var useStyles$9 = core.makeStyles(function (theme) {
   var _drawer, _appBar, _menuButton;
 
@@ -976,12 +976,10 @@ function _for(test, update, body) {
 }
 
 var useStyles$d = core.makeStyles(function (theme) {
-  var _media;
-
   return {
-    media: (_media = {}, _media[theme.breakpoints.down('sm')] = {
+    media: {
       width: '100%'
-    }, _media)
+    }
   };
 });
 var ImageViewer = function ImageViewer(_ref) {
@@ -1440,7 +1438,7 @@ function clsx () {
 }
 
 var ShyftContext = React__default.createContext({});
-var drawerWidth$1 = 260;
+var drawerWidth$1 = 250;
 var useStyles$i = core.makeStyles(function (theme) {
   var _content, _ref;
 

@@ -1,14 +1,12 @@
 import React from 'react';
-import { makeStyles, CardMedia, Card } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 /**
  * Uses Material UI to display an image
  */
 const useStyles = makeStyles((theme) => ({
     media: {
-        [theme.breakpoints.down('sm')]: {
-            width: '100%'
-        }
+        width: '100%'
     }
 }));
 
