@@ -25,7 +25,7 @@ export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Ru
 
     return (
         /* Run Grid Container */
-        <Grid container item justify="flex-end" className={classes.root}>
+        <Grid container item className={classes.root}>
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
                 {newOptions.length === 1 ? (

@@ -591,16 +591,16 @@ var useStyles$9 = makeStyles(function (theme) {
     root: {
       display: 'flex'
     },
-    drawer: (_drawer = {}, _drawer[theme.breakpoints.up('sm')] = {
+    drawer: (_drawer = {}, _drawer[theme.breakpoints.up('md')] = {
       width: drawerWidth,
       flexShrink: 0
     }, _drawer),
-    appBar: (_appBar = {}, _appBar[theme.breakpoints.up('sm')] = {
+    appBar: (_appBar = {}, _appBar[theme.breakpoints.up('md')] = {
       display: 'none'
     }, _appBar),
     menuButton: (_menuButton = {
       marginRight: theme.spacing(2)
-    }, _menuButton[theme.breakpoints.up('sm')] = {
+    }, _menuButton[theme.breakpoints.up('md')] = {
       display: 'none'
     }, _menuButton),
     toolbar: theme.mixins.toolbar,
@@ -653,7 +653,7 @@ var ProductSelector = function ProductSelector(_ref) {
   }, /*#__PURE__*/React.createElement(MenuIcon, null)))), /*#__PURE__*/React.createElement("nav", {
     className: classes.drawer
   }, /*#__PURE__*/React.createElement(Hidden, {
-    smUp: true,
+    mdUp: true,
     implementation: "css"
   }, /*#__PURE__*/React.createElement(Drawer, {
     container: container,
@@ -668,7 +668,7 @@ var ProductSelector = function ProductSelector(_ref) {
       keepMounted: true
     }
   }, menu)), /*#__PURE__*/React.createElement(Hidden, {
-    xsDown: true,
+    smDown: true,
     implementation: "css"
   }, /*#__PURE__*/React.createElement(Drawer, {
     classes: {
@@ -702,7 +702,6 @@ var RegionSelector = function RegionSelector(_ref) {
     React.createElement(Grid, {
       container: true,
       item: true,
-      justify: "center",
       className: classes.root
     }, /*#__PURE__*/React.createElement(Grid, {
       item: true
@@ -798,7 +797,6 @@ var RunsSelector = function RunsSelector(_ref) {
     React.createElement(Grid, {
       container: true,
       item: true,
-      justify: "flex-end",
       className: classes.root
     }, /*#__PURE__*/React.createElement(Grid, {
       item: true
@@ -1286,7 +1284,7 @@ var ValidTime = function ValidTime(_ref) {
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
-    xsDown: true
+    smDown: true
   }, /*#__PURE__*/React.createElement(Grid, {
     container: true,
     direction: "row",
@@ -1301,7 +1299,7 @@ var ValidTime = function ValidTime(_ref) {
   }, /*#__PURE__*/React.createElement(Typography, {
     variant: "button"
   }, time))))), /*#__PURE__*/React.createElement(Hidden, {
-    smUp: true
+    mdUp: true
   }, /*#__PURE__*/React.createElement(Paper, {
     className: classes.mobilePaper
   }, /*#__PURE__*/React.createElement(Grid, {
@@ -1441,12 +1439,12 @@ var drawerWidth$1 = 250;
 var useStyles$i = makeStyles(function (theme) {
   var _content, _ref;
 
-  return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
+  return _ref = {}, _ref[theme.breakpoints.down('sm')] = {
     toolbar: theme.mixins.toolbar
   }, _ref.content = (_content = {
     flexGrow: 1,
     padding: theme.spacing(3)
-  }, _content[theme.breakpoints.up('sm')] = {
+  }, _content[theme.breakpoints.up('md')] = {
     marginLeft: drawerWidth$1
   }, _content), _ref;
 });
@@ -1737,7 +1735,7 @@ var ShyftWx = function ShyftWx(_ref2) {
     }, /*#__PURE__*/React.createElement(Grid, {
       item: true,
       xs: true,
-      sm: 3,
+      sm: true,
       md: true
     }, /*#__PURE__*/React.createElement(ModelSelector, {
       "data-cy": "model-selector",
@@ -1753,8 +1751,8 @@ var ShyftWx = function ShyftWx(_ref2) {
       action: function action() {}
     })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
-      xs: 6,
-      sm: 6,
+      xs: true,
+      sm: true,
       md: true
     }, /*#__PURE__*/React.createElement(RunsSelector, {
       "data-cy": "runs-selector",

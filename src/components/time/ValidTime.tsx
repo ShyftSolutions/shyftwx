@@ -35,7 +35,7 @@ export const ValidTime: React.FC<ValidTimeProps> = ({ time }) => {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <Hidden xsDown>
+            <Hidden smDown>
                 <Grid container direction="row" justify="flex-end" alignItems="center">
                     <Grid item>
                         <Typography variant="h6">Valid Time</Typography>
@@ -45,7 +45,7 @@ export const ValidTime: React.FC<ValidTimeProps> = ({ time }) => {
                     </Grid>
                 </Grid>
             </Hidden>
-            <Hidden smUp>
+            <Hidden mdUp>
                 <Paper className={classes.mobilePaper}>
                     <Grid container item xs={12} justify="center">
                         <Typography className={classes.text} variant="h6">

@@ -20,13 +20,13 @@ const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
         toolbar: theme.mixins.toolbar
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             marginLeft: drawerWidth
         }
     }
@@ -152,7 +152,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
     const onRunSelect = (buttonText: string) => {
         console.log(buttonText);
-        //setSelectedRun(buttonText);
+        // setSelectedRun(buttonText);
     };
 
     /**
@@ -275,7 +275,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>
-                        <Grid item xs sm={3} md>
+                        <Grid item xs sm md>
                             <ModelSelector
                                 data-cy="model-selector"
                                 options={[index.datasets[0].dataset]}
@@ -289,7 +289,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                                 action={() => {}}
                             />
                         </Grid>
-                        <Grid item xs={6} sm={6} md>
+                        <Grid item xs sm md>
                             <RunsSelector
                                 data-cy="runs-selector"
                                 options={[+index.datasets[0].run.name]}
