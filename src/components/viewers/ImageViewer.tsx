@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, CardMedia, Card } from '@material-ui/core';
+import { makeStyles} from '@material-ui/core';
 
 /**
  * Uses Material UI to display an image
