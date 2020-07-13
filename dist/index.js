@@ -389,7 +389,7 @@ var LandingPage = function LandingPage(_ref) {
     alignItems: "center",
     justify: "center",
     style: {
-      minHeight: '80vh'
+      minHeight: '100vh'
     }
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
@@ -1453,7 +1453,7 @@ var useStyles$i = core.makeStyles(function (theme) {
     toolbar: theme.mixins.toolbar
   }, _ref.content = (_content = {
     flexGrow: 1,
-    padding: theme.spacing(3)
+    padding: theme.spacing(4)
   }, _content[theme.breakpoints.only('xl')] = {
     marginLeft: xlDrawerWidth$1
   }, _content[theme.breakpoints.up('sm')] = {

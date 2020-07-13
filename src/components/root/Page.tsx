@@ -77,7 +77,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                 direction="column"
                 alignItems="center"
                 justify="center"
-                style={{ minHeight: '80vh' }}
+                style={{ minHeight: '100vh' }}
             >
                 <Grid container item direction="column" alignItems="center" justify="center">
                     <Paper className={classes.paper}>
