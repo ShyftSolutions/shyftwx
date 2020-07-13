@@ -1831,7 +1831,7 @@ var ShyftWx = function ShyftWx(_ref2) {
     direction: "row",
     justify: "center",
     alignItems: "center",
-    spacing: 3
+    spacing: 4
   }, generateContent())));
 };
 

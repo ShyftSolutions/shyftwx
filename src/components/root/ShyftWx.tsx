@@ -347,7 +347,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     return (
         <MuiThemeProvider theme={themeOverride || theme}>
             <ShyftContext.Provider value={{ data: index }}>
-                <Grid container direction="row" justify="center" alignItems="center" spacing={3}>
+                <Grid container direction="row" justify="center" alignItems="center" spacing={4}>
                     {generateContent()}
                 </Grid>
             </ShyftContext.Provider>
