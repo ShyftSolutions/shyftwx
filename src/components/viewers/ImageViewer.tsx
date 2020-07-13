@@ -6,7 +6,12 @@ import { makeStyles } from '@material-ui/core';
  */
 const useStyles = makeStyles((theme) => ({
     media: {
-        width: '100%'
+        [theme.breakpoints.up('md')]: {
+            height: '40vw'
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
     }
 }));
 

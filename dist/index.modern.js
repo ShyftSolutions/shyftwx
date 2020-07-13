@@ -979,10 +979,14 @@ function _for(test, update, body) {
 }
 
 var useStyles$d = makeStyles(function (theme) {
+  var _media;
+
   return {
-    media: {
+    media: (_media = {}, _media[theme.breakpoints.up('md')] = {
+      height: '40vw'
+    }, _media[theme.breakpoints.down('sm')] = {
       width: '100%'
-    }
+    }, _media)
   };
 });
 var ImageViewer = function ImageViewer(_ref) {
@@ -1450,7 +1454,7 @@ var useStyles$i = makeStyles(function (theme) {
     toolbar: theme.mixins.toolbar
   }, _ref.content = (_content = {
     flexGrow: 1,
-    padding: theme.spacing(4)
+    padding: theme.spacing(3)
   }, _content[theme.breakpoints.only('xl')] = {
     marginLeft: xlDrawerWidth$1
   }, _content[theme.breakpoints.up('sm')] = {
@@ -1781,6 +1785,7 @@ var ShyftWx = function ShyftWx(_ref2) {
       spacing: 1
     }, /*#__PURE__*/React.createElement(Grid, {
       container: true,
+      justify: "center",
       item: true,
       xs: 12
     }, /*#__PURE__*/React.createElement(ImageViewer, {
@@ -1831,7 +1836,7 @@ var ShyftWx = function ShyftWx(_ref2) {
     direction: "row",
     justify: "center",
     alignItems: "center",
-    spacing: 4
+    spacing: 3
   }, generateContent())));
 };
 

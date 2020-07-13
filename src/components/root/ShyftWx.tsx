@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(4),
+        padding: theme.spacing(3),
         [theme.breakpoints.only('xl')]: {
             marginLeft: xlDrawerWidth
         },
@@ -309,7 +309,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
 
                     {/* Viewer/Time Grid */}
                     <Grid container direction="column" spacing={1}>
-                        <Grid container item xs={12}>
+                        <Grid container justify="center" item xs={12}>
                             <ImageViewer image={activeForecastLayer} />
                         </Grid>
 
@@ -347,7 +347,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     return (
         <MuiThemeProvider theme={themeOverride || theme}>
             <ShyftContext.Provider value={{ data: index }}>
-                <Grid container direction="row" justify="center" alignItems="center" spacing={4}>
+                <Grid container direction="row" justify="center" alignItems="center" spacing={3}>
                     {generateContent()}
                 </Grid>
             </ShyftContext.Provider>
