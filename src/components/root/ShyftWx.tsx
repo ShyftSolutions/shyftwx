@@ -21,7 +21,7 @@ const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.only('xs')]: {
         toolbar: theme.mixins.toolbar
     },
     content: {
@@ -32,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.between('sm', 'lg')]: {
             marginLeft: drawerWidth
-        },
-        [theme.breakpoints.only('xs')]: {
-            marginLeft: 0
         }
     }
 }));
@@ -277,7 +274,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     />
                 </Grid>
 
-                <main className={clsx(classes.content)}>
+                <main className={classes.content}>
                     <div className={classes.toolbar} />
 
                     {/* Model/Region/Run/Valid Menu Grid */}

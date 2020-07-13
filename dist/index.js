@@ -1409,51 +1409,13 @@ var options = {
 theme = core.responsiveFontSizes(theme, options);
 var theme$1 = theme;
 
-function toVal(mix) {
-	var k, y, str='';
-	if (mix) {
-		if (typeof mix === 'object') {
-			if (Array.isArray(mix)) {
-				for (k=0; k < mix.length; k++) {
-					if (mix[k] && (y = toVal(mix[k]))) {
-						str && (str += ' ');
-						str += y;
-					}
-				}
-			} else {
-				for (k in mix) {
-					if (mix[k] && (y = toVal(k))) {
-						str && (str += ' ');
-						str += y;
-					}
-				}
-			}
-		} else if (typeof mix !== 'boolean' && !mix.call) {
-			str && (str += ' ');
-			str += mix;
-		}
-	}
-	return str;
-}
-
-function clsx () {
-	var i=0, x, str='';
-	while (i < arguments.length) {
-		if (x = toVal(arguments[i++])) {
-			str && (str += ' ');
-			str += x;
-		}
-	}
-	return str;
-}
-
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
 var xlDrawerWidth$1 = 350;
 var useStyles$i = core.makeStyles(function (theme) {
   var _content, _ref;
 
-  return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
+  return _ref = {}, _ref[theme.breakpoints.only('xs')] = {
     toolbar: theme.mixins.toolbar
   }, _ref.content = (_content = {
     flexGrow: 1,
@@ -1462,8 +1424,6 @@ var useStyles$i = core.makeStyles(function (theme) {
     marginLeft: xlDrawerWidth$1
   }, _content[theme.breakpoints.between('sm', 'lg')] = {
     marginLeft: drawerWidth$1
-  }, _content[theme.breakpoints.only('xs')] = {
-    marginLeft: 0
   }, _content), _ref;
 });
 var ShyftWx = function ShyftWx(_ref2) {
@@ -1743,7 +1703,7 @@ var ShyftWx = function ShyftWx(_ref2) {
       categories: levelProductVals,
       action: onProductSelect
     })), /*#__PURE__*/React__default.createElement("main", {
-      className: clsx(classes.content)
+      className: classes.content
     }, /*#__PURE__*/React__default.createElement("div", {
       className: classes.toolbar
     }), /*#__PURE__*/React__default.createElement(core.Grid, {
