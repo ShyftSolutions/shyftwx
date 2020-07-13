@@ -6,7 +6,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 300
+        maxWidth: 400
     },
     categoryStyle: {
         fontWeight: 800,

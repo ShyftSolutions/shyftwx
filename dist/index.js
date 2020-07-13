@@ -424,7 +424,7 @@ var LandingPage = function LandingPage(_ref) {
     variant: "body1",
     color: "textSecondary",
     align: "center"
-  }, "Enter your information below to access the viewer:"))), /*#__PURE__*/React__default.createElement(core.Grid, {
+  }, "Please enter your information below ", /*#__PURE__*/React__default.createElement("br", null), " to access the viewer:"))), /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     item: true,
     alignItems: "center",
@@ -470,7 +470,7 @@ function _extends() {
 var useStyles$8 = core.makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: 300
+      maxWidth: 400
     },
     categoryStyle: {
       fontWeight: 800,
@@ -587,29 +587,35 @@ var ProductMenu = function ProductMenu(_ref) {
 };
 
 var drawerWidth = 250;
+var xlDrawerWidth = 350;
 var useStyles$9 = core.makeStyles(function (theme) {
-  var _drawer, _appBar, _menuButton;
+  var _drawer, _appBar, _menuButton, _drawerPaper;
 
   return {
     root: {
       display: 'flex'
     },
-    drawer: (_drawer = {}, _drawer[theme.breakpoints.up('md')] = {
+    drawer: (_drawer = {}, _drawer[theme.breakpoints.only('xl')] = {
+      width: xlDrawerWidth,
+      flexShrink: 0
+    }, _drawer[theme.breakpoints.up('sm')] = {
       width: drawerWidth,
       flexShrink: 0
     }, _drawer),
-    appBar: (_appBar = {}, _appBar[theme.breakpoints.up('md')] = {
+    appBar: (_appBar = {}, _appBar[theme.breakpoints.up('sm')] = {
       display: 'none'
     }, _appBar),
     menuButton: (_menuButton = {
       marginRight: theme.spacing(2)
-    }, _menuButton[theme.breakpoints.up('md')] = {
+    }, _menuButton[theme.breakpoints.up('sm')] = {
       display: 'none'
     }, _menuButton),
     toolbar: theme.mixins.toolbar,
-    drawerPaper: {
+    drawerPaper: (_drawerPaper = {}, _drawerPaper[theme.breakpoints.only('xl')] = {
+      width: xlDrawerWidth
+    }, _drawerPaper[theme.breakpoints.down('lg')] = {
       width: drawerWidth
-    }
+    }, _drawerPaper)
   };
 });
 var ProductSelector = function ProductSelector(_ref) {
@@ -656,7 +662,7 @@ var ProductSelector = function ProductSelector(_ref) {
   }, /*#__PURE__*/React__default.createElement(MenuIcon, null)))), /*#__PURE__*/React__default.createElement("nav", {
     className: classes.drawer
   }, /*#__PURE__*/React__default.createElement(core.Hidden, {
-    mdUp: true,
+    smUp: true,
     implementation: "css"
   }, /*#__PURE__*/React__default.createElement(core.Drawer, {
     container: container,
@@ -671,7 +677,7 @@ var ProductSelector = function ProductSelector(_ref) {
       keepMounted: true
     }
   }, menu)), /*#__PURE__*/React__default.createElement(core.Hidden, {
-    smDown: true,
+    xsDown: true,
     implementation: "css"
   }, /*#__PURE__*/React__default.createElement(core.Drawer, {
     classes: {
@@ -1335,9 +1341,9 @@ var theme = core.createMuiTheme({
     values: {
       xs: 0,
       sm: 768,
-      md: 960,
-      lg: 1280,
-      xl: 1920
+      md: 950,
+      lg: 1130,
+      xl: 1400
     }
   },
   overrides: {
@@ -1439,15 +1445,18 @@ function clsx () {
 
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
+var xlDrawerWidth$1 = 350;
 var useStyles$i = core.makeStyles(function (theme) {
   var _content, _ref;
 
-  return _ref = {}, _ref[theme.breakpoints.down('sm')] = {
+  return _ref = {}, _ref[theme.breakpoints.down('xs')] = {
     toolbar: theme.mixins.toolbar
   }, _ref.content = (_content = {
     flexGrow: 1,
     padding: theme.spacing(3)
-  }, _content[theme.breakpoints.up('md')] = {
+  }, _content[theme.breakpoints.only('xl')] = {
+    marginLeft: xlDrawerWidth$1
+  }, _content[theme.breakpoints.up('sm')] = {
     marginLeft: drawerWidth$1
   }, _content), _ref;
 });

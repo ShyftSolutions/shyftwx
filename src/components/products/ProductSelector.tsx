@@ -14,32 +14,42 @@ import ProductMenu from './ProductMenu';
 import React from 'react';
 
 const drawerWidth = 250;
+const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex'
     },
     drawer: {
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.only('xl')]: {
+            width: xlDrawerWidth,
+            flexShrink: 0
+        },
+        [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
             flexShrink: 0
         }
     },
     appBar: {
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('sm')]: {
             display: 'none'
         }
     },
     menuButton: {
         marginRight: theme.spacing(2),
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('sm')]: {
             display: 'none'
         }
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
-        width: drawerWidth
+        [theme.breakpoints.only('xl')]: {
+            width: xlDrawerWidth
+        },
+        [theme.breakpoints.down('lg')]: {
+            width: drawerWidth
+        }
     }
 }));
 
@@ -89,7 +99,7 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer}>
-                <Hidden mdUp implementation="css">
+                <Hidden smUp implementation="css">
                     <Drawer
                         container={container}
                         variant="temporary"
@@ -106,7 +116,7 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
                         {menu}
                     </Drawer>
                 </Hidden>
-                <Hidden smDown implementation="css">
+                <Hidden xsDown implementation="css">
                     <Drawer
                         classes={{
                             paper: classes.drawerPaper

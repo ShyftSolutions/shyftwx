@@ -95,7 +95,7 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
                                         Welcome
                                     </Typography>
                                     <Typography variant="body1" color="textSecondary" align="center">
-                                        Enter your information below to access the viewer:
+                                        Please enter your information below <br /> to access the viewer:
                                     </Typography>
                                 </Paper>
                             </Grid>

@@ -19,9 +19,9 @@ let theme = createMuiTheme({
         values: {
             xs: 0,
             sm: 768,
-            md: 960,
-            lg: 1280,
-            xl: 1920
+            md: 950,
+            lg: 1130,
+            xl: 1400
         }
     },
     overrides: {

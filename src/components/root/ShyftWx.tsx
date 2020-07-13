@@ -17,16 +17,20 @@ import LandingPage from './Page';
 export const ShyftContext = React.createContext({});
 
 const drawerWidth = 250;
+const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
         toolbar: theme.mixins.toolbar
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.only('xl')]: {
+            marginLeft: xlDrawerWidth
+        },
+        [theme.breakpoints.up('sm')]: {
             marginLeft: drawerWidth
         }
     }
