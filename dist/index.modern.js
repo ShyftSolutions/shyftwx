@@ -595,7 +595,7 @@ var useStyles$9 = makeStyles(function (theme) {
     drawer: (_drawer = {}, _drawer[theme.breakpoints.only('xl')] = {
       width: xlDrawerWidth,
       flexShrink: 0
-    }, _drawer[theme.breakpoints.up('sm')] = {
+    }, _drawer[theme.breakpoints.between('sm', 'lg')] = {
       width: drawerWidth,
       flexShrink: 0
     }, _drawer),
@@ -1457,8 +1457,10 @@ var useStyles$i = makeStyles(function (theme) {
     padding: theme.spacing(3)
   }, _content[theme.breakpoints.only('xl')] = {
     marginLeft: xlDrawerWidth$1
-  }, _content[theme.breakpoints.up('sm')] = {
+  }, _content[theme.breakpoints.between('sm', 'lg')] = {
     marginLeft: drawerWidth$1
+  }, _content[theme.breakpoints.only('xs')] = {
+    marginLeft: 0
   }, _content), _ref;
 });
 var ShyftWx = function ShyftWx(_ref2) {

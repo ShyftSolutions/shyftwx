@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
             width: xlDrawerWidth,
             flexShrink: 0
         },
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.between('sm', 'lg')]: {
             width: drawerWidth,
             flexShrink: 0
         }

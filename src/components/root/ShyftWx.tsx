@@ -30,8 +30,11 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.only('xl')]: {
             marginLeft: xlDrawerWidth
         },
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.between('sm', 'lg')]: {
             marginLeft: drawerWidth
+        },
+        [theme.breakpoints.only('xs')]: {
+            marginLeft: 0
         }
     }
 }));
