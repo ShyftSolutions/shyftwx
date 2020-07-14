@@ -10,7 +10,6 @@ import TimeControl from './../time/TimeControl';
 import ValidTime from '../time/ValidTime';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
-import clsx from 'clsx';
 import moment from 'moment';
 import LandingPage from './Page';
 

@@ -1344,7 +1344,7 @@ var theme = createMuiTheme({
       sm: 768,
       md: 950,
       lg: 1130,
-      xl: 1400
+      xl: 1460
     }
   },
   overrides: {
