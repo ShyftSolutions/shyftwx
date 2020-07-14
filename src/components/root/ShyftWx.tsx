@@ -20,17 +20,20 @@ const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
-    [theme.breakpoints.only('xs')]: {
-        toolbar: theme.mixins.toolbar
-    },
-    content: {
+    toolbar: theme.mixins.toolbar,
+    contentClass: {
         flexGrow: 1,
         padding: theme.spacing(3),
-        [theme.breakpoints.only('xl')]: {
+        marginLeft: drawerWidth
+    },
+    '@media (max-width: 768px)': {
+        contentClass: {
+            marginLeft: 0
+        }
+    },
+    '@media (min-width: 1460px)': {
+        contentClass: {
             marginLeft: xlDrawerWidth
-        },
-        [theme.breakpoints.between('sm', 'lg')]: {
-            marginLeft: drawerWidth
         }
     }
 }));
@@ -273,8 +276,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     />
                 </Grid>
 
-                <main className={classes.content}>
-                    <div className={classes.toolbar} />
+                <main className={classes.contentClass}>
+                    <Hidden smUp>
+                        <div className={classes.toolbar} />
+                    </Hidden>
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>

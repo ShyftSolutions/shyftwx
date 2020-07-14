@@ -1410,24 +1410,30 @@ var ShyftContext = React.createContext({});
 var drawerWidth$1 = 250;
 var xlDrawerWidth$1 = 350;
 var useStyles$i = makeStyles(function (theme) {
-  var _content, _ref;
-
-  return _ref = {}, _ref[theme.breakpoints.only('xs')] = {
-    toolbar: theme.mixins.toolbar
-  }, _ref.content = (_content = {
-    flexGrow: 1,
-    padding: theme.spacing(3)
-  }, _content[theme.breakpoints.only('xl')] = {
-    marginLeft: xlDrawerWidth$1
-  }, _content[theme.breakpoints.between('sm', 'lg')] = {
-    marginLeft: drawerWidth$1
-  }, _content), _ref;
+  return {
+    toolbar: theme.mixins.toolbar,
+    contentClass: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      marginLeft: drawerWidth$1
+    },
+    '@media (max-width: 768px)': {
+      contentClass: {
+        marginLeft: 0
+      }
+    },
+    '@media (min-width: 1460px)': {
+      contentClass: {
+        marginLeft: xlDrawerWidth$1
+      }
+    }
+  };
 });
-var ShyftWx = function ShyftWx(_ref2) {
-  var dataset = _ref2.dataset,
-      url = _ref2.url,
-      customer = _ref2.customer,
-      themeOverride = _ref2.themeOverride;
+var ShyftWx = function ShyftWx(_ref) {
+  var dataset = _ref.dataset,
+      url = _ref.url,
+      customer = _ref.customer,
+      themeOverride = _ref.themeOverride;
   var classes = useStyles$i();
 
   var _React$useState = React.useState(true),
@@ -1700,10 +1706,12 @@ var ShyftWx = function ShyftWx(_ref2) {
       categories: levelProductVals,
       action: onProductSelect
     })), /*#__PURE__*/React.createElement("main", {
-      className: classes.content
+      className: classes.contentClass
+    }, /*#__PURE__*/React.createElement(Hidden, {
+      smUp: true
     }, /*#__PURE__*/React.createElement("div", {
       className: classes.toolbar
-    }), /*#__PURE__*/React.createElement(Grid, {
+    })), /*#__PURE__*/React.createElement(Grid, {
       container: true,
       justify: "space-between",
       spacing: 1
