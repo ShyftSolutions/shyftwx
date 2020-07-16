@@ -16,42 +16,47 @@ const options = [
     {
         name: 'Surface',
         open: true,
-        products: [{
-            name: 'Wind and Temperature',
-            icon: faWind,
-        }, {
-            name: 'Relative Humidity',
-            icon: faPercent,
-        }]
+        products: [
+            {
+                name: 'Wind and Temperature',
+                icon: faWind
+            },
+            {
+                name: 'Relative Humidity',
+                icon: faPercent
+            }
+        ]
     },
     {
         name: '850MB',
         open: false,
-        products: [{
-            name: 'Relative Humidity',
-            icon: faTint,
-        },
+        products: [
+            {
+                name: 'Relative Humidity',
+                icon: faTint
+            },
             {
                 name: 'Precipitation Type',
-                icon: faCloudShowersHeavy,
-            }]
+                icon: faCloudShowersHeavy
+            }
+        ]
     },
     {
         name: '700MB',
         open: false,
-        products: [{
-            name: 'Wind and Temperature',
-            icon: faWind,
-        },]
+        products: [
+            {
+                name: 'Wind and Temperature',
+                icon: faWind
+            }
+        ]
     }
 ];
 
 export const ProductSelector = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_ProductSelector categories={object('Product Categories', options)}/>
+            <_ProductSelector categories={object('Product Categories', options)} />
         </MuiThemeProvider>
     );
 };
-
-

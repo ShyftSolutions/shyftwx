@@ -24,3 +24,10 @@ export const RunDropdown = () => {
     );
 };
 
+export const RunButtonGroup = () => {
+  return (
+    <MuiThemeProvider theme={theme}>
+      <_RunSelector options={[1594307790]} action={onRunSelect} />
+    </MuiThemeProvider>
+  );
+};

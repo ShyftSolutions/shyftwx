@@ -2,6 +2,7 @@ import { Container, MuiThemeProvider } from '@material-ui/core';
 import { withKnobs } from '@storybook/addon-knobs/react';
 import React from 'react';
 import _ShyftWx from '../components/root/ShyftWx';
+import _TextField from '../components/textfield/TextField';
 import theme from './../theme';
 
 export default {

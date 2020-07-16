@@ -1417,12 +1417,12 @@ var useStyles$i = makeStyles(function (theme) {
       padding: theme.spacing(3),
       marginLeft: drawerWidth$1
     },
-    '@media (max-width: 768px)': {
+    '@media (max-width: 767px)': {
       contentClass: {
         marginLeft: 0
       }
     },
-    '@media (min-width: 1460px)': {
+    '@media (min-width: 1459px)': {
       contentClass: {
         marginLeft: xlDrawerWidth$1
       }

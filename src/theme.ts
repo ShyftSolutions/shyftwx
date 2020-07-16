@@ -72,9 +72,13 @@ let theme = createMuiTheme({
             tooltipPlacementBottom: {
                 marginTop: 15
             }
+        },
+        MuiPickersToolbar: {
+            toolbar: {
+                backgroundColor: '#212529'
+            }
         }
     },
-
     spacing: 10
 });
 

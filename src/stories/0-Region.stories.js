@@ -18,5 +18,5 @@ export const RegionSelector = () => {
         <MuiThemeProvider theme={theme}>
             <_RegionSelector options={object('Button Labels', defaultOptions)} label={text('Label', label)}/>
         </MuiThemeProvider>
-    )
+    );
 };
