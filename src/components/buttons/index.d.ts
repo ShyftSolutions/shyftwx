@@ -10,4 +10,5 @@ declare type GroupedButtonsProps = {
 declare type BasicButtonProps = {
     text?: string;
     action: () => void;
+    style?: string;
 };
