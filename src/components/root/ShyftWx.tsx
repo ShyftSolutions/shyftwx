@@ -11,7 +11,7 @@ import ValidTime from '../time/ValidTime';
 import { getIndexAsync } from '../../apis';
 import theme from '../../theme';
 import moment from 'moment';
-import LandingPage from './Page';
+import LandingPage from '../landingpage/Page';
 
 export const ShyftContext = React.createContext({});
 

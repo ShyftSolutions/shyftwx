@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
-import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, Fab, createMuiTheme, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
+import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, Fab, createMuiTheme, fade, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import 'leaflet/dist/leaflet.css';
 import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
 import { latLngBounds } from 'leaflet';
@@ -223,22 +223,60 @@ var useStyles$5 = makeStyles(function (theme) {
       '& > *': {
         margin: theme.spacing(1)
       }
+    },
+    gradient: {
+      background: 'linear-gradient(-139deg, #F0329A 0%, #FF922B 100%)',
+      borderRadius: 3,
+      border: 0,
+      color: 'white',
+      height: 48,
+      padding: '0 30px',
+      boxShadow: theme.shadows[3],
+      fontWeight: 800
+    },
+    disabled: {
+      borderRadius: 3,
+      height: 48,
+      padding: '0 30px',
+      fontWeight: 800
     }
   });
 });
 var BasicButton = function BasicButton(_ref) {
   var action = _ref.action,
       _ref$text = _ref.text,
-      text = _ref$text === void 0 ? 'Next' : _ref$text;
+      text = _ref$text === void 0 ? 'Next' : _ref$text,
+      _ref$style = _ref.style,
+      style = _ref$style === void 0 ? 'blue' : _ref$style;
   var classes = useStyles$5();
+  var buttonStyles = {
+    blue: /*#__PURE__*/React.createElement(Button$1, {
+      variant: "contained",
+      color: "primary",
+      size: "large",
+      onClick: action
+    }, text),
+    disabled: /*#__PURE__*/React.createElement(Button$1, {
+      variant: "contained",
+      color: "primary",
+      size: "large",
+      disabled: true
+    }, text),
+    gradient: /*#__PURE__*/React.createElement(Button$1, {
+      className: classes.gradient,
+      size: "large",
+      onClick: action
+    }, text),
+    disabledGradient: /*#__PURE__*/React.createElement(Button$1, {
+      className: classes.disabled,
+      variant: "contained",
+      size: "large",
+      disabled: true
+    }, text)
+  };
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
-  }, /*#__PURE__*/React.createElement(Button$1, {
-    variant: "contained",
-    color: "primary",
-    size: "large",
-    onClick: action
-  }, text));
+  }, buttonStyles[style]);
 };
 
 var useStyles$6 = makeStyles$1(function (theme) {
@@ -1394,6 +1432,23 @@ var theme = createMuiTheme({
       },
       tooltipPlacementBottom: {
         marginTop: 15
+      }
+    },
+    MuiSwitch: {
+      colorPrimary: {
+        color: '#37B24D',
+        '& + $track': {
+          backgroundColor: '#37B24D'
+        },
+        '&$checked': {
+          color: '#F50000',
+          '&:hover': {
+            backgroundColor: fade('#F50000', 0.04)
+          }
+        },
+        '&$checked + $track': {
+          backgroundColor: '#F50000'
+        }
       }
     }
   },

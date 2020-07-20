@@ -5,6 +5,7 @@ import React from 'react';
  *
  * @param text on button
  * @param action function that occurs when the button is clicked
+ * @param style
  */
 export declare const BasicButton: React.FC<BasicButtonProps>;
 export default BasicButton;

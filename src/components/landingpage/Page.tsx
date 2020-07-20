@@ -1,6 +1,6 @@
 import React from 'react';
-import BasicButton from './../buttons/BasicButton';
-import TextField from './../textfield/TextField';
+import BasicButton from '../buttons/BasicButton';
+import TextField from '../textfield/TextField';
 import { getIndexAsync } from '../../apis';
 import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
 

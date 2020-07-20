@@ -5,7 +5,7 @@ import BaseWxViewer from './components/viewers/BaseWxViewer';
 import ForwardButton from './components/time/ForwardButton';
 import GroupedButtons from './components/buttons/GroupedButtons';
 import ModelSelector from './components/models/ModelSelector';
-import LandingPage from './components/root/Page';
+import LandingPage from './components/landingpage/Page';
 import ProductMenu from './components/products/ProductMenu';
 import ProductSelector from './components/products/ProductSelector';
 import RegionSelector from './components/regions/RegionSelector';
