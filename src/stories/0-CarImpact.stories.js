@@ -1,11 +1,11 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import React from 'react';
-import _TimeSelector from '../components/time/TimeSelector';
-import _BasicButton from '../components/buttons/BasicButton';
-import _BasicSwitch from '../components/switch/BasicSwitch';
-import _BasicCheckbox from '../components/checkbox/BasicCheckbox';
-import _WelcomePage from '../components/landingpage/WelcomePage';
-// import _ThresholdSlider from '../components/slider/ThresholdSlider';
+import _WelcomePage from '../components/car-route/WelcomePage';
+import _RouteInput from '../components/car-route/RouteInput';
+import _WeatherInput from '../components/car-route/WeatherInput';
+import _SearchField from '../components/textfield/SearchField';
+import _ThresholdInput from '../components/car-route/ThresholdInput';
+import _CarRouteServices from '../components/car-route/CarRouteServices';
 import theme from './../theme';
 import { withKnobs } from '@storybook/addon-knobs';
 
@@ -14,61 +14,50 @@ export default {
     decoration: [withKnobs]
 };
 
-export const TimeSelector = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_TimeSelector />
-        </MuiThemeProvider>
-    );
-};
-
-export const BasicButton = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_BasicButton style="gradient" text="start" />
-            <_BasicButton style="blue" text="start" />
-            <_BasicButton style="disabled" text="start" />
-            <_BasicButton style="disabledGradient" text="start" />
-        </MuiThemeProvider>
-    );
-};
-
-export const BasicSwitch = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_BasicSwitch />
-        </MuiThemeProvider>
-    );
-};
-
-export const BasicCheckbox = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_BasicCheckbox />
-        </MuiThemeProvider>
-    );
-};
-
-/*
-export const ThresholdSlider = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_ThresholdSlider
-                key="wind"
-                min={0}
-                max={40}
-                values={[0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]}
-                units="kt"
-            />
-        </MuiThemeProvider>
-    );
-};
-*/
-
 export const WelcomePage = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <_WelcomePage />
+        </MuiThemeProvider>
+    );
+};
+
+export const RouteInput = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_RouteInput />
+        </MuiThemeProvider>
+    );
+};
+
+export const WeatherInput = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_WeatherInput />
+        </MuiThemeProvider>
+    );
+};
+
+export const SearchField = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_SearchField />
+        </MuiThemeProvider>
+    );
+};
+
+export const ThresholdInput = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_ThresholdInput impact="wind" />
+        </MuiThemeProvider>
+    );
+};
+
+export const CarRouteServices = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_CarRouteServices />
         </MuiThemeProvider>
     );
 };

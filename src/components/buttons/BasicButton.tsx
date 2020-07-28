@@ -13,14 +13,14 @@ const useStyles = makeStyles((theme) =>
             borderRadius: 3,
             border: 0,
             color: 'white',
-            height: 48,
+            height: 52,
             padding: '0 30px',
             boxShadow: theme.shadows[3],
             fontWeight: 800
         },
         disabled: {
             borderRadius: 3,
-            height: 48,
+            height: 52,
             padding: '0 30px',
             fontWeight: 800
         }

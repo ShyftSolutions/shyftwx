@@ -8,3 +8,8 @@ declare type TextFieldProps = {
     state: string;
     helperText?: string;
 };
+
+declare type SearchFieldProps = {
+    label: string;
+    handleChange: (string) => void;
+};

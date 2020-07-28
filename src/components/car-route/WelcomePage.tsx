@@ -12,21 +12,28 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.up('md')]: {
             minHeight: '40vh',
-            minWidth: '40vw'
-        }
-    },
-    textPaper: {
-        paddingTop: 20
+            minWidth: '50vw'
+        },
+        paddingTop: 20,
+        paddingBottom: 20
     },
     text: {
-        color: theme.palette.secondary.contrastText
+        fontWeight: 500,
+        fontSize: '2rem',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1.75em'
+        },
+        [theme.breakpoints.down('xs')]: {
+            fontSize: '1.25em'
+        }
     },
-    subtitle: {
-        color: theme.palette.secondary.dark
+    dot: {
+        fontSize: '.75em',
+        color: '#329AF0'
     }
 }));
 
-export const WelcomePage = () => {
+export const WelcomePage: React.FC<WelcomePageProps> = ({ action }) => {
     const classes = useStyles();
 
     return (
@@ -45,13 +52,11 @@ export const WelcomePage = () => {
                             container
                             item
                             direction="column"
-                            justify="center"
+                            justify="space-around"
                             alignItems="center"
                             spacing={2}
-                            style={{ minHeight: '40vh', minWidth: '40vw' }}
+                            style={{ minHeight: '60vh', minWidth: '50vw' }}
                         >
-                            <Grid item xs={12} />
-
                             <Grid container item justify="space-around">
                                 <FontAwesomeIcon
                                     icon={fas.faTemperatureHigh}
@@ -74,26 +79,17 @@ export const WelcomePage = () => {
                                 <FontAwesomeIcon icon={fas.faCar} style={{ fontSize: '1.5em', color: '#A551CF' }} />
                             </Grid>
 
-                            <Grid item xs={12} />
-
-                            <Typography align="center" variant="h5" gutterBottom>
-                                View the weather along your car route
+                            <Typography align="center" className={classes.text}>
+                                View the weather along your <br /> car route
                             </Typography>
 
-                            <Grid item xs={12} />
-
                             <Grid container item justify="space-evenly" xs={3}>
-                                <FontAwesomeIcon icon={fas.faCircle} style={{ fontSize: '.75em', color: '#329AF0' }} />
-                                <FontAwesomeIcon icon={fas.faCircle} style={{ fontSize: '.75em', color: '#329AF0' }} />
-                                <FontAwesomeIcon icon={fas.faCircle} style={{ fontSize: '.75em', color: '#329AF0' }} />
+                                <FontAwesomeIcon icon={fas.faCircle} className={classes.dot} />
+                                <FontAwesomeIcon icon={fas.faCircle} className={classes.dot} />
+                                <FontAwesomeIcon icon={fas.faCircle} className={classes.dot} />
                             </Grid>
 
-                            <Grid item xs={12} />
-
-                            <BasicButton style="gradient" text="start" />
-
-                            <Grid item xs={12} />
-                            <Grid item xs={12} />
+                            <BasicButton style="gradient" text="start" action={action} />
                         </Grid>
                     </Paper>
                 </Grid>

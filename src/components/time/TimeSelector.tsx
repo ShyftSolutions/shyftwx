@@ -1,5 +1,5 @@
 import React from 'react';
-import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from '@date-io/moment';
 import { KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 export const TimeSelector = () => {
@@ -12,6 +12,7 @@ export const TimeSelector = () => {
                 mask="__:__ _M"
                 value={selectedDate}
                 onChange={(date) => handleDateChange(date)}
+                fullWidth
             />
         </MuiPickersUtilsProvider>
     );

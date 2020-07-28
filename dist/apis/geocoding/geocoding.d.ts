@@ -1,0 +1,12 @@
+import { PointRequestResult, RouteImpactDataSegment, SearchData, ShyftOGCRestfulLayerResponse } from './index';
+export declare const MAPBOX_API_URL: string;
+export declare const MAPBOX_DIRECTIONS_API_URL: string;
+export declare const SHYFT_CAR_ROUTE_API_URL = "https://api.shyftwx.com/product/car_route";
+export declare const SHYFT_CAPS_URL = "https://ogc.shyftwx.com/ogcRestful/layers";
+export declare const SHYFT_WCS_ROUTE = "https://api.shyftwx.com/getwxdata/point";
+export declare function searchAsync(input: string): Promise<SearchData>;
+export declare function directionsAsync(coords: number[][]): Promise<any>;
+export declare function pointDataAsync(lon: number, lat: number, time?: string): Promise<PointRequestResult>;
+export declare function getCapabilities(): Promise<any>;
+export declare function checkAvailableTimes(layer: string): Promise<ShyftOGCRestfulLayerResponse>;
+export declare function carRouteAsync(currentRoute: any, startTime: Date | null): Promise<RouteImpactDataSegment[]>;
