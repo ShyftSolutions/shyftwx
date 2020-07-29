@@ -1,6 +1,5 @@
 import React from 'react';
-import { Paper, Grid, Typography, makeStyles, IconButton } from '@material-ui/core';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
+import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import TimeSelector from '../time/TimeSelector';
@@ -41,7 +40,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const RouteInput: React.FC<RouteInputProps> = ({ onClick, onStartPointChange, onDestinationChange }) => {
+export const RouteInput: React.FC<RouteInputProps> = ({
+    onClick,
+    onStartPointChange,
+    onDestinationChange,
+    onTimeChange,
+    startPoint,
+    destination
+}) => {
     const classes = useStyles();
 
     const handleStartPointChange = (input: string) => {
@@ -50,6 +56,10 @@ export const RouteInput: React.FC<RouteInputProps> = ({ onClick, onStartPointCha
 
     const handleDestinationChange = (input: string) => {
         onDestinationChange(input);
+    };
+
+    const handleTimeChange = (time: Date) => {
+        onTimeChange(time);
     };
 
     return (
@@ -91,12 +101,20 @@ export const RouteInput: React.FC<RouteInputProps> = ({ onClick, onStartPointCha
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <TextSearch label="Starting Point" handleChange={handleStartPointChange} />
+                                        <TextSearch
+                                            label="Starting Point"
+                                            handleChange={handleStartPointChange}
+                                            value={startPoint}
+                                        />
                                     </Grid>
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <TextSearch label="Destination" handleChange={handleDestinationChange} />
+                                        <TextSearchRo
+                                            label="Destination"
+                                            handleChange={handleDestinationChange}
+                                            value={destination}
+                                        />
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -110,7 +128,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({ onClick, onStartPointCha
                                 </Grid>
                                 <Grid item xs={2} />
                                 <Grid item xs={8}>
-                                    <TimeSelector />
+                                    <TimeSelector action={handleTimeChange} />
                                 </Grid>
                             </Grid>
 

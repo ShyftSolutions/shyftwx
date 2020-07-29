@@ -27,7 +27,10 @@ declare type SliderProps = {
     selected: number;
 };
 
-
 declare type ValidTimeProps = {
     time: string;
+};
+
+declare type TimeSelectorProps = {
+    action: (Date) => void;
 };

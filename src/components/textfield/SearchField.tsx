@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const SearchField: React.FC<SearchFieldProps> = ({ label, handleChange }) => {
+export const SearchField: React.FC<SearchFieldProps> = ({ label, handleChange, value }) => {
     const classes = useStyles();
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +45,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({ label, handleChange })
                 placeholder={label}
                 inputProps={{ 'aria-label': label }}
                 onChange={onChange}
+                defaultValue={value}
             />
             <IconButton type="submit" className={classes.iconButton} aria-label="search">
                 <SearchIcon />

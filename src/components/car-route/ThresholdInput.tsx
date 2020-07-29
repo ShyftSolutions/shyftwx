@@ -47,12 +47,13 @@ const unitOptions = {
     temp: ['°F', '°C']
 };
 
-export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact }) => {
+export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }) => {
     const classes = useStyles();
     const [values, setValues] = React.useState(defaultThresholdValues[impact]);
 
     const handleThresholdChange = (values: number[]) => {
         setValues(values);
+        action(values);
     };
 
     const sliders = {
@@ -110,7 +111,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact }) => {
                         <Typography className={classes.unitText}>Units:</Typography>
                         <SimpleSelect choices={unitOptions[impact]} />
                     </Grid>
-                    < Grid container item alignItems="center" justify="flex-end" xs={6}>
+                    <Grid container item alignItems="center" justify="flex-end" xs={6}>
                         <Typography className={classes.unitText}>Greater/Less Than:</Typography>
                     </Grid>
                 </Grid>

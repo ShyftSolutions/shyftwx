@@ -6,6 +6,7 @@ import _WeatherInput from '../components/car-route/WeatherInput';
 import _SearchField from '../components/textfield/SearchField';
 import _ThresholdInput from '../components/car-route/ThresholdInput';
 import _CarRouteServices from '../components/car-route/CarRouteServices';
+import _MapBackground from '../components/car-route/MapBackground';
 import theme from './../theme';
 import { withKnobs } from '@storybook/addon-knobs';
 
@@ -58,6 +59,14 @@ export const CarRouteServices = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <_CarRouteServices />
+        </MuiThemeProvider>
+    );
+};
+
+export const MapBackground = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <_MapBackground />
         </MuiThemeProvider>
     );
 };

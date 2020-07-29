@@ -2,8 +2,13 @@ import React from 'react';
 import DateFnsUtils from '@date-io/moment';
 import { KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-export const TimeSelector = () => {
-    const [selectedDate, handleDateChange] = React.useState<Date | null>(new Date());
+export const TimeSelector: React.FC<TimeSelectorProps> = ({ action }) => {
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
+
+    const onChange = (date) => {
+        setSelectedDate(date);
+        action(date);
+    };
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -11,7 +16,7 @@ export const TimeSelector = () => {
                 placeholder="08:00 AM"
                 mask="__:__ _M"
                 value={selectedDate}
-                onChange={(date) => handleDateChange(date)}
+                onChange={(date) => onChange(date)}
                 fullWidth
             />
         </MuiPickersUtilsProvider>

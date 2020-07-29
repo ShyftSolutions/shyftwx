@@ -12,4 +12,5 @@ declare type TextFieldProps = {
 declare type SearchFieldProps = {
     label: string;
     handleChange: (string) => void;
+    value: string;
 };

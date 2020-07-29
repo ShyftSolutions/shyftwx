@@ -13,7 +13,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const WeatherInput: React.FC<WeatherInputProps> = ({ onClick }) => {
+export const WeatherInput: React.FC<WeatherInputProps> = ({
+    onClick,
+    onWindSliderChange,
+    onPrecipSliderChange,
+    onTempSliderChange
+}) => {
     const classes = useStyles();
 
     const [windChecked, setWindChecked] = React.useState(false);
@@ -36,47 +41,61 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({ onClick }) => {
                             container
                             item
                             direction="column"
-                            justify="space-around"
+                            justify="space-between"
                             alignItems="center"
                             spacing={2}
-                            style={{ minHeight: '70vh', minWidth: '30vw', maxWidth: '45vw' }}
+                            style={{ minHeight: '70vh', minWidth: '30vw', maxWidth: '40vw', margin: 0 }}
                         >
-                            <Grid container item justify="flex-start">
-                                <BasicButton style="blue" text="back" action={onClick} />
-                            </Grid>
-
-                            <Grid container item justify="flex-start">
-                                <Grid item xs={2} />
-                                <Grid item xs={10}>
-                                    <Typography color="secondary" variant="h5" gutterBottom>
-                                        Set weather parameters:
-                                    </Typography>
+                            <Grid container item spacing={2}>
+                                <Grid container item justify="flex-start">
+                                    <BasicButton style="blue" text="back" action={onClick} />
                                 </Grid>
 
-                                {/* Wind */}
-                                <Grid container item key="wind">
+                                <Grid container item justify="flex-start" style={{ border: '1px red' }}>
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <BasicCheckbox text="Wind" action={setWindChecked} />
-                                        {windChecked ? <ThresholdInput impact="wind" /> : <></>}
+                                        <Typography color="secondary" variant="h5" gutterBottom>
+                                            Set weather parameters:
+                                        </Typography>
                                     </Grid>
-                                </Grid>
 
-                                {/* Precipitation */}
-                                <Grid container item key="precipitation">
-                                    <Grid item xs={2} />
-                                    <Grid item xs={10}>
-                                        <BasicCheckbox text="Precipitation" action={setPrecipChecked} />
-                                        {precipChecked ? <ThresholdInput impact="precip" /> : <></>}
+                                    {/* Wind */}
+                                    <Grid container item key="wind">
+                                        <Grid item xs={2} />
+                                        <Grid item xs={10}>
+                                            <BasicCheckbox text="Wind" action={setWindChecked} />
+                                            {windChecked ? (
+                                                <ThresholdInput impact="wind" action={onWindSliderChange} />
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </Grid>
                                     </Grid>
-                                </Grid>
 
-                                {/* Temperature */}
-                                <Grid container item key="temperature">
-                                    <Grid item xs={2} />
-                                    <Grid item xs={10}>
-                                        <BasicCheckbox text="Temperature" action={setTempChecked} />
-                                        {tempChecked ? <ThresholdInput impact="temp" /> : <></>}
+                                    {/* Precipitation */}
+                                    <Grid container item key="precipitation">
+                                        <Grid item xs={2} />
+                                        <Grid item xs={10}>
+                                            <BasicCheckbox text="Precipitation" action={setPrecipChecked} />
+                                            {precipChecked ? (
+                                                <ThresholdInput impact="precip" action={onPrecipSliderChange} />
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </Grid>
+                                    </Grid>
+
+                                    {/* Temperature */}
+                                    <Grid container item key="temperature">
+                                        <Grid item xs={2} />
+                                        <Grid item xs={10}>
+                                            <BasicCheckbox text="Temperature" action={setTempChecked} />
+                                            {tempChecked ? (
+                                                <ThresholdInput impact="temp" action={onTempSliderChange} />
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
