@@ -7,4 +7,5 @@ declare type ThresholdSliderProps = {
     key: string;
     onChange: (values: number[]) => void;
     onAfterChange?: (data: any) => void;
+    isGreaterThan?: boolean;
 };

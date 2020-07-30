@@ -1,8 +1,8 @@
 import React from 'react';
-import { Paper, Typography, makeStyles, Grid } from '@material-ui/core';
+import { Paper, Typography, makeStyles, Grid, Fab } from '@material-ui/core';
+import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import ThresholdSlider from '../slider/ThresholdSlider';
 import SimpleSelect from '../dropdown/SimpleSelect';
-import BasicSwitch from '../switch/BasicSwitch';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -50,10 +50,15 @@ const unitOptions = {
 export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }) => {
     const classes = useStyles();
     const [values, setValues] = React.useState(defaultThresholdValues[impact]);
+    const [isGreaterThan, setIsGreaterThan] = React.useState(true);
 
     const handleThresholdChange = (values: number[]) => {
         setValues(values);
         action(values);
+    };
+
+    const onClick = () => {
+        setIsGreaterThan(!isGreaterThan);
     };
 
     const sliders = {
@@ -66,6 +71,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }
                 values={values}
                 units="kt"
                 onChange={(values) => handleThresholdChange(values)}
+                isGreaterThan={isGreaterThan}
             />
         ),
         temp: (
@@ -77,6 +83,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }
                 values={values}
                 units="C"
                 onChange={(values) => handleThresholdChange(values)}
+                isGreaterThan={isGreaterThan}
             />
         ),
         precip: (
@@ -88,6 +95,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }
                 values={values}
                 units="inches"
                 onChange={(values) => handleThresholdChange(values)}
+                isGreaterThan={isGreaterThan}
             />
         )
     };
@@ -101,19 +109,21 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }
 
                 <Grid container item justify="center" xs={12}>
                     <Grid item xs={1} />
+                    <Grid container item justify="center" alignItems="center" spacing={2}>
+                        <Grid container item xs={1}>
+                            <Fab onClick={onClick} color="primary" size="small">
+                                {isGreaterThan ? <ChevronRight /> : <ChevronLeft />}
+                            </Fab>
+                        </Grid>
+                    </Grid>
                     <Grid item xs={11}>
                         {sliders[impact]}
                     </Grid>
                 </Grid>
 
-                <Grid container item direction="row" alignItems="center">
-                    <Grid container item alignItems="center" xs={6}>
-                        <Typography className={classes.unitText}>Units:</Typography>
-                        <SimpleSelect choices={unitOptions[impact]} />
-                    </Grid>
-                    <Grid container item alignItems="center" justify="flex-end" xs={6}>
-                        <Typography className={classes.unitText}>Greater/Less Than:</Typography>
-                    </Grid>
+                <Grid container item alignItems="center" xs={6}>
+                    <Typography className={classes.unitText}>Units:</Typography>
+                    <SimpleSelect choices={unitOptions[impact]} />
                 </Grid>
             </Grid>
         </Paper>

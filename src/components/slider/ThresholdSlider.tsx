@@ -12,7 +12,8 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({
     values,
     key,
     onChange,
-    onAfterChange
+    onAfterChange,
+    isGreaterThan
 }) => {
     const handleRangeChange = (incomingValues: number[]) => {
         if (incomingValues[0] !== min || incomingValues[3] !== max) {
@@ -30,11 +31,19 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({
         onAfterChange && onAfterChange(data);
     };
 
-    const trackStyle = [
+    let trackStyle = [
         { backgroundColor: '#51CF66', height: 8 },
         { backgroundColor: '#FF922B', height: 8 },
         { backgroundColor: '#FF0000', height: 8 }
     ];
+
+    if (!isGreaterThan) {
+        trackStyle = [
+            { backgroundColor: '#FF0000', height: 8 },
+            { backgroundColor: '#FF922B', height: 8 },
+            { backgroundColor: '#51CF66', height: 8 }
+        ];
+    }
 
     return (
         <Grid container>

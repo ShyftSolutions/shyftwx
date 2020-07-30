@@ -88,9 +88,9 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
     }, [value, inputValue, fetch]);
 
     return (
-        <Paper component="form" className={classes.root}>
+        <div className={classes.root}>
             <Autocomplete
-                style={{ width: 300 }}
+                style={{ width: '100%' }}
                 getOptionLabel={(option) => (typeof option === 'string' ? option : (option as any).place_name)}
                 filterOptions={(x) => x}
                 options={options}
@@ -111,7 +111,7 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
                 onInputChange={(event, newInputValue) => {
                     setInputValue(newInputValue);
                 }}
-                renderInput={(params) => <TextField {...params} label="Add a location" variant="outlined" fullWidth />}
+                renderInput={(params) => <TextField {...params} label={label} variant="outlined" fullWidth />}
                 renderOption={(option) => {
                     return (
                         <Grid container alignItems="center">
@@ -133,11 +133,11 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
                 inputProps={{ 'aria-label': label }}
                 onChange={onChange}
                 defaultValue={value}
-            /> */}
+            />
             <IconButton type="submit" className={classes.iconButton} aria-label="search">
                 <SearchIcon />
-            </IconButton>
-        </Paper>
+            </IconButton> */}
+        </div>
     );
 };
 

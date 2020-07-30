@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import TimeSelector from '../time/TimeSelector';
 import BasicButton from '../buttons/BasicButton';
-import TextSearch from '../textfield/SearchField';
+import SearchField from '../textfield/SearchField';
 import { directionsAsync } from '../../apis';
 
 const useStyles = makeStyles((theme) => ({
@@ -110,7 +110,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <TextSearch
+                                        <SearchField
                                             label="Starting Point"
                                             handleChange={handleStartPointChange}
                                             value={startPoint}
@@ -119,7 +119,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <TextSearch
+                                        <SearchField
                                             label="Destination"
                                             handleChange={handleDestinationChange}
                                             value={destination}

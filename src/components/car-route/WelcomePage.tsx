@@ -17,10 +17,16 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: 20,
         paddingBottom: 20
     },
-    text: {
-        fontWeight: 500,
-        fontSize: '2rem',
+    icon: {
+        fontSize: '1.5em',
         [theme.breakpoints.down('sm')]: {
+            fontSize: '1em'
+        }
+    },
+    text: {
+        fontWeight: 600,
+        fontSize: '2.25rem',
+        [theme.breakpoints.down('md')]: {
             fontSize: '1.75em'
         },
         [theme.breakpoints.down('xs')]: {
@@ -28,8 +34,11 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     dot: {
-        fontSize: '.75em',
-        color: '#329AF0'
+        fontSize: '1em',
+        color: '#329AF0',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '.75em'
+        }
     }
 }));
 
@@ -59,24 +68,40 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ action }) => {
                         >
                             <Grid container item justify="space-around">
                                 <FontAwesomeIcon
+                                    className={classes.icon}
                                     icon={fas.faTemperatureHigh}
-                                    style={{ fontSize: '1.5em', color: '#F0329A' }}
+                                    style={{ color: '#F0329A' }}
                                 />
                                 <FontAwesomeIcon
+                                    className={classes.icon}
                                     icon={fas.faCloudShowersHeavy}
-                                    style={{ fontSize: '1.5em', color: '#F76707' }}
+                                    style={{ color: '#F76707' }}
                                 />
                                 <FontAwesomeIcon
+                                    className={classes.icon}
                                     icon={fas.faMapMarkedAlt}
-                                    style={{ fontSize: '1.5em', color: '#FF922B' }}
+                                    style={{ color: '#FF922B' }}
                                 />
-                                <FontAwesomeIcon icon={fas.faWind} style={{ fontSize: '1.5em', color: '#F7BE1E' }} />
-                                <FontAwesomeIcon icon={fas.faClock} style={{ fontSize: '1.5em', color: '#51CF66' }} />
                                 <FontAwesomeIcon
-                                    icon={fas.faTemperatureLow}
-                                    style={{ fontSize: '1.5em', color: '#329AF0' }}
+                                    className={classes.icon}
+                                    icon={fas.faWind}
+                                    style={{ color: '#F7BE1E' }}
                                 />
-                                <FontAwesomeIcon icon={fas.faCar} style={{ fontSize: '1.5em', color: '#A551CF' }} />
+                                <FontAwesomeIcon
+                                    className={classes.icon}
+                                    icon={fas.faClock}
+                                    style={{ color: '#51CF66' }}
+                                />
+                                <FontAwesomeIcon
+                                    className={classes.icon}
+                                    icon={fas.faTemperatureLow}
+                                    style={{ color: '#329AF0' }}
+                                />
+                                <FontAwesomeIcon
+                                    className={classes.icon}
+                                    icon={fas.faCar}
+                                    style={{ fontSize: '1.5em', color: '#A551CF' }}
+                                />
                             </Grid>
 
                             <Typography align="center" className={classes.text}>
