@@ -1,2 +1,3 @@
-export declare const TimeSelector: () => JSX.Element;
+import React from 'react';
+export declare const TimeSelector: React.FC<TimeSelectorProps>;
 export default TimeSelector;

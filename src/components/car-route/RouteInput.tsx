@@ -110,7 +110,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <TextSearchRo
+                                        <TextSearch
                                             label="Destination"
                                             handleChange={handleDestinationChange}
                                             value={destination}

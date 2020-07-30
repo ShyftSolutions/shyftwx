@@ -4,6 +4,7 @@ import React from 'react';
  *
  * @param options string[] of options for the button group
  * @param label text displayed over the button group
+ * @param action
  */
 export declare const RunsSelector: React.FC<RunsSelectorProps>;
 export default RunsSelector;

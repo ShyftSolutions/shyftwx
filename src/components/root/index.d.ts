@@ -2,11 +2,14 @@
  * Defines the types of the values used in the root file
  */
 
+declare type DynamicFeature = 'routes';
+
 declare type ShyftWxProps = {
     dataset?: string;
     customer?: string;
     url: string;
     themeOverride?: Theme;
+    dynamicFeatures?: DynamicFeature[];
 };
 
 declare type ShyftIndex = {
