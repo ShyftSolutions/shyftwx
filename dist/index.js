@@ -49,6 +49,63 @@ var searchAsync = function searchAsync(input) {
     return response.data;
   });
 };
+function directionsAsync(coords) {
+  var stringCoords = '';
+  coords.forEach(function (c) {
+    stringCoords += c[0] + "," + c[1] + ";";
+  });
+  stringCoords = stringCoords.slice(0, stringCoords.length - 1);
+  var url = MAPBOX_DIRECTIONS_API_URL.replace('{COORDS}', stringCoords);
+  return axios.get(url).then(function (response) {
+    return response.data;
+  });
+}
+var carRouteAsync = function carRouteAsync(currentRoute, startTime) {
+  startTime.setMilliseconds(0);
+  startTime.setSeconds(0);
+  startTime.setMinutes(0);
+  return axios.post(SHYFT_CAR_ROUTE_API_URL, {
+    start_time: startTime.toISOString().slice(0, -1),
+    routes: {
+      geometry: currentRoute.geometry,
+      legs: [{
+        annotation: {
+          duration: currentRoute.legs[0].annotation.duration,
+          distance: [currentRoute.legs[0].distance]
+        }
+      }]
+    }
+  }, {
+    withCredentials: true
+  }).then(function (response) {
+    return response.data;
+  }).then(function (data) {
+    var results = [];
+
+    for (var i = 0; i < data.features.length - 1; i++) {
+      var feature = data.features[i];
+      var tempAvailable = feature.properties.parameters.find(function (parameter) {
+        return parameter.name === 'Temperature';
+      });
+      var windAvailable = feature.properties.parameters.find(function (parameter) {
+        return parameter.name === 'WindSpeed';
+      });
+      var precipAvailable = feature.properties.parameters.find(function (parameter) {
+        return parameter.name === 'TotalPrecipitationRate';
+      });
+      var startTimeAvailable = feature.properties.times[i];
+      results.push({
+        lineString: feature.geometry,
+        temp: tempAvailable.value,
+        precip: precipAvailable.value,
+        wind: windAvailable.value,
+        startTime: startTimeAvailable
+      });
+    }
+
+    return results;
+  });
+};
 
 var index = {
     __proto__: null,
@@ -59,7 +116,9 @@ var index = {
     SHYFT_WCS_ROUTE: SHYFT_WCS_ROUTE,
     getIndexAsync: getIndexAsync,
     getProductDataAsync: getProductDataAsync,
-    searchAsync: searchAsync
+    searchAsync: searchAsync,
+    directionsAsync: directionsAsync,
+    carRouteAsync: carRouteAsync
 };
 
 var useStyles = core.makeStyles(function (theme) {
@@ -2301,6 +2360,8 @@ var ShyftWx = function ShyftWx(props) {
   customer = customer || urlParams.current.get('customer') || '';
   dataset = dataset || urlParams.current.get('model') || '';
   React__default.useEffect(function () {
+    setLoading(true);
+
     if (!url) {
       setLandingPage(true);
       return;
@@ -2310,7 +2371,7 @@ var ShyftWx = function ShyftWx(props) {
       setLandingPage(true);
     }
 
-    setLoading(true);
+    setLoading(false);
   }, []);
 
   var generateContent = function generateContent() {

@@ -36,11 +36,6 @@ const useStyles = makeStyles((theme) =>
     })
 );
 
-declare interface SearchData {
-    type: string;
-    features: Feature[];
-}
-
 export const SearchField: React.FC<SearchFieldProps> = (props) => {
     const { label, handleChange } = props;
 
@@ -95,7 +90,6 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
     return (
         <Paper component="form" className={classes.root}>
             <Autocomplete
-                id="google-map-demo"
                 style={{ width: 300 }}
                 getOptionLabel={(option) => (typeof option === 'string' ? option : (option as any).place_name)}
                 filterOptions={(x) => x}
@@ -107,18 +101,18 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
                 onChange={(event, newValue) => {
                     setOptions(newValue ? [newValue, ...options] : options);
                     setValue(newValue);
+
+                    if (newValue) {
+                        handleChange({ name: (newValue as any).place_name, coords: (newValue as any).center });
+                    } else {
+                        handleChange({ name: '', coords: [] });
+                    }
                 }}
                 onInputChange={(event, newInputValue) => {
                     setInputValue(newInputValue);
                 }}
                 renderInput={(params) => <TextField {...params} label="Add a location" variant="outlined" fullWidth />}
                 renderOption={(option) => {
-                    // const matches = option.structured_formatting.main_text_matched_substrings;
-                    // const parts = parse(
-                    //     option.structured_formatting.main_text,
-                    //     matches.map((match) => [match.offset, match.offset + match.length])
-                    // );
-
                     return (
                         <Grid container alignItems="center">
                             <Grid item>

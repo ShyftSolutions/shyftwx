@@ -5,6 +5,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import TimeSelector from '../time/TimeSelector';
 import BasicButton from '../buttons/BasicButton';
 import TextSearch from '../textfield/SearchField';
+import { directionsAsync } from '../../apis';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -49,17 +50,25 @@ export const RouteInput: React.FC<RouteInputProps> = ({
     destination
 }) => {
     const classes = useStyles();
+    const [startCoords, setStartCoords] = React.useState<number[]>([]);
+    const [endCoords, setEndCoords] = React.useState<number[]>([]);
 
-    const handleStartPointChange = (input: string) => {
-        onStartPointChange(input);
+    const handleStartPointChange = (value: { name: string; coords: number[] }) => {
+        // onStartPointChange(input);
+        setStartCoords(value.coords);
     };
 
-    const handleDestinationChange = (input: string) => {
-        onDestinationChange(input);
+    const handleDestinationChange = (value: { name: string; coords: number[] }) => {
+        // onDestinationChange(input);
+        setEndCoords(value.coords);
     };
 
     const handleTimeChange = (time: Date) => {
         onTimeChange(time);
+    };
+
+    const handleButtonClick = () => {
+        directionsAsync([startCoords, endCoords]).then((data) => console.log(data));
     };
 
     return (
@@ -133,7 +142,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
                             </Grid>
 
                             <Grid container item justify="flex-end">
-                                <BasicButton style="blue" action={onClick} />
+                                <BasicButton style="blue" action={handleButtonClick} />
                             </Grid>
                         </Grid>
                     </Paper>

@@ -10,16 +10,11 @@ export const SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/product/car_rout
 export const SHYFT_CAPS_URL = 'https://ogc.shyftwx.com/ogcRestful/layers';
 export const SHYFT_WCS_ROUTE = 'https://api.shyftwx.com/getwxdata/point';
 
-declare interface SearchData {
-    type: string;
-    features: import('geojson').Feature[];
-}
-
-export const getIndexAsync = (url) => {
+export const getIndexAsync = (url: string) => {
     return fetch(url).then((response) => response.json());
 };
 
-export const getProductDataAsync = (url, region, run) => {
+export const getProductDataAsync = (url: string, region: string, run: string) => {
     url = `${url}/${run}-${region}`;
 
     return fetch(url).then((response) => response.json());
@@ -29,4 +24,75 @@ export const searchAsync = (input: string): Promise<SearchData> => {
     const url = MAPBOX_API_URL.replace('{SEARCH_TEXT}', encodeURIComponent(input));
 
     return axios.get<SearchData>(url).then((response) => response.data);
+};
+
+export function directionsAsync(coords: number[][]) {
+    let stringCoords = '';
+
+    coords.forEach((c) => {
+        stringCoords += `${c[0]},${c[1]};`;
+    });
+
+    stringCoords = stringCoords.slice(0, stringCoords.length - 1);
+
+    const url = MAPBOX_DIRECTIONS_API_URL.replace('{COORDS}', stringCoords);
+
+    return axios.get(url).then((response) => response.data);
+}
+
+export const carRouteAsync = (currentRoute: any, startTime: Date | null): Promise<RouteImpactDataSegment[]> => {
+    (startTime as Date).setMilliseconds(0);
+    (startTime as Date).setSeconds(0);
+    (startTime as Date).setMinutes(0);
+
+    return axios
+        .post<ShyftCarRouteResponse>(
+            SHYFT_CAR_ROUTE_API_URL,
+            {
+                start_time: (startTime as Date).toISOString().slice(0, -1),
+                routes: {
+                    geometry: currentRoute.geometry,
+                    legs: [
+                        {
+                            annotation: {
+                                duration: currentRoute.legs[0].annotation.duration,
+                                distance: [currentRoute.legs[0].distance]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                withCredentials: true
+            }
+        )
+        .then((response) => response.data)
+        .then((data) => {
+            const results: RouteImpactDataSegment[] = [];
+
+            for (let i = 0; i < data.features.length - 1; i++) {
+                const feature = data.features[i];
+
+                const tempAvailable = feature.properties.parameters.find(
+                    (parameter) => parameter.name === 'Temperature'
+                ) as FeatureParameters;
+                const windAvailable = feature.properties.parameters.find(
+                    (parameter) => parameter.name === 'WindSpeed'
+                ) as FeatureParameters;
+                const precipAvailable = feature.properties.parameters.find(
+                    (parameter) => parameter.name === 'TotalPrecipitationRate'
+                ) as FeatureParameters;
+                const startTimeAvailable = feature.properties.times[i];
+
+                results.push({
+                    lineString: feature.geometry,
+                    temp: tempAvailable.value,
+                    precip: precipAvailable.value,
+                    wind: windAvailable.value,
+                    startTime: startTimeAvailable
+                });
+            }
+
+            return results;
+        });
 };
