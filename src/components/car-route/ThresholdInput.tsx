@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
     unitText: {
         fontSize: '.8em',
+        fontWeight: 500,
         [theme.breakpoints.down('sm')]: {
             fontSize: '.7em'
         },
@@ -107,16 +108,13 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }
                     <Typography className={classes.text}>Define Impact Thresholds:</Typography>
                 </Grid>
 
-                <Grid container item justify="center" xs={12}>
-                    <Grid item xs={1} />
-                    <Grid container item justify="center" alignItems="center" spacing={2}>
-                        <Grid container item xs={1}>
-                            <Fab onClick={onClick} color="primary" size="small">
-                                {isGreaterThan ? <ChevronRight /> : <ChevronLeft />}
-                            </Fab>
-                        </Grid>
+                <Grid container item justify="center" alignItems="center" xs={12}>
+                    <Grid item xs>
+                        <Fab onClick={onClick} color="primary" size="small">
+                            {isGreaterThan ? <ChevronRight /> : <ChevronLeft />}
+                        </Fab>
                     </Grid>
-                    <Grid item xs={11}>
+                    <Grid item xs lg={10} md={9} sm={9}>
                         {sliders[impact]}
                     </Grid>
                 </Grid>

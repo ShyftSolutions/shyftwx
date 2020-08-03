@@ -142,7 +142,11 @@ export const RouteInput: React.FC<RouteInputProps> = ({
                             </Grid>
 
                             <Grid container item justify="flex-end">
-                                <BasicButton style="blue" action={handleButtonClick} />
+                                {startCoords.length === 0 || endCoords.length === 0 ? (
+                                    <BasicButton style="disabled" />
+                                ) : (
+                                    <BasicButton style="blue" action={handleButtonClick} />
+                                )}
                             </Grid>
                         </Grid>
                     </Paper>

@@ -308,16 +308,18 @@ var useStyles$5 = makeStyles(function (theme) {
       borderRadius: 3,
       border: 0,
       color: 'white',
-      height: 52,
+      height: 60,
       padding: '0 30px',
       boxShadow: theme.shadows[3],
-      fontWeight: 800
+      fontWeight: 800,
+      fontSize: '1.25em'
     },
     disabled: {
       borderRadius: 3,
-      height: 52,
+      height: 60,
       padding: '0 30px',
-      fontWeight: 800
+      fontWeight: 800,
+      fontSize: '1.25em'
     }
   });
 });

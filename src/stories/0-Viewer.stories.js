@@ -149,8 +149,8 @@ const defaultViewerKnobs = {
             name: '700MB',
             open: false,
             products: [{
-                name: 'Wind and Temperature',
-                icon: faWind,
+                    name: 'Wind and Temperature',
+                    icon: faWind
             },]
         }
     ]
