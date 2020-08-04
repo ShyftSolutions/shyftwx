@@ -1473,6 +1473,7 @@ var ShyftWx = function ShyftWx(_ref) {
     try {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         function _temp2() {
+          setIndex(arr);
           setLoading(false);
         }
 
@@ -1481,6 +1482,9 @@ var ShyftWx = function ShyftWx(_ref) {
           return;
         }
 
+        var arr = {
+          datasets: []
+        };
         var i = 0;
 
         var _temp = _for(function () {
@@ -1533,7 +1537,7 @@ var ShyftWx = function ShyftWx(_ref) {
                 }).map(function (item) {
                   return {
                     hour: item.forecast,
-                    image: item.filename
+                    image: item.url
                   };
                 });
               });
@@ -1542,7 +1546,7 @@ var ShyftWx = function ShyftWx(_ref) {
             var indexes = {
               datasets: [datasetRegionRun]
             };
-            setIndex(indexes);
+            arr.datasets.push(datasetRegionRun);
 
             if (i === 0) {
               setSelectedLevel(indexes.datasets[0].run.levels[0].name);
@@ -1574,6 +1578,7 @@ var ShyftWx = function ShyftWx(_ref) {
   }, []);
 
   var getSelectedLevel = function getSelectedLevel() {
+    console.log(index);
     return index.datasets[0].run.levels.filter(function (lvl) {
       return lvl.name === selectedLevel;
     })[0];
@@ -1667,8 +1672,7 @@ var ShyftWx = function ShyftWx(_ref) {
   };
 
   var getValidTime = function getValidTime() {
-    var validTime = moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
-    return validTime;
+    return moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
   };
 
   var generateContent = function generateContent() {
