@@ -1,4 +1,4 @@
-import { CircularProgress, Grid, MuiThemeProvider, makeStyles, Hidden } from '@material-ui/core';
+import { CircularProgress, Grid, Hidden, makeStyles, MuiThemeProvider } from '@material-ui/core';
 import ImageViewer from './../viewers/ImageViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
@@ -63,6 +63,8 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             return;
         }
 
+        const arr = { datasets: [] as DatasetRegionRun[] };
+
         for (let i = 0; i < indexData.datasets.length; i++) {
             const dataset = indexData.datasets[i];
 
@@ -105,7 +107,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                     product.forecasts = items
                         .filter((item) => item.level === lvl.name && item.product === product.name) // only look at specific level and product
                         .map((item) => {
-                            return { hour: item.forecast, image: item.filename };
+                            return { hour: item.forecast, image: item.url };
                         }); // return forecast obj arr
                 });
             });
@@ -114,7 +116,9 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             datasetRegionRun.run.levels = uniqueLevels;
 
             const indexes = { datasets: [datasetRegionRun] };
-            setIndex(indexes);
+
+            // add dataset to index array
+            arr.datasets.push(datasetRegionRun);
 
             // setting default values
             if (i === 0) {
@@ -123,6 +127,9 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                 setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
             }
         }
+
+        // set index to array of datasets
+        setIndex(arr);
 
         setLoading(false);
     };
@@ -143,6 +150,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     }, []);
 
     const getSelectedLevel = () => {
+        console.log(index);
         return index.datasets[0].run.levels.filter((lvl) => lvl.name === selectedLevel)[0];
     };
 
@@ -231,11 +239,10 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     };
 
     const getValidTime = () => {
-        const validTime = moment
+        return moment
             .unix(+index.datasets[0].run.name + +selectedForecast)
             .utc()
             .format('MM/DD HH:mm[Z]');
-        return validTime;
     };
 
     const generateContent = (): React.ReactNode => {

@@ -40,7 +40,7 @@ declare type ShyftProduct = {
     product: string;
     level: string;
     forecast: string;
-    filename: string;
+    url: string;
 };
 
 declare type ForecastHour = {
