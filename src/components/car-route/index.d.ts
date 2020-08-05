@@ -22,3 +22,24 @@ declare type RouteInputProps = {
     startPoint: string;
     destination: string;
 };
+
+declare type Threshold = {
+    greaterThan: boolean;
+    threshold: number[];
+}
+
+declare type FeatureValue = {
+    name: string;
+    unit: string;
+    value: number;
+}
+
+declare type RouteLeg = {
+    coordinates: [number, number][];
+    threshold: any; // Record<string, Threshold>;
+    featureValues: any; // Record<string, FeatureValue>;
+}
+
+declare type RouteProps = {
+    legs: RouteLeg[]
+}
