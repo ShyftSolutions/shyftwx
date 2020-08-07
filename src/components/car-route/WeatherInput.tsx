@@ -17,7 +17,8 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
     onClick,
     onWindSliderChange,
     onPrecipSliderChange,
-    onTempSliderChange
+    onTempSliderChange,
+    onStart
 }) => {
     const classes = useStyles();
 
@@ -101,7 +102,7 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                             </Grid>
 
                             {windChecked || precipChecked || tempChecked ? (
-                                <BasicButton style="blue" text="start" />
+                                <BasicButton style="blue" text="start" action={onStart} />
                             ) : (
                                 <BasicButton style="disabled" text="start" />
                             )}

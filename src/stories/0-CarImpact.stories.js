@@ -7,6 +7,7 @@ import _InputDrawer from '../components/car-route/InputDrawer';
 import _ThresholdInput from '../components/car-route/ThresholdInput';
 import _CarRouteServices from '../components/car-route/CarRouteServices';
 import _MapBackground from '../components/car-route/MapBackground';
+import _SearchField from '../components/textfield/SearchField';
 import theme from './../theme';
 import { withKnobs } from '@storybook/addon-knobs';
 
@@ -63,7 +64,7 @@ export const MapBackground = () => {
     );
 };
 
-export const inputDrawer = () => {
+export const InputDrawer = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <_InputDrawer />

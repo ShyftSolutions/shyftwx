@@ -33,4 +33,5 @@ declare type ValidTimeProps = {
 
 declare type TimeSelectorProps = {
     action: (Date) => void;
+    value?: Date;
 };

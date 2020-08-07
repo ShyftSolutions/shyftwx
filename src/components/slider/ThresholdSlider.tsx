@@ -55,6 +55,7 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({
                     step={1}
                     pushable
                     key={key}
+                    style={{ width: '145%' }}
                     tipFormatter={(value: number) => `${value}${units}`}
                     trackStyle={trackStyle}
                     onChange={handleRangeChange}

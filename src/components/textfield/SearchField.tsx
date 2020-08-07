@@ -1,15 +1,13 @@
-// import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 import { Grid, TextField, Typography } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import SearchIcon from '@material-ui/icons/Search';
 import { Autocomplete } from '@material-ui/lab';
 import throttle from 'lodash/throttle';
 import React from 'react';
 import { searchAsync } from '../../apis';
+import { Debugger } from 'inspector';
 import { Feature } from 'geojson';
+// import SearchInContentParameterType = module
 
 // const provider = new OpenStreetMapProvider();
 
@@ -37,11 +35,11 @@ const useStyles = makeStyles((theme) =>
 );
 
 export const SearchField: React.FC<SearchFieldProps> = (props) => {
-    const { label, handleChange } = props;
+    const { label, handleChange, defaultValue } = props;
 
     const classes = useStyles();
 
-    const [value, setValue] = React.useState<Feature | null>(null);
+    const [value, setValue] = React.useState<Feature | null>(defaultValue || null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<Feature[]>([]);
     const loaded = React.useRef(false);
@@ -97,6 +95,7 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
                 autoComplete
                 includeInputInList
                 filterSelectedOptions
+                inputValue={defaultValue?.name}
                 value={value}
                 onChange={(event, newValue) => {
                     setOptions(newValue ? [newValue, ...options] : options);
@@ -127,16 +126,6 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
                     );
                 }}
             />
-            {/* <InputBase
-                className={classes.input}
-                placeholder={label}
-                inputProps={{ 'aria-label': label }}
-                onChange={onChange}
-                defaultValue={value}
-            />
-            <IconButton type="submit" className={classes.iconButton} aria-label="search">
-                <SearchIcon />
-            </IconButton> */}
         </div>
     );
 };

@@ -52,6 +52,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
     const [selectedProduct, setSelectedProduct] = React.useState<string>('');
     const [selectedLevel, setSelectedLevel] = React.useState<string>('');
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
+    const [selectedRegion, setSelectedRegion] = React.useState<string>('');
     const [selectedRun, setSelectedRun] = React.useState<string>('');
     const [landingPage, setLandingPage] = React.useState(false);
 
@@ -74,6 +75,8 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
             setLandingPage(true);
             return;
         }
+
+        const arr = { datasets: [] as DatasetRegionRun[] };
 
         for (let i = 0; i < indexData.datasets.length; i++) {
             const dataset = indexData.datasets[i];
@@ -126,15 +129,21 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
             datasetRegionRun.run.levels = uniqueLevels;
 
             const indexes = { datasets: [datasetRegionRun] };
-            setIndex(indexes);
+
+            // add dataset to index array
+            arr.datasets.push(datasetRegionRun);
 
             // setting default values
             if (i === 0) {
+                setSelectedRegion(indexes.datasets[0].region.name);
                 setSelectedLevel(indexes.datasets[0].run.levels[0].name);
                 setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
                 setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
             }
         }
+
+        // set index to array of datasets
+        setIndex(arr);
 
         setLoading(false);
     };

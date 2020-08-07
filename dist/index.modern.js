@@ -1591,11 +1591,14 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
       selectedForecast = _React$useState5[0],
       setSelectedForecast = _React$useState5[1];
 
-  var _React$useState6 = React.useState('');
+  var _React$useState6 = React.useState(''),
+      setSelectedRegion = _React$useState6[1];
 
-  var _React$useState7 = React.useState(false),
-      landingPage = _React$useState7[0],
-      setLandingPage = _React$useState7[1];
+  var _React$useState7 = React.useState('');
+
+  var _React$useState8 = React.useState(false),
+      landingPage = _React$useState8[0],
+      setLandingPage = _React$useState8[1];
 
   var isDynamic = React.useRef(false);
 
@@ -1612,6 +1615,7 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     try {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         function _temp2() {
+          setIndex(arr);
           setLoading(false);
         }
 
@@ -1620,6 +1624,9 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
           return;
         }
 
+        var arr = {
+          datasets: []
+        };
         var i = 0;
 
         var _temp = _for(function () {
@@ -1681,9 +1688,10 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
             var indexes = {
               datasets: [datasetRegionRun]
             };
-            setIndex(indexes);
+            arr.datasets.push(datasetRegionRun);
 
             if (i === 0) {
+              setSelectedRegion(indexes.datasets[0].region.name);
               setSelectedLevel(indexes.datasets[0].run.levels[0].name);
               setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
               setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
@@ -1988,11 +1996,14 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
       selectedForecast = _React$useState5[0],
       setSelectedForecast = _React$useState5[1];
 
-  var _React$useState6 = React.useState('');
+  var _React$useState6 = React.useState(''),
+      setSelectedRegion = _React$useState6[1];
 
-  var _React$useState7 = React.useState(false),
-      landingPage = _React$useState7[0],
-      setLandingPage = _React$useState7[1];
+  var _React$useState7 = React.useState('');
+
+  var _React$useState8 = React.useState(false),
+      landingPage = _React$useState8[0],
+      setLandingPage = _React$useState8[1];
 
   var isDynamic = React.useRef(false);
 
@@ -2009,6 +2020,7 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     try {
       return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
         function _temp2() {
+          setIndex(arr);
           setLoading(false);
         }
 
@@ -2017,6 +2029,9 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
           return;
         }
 
+        var arr = {
+          datasets: []
+        };
         var i = 0;
 
         var _temp = _for(function () {
@@ -2079,8 +2094,10 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
               datasets: [datasetRegionRun]
             };
             setIndex(indexes);
+            arr.datasets.push(datasetRegionRun);
 
             if (i === 0) {
+              setSelectedRegion(indexes.datasets[0].region.name);
               setSelectedLevel(indexes.datasets[0].run.levels[0].name);
               setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
               setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);

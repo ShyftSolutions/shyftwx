@@ -45,21 +45,21 @@ export const RouteInput: React.FC<RouteInputProps> = ({
     onClick,
     onStartPointChange,
     onDestinationChange,
-    onTimeChange,
-    startPoint,
-    destination
+    onTimeChange
 }) => {
     const classes = useStyles();
     const [startCoords, setStartCoords] = React.useState<number[]>([]);
     const [endCoords, setEndCoords] = React.useState<number[]>([]);
 
     const handleStartPointChange = (value: { name: string; coords: number[] }) => {
-        // onStartPointChange(input);
+        const point = { name: value.name, coordinates: value.coords };
+        onStartPointChange(point);
         setStartCoords(value.coords);
     };
 
     const handleDestinationChange = (value: { name: string; coords: number[] }) => {
-        // onDestinationChange(input);
+        const point = { name: value.name, coordinates: value.coords };
+        onDestinationChange(point);
         setEndCoords(value.coords);
     };
 
@@ -69,6 +69,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
     const handleButtonClick = () => {
         directionsAsync([startCoords, endCoords]).then((data) => console.log(data));
+        onClick();
     };
 
     return (
@@ -110,20 +111,12 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <SearchField
-                                            label="Starting Point"
-                                            handleChange={handleStartPointChange}
-                                            value={startPoint}
-                                        />
+                                        <SearchField label="Starting Point" handleChange={handleStartPointChange} />
                                     </Grid>
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <SearchField
-                                            label="Destination"
-                                            handleChange={handleDestinationChange}
-                                            value={destination}
-                                        />
+                                        <SearchField label="Destination" handleChange={handleDestinationChange} />
                                     </Grid>
                                 </Grid>
                             </Grid>

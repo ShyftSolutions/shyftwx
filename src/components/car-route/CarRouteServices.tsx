@@ -3,15 +3,18 @@ import WelcomePage from './WelcomePage';
 import RouteInput from './RouteInput';
 import WeatherInput from './WeatherInput';
 import 'leaflet/dist/leaflet.css';
+import InputDrawer from './InputDrawer';
+import { Feature } from 'geojson';
 
 export const CarRouteServices = () => {
     const [state, setState] = React.useState('initial');
-    const [startingPoint, setStartingPoint] = React.useState('');
-    const [destination, setDestination] = React.useState('');
-    const [time, setTime] = React.useState<Date | null>(new Date());
+    const [startingPoint, setStartingPoint] = React.useState<Feature>();
+    const [destination, setDestination] = React.useState<Feature>();
+    const [time, setTime] = React.useState<Date | undefined>(new Date());
     const [windThresholds, setWindThresholds] = React.useState<number[]>([]);
     const [precipThresholds, setPrecipThresholds] = React.useState<number[]>([]);
     const [tempThresholds, setTempThresholds] = React.useState<number[]>([]);
+    const [directions, setDirections] = React.useState();
 
     // Welcome Page Functions
     const onStartButton = () => {
@@ -19,11 +22,11 @@ export const CarRouteServices = () => {
     };
 
     // Route Input Functions
-    const onStartingPointChange = (input: string) => {
+    const onStartingPointChange = (input: Feature) => {
         setStartingPoint(input);
     };
 
-    const onDestinationChange = (input: string) => {
+    const onDestinationChange = (input: Feature) => {
         setDestination(input);
     };
 
@@ -32,7 +35,7 @@ export const CarRouteServices = () => {
     };
 
     const onNextButton = () => {
-        if (startingPoint === '' || destination === '') {
+        if (startingPoint === undefined || destination === undefined) {
             // TODO: add some error message
         } else {
             setState('weather');
@@ -56,6 +59,10 @@ export const CarRouteServices = () => {
         setWindThresholds(input);
     };
 
+    const onStartButtonClick = () => {
+        setState('map');
+    };
+
     const generateContent = () => {
         switch (state) {
             case 'route':
@@ -65,8 +72,6 @@ export const CarRouteServices = () => {
                         onDestinationChange={onDestinationChange}
                         onStartPointChange={onStartingPointChange}
                         onTimeChange={onTimeChange}
-                        startPoint={startingPoint}
-                        destination={destination}
                     />
                 );
             case 'weather':
@@ -76,6 +81,18 @@ export const CarRouteServices = () => {
                         onPrecipSliderChange={precipValuesChange}
                         onTempSliderChange={tempValuesChange}
                         onWindSliderChange={windValuesChange}
+                        onStart={onStartButtonClick}
+                    />
+                );
+            case 'map':
+                return (
+                    <InputDrawer
+                        startingPoint={startingPoint}
+                        destination={destination}
+                        precipParam={precipThresholds}
+                        tempParam={tempThresholds}
+                        time={time}
+                        windParam={windThresholds}
                     />
                 );
             default:

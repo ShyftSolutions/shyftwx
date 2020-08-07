@@ -6,6 +6,7 @@ import SimpleSelect from '../dropdown/SimpleSelect';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
+        width: '100%',
         padding: 10,
         backgroundColor: '#E9ECEF'
     },
@@ -48,10 +49,14 @@ const unitOptions = {
     temp: ['°F', '°C']
 };
 
-export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }) => {
+export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, sliderValues }) => {
     const classes = useStyles();
-    const [values, setValues] = React.useState(defaultThresholdValues[impact]);
+    const [values, setValues] = React.useState(sliderValues || defaultThresholdValues[impact]);
     const [isGreaterThan, setIsGreaterThan] = React.useState(true);
+
+    if (sliderValues === undefined) {
+        action(values);
+    }
 
     const handleThresholdChange = (values: number[]) => {
         setValues(values);
@@ -108,8 +113,8 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action }
                     <Typography className={classes.text}>Define Impact Thresholds:</Typography>
                 </Grid>
 
-                <Grid container item justify="center" alignItems="center" xs={12}>
-                    <Grid item xs>
+                <Grid container item justify="center" alignItems="center" xs={12} spacing={1}>
+                    <Grid container item xs justify="center">
                         <Fab onClick={onClick} color="primary" size="small">
                             {isGreaterThan ? <ChevronRight /> : <ChevronLeft />}
                         </Fab>

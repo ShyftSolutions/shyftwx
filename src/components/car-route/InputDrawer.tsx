@@ -1,52 +1,18 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme, createStyles } from '@material-ui/core/styles';
-import {
-    Drawer,
-    Typography,
-    CssBaseline,
-    AppBar,
-    Toolbar,
-    Divider,
-    IconButton,
-    Grid,
-    List,
-    ListItem,
-    ListItemText
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { Drawer, Typography, Divider, Grid, List, ListItem } from '@material-ui/core';
 import SearchField from '../textfield/SearchField';
 import TimeSelector from '../time/TimeSelector';
 import BasicButton from '../buttons/BasicButton';
+import { ThresholdExpansionPanel } from './ThresholdExpansionPanel';
+import MapBackground from './MapBackground';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             display: 'flex'
-        },
-        appBar: {
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen
-            })
-        },
-        appBarShift: {
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: drawerWidth,
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen
-            })
-        },
-        menuButton: {
-            marginRight: theme.spacing(2)
-        },
-        hide: {
-            display: 'none'
         },
         drawer: {
             width: drawerWidth,
@@ -55,7 +21,8 @@ const useStyles = makeStyles((theme) =>
         drawerPaper: {
             width: drawerWidth,
             paddingLeft: 10,
-            paddingRight: 10
+            paddingRight: 10,
+            backgroundColor: theme.palette.primary.contrastText
         },
         drawerHeader: {
             display: 'flex',
@@ -67,90 +34,56 @@ const useStyles = makeStyles((theme) =>
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing(3),
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen
-            }),
-            marginLeft: -drawerWidth
-        },
-        contentShift: {
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen
-            }),
-            marginLeft: 0
+            marginLeft: 13
         },
         header: {
             fontSize: 18,
-            fontWeight: 600
+            fontWeight: 600,
+            color: theme.palette.secondary.main
+        },
+        weatherList: {
+            fontSize: 16,
+            fontWeight: 400
         }
     })
 );
 
-export const InputDrawer = () => {
+export const InputDrawer: React.FC<InputDrawerProps> = ({
+    startingPoint,
+    destination,
+    time,
+    windParam,
+    precipParam,
+    tempParam
+}) => {
     const classes = useStyles();
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     return (
         <div className={classes.root}>
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
             <Drawer
                 className={classes.drawer}
-                variant="persistent"
+                variant="permanent"
                 anchor="left"
-                open={open}
                 classes={{
                     paper: classes.drawerPaper
                 }}
             >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </div>
+                <div className={classes.drawerHeader} />
 
                 <Divider />
                 <Typography className={classes.header} gutterBottom>
                     Route
                 </Typography>
-                <SearchField label="Starting Point" />
-                <SearchField label="Destination" />
+                <SearchField label="Starting Point" defaultValue={startingPoint} />
+                <SearchField label="Destination" defaultValue={destination} />
 
                 <Divider />
+                <Typography className={classes.header} gutterBottom>
+                    Time
+                </Typography>
                 <Grid container direction="column" justify="space-between" alignItems="center">
                     <Grid item>
-                        <Typography className={classes.header} gutterBottom>
-                            Time
-                        </Typography>
-                        <TimeSelector />
+                        <TimeSelector value={time} />
                     </Grid>
                     <Grid item>
                         <BasicButton text="Explore Times" />
@@ -163,16 +96,22 @@ export const InputDrawer = () => {
                 </Typography>
                 <List>
                     <ListItem>
-                        <ListItemText primary="Wind" />
+                        <ThresholdExpansionPanel summary="Wind" weatherImpact="wind" sliderValues={windParam} />
+                    </ListItem>
+                    <ListItem>
+                        <ThresholdExpansionPanel
+                            summary="Precipitation"
+                            weatherImpact="precip"
+                            sliderValues={precipParam}
+                        />
+                    </ListItem>
+                    <ListItem>
+                        <ThresholdExpansionPanel summary="Temperature" weatherImpact="temp" sliderValues={tempParam} />
                     </ListItem>
                 </List>
             </Drawer>
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: open
-                })}
-            >
-                <div className={classes.drawerHeader} />
+            <main className={classes.content}>
+                <MapBackground />
             </main>
         </div>
     );
