@@ -40,7 +40,7 @@ export function directionsAsync(coords: number[][]) {
     return axios.get(url).then((response) => response.data);
 }
 
-export const carRouteAsync = (currentRoute: any, startTime: Date | null): Promise<RouteImpactDataSegment[]> => {
+export const carRouteAsync = (currentRoute: any, startTime: Date | undefined): Promise<RouteImpactDataSegment[]> => {
     (startTime as Date).setMilliseconds(0);
     (startTime as Date).setSeconds(0);
     (startTime as Date).setMinutes(0);

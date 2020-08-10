@@ -1,15 +1,20 @@
+declare type Threshold = {
+  greaterThan: boolean;
+  threshold: number[];
+};
+
 declare type WeatherInputProps = {
     onClick: () => void;
-    onWindSliderChange: (input: number[]) => void;
-    onPrecipSliderChange: (input: number[]) => void;
-    onTempSliderChange: (input: number[]) => void;
+    onWindSliderChange: (input: Threshold) => void;
+    onPrecipSliderChange: (input: Threshold) => void;
+    onTempSliderChange: (input: Threshold) => void;
     onStart: () => void;
 };
 
 declare type ThresholdInputProps = {
     impact: string;
-    action: (input: number[]) => void;
-    sliderValues?: number[];
+    action: (input: Threshold) => void;
+    sliderValues?: Threshold;
 };
 
 declare type WelcomePageProps = {
@@ -24,15 +29,12 @@ declare type Place = {
  */
 
 declare type RouteInputProps = {
-    onClick: () => void;
+    destination?: Feature;
+    onClick: (any) => void;
     onStartPointChange: (input: Feature) => void;
     onDestinationChange: (input: Feature) => void;
     onTimeChange: (Date) => void;
-};
-
-declare type Threshold = {
-    greaterThan: boolean;
-    threshold: number[];
+    startPoint?: Feature;
 };
 
 declare type FeatureValue = {
@@ -54,14 +56,19 @@ declare type RouteProps = {
 declare type ThresholdExpansionPanelProps = {
     summary: string;
     weatherImpact: string;
-    sliderValues?: number[];
+    sliderValues?: Threshold;
 };
 
 declare type InputDrawerProps = {
     startingPoint?: Feature;
     destination?: Feature;
     time?: Date;
-    windParam?: number[];
-    precipParam?: number[];
-    tempParam?: number[];
+    windParam?: Threshold;
+    precipParam?: Threshold;
+    tempParam?: Threshold;
+    carRouteData: RouteLeg[];
+};
+
+declare type MapBackgroundProps = {
+    data: RouteLeg[];
 };

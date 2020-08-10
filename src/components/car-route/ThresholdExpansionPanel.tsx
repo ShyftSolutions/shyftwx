@@ -25,9 +25,9 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
 }) => {
     const classes = useStyles();
 
-    const [values, setValues] = React.useState<number[]>(sliderValues || []);
+    const [values, setValues] = React.useState<Threshold>(sliderValues || {greaterThan: true, threshold: []});
     const [expanded, setExpanded] = React.useState(false);
-    const [active, setActive] = React.useState(sliderValues?.length !== 0);
+    const [active, setActive] = React.useState(sliderValues?.threshold.length !== 0);
 
     const handleChange = () => {
         setExpanded(!expanded);

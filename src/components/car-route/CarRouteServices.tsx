@@ -5,16 +5,19 @@ import WeatherInput from './WeatherInput';
 import 'leaflet/dist/leaflet.css';
 import InputDrawer from './InputDrawer';
 import { Feature } from 'geojson';
+import { carRouteAsync, directionsAsync } from '../../apis';
+import { transformWeatherData } from '../../utils/weatherDataFormatter';
 
 export const CarRouteServices = () => {
     const [state, setState] = React.useState('initial');
     const [startingPoint, setStartingPoint] = React.useState<Feature>();
     const [destination, setDestination] = React.useState<Feature>();
     const [time, setTime] = React.useState<Date | undefined>(new Date());
-    const [windThresholds, setWindThresholds] = React.useState<number[]>([]);
-    const [precipThresholds, setPrecipThresholds] = React.useState<number[]>([]);
-    const [tempThresholds, setTempThresholds] = React.useState<number[]>([]);
-    const [directions, setDirections] = React.useState();
+    const [windThresholds, setWindThresholds] = React.useState<Threshold>({greaterThan: true, threshold: []});
+    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({greaterThan: true, threshold: []});
+    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({greaterThan: true, threshold: []});
+    const [directions, setDirections] = React.useState<any>();
+    const [weatherData, setWeatherData] = React.useState<any>();
 
     // Welcome Page Functions
     const onStartButton = () => {
@@ -34,12 +37,9 @@ export const CarRouteServices = () => {
         setTime(time);
     };
 
-    const onNextButton = () => {
-        if (startingPoint === undefined || destination === undefined) {
-            // TODO: add some error message
-        } else {
-            setState('weather');
-        }
+    const onNextButton = (data: any) => {
+        setDirections(data);
+        setState('weather');
     };
 
     // Weather Input Functions
@@ -47,28 +47,44 @@ export const CarRouteServices = () => {
         setState('route');
     };
 
-    const precipValuesChange = (input: number[]) => {
+    const precipValuesChange = (input: Threshold) => {
         setPrecipThresholds(input);
     };
 
-    const tempValuesChange = (input: number[]) => {
+    const tempValuesChange = (input: Threshold) => {
         setTempThresholds(input);
     };
 
-    const windValuesChange = (input: number[]) => {
+    const windValuesChange = (input: Threshold) => {
         setWindThresholds(input);
     };
 
     const onStartButtonClick = () => {
         // set thresholds
-
-        setState('map');
+      const thresholds = {
+        'Temperature': {
+          greaterThan: tempThresholds.greaterThan,
+          threshold: tempThresholds.threshold
+        },
+        'WindSpeed': {
+          greaterThan: windThresholds.greaterThan,
+          threshold: tempThresholds.threshold
+        },
+        'TotalPrecipitationRate': {
+          greaterThan: precipThresholds.greaterThan,
+          threshold: precipThresholds.threshold
+        }
+      }
 
         // set loading
 
         // call weather services
+        carRouteAsync(directions, time).then((data) => setWeatherData(transformWeatherData(data)));
+
         // transform data
+
         // pass down to map
+        setState('map');
     };
 
     const generateContent = () => {
@@ -76,10 +92,12 @@ export const CarRouteServices = () => {
             case 'route':
                 return (
                     <RouteInput
+                        destination={destination}
                         onClick={onNextButton}
                         onDestinationChange={onDestinationChange}
                         onStartPointChange={onStartingPointChange}
                         onTimeChange={onTimeChange}
+                        startPoint={startingPoint}
                     />
                 );
             case 'weather':
@@ -101,6 +119,7 @@ export const CarRouteServices = () => {
                         tempParam={tempThresholds}
                         time={time}
                         windParam={windThresholds}
+                        carRouteData={weatherData}
                     />
                 );
             default:

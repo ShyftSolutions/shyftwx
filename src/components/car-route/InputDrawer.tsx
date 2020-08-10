@@ -54,7 +54,8 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
     time,
     windParam,
     precipParam,
-    tempParam
+    tempParam,
+    carRouteData
 }) => {
     const classes = useStyles();
 
@@ -111,7 +112,7 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                 </List>
             </Drawer>
             <main className={classes.content}>
-                <MapBackground />
+                <MapBackground data={carRouteData}/>
             </main>
         </div>
     );

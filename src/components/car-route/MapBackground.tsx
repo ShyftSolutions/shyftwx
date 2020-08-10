@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const MapBackground = () => {
+export const MapBackground: React.FC<MapBackgroundProps> = ({data}) => {
     const classes = useStyles();
     // sw, ne
     // const bounds = latLngBounds([23.81, -65.69], [49.38, -129.17]);
@@ -4844,7 +4844,7 @@ export const MapBackground = () => {
     }
 
 
-    const dataToDraw: RouteLeg[] = transformWeatherData(route_with_weather_data)
+    //const dataToDraw: RouteLeg[] = transformWeatherData(route_with_weather_data)
 
     return (
         <Map
@@ -4861,11 +4861,10 @@ export const MapBackground = () => {
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                grayscale
             />
 
             <LayerGroup>
-                <Route legs={dataToDraw} />
+                <Route legs={data} />
             </LayerGroup>
         </Map>
     );

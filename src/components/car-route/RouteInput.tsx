@@ -42,10 +42,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const RouteInput: React.FC<RouteInputProps> = ({
+    destination,
     onClick,
     onStartPointChange,
     onDestinationChange,
-    onTimeChange
+    onTimeChange,
+    startPoint
 }) => {
     const classes = useStyles();
     const [startCoords, setStartCoords] = React.useState<number[]>([]);
@@ -69,8 +71,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
     const handleButtonClick = () => {
         // update to return data of route to parent
-        directionsAsync([startCoords, endCoords]).then((data) => console.log(data));
-        onClick();
+        directionsAsync([startCoords, endCoords]).then((data) => onClick(data));
     };
 
     return (
@@ -112,12 +113,12 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <SearchField label="Starting Point" handleChange={handleStartPointChange} />
+                                        <SearchField label="Starting Point" handleChange={handleStartPointChange} defaultValue={startPoint}/>
                                     </Grid>
 
                                     <Grid item xs={2} />
                                     <Grid item xs={10}>
-                                        <SearchField label="Destination" handleChange={handleDestinationChange} />
+                                        <SearchField label="Destination" handleChange={handleDestinationChange} defaultValue={destination}/>
                                     </Grid>
                                 </Grid>
                             </Grid>
