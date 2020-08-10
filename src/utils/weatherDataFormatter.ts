@@ -1,24 +1,24 @@
-const THRESHOLDS = {
-    'Temperature': {
-        greaterThan: true,
-        threshold: [1122.5, 2113.5]
-    },
-    'WindSpeed': {
-        greaterThan: true,
-        threshold: [11.0, 11.36]
-    },
-    'TotalPrecipitationRate': {
-        greaterThan: true,
-        threshold: [1120, 6110]
-    }
-}
+// const THRESHOLDS = {
+//     'Temperature': {
+//         greaterThan: true,
+//         threshold: [1122.5, 2113.5]
+//     },
+//     'WindSpeed': {
+//         greaterThan: true,
+//         threshold: [11.0, 11.36]
+//     },
+//     'TotalPrecipitationRate': {
+//         greaterThan: true,
+//         threshold: [1120, 6110]
+//     }
+// }
 
-export function transformWeatherData(weatherResp) {
+export function transformWeatherData(weatherResp, thresholds) {
     let formattedData: RouteLeg[] = [];
 
     // transform
     weatherResp.features.forEach(feature => {
-        formattedData.push(convertLeg(feature, THRESHOLDS))
+        formattedData.push(convertLeg(feature, thresholds))
     })
 
     return formattedData;

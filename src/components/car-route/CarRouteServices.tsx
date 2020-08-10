@@ -13,9 +13,9 @@ export const CarRouteServices = () => {
     const [startingPoint, setStartingPoint] = React.useState<Feature>();
     const [destination, setDestination] = React.useState<Feature>();
     const [time, setTime] = React.useState<Date | undefined>(new Date());
-    const [windThresholds, setWindThresholds] = React.useState<Threshold>({greaterThan: true, threshold: []});
-    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({greaterThan: true, threshold: []});
-    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({greaterThan: true, threshold: []});
+    const [windThresholds, setWindThresholds] = React.useState<Threshold>({greaterThan: true, threshold: [5, 10]});
+    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({greaterThan: true, threshold: [1, 2]});
+    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({greaterThan: true, threshold: [32, 70]});
     const [directions, setDirections] = React.useState<any>();
     const [weatherData, setWeatherData] = React.useState<any>();
 
@@ -68,7 +68,7 @@ export const CarRouteServices = () => {
         },
         'WindSpeed': {
           greaterThan: windThresholds.greaterThan,
-          threshold: tempThresholds.threshold
+          threshold: windThresholds.threshold
         },
         'TotalPrecipitationRate': {
           greaterThan: precipThresholds.greaterThan,
@@ -79,12 +79,14 @@ export const CarRouteServices = () => {
         // set loading
 
         // call weather services
-        carRouteAsync(directions, time).then((data) => setWeatherData(transformWeatherData(data)));
+        carRouteAsync(directions, time).then((data) => { 
+            console.log(data);
+            setWeatherData(transformWeatherData(data, thresholds)); 
 
-        // transform data
+            // pass down to map
+            setState('map');
+        });
 
-        // pass down to map
-        setState('map');
     };
 
     const generateContent = () => {
@@ -131,3 +133,10 @@ export const CarRouteServices = () => {
 };
 
 export default CarRouteServices;
+
+
+// implement isGreaterThan = false
+// loading indicator
+// random warnings in the console (ex. key prop in slider)
+// updating thresholds after loading the first bit (may require some data input changes to the Route component and to the formatter util)
+// need to load multiple leaving times???

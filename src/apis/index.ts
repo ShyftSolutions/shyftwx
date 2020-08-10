@@ -6,7 +6,7 @@ export const MAPBOX_API_URL =
 export const MAPBOX_DIRECTIONS_API_URL =
     'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{COORDS}?geometries=geojson&overview=full&annotations=duration,congestion,speed&access_token=' +
     MAPBOX_KEY;
-export const SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/product/car_route';
+export const SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/v1/product/car_route';
 export const SHYFT_CAPS_URL = 'https://ogc.shyftwx.com/ogcRestful/layers';
 export const SHYFT_WCS_ROUTE = 'https://api.shyftwx.com/getwxdata/point';
 
@@ -45,18 +45,22 @@ export const carRouteAsync = (currentRoute: any, startTime: Date | undefined): P
     (startTime as Date).setSeconds(0);
     (startTime as Date).setMinutes(0);
 
+    console.log(currentRoute);
+
+    let route = currentRoute.routes[0]
+
     return axios
-        .post<ShyftCarRouteResponse>(
+        .post(
             SHYFT_CAR_ROUTE_API_URL,
             {
                 start_time: (startTime as Date).toISOString().slice(0, -1),
                 routes: {
-                    geometry: currentRoute.geometry,
+                    geometry: route.geometry,
                     legs: [
                         {
                             annotation: {
-                                duration: currentRoute.legs[0].annotation.duration,
-                                distance: [currentRoute.legs[0].distance]
+                                duration: route.legs[0].annotation.duration,
+                                distance: [route.legs[0].distance]
                             }
                         }
                     ]
@@ -68,31 +72,36 @@ export const carRouteAsync = (currentRoute: any, startTime: Date | undefined): P
         )
         .then((response) => response.data)
         .then((data) => {
-            const results: RouteImpactDataSegment[] = [];
 
-            for (let i = 0; i < data.features.length - 1; i++) {
-                const feature = data.features[i];
+            return data;
 
-                const tempAvailable = feature.properties.parameters.find(
-                    (parameter) => parameter.name === 'Temperature'
-                ) as FeatureParameters;
-                const windAvailable = feature.properties.parameters.find(
-                    (parameter) => parameter.name === 'WindSpeed'
-                ) as FeatureParameters;
-                const precipAvailable = feature.properties.parameters.find(
-                    (parameter) => parameter.name === 'TotalPrecipitationRate'
-                ) as FeatureParameters;
-                const startTimeAvailable = feature.properties.times[i];
+            // const results: RouteImpactDataSegment[] = [];
 
-                results.push({
-                    lineString: feature.geometry,
-                    temp: tempAvailable.value,
-                    precip: precipAvailable.value,
-                    wind: windAvailable.value,
-                    startTime: startTimeAvailable
-                });
-            }
+            // for (let i = 0; i < data.features.length - 1; i++) {
+            //     const feature = data.features[i];
 
-            return results;
+            //     const tempAvailable = feature.properties.parameters.find(
+            //         (parameter) => parameter.name === 'Temperature'
+            //     ) as FeatureParameters;
+            //     const windAvailable = feature.properties.parameters.find(
+            //         (parameter) => parameter.name === 'WindSpeed'
+            //     ) as FeatureParameters;
+            //     const precipAvailable = feature.properties.parameters.find(
+            //         (parameter) => parameter.name === 'TotalPrecipitationRate'
+            //     ) as FeatureParameters;
+            //     const startTimeAvailable = feature.properties.times[i];
+
+            //     results.push({
+            //         lineString: feature.geometry,
+            //         temp: tempAvailable.value,
+            //         precip: precipAvailable.value,
+            //         wind: windAvailable.value,
+            //         startTime: startTimeAvailable
+            //     });
+            // }
+
+            // console.log(results);
+
+            // return results;
         });
 };
