@@ -14,27 +14,29 @@
 // }
 
 export function transformWeatherData(weatherResp, thresholds) {
-    let formattedData: RouteLeg[] = [];
+    const formattedData: RouteLeg[] = [];
 
     // transform
-    weatherResp.features.forEach(feature => {
-        formattedData.push(convertLeg(feature, thresholds))
-    })
+    weatherResp.features.forEach((feature) => {
+        formattedData.push(convertLeg(feature, thresholds));
+    });
 
     return formattedData;
 }
 
 function convertLeg(rawLegData, thresholds) {
-    let featureValues = {}
+    const featureValues = {};
 
-    let leg: RouteLeg = {
-        coordinates: rawLegData.geometry.coordinates.map(pair => pair.reverse()),
+    const leg: RouteLeg = {
+        coordinates: rawLegData.geometry.coordinates.map((pair) => pair.reverse()),
         threshold: thresholds,
         featureValues: null
-    }
+    };
 
     // adding something like { 'Temperature': { name: 'Temperature', value: 100.0 }... }
-    rawLegData.properties.parameters.map(feature => { featureValues[feature.name] = { name: feature.name, value: feature.value} } )
+    rawLegData.properties.parameters.map((feature) => {
+        featureValues[feature.name] = { name: feature.name, value: feature.value };
+    });
 
     leg.featureValues = featureValues;
 

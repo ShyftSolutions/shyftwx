@@ -5,19 +5,21 @@ import WeatherInput from './WeatherInput';
 import 'leaflet/dist/leaflet.css';
 import InputDrawer from './InputDrawer';
 import { Feature } from 'geojson';
-import { carRouteAsync, directionsAsync } from '../../apis';
+import { carRouteAsync } from '../../apis';
 import { transformWeatherData } from '../../utils/weatherDataFormatter';
+import { CircularProgress, Grid } from '@material-ui/core';
 
 export const CarRouteServices = () => {
     const [state, setState] = React.useState('initial');
     const [startingPoint, setStartingPoint] = React.useState<Feature>();
     const [destination, setDestination] = React.useState<Feature>();
     const [time, setTime] = React.useState<Date | undefined>(new Date());
-    const [windThresholds, setWindThresholds] = React.useState<Threshold>({greaterThan: true, threshold: [5, 10]});
-    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({greaterThan: true, threshold: [1, 2]});
-    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({greaterThan: true, threshold: [32, 70]});
+    const [windThresholds, setWindThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
+    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
+    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
     const [directions, setDirections] = React.useState<any>();
     const [weatherData, setWeatherData] = React.useState<any>();
+    const [loading, setLoading] = React.useState(false);
 
     // Welcome Page Functions
     const onStartButton = () => {
@@ -61,45 +63,53 @@ export const CarRouteServices = () => {
 
     const onStartButtonClick = () => {
         // set thresholds
-      const thresholds = {
-        'Temperature': {
-          greaterThan: tempThresholds.greaterThan,
-          threshold: tempThresholds.threshold
-        },
-        'WindSpeed': {
-          greaterThan: windThresholds.greaterThan,
-          threshold: windThresholds.threshold
-        },
-        'TotalPrecipitationRate': {
-          greaterThan: precipThresholds.greaterThan,
-          threshold: precipThresholds.threshold
-        }
-      }
+        const thresholds = {
+            Temperature: {
+                greaterThan: tempThresholds.greaterThan,
+                threshold: tempThresholds.threshold
+            },
+            WindSpeed: {
+                greaterThan: windThresholds.greaterThan,
+                threshold: windThresholds.threshold
+            },
+            TotalPrecipitationRate: {
+                greaterThan: precipThresholds.greaterThan,
+                threshold: precipThresholds.threshold
+            }
+        };
 
         // set loading
+        setLoading(true);
 
         // call weather services
-        carRouteAsync(directions, time).then((data) => { 
+        carRouteAsync(directions, time).then((data) => {
             console.log(data);
-            setWeatherData(transformWeatherData(data, thresholds)); 
+            setWeatherData(transformWeatherData(data, thresholds));
+
+            setLoading(false);
 
             // pass down to map
             setState('map');
         });
-
     };
 
     const generateContent = () => {
+        if (loading) {
+            return (
+                <Grid container justify="center">
+                    <CircularProgress />
+                </Grid>
+            );
+        }
+
         switch (state) {
             case 'route':
                 return (
                     <RouteInput
-                        destination={destination}
                         onClick={onNextButton}
                         onDestinationChange={onDestinationChange}
                         onStartPointChange={onStartingPointChange}
                         onTimeChange={onTimeChange}
-                        startPoint={startingPoint}
                     />
                 );
             case 'weather':
@@ -134,9 +144,8 @@ export const CarRouteServices = () => {
 
 export default CarRouteServices;
 
-
-// implement isGreaterThan = false
-// loading indicator
-// random warnings in the console (ex. key prop in slider)
+// implement isGreaterThan = false -MAYBE DONE
+// loading indicator -DONE
+// random warnings in the console (ex. key prop in slider) -FIXED SOME??
 // updating thresholds after loading the first bit (may require some data input changes to the Route component and to the formatter util)
 // need to load multiple leaving times???

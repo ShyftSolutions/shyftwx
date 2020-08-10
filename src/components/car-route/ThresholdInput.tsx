@@ -51,20 +51,21 @@ const unitOptions = {
 
 export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, sliderValues }) => {
     const classes = useStyles();
-    const [values, setValues] = React.useState(sliderValues?.threshold || defaultThresholdValues[impact]);
+    const [values, setValues] = React.useState<number[]>(sliderValues?.threshold || []);
     const [isGreaterThan, setIsGreaterThan] = React.useState(sliderValues?.greaterThan || true);
 
-    if (sliderValues?.threshold === []) {
-        action({threshold: values, greaterThan: isGreaterThan});
+    if (values.length === 0) {
+        setValues(defaultThresholdValues[impact]);
+        action({ threshold: defaultThresholdValues[impact], greaterThan: isGreaterThan });
     }
 
     const handleThresholdChange = (newValues: number[]) => {
         setValues(newValues);
-        action({threshold: newValues, greaterThan: isGreaterThan});
+        action({ threshold: newValues, greaterThan: isGreaterThan });
     };
 
     const onClick = () => {
-        action({threshold: values, greaterThan: !isGreaterThan});
+        action({ threshold: values, greaterThan: !isGreaterThan });
         setIsGreaterThan(!isGreaterThan);
     };
 

@@ -11,5 +11,4 @@ declare type TextFieldProps = {
 declare type SearchFieldProps = {
     label: string;
     handleChange: (value: { name: string; coords: number[] }) => void;
-    defaultValue?: Feature;
 };

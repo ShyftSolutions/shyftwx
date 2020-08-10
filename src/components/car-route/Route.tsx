@@ -8,29 +8,31 @@ export const Route: React.FC<RouteProps> = ({ legs }) => {
     const classes = useStyles();
 
     const getColor = (leg) => {
-
         // default
-        let overallColor = 'green'
+        let overallColor = 'green';
         const thresholds = leg.threshold;
 
-        Object.keys(leg.featureValues).forEach(featureValueKey => {
-            const featureValue = leg.featureValues[featureValueKey]
+        Object.keys(leg.featureValues).forEach((featureValueKey) => {
+            const featureValue = leg.featureValues[featureValueKey];
             // i.e. 32.0 for "Temperature"
-            const legFeatureValue = featureValue.value
+            const legFeatureValue = featureValue.value;
 
             const isGreaterThan = thresholds[featureValue.name].greaterThan;
             const firstThreshold = thresholds[featureValue.name].threshold[0];
             const secondThreshold = thresholds[featureValue.name].threshold[1];
 
-            // TODO !isGreaterThan
             if (isGreaterThan) {
                 if (legFeatureValue > secondThreshold) {
                     overallColor = 'red';
                 } else if (legFeatureValue > firstThreshold && overallColor != 'red') {
-                    overallColor = 'yellow'
+                    overallColor = 'yellow';
                 }
             } else {
-
+                if (legFeatureValue < firstThreshold) {
+                    overallColor = 'red';
+                } else if (legFeatureValue < secondThreshold && overallColor != 'red') {
+                    overallColor = 'yellow';
+                }
             }
         });
 

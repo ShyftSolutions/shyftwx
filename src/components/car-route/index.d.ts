@@ -21,20 +21,11 @@ declare type WelcomePageProps = {
     action: () => void;
 };
 
-/*
-declare type Place = {
-    name: string;
-    coordinates: number[];
-};
- */
-
 declare type RouteInputProps = {
-    destination?: Feature;
     onClick: (any) => void;
     onStartPointChange: (input: Feature) => void;
     onDestinationChange: (input: Feature) => void;
     onTimeChange: (Date) => void;
-    startPoint?: Feature;
 };
 
 declare type FeatureValue = {

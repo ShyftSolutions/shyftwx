@@ -35,11 +35,11 @@ const useStyles = makeStyles((theme) =>
 );
 
 export const SearchField: React.FC<SearchFieldProps> = (props) => {
-    const { label, handleChange, defaultValue } = props;
+    const { label, handleChange } = props;
 
     const classes = useStyles();
 
-    const [value, setValue] = React.useState<Feature | null>(defaultValue || null);
+    const [value, setValue] = React.useState<Feature | null>();
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<Feature[]>([]);
     const loaded = React.useRef(false);
@@ -95,7 +95,6 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
                 autoComplete
                 includeInputInList
                 filterSelectedOptions
-                inputValue={defaultValue?.name}
                 value={value}
                 onChange={(event, newValue) => {
                     setOptions(newValue ? [newValue, ...options] : options);
