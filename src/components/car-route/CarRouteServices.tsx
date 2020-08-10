@@ -60,7 +60,15 @@ export const CarRouteServices = () => {
     };
 
     const onStartButtonClick = () => {
+        // set thresholds
+
         setState('map');
+
+        // set loading
+
+        // call weather services
+        // transform data
+        // pass down to map
     };
 
     const generateContent = () => {

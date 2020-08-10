@@ -6,17 +6,8 @@ const useStyles = makeStyles((theme) => ({}));
 
 export const Route: React.FC<RouteProps> = ({ legs }) => {
     const classes = useStyles();
-    // value, function to set state
-    // const [startCoords, setStartCoords] = React.useState<number[]>([]);
-    // const [endCoords, setEndCoords] = React.useState<number[]>([]);
 
     const getColor = (leg) => {
-
-        console.log(leg);
-
-        // get all 3 features we care about (wind, temp...)
-
-        // for every feature, seee if its values violate the thresholds we set
 
         // default
         let overallColor = 'green'
@@ -31,6 +22,7 @@ export const Route: React.FC<RouteProps> = ({ legs }) => {
             const firstThreshold = thresholds[featureValue.name].threshold[0];
             const secondThreshold = thresholds[featureValue.name].threshold[1];
 
+            // TODO !isGreaterThan
             if (isGreaterThan) {
                 if (legFeatureValue > secondThreshold) {
                     overallColor = 'red';

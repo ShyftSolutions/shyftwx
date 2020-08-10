@@ -68,6 +68,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
     };
 
     const handleButtonClick = () => {
+        // update to return data of route to parent
         directionsAsync([startCoords, endCoords]).then((data) => console.log(data));
         onClick();
     };
