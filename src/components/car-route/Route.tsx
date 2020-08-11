@@ -4,12 +4,16 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({}));
 
+const green = '#51CF66';
+const yellow = '#FF922B';
+const red = '#FF0000';
+
 export const Route: React.FC<RouteProps> = ({ legs, thresholds }) => {
     const classes = useStyles();
 
     const getColor = (leg) => {
         // default
-        let overallColor = 'green';
+        let overallColor = green;
 
         Object.keys(leg.featureValues).forEach((featureValueKey) => {
             const featureValue = leg.featureValues[featureValueKey];
@@ -22,15 +26,15 @@ export const Route: React.FC<RouteProps> = ({ legs, thresholds }) => {
 
             if (isGreaterThan) {
                 if (legFeatureValue > secondThreshold) {
-                    overallColor = 'red';
-                } else if (legFeatureValue > firstThreshold && overallColor != 'red') {
-                    overallColor = 'yellow';
+                    overallColor = red;
+                } else if (legFeatureValue > firstThreshold && overallColor !== red) {
+                    overallColor = yellow;
                 }
             } else {
                 if (legFeatureValue < firstThreshold) {
-                    overallColor = 'red';
-                } else if (legFeatureValue < secondThreshold && overallColor != 'red') {
-                    overallColor = 'yellow';
+                    overallColor = red;
+                } else if (legFeatureValue < secondThreshold && overallColor !== red) {
+                    overallColor = yellow;
                 }
             }
         });

@@ -53,16 +53,21 @@ declare type ThresholdExpansionPanelProps = {
 };
 
 declare type InputDrawerProps = {
-    startingPoint?: Feature;
-    destination?: Feature;
-    time?: Date;
-    windParam?: Threshold;
-    precipParam?: Threshold;
-    tempParam?: Threshold;
-    carRouteData: RouteLeg[];
+    startingPoint: Feature;
+    destination: Feature;
+    time: Date;
+    windParam: Threshold;
+    precipParam: Threshold;
+    tempParam: Threshold;
+    possibleTrips: any;
     onWindSliderChange: (input: Threshold) => void;
     onPrecipSliderChange: (input: Threshold) => void;
     onTempSliderChange: (input: Threshold) => void;
+};
+
+declare type TimeChartProps = {
+    data: any;
+    thresholds: any;
 };
 
 declare type MapBackgroundProps = {

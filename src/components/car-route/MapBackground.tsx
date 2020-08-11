@@ -12,7 +12,10 @@ import { transformWeatherData } from './../../utils/weatherDataFormatter';
  */
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100vh'
+        height: '100%',
+        margin: 0,
+        padding: 0
+        // position: 'absolute'
     },
     paddingMiddle: {
         marginLeft: 15,
@@ -21,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const MapBackground: React.FC<MapBackgroundProps> = ({children}) => {
+export const MapBackground: React.FC<MapBackgroundProps> = ({ children }) => {
     const classes = useStyles();
     // sw, ne
     // const bounds = latLngBounds([23.81, -65.69], [49.38, -129.17]);
@@ -45,7 +48,7 @@ export const MapBackground: React.FC<MapBackgroundProps> = ({children}) => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
-                {children}
+            {children}
         </Map>
     );
 };

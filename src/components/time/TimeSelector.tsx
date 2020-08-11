@@ -6,8 +6,8 @@ export const TimeSelector: React.FC<TimeSelectorProps> = ({ action, value }) => 
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(value || null);
 
     if (selectedDate === null) {
-      setSelectedDate(new Date());
-      action(new Date());
+        setSelectedDate(new Date());
+        action(new Date());
     }
 
     const onChange = (date) => {

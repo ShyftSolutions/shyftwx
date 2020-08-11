@@ -56,7 +56,11 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
                         <Typography className={classes.heading}>{summary}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <ThresholdInput impact={weatherImpact} sliderValues={sliderValues} action={onSliderValueChange} />
+                        <ThresholdInput
+                            impact={weatherImpact}
+                            sliderValues={sliderValues}
+                            action={onSliderValueChange}
+                        />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             </div>

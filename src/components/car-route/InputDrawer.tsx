@@ -8,6 +8,7 @@ import { ThresholdExpansionPanel } from './ThresholdExpansionPanel';
 import { LayerGroup } from 'react-leaflet';
 import { Route } from './Route';
 import MapBackground from './MapBackground';
+import TimeChart from './TimeChart';
 
 const drawerWidth = 300;
 
@@ -60,10 +61,12 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
     onPrecipSliderChange,
     onTempSliderChange,
     onWindSliderChange,
-    carRouteData
+    possibleTrips
 }) => {
     const classes = useStyles();
-
+    // const [tableShow, setTableShow] = React.useState(false);
+    // temporarily just set to true since when false the map disappears with the table???
+    const tableShow = true;
 
     const thresholds = {
         Temperature: {
@@ -80,6 +83,18 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
         }
     };
 
+    const onClick = () => {
+        // setTableShow(true);
+    };
+
+
+    const getActiveTrip = () => {
+        // TODO may need to make this more dynamic later if we want to update the map w/ a selected time.
+        // didnt do this yet bc startTime is on the hour, but the user chosen time is to the minute
+        // const activeTrip = possibleTrips.filter(trip => trip.startTime === time)[0];
+
+        return possibleTrips[0];
+    };
 
     return (
         <div className={classes.root}>
@@ -109,7 +124,11 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                         <TimeSelector value={time} />
                     </Grid>
                     <Grid item>
-                        <BasicButton text="Explore Times" />
+                        {!tableShow ? (
+                            <BasicButton text="Explore Times" action={onClick} />
+                        ) : (
+                            <BasicButton text="Explore Times" style="disabled" />
+                        )}
                     </Grid>
                 </Grid>
 
@@ -119,7 +138,12 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                 </Typography>
                 <List>
                     <ListItem>
-                        <ThresholdExpansionPanel summary="Wind" weatherImpact="wind" sliderValues={windParam} onSliderValueChange={onWindSliderChange} />
+                        <ThresholdExpansionPanel
+                            summary="Wind"
+                            weatherImpact="wind"
+                            sliderValues={windParam}
+                            onSliderValueChange={onWindSliderChange}
+                        />
                     </ListItem>
                     <ListItem>
                         <ThresholdExpansionPanel
@@ -130,14 +154,20 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                         />
                     </ListItem>
                     <ListItem>
-                        <ThresholdExpansionPanel summary="Temperature" weatherImpact="temp" sliderValues={tempParam} onSliderValueChange={onTempSliderChange}/>
+                        <ThresholdExpansionPanel
+                            summary="Temperature"
+                            weatherImpact="temp"
+                            sliderValues={tempParam}
+                            onSliderValueChange={onTempSliderChange}
+                        />
                     </ListItem>
                 </List>
             </Drawer>
             <main className={classes.content}>
+                {tableShow ? <TimeChart data={possibleTrips} thresholds={thresholds} /> : ' '}
                 <MapBackground>
                     <LayerGroup>
-                        <Route legs={carRouteData} thresholds={thresholds}/>
+                        <Route legs={getActiveTrip().tripData} thresholds={thresholds} />
                     </LayerGroup>
                 </MapBackground>
             </main>
