@@ -18,7 +18,7 @@ export const CarRouteServices = () => {
     const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
     const [tempThresholds, setTempThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
     const [directions, setDirections] = React.useState<any>();
-    const [weatherData, setWeatherData] = React.useState<any>();
+    const [possibleTrips, setPossibleTrips] = React.useState<any>();
     const [loading, setLoading] = React.useState(false);
 
     // Welcome Page Functions
@@ -61,21 +61,45 @@ export const CarRouteServices = () => {
         setWindThresholds(input);
     };
 
-    const onStartButtonClick = () => {
+    const onStartButtonClick = async () => {
         // set loading
         setLoading(true);
 
-        // call weather services
-        carRouteAsync(directions, time).then((data) => {
-            console.log(data);
-            setWeatherData(transformWeatherData(data));
+        const possibleTrips: any = [];
 
-            setLoading(false);
+        const promises: any = [];
 
-            // pass down to map
-            setState('map');
-        });
+        const NUM_OF_FORECASTS = 5;
+
+        for (let i = 0; i < NUM_OF_FORECASTS; i++) {
+            const tempStartTime = new Date((time).getTime() + i * 60 * 60000);
+
+            promises.push(carRouteAsync(directions, tempStartTime)
+                .then((data) => {
+                    
+                    let transformedData = transformWeatherData(data);
+
+                    possibleTrips.push({ startTime: tempStartTime.toISOString(), tripData: transformedData})
+                }));
+        }
+
+        await Promise.all(promises);
+
+        // sort the routes based on start time
+        possibleTrips.sort((x, y) => new Date(x.startTime).getTime() - new Date(y.startTime).getTime());
+
+        setPossibleTrips(possibleTrips);
+        setLoading(false)
+        setState('map');
     };
+
+    const getActiveTrip = () => {
+        // TODO may need to make this more dynamic later if we want to update the map w/ a selected time.
+        // didnt do this yet bc startTime is on the hour, but the user chosen time is to the minute
+        // const activeTrip = possibleTrips.filter(trip => trip.startTime === time)[0];
+
+        return possibleTrips[0];
+    }
 
     const generateContent = () => {
         if (loading) {
@@ -118,7 +142,7 @@ export const CarRouteServices = () => {
                         onPrecipSliderChange={precipValuesChange}
                         onTempSliderChange={tempValuesChange}
                         onWindSliderChange={windValuesChange}
-                        carRouteData={weatherData}
+                        carRouteData={getActiveTrip().tripData}
                     />
                 );
             default:
