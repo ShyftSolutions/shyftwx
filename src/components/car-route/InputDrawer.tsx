@@ -5,6 +5,8 @@ import SearchField from '../textfield/SearchField';
 import TimeSelector from '../time/TimeSelector';
 import BasicButton from '../buttons/BasicButton';
 import { ThresholdExpansionPanel } from './ThresholdExpansionPanel';
+import { LayerGroup } from 'react-leaflet';
+import { Route } from './Route';
 import MapBackground from './MapBackground';
 
 const drawerWidth = 300;
@@ -55,9 +57,29 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
     windParam,
     precipParam,
     tempParam,
+    onPrecipSliderChange,
+    onTempSliderChange,
+    onWindSliderChange,
     carRouteData
 }) => {
     const classes = useStyles();
+
+
+    const thresholds = {
+        Temperature: {
+            greaterThan: tempParam ? tempParam.greaterThan : false,
+            threshold: tempParam ? tempParam.threshold : null
+        },
+        WindSpeed: {
+            greaterThan: windParam ? windParam.greaterThan : false,
+            threshold: windParam ? windParam.threshold : null
+        },
+        TotalPrecipitationRate: {
+            greaterThan: precipParam ? precipParam.greaterThan : false,
+            threshold: precipParam ? precipParam.threshold : null
+        }
+    };
+
 
     return (
         <div className={classes.root}>
@@ -97,22 +119,27 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                 </Typography>
                 <List>
                     <ListItem>
-                        <ThresholdExpansionPanel summary="Wind" weatherImpact="wind" sliderValues={windParam} />
+                        <ThresholdExpansionPanel summary="Wind" weatherImpact="wind" sliderValues={windParam} onSliderValueChange={onWindSliderChange} />
                     </ListItem>
                     <ListItem>
                         <ThresholdExpansionPanel
                             summary="Precipitation"
                             weatherImpact="precip"
                             sliderValues={precipParam}
+                            onSliderValueChange={onPrecipSliderChange}
                         />
                     </ListItem>
                     <ListItem>
-                        <ThresholdExpansionPanel summary="Temperature" weatherImpact="temp" sliderValues={tempParam} />
+                        <ThresholdExpansionPanel summary="Temperature" weatherImpact="temp" sliderValues={tempParam} onSliderValueChange={onTempSliderChange}/>
                     </ListItem>
                 </List>
             </Drawer>
             <main className={classes.content}>
-                <MapBackground data={carRouteData}/>
+                <MapBackground>
+                    <LayerGroup>
+                        <Route legs={carRouteData} thresholds={thresholds}/>
+                    </LayerGroup>
+                </MapBackground>
             </main>
         </div>
     );

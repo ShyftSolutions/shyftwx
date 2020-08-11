@@ -21,11 +21,12 @@ const useStyles = makeStyles((theme) =>
 export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = ({
     summary,
     weatherImpact,
-    sliderValues
+    sliderValues,
+    onSliderValueChange
 }) => {
     const classes = useStyles();
 
-    const [values, setValues] = React.useState<Threshold>(sliderValues || {greaterThan: true, threshold: []});
+    // const [values, setValues] = React.useState<Threshold>(sliderValues || {greaterThan: true, threshold: []});
     const [expanded, setExpanded] = React.useState(false);
     const [active, setActive] = React.useState(sliderValues?.threshold.length !== 0);
 
@@ -55,7 +56,7 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
                         <Typography className={classes.heading}>{summary}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <ThresholdInput impact={weatherImpact} sliderValues={values} action={setValues} />
+                        <ThresholdInput impact={weatherImpact} sliderValues={sliderValues} action={onSliderValueChange} />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             </div>

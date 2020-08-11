@@ -62,29 +62,13 @@ export const CarRouteServices = () => {
     };
 
     const onStartButtonClick = () => {
-        // set thresholds
-        const thresholds = {
-            Temperature: {
-                greaterThan: tempThresholds.greaterThan,
-                threshold: tempThresholds.threshold
-            },
-            WindSpeed: {
-                greaterThan: windThresholds.greaterThan,
-                threshold: windThresholds.threshold
-            },
-            TotalPrecipitationRate: {
-                greaterThan: precipThresholds.greaterThan,
-                threshold: precipThresholds.threshold
-            }
-        };
-
         // set loading
         setLoading(true);
 
         // call weather services
         carRouteAsync(directions, time).then((data) => {
             console.log(data);
-            setWeatherData(transformWeatherData(data, thresholds));
+            setWeatherData(transformWeatherData(data));
 
             setLoading(false);
 
@@ -131,6 +115,9 @@ export const CarRouteServices = () => {
                         tempParam={tempThresholds}
                         time={time}
                         windParam={windThresholds}
+                        onPrecipSliderChange={precipValuesChange}
+                        onTempSliderChange={tempValuesChange}
+                        onWindSliderChange={windValuesChange}
                         carRouteData={weatherData}
                     />
                 );

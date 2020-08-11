@@ -4,13 +4,12 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({}));
 
-export const Route: React.FC<RouteProps> = ({ legs }) => {
+export const Route: React.FC<RouteProps> = ({ legs, thresholds }) => {
     const classes = useStyles();
 
     const getColor = (leg) => {
         // default
         let overallColor = 'green';
-        const thresholds = leg.threshold;
 
         Object.keys(leg.featureValues).forEach((featureValueKey) => {
             const featureValue = leg.featureValues[featureValueKey];
@@ -42,7 +41,7 @@ export const Route: React.FC<RouteProps> = ({ legs }) => {
     return (
         <LayerGroup>
             {legs.map((leg, idx) => (
-                <Polyline key={idx} positions={leg.coordinates} color={getColor(leg)} />
+                <Polyline key={idx} positions={leg.coordinates} color={!thresholds ? 'gray' : getColor(leg)} />
             ))}
         </LayerGroup>
     );
