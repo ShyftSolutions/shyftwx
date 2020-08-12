@@ -39,47 +39,47 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const defaultThresholdValues = {
-    wind: [5, 10], // mph
-    temp: [32, 70], // F
-    precip: [1, 2]  // in/hr
-}
+// const defaultThresholdValues = {
+//     wind: [5, 10], // mph
+//     temp: [32, 70], // F
+//     precip: [1, 2]  // in/hr
+// }
 
 const unitOptions = {
     wind: [Units.MPH, Units.KPH],
-    precip: [Units.KPH, Units.MM_HR],
+    precip: [Units.IN_HR, Units.MM_HR],
     temp: [Units.F, Units.C]
 };
 
-export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, sliderValues }) => {
+export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, unitAction, sliderValues }) => {
     const classes = useStyles();
-    const [values, setValues] = React.useState<number[]>(sliderValues?.threshold || []);
-    const [isGreaterThan, setIsGreaterThan] = React.useState(sliderValues?.greaterThan || true);
-    const [unit, setUnit] = React.useState<string>(sliderValues?.unit || unitOptions[impact][0]);
+    // const [values, setValues] = React.useState<number[]>(sliderValues?.threshold || []);
+    // const [isGreaterThan, setIsGreaterThan] = React.useState(sliderValues?.greaterThan || true);
+    // const [unit, setUnit] = React.useState<string>(sliderValues?.unit || unitOptions[impact][0]);
 
 
-    if (values.length === 0) {
-        setValues(defaultThresholdValues[impact]);
-        action({ threshold: defaultThresholdValues[impact], greaterThan: isGreaterThan, unit: unit });
-    }
+    // if (values.length === 0) {
+        // setValues(defaultThresholdValues[impact]);
+        // action({ threshold: defaultThresholdValues[impact], greaterThan: isGreaterThan, unit: unit });
+    // }
 
     const handleThresholdChange = (newValues: number[]) => {
-        setValues(newValues);
-        action({ threshold: newValues, greaterThan: isGreaterThan, unit: unit });
+        const newThreshold: Threshold = {
+            ...sliderValues,
+            threshold: newValues
+        }
+        action(newThreshold);
     };
 
     const onClick = () => {
-        action({ threshold: values, greaterThan: !isGreaterThan, unit: unit });
-        setIsGreaterThan(!isGreaterThan);
+        action({ ...sliderValues, greaterThan: !sliderValues.greaterThan });
+        // setIsGreaterThan(!isGreaterThan);
     };
 
     const handleUnitChange = (newUnit: string) => {
-        console.log('new unit', newUnit);
-        const oldUnit = unit;
-        setUnit(newUnit)
-
-        // TODO have to update this higher up?
-        sliderValues.threshold = convertUnits(oldUnit, newUnit, sliderValues.threshold);
+        // setValues(convertUnits(unit, newUnit, values))
+        // setUnit(newUnit);
+        unitAction(newUnit);
     }
 
     const sliders = {
@@ -89,10 +89,10 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 label="Wind"
                 min={0}
                 max={40}
-                values={values}
-                units={unit}
+                values={sliderValues.threshold}
+                units={sliderValues.unit}
                 onChange={(values) => handleThresholdChange(values)}
-                isGreaterThan={isGreaterThan}
+                isGreaterThan={sliderValues.greaterThan}
             />
         ),
         temp: (
@@ -101,10 +101,10 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 label="Temp"
                 min={-30}
                 max={140}
-                values={values}
-                units={unit}
+                values={sliderValues.threshold}
+                units={sliderValues.unit}
                 onChange={(values) => handleThresholdChange(values)}
-                isGreaterThan={isGreaterThan}
+                isGreaterThan={sliderValues.greaterThan}
             />
         ),
         precip: (
@@ -113,13 +113,16 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 label="Precip"
                 min={0}
                 max={10}
-                values={values}
-                units={unit}
+                values={sliderValues.threshold}
+                units={sliderValues.unit}
                 onChange={(values) => handleThresholdChange(values)}
-                isGreaterThan={isGreaterThan}
+                isGreaterThan={sliderValues.greaterThan}
             />
         )
     };
+
+    console.log()
+    console.log('returning...', sliderValues);
 
     return (
         <Paper className={classes.paper}>
@@ -131,7 +134,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 <Grid container item justify="center" alignItems="center" xs={12} spacing={1}>
                     <Grid container item xs justify="center">
                         <Fab onClick={onClick} color="primary" size="small">
-                            {isGreaterThan ? <ChevronRight /> : <ChevronLeft />}
+                            {sliderValues.greaterThan ? <ChevronRight /> : <ChevronLeft />}
                         </Fab>
                     </Grid>
                     <Grid item xs lg={10} md={9} sm={9}>

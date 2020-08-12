@@ -9,13 +9,20 @@ declare type WeatherInputProps = {
     onWindSliderChange: (input: Threshold) => void;
     onPrecipSliderChange: (input: Threshold) => void;
     onTempSliderChange: (input: Threshold) => void;
+    onWindUnitChange: (newVal: string) => void;
+    onPrecipUnitChange: (newVal: string) => void;
+    onTempUnitChange: (newVal: string) => void;
+    windThreshold: Threshold;
+    tempThreshold: Threshold;
+    precipThreshold: Threshold;
     onStart: () => void;
 };
 
 declare type ThresholdInputProps = {
     impact: string;
     action: (input: Threshold) => void;
-    sliderValues?: Threshold;
+    unitAction: (newVal: string) => void;
+    sliderValues: Threshold;
 };
 
 declare type WelcomePageProps = {

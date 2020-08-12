@@ -45,6 +45,8 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({
         ];
     }
 
+    console.log('rerendering a slider yo', values);
+
     return (
         <Grid container>
             <Grid item md={8}>
@@ -52,6 +54,7 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({
                     min={min}
                     max={max}
                     defaultValue={[min, ...values, max]}
+                    value={[min, ...values, max]}
                     step={1}
                     pushable
                     key={key}

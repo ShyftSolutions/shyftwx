@@ -9,6 +9,7 @@ import { carRouteAsync } from '../../apis';
 import { transformWeatherData } from '../../utils/weatherDataFormatter';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { Units } from './../../utils/Units';
+import { convertUnits } from './../../utils/unitConverter';
 
 export const CarRouteServices = () => {
     const [state, setState] = React.useState('initial');
@@ -62,6 +63,24 @@ export const CarRouteServices = () => {
         setWindThresholds(input);
     };
 
+    const precipUnitChange = (newUnit: string) => {
+        setPrecipThresholds({...precipThresholds, 
+                            unit: newUnit, 
+                            threshold: convertUnits(precipThresholds.unit, newUnit, precipThresholds.threshold)});
+    };
+
+    const tempUnitChange = (newUnit: string) => {
+        setTempThresholds({...tempThresholds, 
+            unit: newUnit, 
+            threshold: convertUnits(tempThresholds.unit, newUnit, tempThresholds.threshold)});
+    };
+
+    const windUnitChange = (newUnit: string) => {
+        setWindThresholds({...windThresholds, 
+            unit: newUnit, 
+            threshold: convertUnits(windThresholds.unit, newUnit, windThresholds.threshold)});
+    };
+
     const onStartButtonClick = async () => {
         // set loading
         setLoading(true);
@@ -95,6 +114,10 @@ export const CarRouteServices = () => {
     };
 
     const generateContent = () => {
+        console.log('generating content');
+
+        console.log(windThresholds);
+
         if (loading) {
             return (
                 <Grid container justify="center">
@@ -120,6 +143,12 @@ export const CarRouteServices = () => {
                         onPrecipSliderChange={precipValuesChange}
                         onTempSliderChange={tempValuesChange}
                         onWindSliderChange={windValuesChange}
+                        onPrecipUnitChange={precipUnitChange}
+                        onTempUnitChange={tempUnitChange}
+                        onWindUnitChange={windUnitChange}
+                        windThreshold={windThresholds}
+                        tempThreshold={tempThresholds}
+                        precipThreshold={precipThresholds}
                         onStart={onStartButtonClick}
                     />
                 );

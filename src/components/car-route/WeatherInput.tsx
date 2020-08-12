@@ -3,6 +3,7 @@ import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
 import BasicButton from '../buttons/BasicButton';
 import BasicCheckbox from '../checkbox/BasicCheckbox';
 import ThresholdInput from './ThresholdInput';
+import { Units } from './../../utils/Units';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -13,11 +14,32 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const defaultThresholdValues = {
+    wind: {
+        [Units.MPH]: [5, 10],
+        [Units.KPH]: [8, 16]
+    },
+    temp: {
+        [Units.F]: [32, 70],
+        [Units.C]: [0, 21]
+    },
+    precip: {
+        [Units.IN_HR]: [1, 2],
+        [Units.MM_HR]: [25, 50]
+    }
+}
+
 export const WeatherInput: React.FC<WeatherInputProps> = ({
     onClick,
     onWindSliderChange,
     onPrecipSliderChange,
     onTempSliderChange,
+    onTempUnitChange,
+    onPrecipUnitChange,
+    onWindUnitChange,
+    windThreshold,
+    tempThreshold,
+    precipThreshold,
     onStart
 }) => {
     const classes = useStyles();
@@ -25,6 +47,20 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
     const [windChecked, setWindChecked] = React.useState(false);
     const [precipChecked, setPrecipChecked] = React.useState(false);
     const [tempChecked, setTempChecked] = React.useState(false);
+
+    const handleWindChecked = (isChecked) => {
+        setWindChecked(isChecked);
+        onWindSliderChange({...windThreshold, threshold: defaultThresholdValues['wind'][windThreshold.unit]})
+    }
+    const handlePrecipChecked = (isChecked) => {
+        setPrecipChecked(isChecked);
+        onPrecipSliderChange({...precipThreshold, threshold: defaultThresholdValues['precip'][precipThreshold.unit]})
+    }
+    const handleTempChecked = (isChecked) => {
+        setTempChecked(isChecked);
+        onTempSliderChange({...tempThreshold, threshold: defaultThresholdValues['temp'][tempThreshold.unit]})
+
+    }
 
     return (
         <div>
@@ -64,9 +100,12 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                                     <Grid container item key="wind">
                                         <Grid item xs={2} />
                                         <Grid item xs={10}>
-                                            <BasicCheckbox text="Wind" action={setWindChecked} />
+                                            <BasicCheckbox text="Wind" action={handleWindChecked} />
                                             {windChecked ? (
-                                                <ThresholdInput impact="wind" action={onWindSliderChange} />
+                                                <ThresholdInput impact="wind" 
+                                                                sliderValues={windThreshold}
+                                                                action={onWindSliderChange} 
+                                                                unitAction={onWindUnitChange} />
                                             ) : (
                                                 <></>
                                             )}
@@ -77,9 +116,12 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                                     <Grid container item key="precipitation">
                                         <Grid item xs={2} />
                                         <Grid item xs={10}>
-                                            <BasicCheckbox text="Precipitation" action={setPrecipChecked} />
+                                            <BasicCheckbox text="Precipitation" action={handlePrecipChecked} />
                                             {precipChecked ? (
-                                                <ThresholdInput impact="precip" action={onPrecipSliderChange} />
+                                                <ThresholdInput impact="precip" 
+                                                                sliderValues={precipThreshold}
+                                                                action={onPrecipSliderChange} 
+                                                                unitAction={onPrecipUnitChange} />
                                             ) : (
                                                 <></>
                                             )}
@@ -90,9 +132,12 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                                     <Grid container item key="temperature">
                                         <Grid item xs={2} />
                                         <Grid item xs={10}>
-                                            <BasicCheckbox text="Temperature" action={setTempChecked} />
+                                            <BasicCheckbox text="Temperature" action={handleTempChecked} />
                                             {tempChecked ? (
-                                                <ThresholdInput impact="temp" action={onTempSliderChange} />
+                                                <ThresholdInput impact="temp" 
+                                                                sliderValues={tempThreshold}
+                                                                action={onTempSliderChange} 
+                                                                unitAction={onTempUnitChange} />
                                             ) : (
                                                 <></>
                                             )}
