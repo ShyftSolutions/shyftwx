@@ -10,7 +10,22 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
         paddingBottom: 20,
         overflow: 'auto',
-        maxHeight: '70vh'
+        maxHeight: '70vh',
+        [theme.breakpoints.down('sm')]: {
+            minHeight: '40vh',
+            minWidth: '60vw'
+        },
+        [theme.breakpoints.up('md')]: {
+            minHeight: '40vh',
+            minWidth: '30vw'
+        }
+    },
+    grid: {
+        minHeight: '60vh',
+        minWidth: '30vw',
+        [theme.breakpoints.up('md')]: {
+            maxWidth: '35vw'
+        }
     }
 }));
 
@@ -27,7 +42,7 @@ const defaultThresholdValues = {
         [Units.IN_HR]: [1, 2],
         [Units.MM_HR]: [25, 50]
     }
-}
+};
 
 export const WeatherInput: React.FC<WeatherInputProps> = ({
     onClick,
@@ -50,17 +65,16 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
 
     const handleWindChecked = (isChecked) => {
         setWindChecked(isChecked);
-        onWindSliderChange({...windThreshold, threshold: defaultThresholdValues['wind'][windThreshold.unit]})
-    }
+        onWindSliderChange({ ...windThreshold, threshold: defaultThresholdValues.wind[windThreshold.unit] });
+    };
     const handlePrecipChecked = (isChecked) => {
         setPrecipChecked(isChecked);
-        onPrecipSliderChange({...precipThreshold, threshold: defaultThresholdValues['precip'][precipThreshold.unit]})
-    }
+        onPrecipSliderChange({ ...precipThreshold, threshold: defaultThresholdValues.precip[precipThreshold.unit] });
+    };
     const handleTempChecked = (isChecked) => {
         setTempChecked(isChecked);
-        onTempSliderChange({...tempThreshold, threshold: defaultThresholdValues['temp'][tempThreshold.unit]})
-
-    }
+        onTempSliderChange({ ...tempThreshold, threshold: defaultThresholdValues.temp[tempThreshold.unit] });
+    };
 
     return (
         <div>
@@ -81,7 +95,7 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                             justify="space-between"
                             alignItems="center"
                             spacing={2}
-                            style={{ minHeight: '70vh', minWidth: '30vw', maxWidth: '40vw', margin: 0 }}
+                            className={classes.grid}
                         >
                             <Grid container item spacing={2}>
                                 <Grid container item justify="flex-start">
@@ -102,10 +116,12 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                                         <Grid item xs={10}>
                                             <BasicCheckbox text="Wind" action={handleWindChecked} />
                                             {windChecked ? (
-                                                <ThresholdInput impact="wind" 
-                                                                sliderValues={windThreshold}
-                                                                action={onWindSliderChange} 
-                                                                unitAction={onWindUnitChange} />
+                                                <ThresholdInput
+                                                    impact="wind"
+                                                    sliderValues={windThreshold}
+                                                    action={onWindSliderChange}
+                                                    unitAction={onWindUnitChange}
+                                                />
                                             ) : (
                                                 <></>
                                             )}
@@ -118,10 +134,12 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                                         <Grid item xs={10}>
                                             <BasicCheckbox text="Precipitation" action={handlePrecipChecked} />
                                             {precipChecked ? (
-                                                <ThresholdInput impact="precip" 
-                                                                sliderValues={precipThreshold}
-                                                                action={onPrecipSliderChange} 
-                                                                unitAction={onPrecipUnitChange} />
+                                                <ThresholdInput
+                                                    impact="precip"
+                                                    sliderValues={precipThreshold}
+                                                    action={onPrecipSliderChange}
+                                                    unitAction={onPrecipUnitChange}
+                                                />
                                             ) : (
                                                 <></>
                                             )}
@@ -134,10 +152,12 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                                         <Grid item xs={10}>
                                             <BasicCheckbox text="Temperature" action={handleTempChecked} />
                                             {tempChecked ? (
-                                                <ThresholdInput impact="temp" 
-                                                                sliderValues={tempThreshold}
-                                                                action={onTempSliderChange} 
-                                                                unitAction={onTempUnitChange} />
+                                                <ThresholdInput
+                                                    impact="temp"
+                                                    sliderValues={tempThreshold}
+                                                    action={onTempSliderChange}
+                                                    unitAction={onTempUnitChange}
+                                                />
                                             ) : (
                                                 <></>
                                             )}

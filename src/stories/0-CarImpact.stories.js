@@ -1,10 +1,7 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import React from 'react';
 import _WelcomePage from '../components/car-route/WelcomePage';
-import _RouteInput from '../components/car-route/RouteInput';
 import _WeatherInput from '../components/car-route/WeatherInput';
-import _InputDrawer from '../components/car-route/InputDrawer';
-import _ThresholdInput from '../components/car-route/ThresholdInput';
 import _CarRouteServices from '../components/car-route/CarRouteServices';
 import _MapBackground from '../components/car-route/MapBackground';
 import theme from './../theme';
@@ -23,26 +20,10 @@ export const WelcomePage = () => {
     );
 };
 
-export const RouteInput = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_RouteInput />
-        </MuiThemeProvider>
-    );
-};
-
 export const WeatherInput = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <_WeatherInput />
-        </MuiThemeProvider>
-    );
-};
-
-export const ThresholdInput = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_ThresholdInput impact="wind" />
         </MuiThemeProvider>
     );
 };
@@ -59,14 +40,6 @@ export const MapBackground = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <_MapBackground />
-        </MuiThemeProvider>
-    );
-};
-
-export const InputDrawer = () => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <_InputDrawer />
         </MuiThemeProvider>
     );
 };

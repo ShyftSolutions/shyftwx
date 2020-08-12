@@ -8,6 +8,7 @@ import {
     Button,
     Dialog,
     DialogContent,
+    Grid,
     IconButton,
     Table,
     TableBody,
@@ -30,14 +31,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.grey[500]
     },
     tableCell: {
-        border: '2px solid white',
-        width: '35px'
-    },
-    icon: {
-        fontSize: '1.5em',
-        [theme.breakpoints.down('sm')]: {
-            fontSize: '1em'
-        }
+        border: '2px solid white'
     }
 }));
 
@@ -79,9 +73,9 @@ export const TimeChart: React.FC<TimeChartProps> = ({ data, thresholds }) => {
     };
 
     const icons = {
-        Temperature: <FontAwesomeIcon className={classes.icon} icon={fas.faTemperatureLow} />,
-        TotalPrecipitationRate: <FontAwesomeIcon className={classes.icon} icon={fas.faCloudShowersHeavy} />,
-        WindSpeed: <FontAwesomeIcon className={classes.icon} icon={fas.faWind} />
+        Temperature: <FontAwesomeIcon icon={fas.faTemperatureLow} />,
+        TotalPrecipitationRate: <FontAwesomeIcon icon={fas.faCloudShowersHeavy} />,
+        WindSpeed: <FontAwesomeIcon icon={fas.faWind} />
     };
 
     const getFormattedTime = (time: string) => {
@@ -150,7 +144,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({ data, thresholds }) => {
                 <TableBody>
                     {data.map((trip, i) => (
                         <TableRow key={i}>
-                            <TableCell className={classes.tableCell}>{getFormattedTime}</TableCell>
+                            <TableCell className={classes.tableCell}>{getFormattedTime(trip.startTime)}</TableCell>
                             {trip.tripData.map((route) => {
                                 const colorAndIcons = getColorAndIcons(route);
                                 return (
@@ -159,13 +153,18 @@ export const TimeChart: React.FC<TimeChartProps> = ({ data, thresholds }) => {
                                         className={classes.tableCell}
                                         style={{ backgroundColor: colorAndIcons.color }}
                                     >
-                                        {colorAndIcons.icons !== undefined
-                                            ? colorAndIcons.icons.map((icon) => icons[icon])
-                                            : ' '}
+                                        <Grid container justify="center" spacing={1}>
+                                            {colorAndIcons.icons !== undefined
+                                                ? colorAndIcons.icons.map((icon) => (
+                                                      <Grid container item justify="center" xs key={icon}>
+                                                          {icons[icon]}
+                                                      </Grid>
+                                                  ))
+                                                : ' '}
+                                        </Grid>
                                     </TableCell>
                                 );
                             })}
-                            <TableCell className={classes.tableCell} />
                         </TableRow>
                     ))}
                 </TableBody>
