@@ -3,7 +3,6 @@ import { Paper, Typography, makeStyles, Grid, Fab } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import ThresholdSlider from '../slider/ThresholdSlider';
 import SimpleSelect from '../dropdown/SimpleSelect';
-import { convertUnits } from './../../utils/unitConverter';
 import { Units } from './../../utils/Units';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,12 +37,6 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: 10
     }
 }));
-
-// const defaultThresholdValues = {
-//     wind: [5, 10], // mph
-//     temp: [32, 70], // F
-//     precip: [1, 2]  // in/hr
-// }
 
 const unitOptions = {
     wind: [Units.MPH, Units.KPH],
@@ -86,15 +79,6 @@ const unitMinMaxes = {
 
 export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, unitAction, sliderValues }) => {
     const classes = useStyles();
-    // const [values, setValues] = React.useState<number[]>(sliderValues?.threshold || []);
-    // const [isGreaterThan, setIsGreaterThan] = React.useState(sliderValues?.greaterThan || true);
-    // const [unit, setUnit] = React.useState<string>(sliderValues?.unit || unitOptions[impact][0]);
-
-
-    // if (values.length === 0) {
-        // setValues(defaultThresholdValues[impact]);
-        // action({ threshold: defaultThresholdValues[impact], greaterThan: isGreaterThan, unit: unit });
-    // }
 
     const handleThresholdChange = (newValues: number[]) => {
         const newThreshold: Threshold = {
@@ -106,17 +90,11 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
 
     const onClick = () => {
         action({ ...sliderValues, greaterThan: !sliderValues.greaterThan });
-        // setIsGreaterThan(!isGreaterThan);
     };
 
     const handleUnitChange = (newUnit: string) => {
-        // setValues(convertUnits(unit, newUnit, values))
-        // setUnit(newUnit);
         unitAction(newUnit);
     }
-
-    console.log(unitMinMaxes, sliderValues.unit);
-    console.log(unitMinMaxes['temp'][sliderValues.unit]);
 
     const sliders = {
         wind: (
@@ -156,9 +134,6 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
             />
         )
     };
-
-    console.log()
-    console.log('returning...', sliderValues);
 
     return (
         <Paper className={classes.paper}>
