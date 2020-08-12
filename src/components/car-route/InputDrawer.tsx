@@ -1,9 +1,8 @@
 import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Drawer, Typography, Divider, Grid, List, ListItem } from '@material-ui/core';
+import { Drawer, Typography, Divider, Grid, List, ListItem, Paper } from '@material-ui/core';
 import SearchField from '../textfield/SearchField';
 import TimeSelector from '../time/TimeSelector';
-import BasicButton from '../buttons/BasicButton';
 import { ThresholdExpansionPanel } from './ThresholdExpansionPanel';
 import { LayerGroup } from 'react-leaflet';
 import { Route } from './Route';
@@ -16,6 +15,10 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             display: 'flex'
+        },
+        content: {
+            flexGrow: 1,
+            marginLeft: 13
         },
         drawer: {
             width: drawerWidth,
@@ -35,14 +38,14 @@ const useStyles = makeStyles((theme) =>
             ...theme.mixins.toolbar,
             justifyContent: 'flex-end'
         },
-        content: {
-            flexGrow: 1,
-            marginLeft: 13
-        },
         header: {
             fontSize: 18,
             fontWeight: 600,
             color: theme.palette.secondary.main
+        },
+        buttonPaper: {
+            padding: 15,
+            backgroundColor: theme.palette.primary.contrastText
         },
         weatherList: {
             fontSize: 16,
@@ -64,9 +67,6 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
     possibleTrips
 }) => {
     const classes = useStyles();
-    // const [tableShow, setTableShow] = React.useState(false);
-    // temporarily just set to true since when false the map disappears with the table???
-    const tableShow = true;
 
     const thresholds = {
         Temperature: {
@@ -82,11 +82,6 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
             threshold: precipParam ? precipParam.threshold : null
         }
     };
-
-    const onClick = () => {
-        // setTableShow(true);
-    };
-
 
     const getActiveTrip = () => {
         // TODO may need to make this more dynamic later if we want to update the map w/ a selected time.
@@ -124,11 +119,9 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                         <TimeSelector value={time} />
                     </Grid>
                     <Grid item>
-                        {!tableShow ? (
-                            <BasicButton text="Explore Times" action={onClick} />
-                        ) : (
-                            <BasicButton text="Explore Times" style="disabled" />
-                        )}
+                        <Paper elevation={0} className={classes.buttonPaper}>
+                            <TimeChart data={possibleTrips} thresholds={thresholds} />
+                        </Paper>
                     </Grid>
                 </Grid>
 
@@ -164,7 +157,6 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                 </List>
             </Drawer>
             <main className={classes.content}>
-                {tableShow ? <TimeChart data={possibleTrips} thresholds={thresholds} /> : ' '}
                 <MapBackground>
                     <LayerGroup>
                         <Route legs={getActiveTrip().tripData} thresholds={thresholds} />
