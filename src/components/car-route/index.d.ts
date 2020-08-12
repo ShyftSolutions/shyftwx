@@ -45,7 +45,7 @@ declare type FeatureValue = {
 declare type RouteLeg = {
     coordinates: [number, number][];
     // threshold: any; // Record<string, Threshold>;
-    featureValues: any; // Record<string, FeatureValue>;
+    featureValues: Record<string, FeatureValue>;
 };
 
 declare type RouteProps = {

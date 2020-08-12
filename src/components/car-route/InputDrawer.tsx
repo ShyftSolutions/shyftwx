@@ -70,16 +70,13 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
 
     const thresholds = {
         Temperature: {
-            greaterThan: tempParam ? tempParam.greaterThan : false,
-            threshold: tempParam ? tempParam.threshold : null
+            ...tempParam
         },
         WindSpeed: {
-            greaterThan: windParam ? windParam.greaterThan : false,
-            threshold: windParam ? windParam.threshold : null
+            ...windParam
         },
         TotalPrecipitationRate: {
-            greaterThan: precipParam ? precipParam.greaterThan : false,
-            threshold: precipParam ? precipParam.threshold : null
+            ...precipParam
         }
     };
 

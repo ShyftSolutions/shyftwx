@@ -45,8 +45,6 @@ export const carRouteAsync = (currentRoute: any, startTime: Date | undefined): P
     (startTime as Date).setSeconds(0);
     (startTime as Date).setMinutes(0);
 
-    console.log(currentRoute);
-
     let route = currentRoute.routes[0]
 
     return axios

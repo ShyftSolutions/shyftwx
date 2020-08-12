@@ -8,7 +8,7 @@ import { Feature } from 'geojson';
 import { carRouteAsync } from '../../apis';
 import { transformWeatherData } from '../../utils/weatherDataFormatter';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { Units } from './../../utils/Units';
+import { Units, isStandard } from './../../utils/Units';
 import { convertUnits } from './../../utils/unitConverter';
 
 export const CarRouteServices = () => {

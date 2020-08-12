@@ -34,7 +34,7 @@ function convertLeg(rawLegData) {
 
     // adding something like { 'Temperature': { name: 'Temperature', value: 100.0 }... }
     rawLegData.properties.parameters.map((feature) => {
-        featureValues[feature.name] = { name: feature.name, value: feature.value };
+        featureValues[feature.name] = { name: feature.name, value: feature.value, unit: feature.unit };
     });
 
     leg.featureValues = featureValues;
