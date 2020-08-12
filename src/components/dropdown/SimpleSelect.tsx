@@ -52,6 +52,7 @@ export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) =
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedValue(event.target.value as string);
+        action(event.target.value as string);
     };
 
     return (

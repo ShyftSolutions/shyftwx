@@ -3,6 +3,8 @@ import { Paper, Typography, makeStyles, Grid, Fab } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import ThresholdSlider from '../slider/ThresholdSlider';
 import SimpleSelect from '../dropdown/SimpleSelect';
+import { convertUnits } from './../../utils/unitConverter';
+import { Units } from './../../utils/Units';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,36 +40,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const defaultThresholdValues = {
-    wind: [5, 10],
-    temp: [32, 70],
-    precip: [1, 2]
-};
+    wind: [5, 10], // mph
+    temp: [32, 70], // F
+    precip: [1, 2]  // in/hr
+}
 
 const unitOptions = {
-    wind: ['mph', 'kph'],
-    precip: ['in/hr', 'mm/hr'],
-    temp: ['°F', '°C']
+    wind: [Units.MPH, Units.KPH],
+    precip: [Units.KPH, Units.MM_HR],
+    temp: [Units.F, Units.C]
 };
 
 export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, sliderValues }) => {
     const classes = useStyles();
     const [values, setValues] = React.useState<number[]>(sliderValues?.threshold || []);
     const [isGreaterThan, setIsGreaterThan] = React.useState(sliderValues?.greaterThan || true);
+    const [unit, setUnit] = React.useState<string>(sliderValues?.unit || unitOptions[impact][0]);
+
 
     if (values.length === 0) {
         setValues(defaultThresholdValues[impact]);
-        action({ threshold: defaultThresholdValues[impact], greaterThan: isGreaterThan });
+        action({ threshold: defaultThresholdValues[impact], greaterThan: isGreaterThan, unit: unit });
     }
 
     const handleThresholdChange = (newValues: number[]) => {
         setValues(newValues);
-        action({ threshold: newValues, greaterThan: isGreaterThan });
+        action({ threshold: newValues, greaterThan: isGreaterThan, unit: unit });
     };
 
     const onClick = () => {
-        action({ threshold: values, greaterThan: !isGreaterThan });
+        action({ threshold: values, greaterThan: !isGreaterThan, unit: unit });
         setIsGreaterThan(!isGreaterThan);
     };
+
+    const handleUnitChange = (newUnit: string) => {
+        console.log('new unit', newUnit);
+        const oldUnit = unit;
+        setUnit(newUnit)
+
+        // TODO have to update this higher up?
+        sliderValues.threshold = convertUnits(oldUnit, newUnit, sliderValues.threshold);
+    }
 
     const sliders = {
         wind: (
@@ -77,7 +90,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 min={0}
                 max={40}
                 values={values}
-                units="kt"
+                units={unit}
                 onChange={(values) => handleThresholdChange(values)}
                 isGreaterThan={isGreaterThan}
             />
@@ -89,7 +102,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 min={-30}
                 max={140}
                 values={values}
-                units="C"
+                units={unit}
                 onChange={(values) => handleThresholdChange(values)}
                 isGreaterThan={isGreaterThan}
             />
@@ -101,7 +114,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
                 min={0}
                 max={10}
                 values={values}
-                units="inches"
+                units={unit}
                 onChange={(values) => handleThresholdChange(values)}
                 isGreaterThan={isGreaterThan}
             />
@@ -128,7 +141,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
 
                 <Grid container item alignItems="center" xs={6}>
                     <Typography className={classes.unitText}>Units:</Typography>
-                    <SimpleSelect choices={unitOptions[impact]} />
+                    <SimpleSelect action={handleUnitChange} choices={unitOptions[impact]} />
                 </Grid>
             </Grid>
         </Paper>

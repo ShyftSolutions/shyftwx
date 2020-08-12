@@ -8,16 +8,16 @@ import { Feature } from 'geojson';
 import { carRouteAsync } from '../../apis';
 import { transformWeatherData } from '../../utils/weatherDataFormatter';
 import { CircularProgress, Grid } from '@material-ui/core';
-import TimeChart from './TimeChart';
+import { Units } from './../../utils/Units';
 
 export const CarRouteServices = () => {
     const [state, setState] = React.useState('initial');
     const [startingPoint, setStartingPoint] = React.useState<Feature>();
     const [destination, setDestination] = React.useState<Feature>();
     const [time, setTime] = React.useState<Date>(new Date());
-    const [windThresholds, setWindThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
-    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
-    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [] });
+    const [windThresholds, setWindThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [], unit: Units.MPH });
+    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [], unit: Units.IN_HR });
+    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [], unit: Units.F });
     const [directions, setDirections] = React.useState<any>();
     const [possibleTrips, setPossibleTrips] = React.useState<any>();
     const [loading, setLoading] = React.useState(false);

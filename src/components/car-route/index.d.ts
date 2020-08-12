@@ -1,6 +1,7 @@
 declare type Threshold = {
   greaterThan: boolean;
   threshold: number[];
+  unit: string;
 };
 
 declare type WeatherInputProps = {
