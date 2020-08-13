@@ -22,7 +22,8 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
     summary,
     weatherImpact,
     sliderValues,
-    onSliderValueChange
+    onSliderValueChange,
+    onUnitChange
 }) => {
     const classes = useStyles();
 
@@ -60,6 +61,7 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
                             impact={weatherImpact}
                             sliderValues={sliderValues}
                             action={onSliderValueChange}
+                            unitAction={onUnitChange}
                         />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>

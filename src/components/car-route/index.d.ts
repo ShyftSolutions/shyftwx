@@ -58,6 +58,7 @@ declare type ThresholdExpansionPanelProps = {
     weatherImpact: string;
     sliderValues?: Threshold;
     onSliderValueChange: any;
+    onUnitChange: (newVal: string) => void;
 };
 
 declare type InputDrawerProps = {
@@ -71,6 +72,9 @@ declare type InputDrawerProps = {
     onWindSliderChange: (input: Threshold) => void;
     onPrecipSliderChange: (input: Threshold) => void;
     onTempSliderChange: (input: Threshold) => void;
+    onWindUnitChange: (newVal: string) => void;
+    onPrecipUnitChange: (newVal: string) => void;
+    onTempUnitChange: (newVal: string) => void;
 };
 
 declare type TimeChartProps = {

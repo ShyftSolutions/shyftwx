@@ -114,10 +114,6 @@ export const CarRouteServices = () => {
     };
 
     const generateContent = () => {
-        console.log('generating content');
-
-        console.log(windThresholds);
-
         if (loading) {
             return (
                 <Grid container justify="center">
@@ -164,6 +160,9 @@ export const CarRouteServices = () => {
                         onPrecipSliderChange={precipValuesChange}
                         onTempSliderChange={tempValuesChange}
                         onWindSliderChange={windValuesChange}
+                        onPrecipUnitChange={precipUnitChange}
+                        onTempUnitChange={tempUnitChange}
+                        onWindUnitChange={windUnitChange}
                         possibleTrips={possibleTrips}
                     />
                 );

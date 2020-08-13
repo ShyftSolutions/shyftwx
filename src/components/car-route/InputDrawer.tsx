@@ -64,6 +64,9 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
     onPrecipSliderChange,
     onTempSliderChange,
     onWindSliderChange,
+    onTempUnitChange,
+    onPrecipUnitChange,
+    onWindUnitChange,
     possibleTrips
 }) => {
     const classes = useStyles();
@@ -133,6 +136,7 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                             weatherImpact="wind"
                             sliderValues={windParam}
                             onSliderValueChange={onWindSliderChange}
+                            onUnitChange={onWindUnitChange}
                         />
                     </ListItem>
                     <ListItem>
@@ -141,6 +145,7 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                             weatherImpact="precip"
                             sliderValues={precipParam}
                             onSliderValueChange={onPrecipSliderChange}
+                            onUnitChange={onPrecipUnitChange}
                         />
                     </ListItem>
                     <ListItem>
@@ -149,6 +154,7 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                             weatherImpact="temp"
                             sliderValues={tempParam}
                             onSliderValueChange={onTempSliderChange}
+                            onUnitChange={onTempUnitChange}
                         />
                     </ListItem>
                 </List>
