@@ -10,6 +10,7 @@ import {
     makeStyles
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import ProductMenu from './ProductMenu';
 import React from 'react';
 
@@ -64,19 +65,91 @@ const useStyles = makeStyles((theme) => ({
 export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, label = 'Products', action, window }) => {
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [shouldSort, setShouldSort] = React.useState<boolean>(false)
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    const getSortFn = () => {
+        if (shouldSort) {
+            return function(a, b) {
+                var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                if (nameA < nameB) {
+                return -1;
+                }
+                if (nameA > nameB) {
+                return 1;
+                }
+            
+                // names must be equal
+                return 0;
+            }
+        } else {
+            return function(a, b) {
+                var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                if (nameA < nameB) {
+                return 1;
+                }
+                if (nameA > nameB) {
+                return -1;
+                }
+            
+                // names must be equal
+                return 0;
+            }
+        }
+    }
+
+    // const sortProducts = (products) => {
+    //     if (shouldSort) {
+    //         // need to sort
+    //         return products.sort(function(a, b) {
+    //             var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    //             var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    //             if (nameA < nameB) {
+    //             return -1;
+    //             }
+    //             if (nameA > nameB) {
+    //             return 1;
+    //             }
+            
+    //             // names must be equal
+    //             return 0;
+    //         });
+    //     } else {
+    //         // need to unsort
+    //         return products.sort(function(a, b) {
+    //             var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    //             var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    //             if (nameA < nameB) {
+    //             return 1;
+    //             }
+    //             if (nameA > nameB) {
+    //             return -1;
+    //             }
+            
+    //             // names must be equal
+    //             return 0;
+    //         });
+    //     }
+    // }
+
     const menu = (
         <div>
             <div className={classes.toolbar} />
             <Divider />
-            <Typography variant="h6" style={{ paddingLeft: '6px' }}>
-                {label}
-            </Typography>
-            <ProductMenu options={categories} action={action} />
+            <Toolbar style={{paddingLeft: '6px', paddingRight: '6px'}}>
+                <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
+                    {label}
+                </Typography>
+                <div>
+                <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)}/>
+                </div>
+            </Toolbar>
+            <ProductMenu options={categories} action={action} sortFn={getSortFn()} />
         </div>
     );
 

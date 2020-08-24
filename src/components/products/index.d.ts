@@ -13,11 +13,14 @@ declare type ProductSelectorProps = {
     categories: Category[];
     label?: string;
     action: (ProductSelectionResponse) => void;
+    // onSortToggle: () => void;
+    // isSorted: boolean;
 };
 
 declare type ProductMenuProps = {
     options: Category[];
     action: (product: object) => void;
+    sortFn: any;
 };
 
 declare type Category = {

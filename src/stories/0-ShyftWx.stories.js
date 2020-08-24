@@ -12,8 +12,8 @@ export default {
 
 // https://api.shyftwx.com/datasets/lkjsdflsjd/Vision/
 // 26066922-2b2c-4c3c-8262-654792f6a30f/TQIOmaha/
-const customer = 'fdff17ec-5226-4993-a2e9-cbf8c37c3059'; // "26066922-2b2c-4c3c-8262-654792f6a30f";
-const dataset = 'JulyEndToEnd01'; // "TQIConus";
+const customer = '64f8b62e-4f3a-4119-8062-3b8c4c344255'; // "26066922-2b2c-4c3c-8262-654792f6a30f";
+const dataset = 'Cathy08'; // "TQIConus";
 const url = 'https://api.shyftwx.com/v1/datasets';
 
 export const ShyftWx = () => {
