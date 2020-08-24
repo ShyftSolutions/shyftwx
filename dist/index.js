@@ -14,6 +14,7 @@ var icons = require('@material-ui/icons');
 var reactFontawesome = require('@fortawesome/react-fontawesome');
 var freeSolidSvgIcons = require('@fortawesome/free-solid-svg-icons');
 var MenuIcon = _interopDefault(require('@material-ui/icons/Menu'));
+var SortByAlphaIcon = _interopDefault(require('@material-ui/icons/SortByAlpha'));
 var FormControl = _interopDefault(require('@material-ui/core/FormControl'));
 var MenuItem = _interopDefault(require('@material-ui/core/MenuItem'));
 var Select = _interopDefault(require('@material-ui/core/Select'));
@@ -513,7 +514,8 @@ var emptyMenu = [{
 var ProductMenu = function ProductMenu(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? emptyMenu : _ref$options,
-      action = _ref.action;
+      action = _ref.action,
+      sortFn = _ref.sortFn;
   var classes = useStyles$8();
 
   var _React$useState = React__default.useState(options[0].name + " " + options[0].products[0].name),
@@ -544,7 +546,7 @@ var ProductMenu = function ProductMenu(_ref) {
 
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
-  }, categories.map(function (cat, index) {
+  }, categories.sort(sortFn).map(function (cat, index) {
     return /*#__PURE__*/React__default.createElement(core.List, {
       key: index
     }, /*#__PURE__*/React__default.createElement(core.ListItem, {
@@ -630,20 +632,78 @@ var ProductSelector = function ProductSelector(_ref) {
       mobileOpen = _React$useState[0],
       setMobileOpen = _React$useState[1];
 
+  var _React$useState2 = React__default.useState(false),
+      shouldSort = _React$useState2[0],
+      setShouldSort = _React$useState2[1];
+
   var handleDrawerToggle = function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   };
 
+  var getSortFn = function getSortFn() {
+    if (shouldSort) {
+      return function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) {
+          return -1;
+        }
+
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      };
+    } else {
+      return function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) {
+          return 1;
+        }
+
+        if (nameA > nameB) {
+          return -1;
+        }
+
+        return 0;
+      };
+    }
+  };
+
   var menu = /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement("div", {
     className: classes.toolbar
-  }), /*#__PURE__*/React__default.createElement(core.Divider, null), /*#__PURE__*/React__default.createElement(core.Typography, {
+  }), /*#__PURE__*/React__default.createElement(core.Divider, null), /*#__PURE__*/React__default.createElement(core.Toolbar, {
+    style: {
+      paddingLeft: '6px',
+      paddingRight: '6px'
+    }
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
     variant: "h6",
     style: {
-      paddingLeft: '6px'
+      paddingLeft: '6px',
+      flex: 1
     }
-  }, label), /*#__PURE__*/React__default.createElement(ProductMenu, {
+  }, label), /*#__PURE__*/React__default.createElement("div", {
+    style: shouldSort ? {
+      color: '#329af0'
+    } : {
+      color: '#aeaeae'
+    }
+  }, /*#__PURE__*/React__default.createElement(SortByAlphaIcon, {
+    onClick: function onClick() {
+      return setShouldSort(!shouldSort);
+    },
+    style: {
+      fontSize: '16pt'
+    }
+  }))), /*#__PURE__*/React__default.createElement(ProductMenu, {
     options: categories,
-    action: action
+    action: action,
+    sortFn: getSortFn()
   }));
   var container = window !== undefined ? function () {
     return window().document.body;

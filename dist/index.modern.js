@@ -11,6 +11,7 @@ import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import MenuIcon from '@material-ui/icons/Menu';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -510,7 +511,8 @@ var emptyMenu = [{
 var ProductMenu = function ProductMenu(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? emptyMenu : _ref$options,
-      action = _ref.action;
+      action = _ref.action,
+      sortFn = _ref.sortFn;
   var classes = useStyles$8();
 
   var _React$useState = React.useState(options[0].name + " " + options[0].products[0].name),
@@ -541,7 +543,7 @@ var ProductMenu = function ProductMenu(_ref) {
 
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
-  }, categories.map(function (cat, index) {
+  }, categories.sort(sortFn).map(function (cat, index) {
     return /*#__PURE__*/React.createElement(List, {
       key: index
     }, /*#__PURE__*/React.createElement(ListItem, {
@@ -627,20 +629,78 @@ var ProductSelector = function ProductSelector(_ref) {
       mobileOpen = _React$useState[0],
       setMobileOpen = _React$useState[1];
 
+  var _React$useState2 = React.useState(false),
+      shouldSort = _React$useState2[0],
+      setShouldSort = _React$useState2[1];
+
   var handleDrawerToggle = function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   };
 
+  var getSortFn = function getSortFn() {
+    if (shouldSort) {
+      return function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) {
+          return -1;
+        }
+
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      };
+    } else {
+      return function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) {
+          return 1;
+        }
+
+        if (nameA > nameB) {
+          return -1;
+        }
+
+        return 0;
+      };
+    }
+  };
+
   var menu = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: classes.toolbar
-  }), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement(Typography, {
+  }), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement(Toolbar, {
+    style: {
+      paddingLeft: '6px',
+      paddingRight: '6px'
+    }
+  }, /*#__PURE__*/React.createElement(Typography, {
     variant: "h6",
     style: {
-      paddingLeft: '6px'
+      paddingLeft: '6px',
+      flex: 1
     }
-  }, label), /*#__PURE__*/React.createElement(ProductMenu, {
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: shouldSort ? {
+      color: '#329af0'
+    } : {
+      color: '#aeaeae'
+    }
+  }, /*#__PURE__*/React.createElement(SortByAlphaIcon, {
+    onClick: function onClick() {
+      return setShouldSort(!shouldSort);
+    },
+    style: {
+      fontSize: '16pt'
+    }
+  }))), /*#__PURE__*/React.createElement(ProductMenu, {
     options: categories,
-    action: action
+    action: action,
+    sortFn: getSortFn()
   }));
   var container = window !== undefined ? function () {
     return window().document.body;
