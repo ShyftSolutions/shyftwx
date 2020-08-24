@@ -71,16 +71,17 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
         setMobileOpen(!mobileOpen);
     };
 
+    // return a function to be passed down as the sort function
     const getSortFn = () => {
         if (shouldSort) {
             return function(a, b) {
-                var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                var nameA = a.name.toUpperCase();
+                var nameB = b.name.toUpperCase();
                 if (nameA < nameB) {
-                return -1;
+                    return -1;
                 }
                 if (nameA > nameB) {
-                return 1;
+                    return 1;
                 }
             
                 // names must be equal
@@ -88,13 +89,13 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
             }
         } else {
             return function(a, b) {
-                var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                var nameA = a.name.toUpperCase();
+                var nameB = b.name.toUpperCase();
                 if (nameA < nameB) {
-                return 1;
+                    return 1;
                 }
                 if (nameA > nameB) {
-                return -1;
+                    return -1;
                 }
             
                 // names must be equal
@@ -102,40 +103,6 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
             }
         }
     }
-
-    // const sortProducts = (products) => {
-    //     if (shouldSort) {
-    //         // need to sort
-    //         return products.sort(function(a, b) {
-    //             var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    //             var nameB = b.name.toUpperCase(); // ignore upper and lowercase
-    //             if (nameA < nameB) {
-    //             return -1;
-    //             }
-    //             if (nameA > nameB) {
-    //             return 1;
-    //             }
-            
-    //             // names must be equal
-    //             return 0;
-    //         });
-    //     } else {
-    //         // need to unsort
-    //         return products.sort(function(a, b) {
-    //             var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    //             var nameB = b.name.toUpperCase(); // ignore upper and lowercase
-    //             if (nameA < nameB) {
-    //             return 1;
-    //             }
-    //             if (nameA > nameB) {
-    //             return -1;
-    //             }
-            
-    //             // names must be equal
-    //             return 0;
-    //         });
-    //     }
-    // }
 
     const menu = (
         <div>
@@ -145,8 +112,8 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
                 <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
                     {label}
                 </Typography>
-                <div>
-                <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)}/>
+                <div style={shouldSort ? {color: '#329af0'} : {color: '#aeaeae'}}>
+                    <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{fontSize: '16pt'}}/>
                 </div>
             </Toolbar>
             <ProductMenu options={categories} action={action} sortFn={getSortFn()} />
