@@ -87,25 +87,6 @@ function ValueLabelComponent(props: Props) {
 }
 
 /**
- * Sorts the objects by their values
- *
- * @param a first comparator
- * @param b second comparator
- */
-const compare = (a, b) => {
-    const valA = Number(a.value);
-    const valB = Number(b.value);
-
-    let comparison = 0;
-    if (valA > valB) {
-        comparison = 1;
-    } else if (valA < valB) {
-        comparison = -1;
-    }
-    return comparison;
-};
-
-/**
  * Creates a material UI slider with marks and props based on the values
  * passed in through the options prop
  *
@@ -116,10 +97,8 @@ const compare = (a, b) => {
 export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected }) => {
     const classes = useStyles();
 
-    // sort the array of objects by the value property
-    options.sort(compare);
-
     // define the props for the slider based on the options prop
+    const optionsCount = React.useRef(options.length);
     const stepValue: number = options[1].value - options[0].value;
     const maxValue: number = options[options.length - 1].value;
     const minValue: number = options[0].value;
@@ -132,6 +111,19 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
         <div className={classes.root}>
             <CssBaseline />
             <Hidden xsDown>
+                {optionsCount.current >= 16
+                    ? options.forEach((option, index) => {
+                          if (
+                              !(
+                                  index === 0 ||
+                                  index === optionsCount.current - 1 ||
+                                  (index % 4 === 0 && index <= optionsCount.current - 4)
+                              )
+                          ) {
+                              option.label = '';
+                          }
+                      })
+                    : undefined}
                 <Slider
                     classes={classes}
                     valueLabelDisplay="auto"

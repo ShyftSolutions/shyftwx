@@ -16,17 +16,16 @@ declare type TimeActivationButtonProps = {
     onToggle: (isRunning: boolean) => void;
 };
 
-declare type sliderValueItem = {
+declare type SliderValueItem = {
     label: string;
     value: number;
 };
 
 declare type SliderProps = {
-    options: sliderValueItem[];
+    options: SliderValueItem[];
     action: (value: number) => void;
     selected: number;
 };
-
 
 declare type ValidTimeProps = {
     time: string;
