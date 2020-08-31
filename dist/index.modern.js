@@ -1124,26 +1124,12 @@ function ValueLabelComponent(props) {
   }, children)));
 }
 
-var compare = function compare(a, b) {
-  var valA = Number(a.value);
-  var valB = Number(b.value);
-  var comparison = 0;
-
-  if (valA > valB) {
-    comparison = 1;
-  } else if (valA < valB) {
-    comparison = -1;
-  }
-
-  return comparison;
-};
-
 var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
   var classes = useStyles$e();
-  options.sort(compare);
+  var optionsCount = React.useRef(options.length);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
   var minValue = options[0].value;
@@ -1156,7 +1142,11 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     className: classes.root
   }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
     xsDown: true
-  }, /*#__PURE__*/React.createElement(Slider, {
+  }, optionsCount.current >= 16 ? options.forEach(function (option, index) {
+    if (!(index === 0 || index === optionsCount.current - 1 || index % 4 === 0 && index <= optionsCount.current - 4)) {
+      option.label = '';
+    }
+  }) : undefined, /*#__PURE__*/React.createElement(Slider, {
     classes: classes,
     valueLabelDisplay: "auto",
     "aria-label": "pretty slider",
@@ -1201,8 +1191,6 @@ var useTimer = function useTimer(interval) {
         return window.clearTimeout(timerId);
       };
     }
-
-    return;
   }, [ticks, isRunning]);
   return [ticks, isRunning, setIsRunning];
 };
@@ -1759,6 +1747,8 @@ var ShyftWx = function ShyftWx(_ref) {
         value: +f.hour + +index.datasets[0].run.name,
         label: moment.unix(+f.hour + +index.datasets[0].run.name).utc().format('MM/DD HH:mm[Z]')
       };
+    }).sort(function (valA, valB) {
+      return valA.value - valB.value;
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
       return f.hour === selectedForecast;
