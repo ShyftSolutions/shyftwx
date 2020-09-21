@@ -8,10 +8,10 @@ import RunsSelector from './../run/RunsSelector';
 import Slider from '../time/Slider';
 import TimeControl from './../time/TimeControl';
 import ValidTime from '../time/ValidTime';
-import { getIndexAsync } from '../../apis';
+import { getIndexAsync, getProductDataAsync } from '../../apis';
 import theme from '../../theme';
 import moment from 'moment';
-import LandingPage from './Page';
+import LandingPage from './LandingPage';
 
 export const ShyftContext = React.createContext({});
 
@@ -46,17 +46,27 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     const [selectedProduct, setSelectedProduct] = React.useState<string>('');
     const [selectedLevel, setSelectedLevel] = React.useState<string>('');
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
-    const [selectedRun, setSelectedRun] = React.useState<string>('');
+    // const [selectedRun, setSelectedRun] = React.useState<string>('');
     const [landingPage, setLandingPage] = React.useState(false);
 
     const urlParams = React.useRef(new URLSearchParams(window.location.search));
-    customer = customer || urlParams.current.get('customer') || '';
-    dataset = dataset || urlParams.current.get('model') || '';
-
-    const customerUrl = `${url}/${customer}/${dataset}/products`;
+    const customerId = React.useRef(customer || urlParams.current.get('customer') || '');
+    const datasetId = React.useRef(dataset || urlParams.current.get('model') || '');
 
     const loadAsync = async () => {
-        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
+        if (!url) {
+            setLandingPage(true);
+            return;
+        }
+
+        if (!customerId.current || !datasetId.current) {
+            setLandingPage(true);
+            return;
+        }
+
+        setLoading(true);
+
+        const indexData = (await getIndexAsync(url, customerId.current, datasetId.current)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
             setLandingPage(true);
@@ -77,10 +87,13 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
                 }
             };
 
-            const runRegion = `${dataset.run}-${dataset.region.name}`;
-            const datasetUrl = `${customerUrl}/${runRegion}`;
-
-            const runRegionData = await getIndexAsync(datasetUrl);
+            const runRegionData = await getProductDataAsync(
+                url,
+                customerId.current,
+                datasetId.current,
+                dataset.region.name,
+                dataset.run
+            );
 
             const items = runRegionData.items;
             let uniqueLevels: Level[] = [];
@@ -135,17 +148,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     };
 
     React.useEffect(() => {
-        if (!url) {
-            setLandingPage(true);
-            return;
-        }
-
-        if (!customer || !dataset) {
-            setLandingPage(true);
-        }
-
-        setLoading(true);
-
         loadAsync();
     }, []);
 

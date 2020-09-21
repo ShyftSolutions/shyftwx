@@ -1,7 +1,7 @@
 import React from 'react';
-import BasicButton from './../buttons/BasicButton';
-import TextField from './../textfield/TextField';
-import { getIndexAsync } from '../../apis';
+import BasicButton from '../buttons/BasicButton';
+import TextField from '../textfield/TextField';
+import { CustomerStatus, validateInitialDataAsync } from '../../apis';
 import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,30 +32,32 @@ export const LandingPage: React.FC<PageProps> = ({ url }) => {
     const [state, setState] = React.useState('initial');
     const [customerInput, setCustomerInput] = React.useState('');
     const [datasetInput, setDatasetInput] = React.useState('');
-    const [errorMessage, setErrorMessage] = React.useState(' ');
+    const [errorMessage, setErrorMessage] = React.useState('');
 
     const onClick = () => {
         if (customerInput === '' && datasetInput === '') {
             setState('error');
-            setErrorMessage('Enter a customer and dataset id');
+            setErrorMessage('Enter a Customer and Dataset ID.');
         } else if (customerInput === '') {
             setState('error');
-            setErrorMessage('Enter a customer id');
+            setErrorMessage('Enter a Customer ID.');
         } else if (datasetInput === '') {
             setState('error');
-            setErrorMessage('Enter a dataset id');
+            setErrorMessage('Enter a Dataset ID.');
         } else {
             checkInput();
         }
     };
 
     const checkInput = async () => {
-        const customerUrl = `${url}/${customerInput}/${datasetInput}/products`;
-        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
+        const status = await validateInitialDataAsync(url, customerInput, datasetInput);
 
-        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
+        if (status === CustomerStatus.Unknown) {
             setState('error');
-            setErrorMessage('Customer or dataset id does not exist');
+            setErrorMessage('Customer or Dataset ID does not exist.');
+        } else if (status === CustomerStatus.NoData) {
+            setState('error');
+            setErrorMessage('Data is still being processed. Please try again in a few moments.');
         } else {
             window.location.href += `?customer=${customerInput}&model=${datasetInput}`;
         }
