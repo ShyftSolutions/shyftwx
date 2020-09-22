@@ -1,7 +1,4 @@
 import 'leaflet/dist/leaflet.css';
-export declare const BaseWxViewer: ({ layers, neBounds, swBounds }: {
-    layers: any;
-    neBounds: any;
-    swBounds: any;
-}) => JSX.Element;
+import React from 'react';
+export declare const BaseWxViewer: React.FC<BaseWxViewerProps>;
 export default BaseWxViewer;

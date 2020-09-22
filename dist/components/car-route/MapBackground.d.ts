@@ -1,3 +1,4 @@
 import 'leaflet/dist/leaflet.css';
-export declare const MapBackground: () => JSX.Element;
+import React from 'react';
+export declare const MapBackground: React.FC<MapBackgroundProps>;
 export default MapBackground;

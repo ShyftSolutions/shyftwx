@@ -274,7 +274,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
             return { name: lvl.name, open: index === 0, products: lvl.products };
         });
 
-        const sliderVals: sliderValueItem[] = selectedProduct.forecasts.map((f) => {
+        const sliderVals: SliderValueItem[] = selectedProduct.forecasts.map((f) => {
             return {
                 value: +f.hour + +index.datasets[0].run.name,
                 label: moment

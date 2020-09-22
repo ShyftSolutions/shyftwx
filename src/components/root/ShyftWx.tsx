@@ -1,9 +1,9 @@
-import { Grid, MuiThemeProvider, CircularProgress } from '@material-ui/core';
+import { CircularProgress, Grid, MuiThemeProvider } from '@material-ui/core';
 import React from 'react';
 import theme from '../../theme';
+import LandingPage from '../landingpage/Page';
 import ShyftWxDynamic from './ShyftWxDynamic';
 import ShyftWxStatic from './ShyftWxStatic';
-import LandingPage from '../landingpage/Page';
 
 export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
     let { dataset, url, customer, themeOverride, dynamicFeatures } = props;
@@ -31,6 +31,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
 
         if (!customer || !dataset) {
             setLandingPage(true);
+            return;
         }
 
         setLoading(false);

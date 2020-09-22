@@ -75,7 +75,7 @@ const emptyMenu = [
   ]
   * @param action function that handles the selected product in the parent component
  */
-export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, action }) => {
+export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, action, sortFn }) => {
     const classes = useStyles();
     const [selectedProduct, setSelectedProduct] = React.useState(`${options[0].name} ${options[0].products[0].name}`);
     const [categories, setCategories] = React.useState(options || []);
@@ -120,7 +120,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
             {/**
              * Loop through the list of categories and create the labels for each
              */}
-            {categories.map((cat: Category, index: number) => (
+            {categories.sort(sortFn).map((cat: Category, index: number) => (
                 <List key={index}>
                     <ListItem data-cy={cat.name} button onClick={() => handleClick(cat)}>
                         <ListItemText primary={<Typography className={classes.categoryStyle}>{cat.name}</Typography>} />

@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
-import { ImageOverlay, Map, TileLayer } from 'react-leaflet';
+import { ImageOverlay, Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import React from 'react';
-import { latLngBounds } from 'leaflet';
+import { Icon, latLngBounds } from 'leaflet';
 import { makeStyles } from '@material-ui/core';
 
 /**
@@ -19,10 +19,32 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const BaseWxViewer = ({ layers, neBounds, swBounds }) => {
+export const BaseWxViewer: React.FC<BaseWxViewerProps> = ({ layers, neBounds, swBounds }) => {
     const classes = useStyles();
 
     const bounds = latLngBounds(swBounds, neBounds);
+
+    const generateLayers = (): React.ReactNode => {
+        const results: React.ReactNode[] = [];
+
+        layers &&
+            layers.forEach((layer) => {
+                if (layer.type === 'metar') {
+                    const metar = layer as WxViewerLayerMetar;
+
+                    results.push(
+                        <Marker
+                            position={metar.coordinates}
+                            icon={new Icon({ iconUrl: 'logo192.png', iconSize: [20, 20] })}
+                        >
+                            <Popup>{JSON.stringify(metar)}</Popup>
+                        </Marker>
+                    );
+                }
+            });
+
+        return results;
+    };
 
     return (
         <Map
@@ -35,7 +57,7 @@ export const BaseWxViewer = ({ layers, neBounds, swBounds }) => {
             keyboard={false}
             touchZoom={false}
         >
-            <ImageOverlay url={layers} bounds={bounds} opacity={0.5} />
+            {generateLayers()}
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

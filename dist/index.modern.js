@@ -4,14 +4,15 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
 import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, createMuiTheme, fade, responsiveFontSizes, Fab, CircularProgress, MuiThemeProvider } from '@material-ui/core';
 import 'leaflet/dist/leaflet.css';
-import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
-import { latLngBounds } from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { latLngBounds, Icon } from 'leaflet';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { makeStyles as makeStyles$1, createStyles as createStyles$1, TextField } from '@material-ui/core/';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import MenuIcon from '@material-ui/icons/Menu';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -26,7 +27,7 @@ var MAPBOX_KEY = 'pk.eyJ1Ijoiam9lMTIzMSIsImEiOiJjanlqMzV5MnAwMXdhM21vZDl4dXFqYmY
 
 var MAPBOX_API_URL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{SEARCH_TEXT}.json?country=US&access_token=' + MAPBOX_KEY;
 var MAPBOX_DIRECTIONS_API_URL = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{COORDS}?geometries=geojson&overview=full&annotations=duration,congestion,speed&access_token=' + MAPBOX_KEY;
-var SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/product/car_route';
+var SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/v1/product/car_route';
 var SHYFT_CAPS_URL = 'https://ogc.shyftwx.com/ogcRestful/layers';
 var SHYFT_WCS_ROUTE = 'https://api.shyftwx.com/getwxdata/point';
 var getIndexAsync = function getIndexAsync(url) {
@@ -61,14 +62,15 @@ var carRouteAsync = function carRouteAsync(currentRoute, startTime) {
   startTime.setMilliseconds(0);
   startTime.setSeconds(0);
   startTime.setMinutes(0);
+  var route = currentRoute.routes[0];
   return axios.post(SHYFT_CAR_ROUTE_API_URL, {
     start_time: startTime.toISOString().slice(0, -1),
     routes: {
-      geometry: currentRoute.geometry,
+      geometry: route.geometry,
       legs: [{
         annotation: {
-          duration: currentRoute.legs[0].annotation.duration,
-          distance: [currentRoute.legs[0].distance]
+          duration: route.legs[0].annotation.duration,
+          distance: [route.legs[0].distance]
         }
       }]
     }
@@ -77,30 +79,7 @@ var carRouteAsync = function carRouteAsync(currentRoute, startTime) {
   }).then(function (response) {
     return response.data;
   }).then(function (data) {
-    var results = [];
-
-    for (var i = 0; i < data.features.length - 1; i++) {
-      var feature = data.features[i];
-      var tempAvailable = feature.properties.parameters.find(function (parameter) {
-        return parameter.name === 'Temperature';
-      });
-      var windAvailable = feature.properties.parameters.find(function (parameter) {
-        return parameter.name === 'WindSpeed';
-      });
-      var precipAvailable = feature.properties.parameters.find(function (parameter) {
-        return parameter.name === 'TotalPrecipitationRate';
-      });
-      var startTimeAvailable = feature.properties.times[i];
-      results.push({
-        lineString: feature.geometry,
-        temp: tempAvailable.value,
-        precip: precipAvailable.value,
-        wind: windAvailable.value,
-        startTime: startTimeAvailable
-      });
-    }
-
-    return results;
+    return data;
   });
 };
 
@@ -162,6 +141,24 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
       swBounds = _ref.swBounds;
   var classes = useStyles$1();
   var bounds = latLngBounds(swBounds, neBounds);
+
+  var generateLayers = function generateLayers() {
+    var results = [];
+    layers && layers.forEach(function (layer) {
+      if (layer.type === 'metar') {
+        var metar = layer;
+        results.push( /*#__PURE__*/React.createElement(Marker, {
+          position: metar.coordinates,
+          icon: new Icon({
+            iconUrl: 'logo192.png',
+            iconSize: [20, 20]
+          })
+        }, /*#__PURE__*/React.createElement(Popup, null, JSON.stringify(metar))));
+      }
+    });
+    return results;
+  };
+
   return /*#__PURE__*/React.createElement(Map, {
     bounds: bounds,
     className: classes.root,
@@ -171,11 +168,7 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
     doubleClickZoom: false,
     keyboard: false,
     touchZoom: false
-  }, /*#__PURE__*/React.createElement(ImageOverlay, {
-    url: layers,
-    bounds: bounds,
-    opacity: 0.5
-  }), /*#__PURE__*/React.createElement(TileLayer, {
+  }, generateLayers(), /*#__PURE__*/React.createElement(TileLayer, {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "\xA9 <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
   }));
@@ -629,7 +622,8 @@ var emptyMenu = [{
 var ProductMenu = function ProductMenu(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? emptyMenu : _ref$options,
-      action = _ref.action;
+      action = _ref.action,
+      sortFn = _ref.sortFn;
   var classes = useStyles$8();
 
   var _React$useState = React.useState(options[0].name + " " + options[0].products[0].name),
@@ -660,7 +654,7 @@ var ProductMenu = function ProductMenu(_ref) {
 
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
-  }, categories.map(function (cat, index) {
+  }, categories.sort(sortFn).map(function (cat, index) {
     return /*#__PURE__*/React.createElement(List, {
       key: index
     }, /*#__PURE__*/React.createElement(ListItem, {
@@ -746,20 +740,78 @@ var ProductSelector = function ProductSelector(_ref) {
       mobileOpen = _React$useState[0],
       setMobileOpen = _React$useState[1];
 
+  var _React$useState2 = React.useState(false),
+      shouldSort = _React$useState2[0],
+      setShouldSort = _React$useState2[1];
+
   var handleDrawerToggle = function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   };
 
+  var getSortFn = function getSortFn() {
+    if (shouldSort) {
+      return function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) {
+          return -1;
+        }
+
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      };
+    } else {
+      return function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+
+        if (nameA < nameB) {
+          return 1;
+        }
+
+        if (nameA > nameB) {
+          return -1;
+        }
+
+        return 0;
+      };
+    }
+  };
+
   var menu = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: classes.toolbar
-  }), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement(Typography, {
+  }), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement(Toolbar, {
+    style: {
+      paddingLeft: '6px',
+      paddingRight: '6px'
+    }
+  }, /*#__PURE__*/React.createElement(Typography, {
     variant: "h6",
     style: {
-      paddingLeft: '6px'
+      paddingLeft: '6px',
+      flex: 1
     }
-  }, label), /*#__PURE__*/React.createElement(ProductMenu, {
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: shouldSort ? {
+      color: '#329af0'
+    } : {
+      color: '#aeaeae'
+    }
+  }, /*#__PURE__*/React.createElement(SortByAlphaIcon, {
+    onClick: function onClick() {
+      return setShouldSort(!shouldSort);
+    },
+    style: {
+      fontSize: '16pt'
+    }
+  }))), /*#__PURE__*/React.createElement(ProductMenu, {
     options: categories,
-    action: action
+    action: action,
+    sortFn: getSortFn()
   }));
   var container = window !== undefined ? function () {
     return window().document.body;
@@ -866,7 +918,8 @@ var useStyles$b = makeStyles$2(function (theme) {
   };
 });
 var SimpleSelect = function SimpleSelect(_ref) {
-  var choices = _ref.choices;
+  var choices = _ref.choices,
+      action = _ref.action;
   var classes = useStyles$b();
 
   var _React$useState = React.useState(choices[0]),
@@ -875,6 +928,7 @@ var SimpleSelect = function SimpleSelect(_ref) {
 
   var handleChange = function handleChange(event) {
     setSelectedValue(event.target.value);
+    action(event.target.value);
   };
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
@@ -1259,26 +1313,12 @@ function ValueLabelComponent(props) {
   }, children)));
 }
 
-var compare = function compare(a, b) {
-  var valA = Number(a.value);
-  var valB = Number(b.value);
-  var comparison = 0;
-
-  if (valA > valB) {
-    comparison = 1;
-  } else if (valA < valB) {
-    comparison = -1;
-  }
-
-  return comparison;
-};
-
 var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
   var classes = useStyles$d();
-  options.sort(compare);
+  var optionsCount = React.useRef(options.length);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
   var minValue = options[0].value;
@@ -1291,7 +1331,11 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     className: classes.root
   }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
     xsDown: true
-  }, /*#__PURE__*/React.createElement(Slider, {
+  }, optionsCount.current >= 16 ? options.forEach(function (option, index) {
+    if (!(index === 0 || index === optionsCount.current - 1 || index % 4 === 0 && index <= optionsCount.current - 4)) {
+      option.label = '';
+    }
+  }) : undefined, /*#__PURE__*/React.createElement(Slider, {
     classes: classes,
     valueLabelDisplay: "auto",
     "aria-label": "pretty slider",
@@ -1394,8 +1438,6 @@ var useTimer = function useTimer(interval) {
         return window.clearTimeout(timerId);
       };
     }
-
-    return;
   }, [ticks, isRunning]);
   return [ticks, isRunning, setIsRunning];
 };
@@ -2385,6 +2427,7 @@ var ShyftWx = function ShyftWx(props) {
 
     if (!customer || !dataset) {
       setLandingPage(true);
+      return;
     }
 
     setLoading(false);

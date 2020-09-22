@@ -70,6 +70,54 @@ const defaultSettings = [
     {
         value: 12,
         label: '12H'
+    },
+    {
+        value: 13,
+        label: '13H'
+    },
+    {
+        value: 14,
+        label: '14H'
+    },
+    {
+        value: 15,
+        label: '15H'
+    },
+    {
+        value: 16,
+        label: '16H'
+    },
+    {
+        value: 17,
+        label: '17H'
+    },
+    {
+        value: 18,
+        label: '18H'
+    },
+    {
+        value: 19,
+        label: '19H'
+    },
+    {
+        value: 20,
+        label: '20H'
+    },
+    {
+        value: 21,
+        label: '21H'
+    },
+    {
+        value: 22,
+        label: '22H'
+    },
+    {
+        value: 23,
+        label: '23H'
+    },
+    {
+        value: 24,
+        label: '24H'
     }
 ];
 

@@ -12,6 +12,7 @@ declare type ProductDrawerProps = {
 declare type ProductMenuProps = {
     options: Category[];
     action: (product: object) => void;
+    sortFn: any;
 };
 
 declare type Category = {
