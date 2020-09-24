@@ -22,22 +22,68 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
-var getIndexAsync = function getIndexAsync(url) {
+var CustomerStatus;
+
+(function (CustomerStatus) {
+  CustomerStatus[CustomerStatus["Unknown"] = 1] = "Unknown";
+  CustomerStatus[CustomerStatus["NoData"] = 2] = "NoData";
+  CustomerStatus[CustomerStatus["Okay"] = 3] = "Okay";
+})(CustomerStatus || (CustomerStatus = {}));
+
+var getProductUrl = function getProductUrl(baseUrl, customerId, datasetId, region, run) {
+  return baseUrl + "/" + customerId + "/" + datasetId + "/products" + (region && run ? "/" + run + "-" + region : '');
+};
+var getOutputUrl = function getOutputUrl(baseUrl, customerId, datasetId, run) {
+  return baseUrl + "/" + customerId + "/" + datasetId + "/outputs" + (run ? "/" + run : '');
+};
+var getIndexAsync = function getIndexAsync(baseUrl, customerId, datasetId) {
+  var url = getProductUrl(baseUrl, customerId, datasetId);
   return fetch(url).then(function (response) {
     return response.json();
   });
 };
-var getProductDataAsync = function getProductDataAsync(url, region, run) {
-  url = url + "/" + run + "-" + region;
+var getProductDataAsync = function getProductDataAsync(baseUrl, customerId, datasetId, region, run) {
+  var url = getProductUrl(baseUrl, customerId, datasetId, region, run);
   return fetch(url).then(function (response) {
     return response.json();
   });
+};
+var getOutputStatusAsync = function getOutputStatusAsync(baseUrl, customerId, datasetId) {
+  var url = getOutputUrl(baseUrl, customerId, datasetId);
+  return fetch(url).then(function (response) {
+    return response.status !== 200 ? Promise.reject(response) : response.json();
+  });
+};
+var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customerId, datasetId, run) {
+  var url = getOutputUrl(baseUrl, customerId, datasetId, run);
+  return fetch(url).then(function (response) {
+    return response.json();
+  });
+};
+var validateInitialDataAsync = function validateInitialDataAsync(baseUrl, customerId, datasetId) {
+  try {
+    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)["catch"](function () {
+      return undefined;
+    })).then(function (outputStatus) {
+      return outputStatus && outputStatus.runs ? outputStatus.runs.length === 0 ? CustomerStatus.NoData : Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
+        return outputRunStatus && outputRunStatus.total_available > 0 ? CustomerStatus.Okay : CustomerStatus.NoData;
+      }) : CustomerStatus.Unknown;
+    });
+  } catch (e) {
+    return Promise.reject(e);
+  }
 };
 
 var index = {
     __proto__: null,
+    get CustomerStatus () { return CustomerStatus; },
+    getProductUrl: getProductUrl,
+    getOutputUrl: getOutputUrl,
     getIndexAsync: getIndexAsync,
-    getProductDataAsync: getProductDataAsync
+    getProductDataAsync: getProductDataAsync,
+    getOutputStatusAsync: getOutputStatusAsync,
+    getOutputRunStatusAsync: getOutputRunStatusAsync,
+    validateInitialDataAsync: validateInitialDataAsync
 };
 
 var useStyles = makeStyles(function (theme) {
@@ -337,20 +383,20 @@ var LandingPage = function LandingPage(_ref) {
       datasetInput = _React$useState3[0],
       setDatasetInput = _React$useState3[1];
 
-  var _React$useState4 = React.useState(' '),
+  var _React$useState4 = React.useState(''),
       errorMessage = _React$useState4[0],
       setErrorMessage = _React$useState4[1];
 
   var onClick = function onClick() {
     if (customerInput === '' && datasetInput === '') {
       setState('error');
-      setErrorMessage('Enter a customer and dataset id');
+      setErrorMessage('Enter a Customer and Dataset ID.');
     } else if (customerInput === '') {
       setState('error');
-      setErrorMessage('Enter a customer id');
+      setErrorMessage('Enter a Customer ID.');
     } else if (datasetInput === '') {
       setState('error');
-      setErrorMessage('Enter a dataset id');
+      setErrorMessage('Enter a Dataset ID.');
     } else {
       checkInput();
     }
@@ -358,11 +404,13 @@ var LandingPage = function LandingPage(_ref) {
 
   var checkInput = function checkInput() {
     try {
-      var customerUrl = url + "/" + customerInput + "/" + datasetInput + "/products";
-      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
+      return Promise.resolve(validateInitialDataAsync(url, customerInput, datasetInput)).then(function (status) {
+        if (status === CustomerStatus.Unknown) {
           setState('error');
-          setErrorMessage('Customer or dataset id does not exist');
+          setErrorMessage('Customer or Dataset ID does not exist.');
+        } else if (status === CustomerStatus.NoData) {
+          setState('error');
+          setErrorMessage('Data is still being processed. Please try again in a few moments.');
         } else {
           window.location.href += "?customer=" + customerInput + "&model=" + datasetInput;
         }
@@ -1506,20 +1554,28 @@ var ShyftWx = function ShyftWx(_ref) {
       selectedForecast = _React$useState5[0],
       setSelectedForecast = _React$useState5[1];
 
-  var _React$useState6 = React.useState('');
-
-  var _React$useState7 = React.useState(false),
-      landingPage = _React$useState7[0],
-      setLandingPage = _React$useState7[1];
+  var _React$useState6 = React.useState(false),
+      landingPage = _React$useState6[0],
+      setLandingPage = _React$useState6[1];
 
   var urlParams = React.useRef(new URLSearchParams(window.location.search));
-  customer = customer || urlParams.current.get('customer') || '';
-  dataset = dataset || urlParams.current.get('model') || '';
-  var customerUrl = url + "/" + customer + "/" + dataset + "/products";
+  var customerId = React.useRef(customer || urlParams.current.get('customer') || '');
+  var datasetId = React.useRef(dataset || urlParams.current.get('model') || '');
 
   var loadAsync = function loadAsync() {
     try {
-      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+      if (!url) {
+        setLandingPage(true);
+        return Promise.resolve();
+      }
+
+      if (!customerId.current || !datasetId.current) {
+        setLandingPage(true);
+        return Promise.resolve();
+      }
+
+      setLoading(true);
+      return Promise.resolve(getIndexAsync(url, customerId.current, datasetId.current)).then(function (indexData) {
         function _temp2() {
           setIndex(arr);
           setLoading(false);
@@ -1549,9 +1605,7 @@ var ShyftWx = function ShyftWx(_ref) {
               levels: []
             }
           };
-          var runRegion = dataset.run + "-" + dataset.region.name;
-          var datasetUrl = customerUrl + "/" + runRegion;
-          return Promise.resolve(getIndexAsync(datasetUrl)).then(function (runRegionData) {
+          return Promise.resolve(getProductDataAsync(url, customerId.current, datasetId.current, dataset.region.name, dataset.run)).then(function (runRegionData) {
             var items = runRegionData.items;
             var uniqueLevels = [];
             uniqueLevels = items.map(function (i) {
@@ -1612,16 +1666,6 @@ var ShyftWx = function ShyftWx(_ref) {
   };
 
   React.useEffect(function () {
-    if (!url) {
-      setLandingPage(true);
-      return;
-    }
-
-    if (!customer || !dataset) {
-      setLandingPage(true);
-    }
-
-    setLoading(true);
     loadAsync();
   }, []);
 
