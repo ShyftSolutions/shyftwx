@@ -67,8 +67,12 @@ export const validateInitialDataAsync = async (
     const outputStatus = await getOutputStatusAsync(baseUrl, customerId, datasetId).catch(() => undefined);
 
     // If there are no runs, unknown status
-    if (!(outputStatus && outputStatus.runs && outputStatus.runs.length > 0)) {
+    if (!(outputStatus && outputStatus.runs)) {
         return CustomerStatus.Unknown;
+    }
+
+    if (outputStatus.runs.length === 0) {
+        return CustomerStatus.NoData;
     }
 
     const outputRunStatus = await getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0]);
