@@ -54,7 +54,7 @@ var getProductDataAsync = function getProductDataAsync(baseUrl, customerId, data
 var getOutputStatusAsync = function getOutputStatusAsync(baseUrl, customerId, datasetId) {
   var url = getOutputUrl(baseUrl, customerId, datasetId);
   return fetch(url).then(function (response) {
-    return response.json();
+    return response.status !== 200 ? Promise.reject(response) : response.json();
   });
 };
 var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customerId, datasetId, run) {
@@ -65,8 +65,10 @@ var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customer
 };
 var validateInitialDataAsync = function validateInitialDataAsync(baseUrl, customerId, datasetId) {
   try {
-    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)).then(function (outputStatus) {
-      return outputStatus && outputStatus.runs && outputStatus.runs.length > 0 ? Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
+    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)["catch"](function () {
+      return undefined;
+    })).then(function (outputStatus) {
+      return outputStatus && outputStatus.runs ? outputStatus.runs.length === 0 ? CustomerStatus.NoData : Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
         return outputRunStatus && outputRunStatus.total_available > 0 ? CustomerStatus.Okay : CustomerStatus.NoData;
       }) : CustomerStatus.Unknown;
     });
