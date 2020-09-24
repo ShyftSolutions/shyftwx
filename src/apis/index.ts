@@ -43,7 +43,7 @@ export const getOutputStatusAsync = (
 ): Promise<{ runs: string[] }> => {
     const url = getOutputUrl(baseUrl, customerId, datasetId);
 
-    return fetch(url).then((response) => response.json());
+    return fetch(url).then((response) => (response.status !== 200 ? Promise.reject(response) : response.json()));
 };
 
 export const getOutputRunStatusAsync = (
@@ -64,7 +64,7 @@ export const validateInitialDataAsync = async (
     customerId: string,
     datasetId: string
 ): Promise<CustomerStatus> => {
-    const outputStatus = await getOutputStatusAsync(baseUrl, customerId, datasetId);
+    const outputStatus = await getOutputStatusAsync(baseUrl, customerId, datasetId).catch(() => undefined);
 
     // If there are no runs, unknown status
     if (!(outputStatus && outputStatus.runs && outputStatus.runs.length > 0)) {
