@@ -1,4 +1,4 @@
-import { CircularProgress, Grid, Hidden, makeStyles, MuiThemeProvider } from '@material-ui/core';
+import { CircularProgress, Grid, Hidden, makeStyles, MuiThemeProvider, Paper } from '@material-ui/core';
 import ImageViewer from './../viewers/ImageViewer';
 import ModelSelector from './../models/ModelSelector';
 import ProductSelector from './../products/ProductSelector';
@@ -12,6 +12,7 @@ import { getIndexAsync, getProductDataAsync } from '../../apis';
 import theme from '../../theme';
 import moment from 'moment';
 import LandingPage from './LandingPage';
+import { AppStatus, validateAppAsync } from '../../services/app-service';
 
 export const ShyftContext = React.createContext({});
 
@@ -41,35 +42,34 @@ const useStyles = makeStyles((theme) => ({
 export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, customer, themeOverride }) => {
     const classes = useStyles();
 
+    const [status, setStatus] = React.useState(AppStatus.Okay);
     const [loading, setLoading] = React.useState(true);
     const [index, setIndex] = React.useState<Index>({ datasets: [] });
     const [selectedProduct, setSelectedProduct] = React.useState<string>('');
     const [selectedLevel, setSelectedLevel] = React.useState<string>('');
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
     // const [selectedRun, setSelectedRun] = React.useState<string>('');
-    const [landingPage, setLandingPage] = React.useState(false);
 
     const urlParams = React.useRef(new URLSearchParams(window.location.search));
     const customerId = React.useRef(customer || urlParams.current.get('customer') || '');
     const datasetId = React.useRef(dataset || urlParams.current.get('model') || '');
 
     const loadAsync = async () => {
-        if (!url) {
-            setLandingPage(true);
-            return;
-        }
-
-        if (!customerId.current || !datasetId.current) {
-            setLandingPage(true);
-            return;
-        }
-
         setLoading(true);
+
+        const appStatus = await validateAppAsync(url, customerId.current, datasetId.current);
+
+        if (appStatus !== AppStatus.Okay) {
+            setStatus(appStatus);
+            setLoading(false);
+            return;
+        }
 
         const indexData = (await getIndexAsync(url, customerId.current, datasetId.current)) as ShyftIndex;
 
         if (!indexData || indexData.datasets.length === 0) {
-            setLandingPage(true);
+            setStatus(AppStatus.NoData);
+            setLoading(false);
             return;
         }
 
@@ -152,7 +152,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     }, []);
 
     const getSelectedLevel = () => {
-        console.log(index);
         return index.datasets[0].run.levels.filter((lvl) => lvl.name === selectedLevel)[0];
     };
 
@@ -167,7 +166,6 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
     };
 
     const onRunSelect = (buttonText: string) => {
-        console.log(buttonText);
         // setSelectedRun(buttonText);
     };
 
@@ -247,13 +245,29 @@ export const ShyftWx: React.FC<ShyftWxProps> = ({ children, dataset, url, custom
             .format('MM/DD HH:mm[Z]');
     };
 
+    const handleStatusChange = (newStatus: AppStatus): void => {
+        setStatus(newStatus);
+    };
+
     const generateContent = (): React.ReactNode => {
-        if (landingPage) {
-            return <LandingPage url={url} />;
+        if (status !== AppStatus.Okay) {
+            return (
+                <LandingPage
+                    url={url}
+                    customerId={customerId.current}
+                    datasetId={datasetId.current}
+                    appStatus={status}
+                    onStatusChange={handleStatusChange}
+                />
+            );
         }
 
         if (loading) {
-            return <CircularProgress />;
+            return (
+                <div style={{ paddingTop: '50vh' }}>
+                    <CircularProgress />
+                </div>
+            );
         }
 
         const selectedProduct = getSelectedProduct();

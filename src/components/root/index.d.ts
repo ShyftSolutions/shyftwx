@@ -73,6 +73,10 @@ declare type Index = {
     datasets: DatasetRegionRun[];
 };
 
-declare type PageProps = {
+declare type LandingPageProps = {
     url: string;
+    customerId?: string;
+    datasetId?: string;
+    appStatus?: import('../../services/app-service').AppStatus;
+    onStatusChange?: (newStatus: import('../../services/app-service').AppStatus) => void;
 };

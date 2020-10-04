@@ -19,9 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = 'Model' }) => {
     const classes = useStyles();
 
-    const handleClick = (index: string) => {
-        console.log(`clicked ${index}`);
-    };
+    const handleClick = (index: string) => {};
 
     return (
         /* Region Grid Container */

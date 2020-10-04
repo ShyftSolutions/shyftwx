@@ -3,8 +3,8 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button from '@material-ui/core/Button';
 import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, Fab, createMuiTheme, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import 'leaflet/dist/leaflet.css';
-import { Map, ImageOverlay, TileLayer } from 'react-leaflet';
-import { latLngBounds } from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { latLngBounds, Icon } from 'leaflet';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { makeStyles as makeStyles$1, createStyles as createStyles$1, TextField } from '@material-ui/core/';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
@@ -21,14 +21,6 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-
-var CustomerStatus;
-
-(function (CustomerStatus) {
-  CustomerStatus[CustomerStatus["Unknown"] = 1] = "Unknown";
-  CustomerStatus[CustomerStatus["NoData"] = 2] = "NoData";
-  CustomerStatus[CustomerStatus["Okay"] = 3] = "Okay";
-})(CustomerStatus || (CustomerStatus = {}));
 
 var getProductUrl = function getProductUrl(baseUrl, customerId, datasetId, region, run) {
   return baseUrl + "/" + customerId + "/" + datasetId + "/products" + (region && run ? "/" + run + "-" + region : '');
@@ -60,30 +52,15 @@ var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customer
     return response.json();
   });
 };
-var validateInitialDataAsync = function validateInitialDataAsync(baseUrl, customerId, datasetId) {
-  try {
-    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)["catch"](function () {
-      return undefined;
-    })).then(function (outputStatus) {
-      return outputStatus && outputStatus.runs ? outputStatus.runs.length === 0 ? CustomerStatus.NoData : Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
-        return outputRunStatus && outputRunStatus.total_available > 0 ? CustomerStatus.Okay : CustomerStatus.NoData;
-      }) : CustomerStatus.Unknown;
-    });
-  } catch (e) {
-    return Promise.reject(e);
-  }
-};
 
 var index = {
     __proto__: null,
-    get CustomerStatus () { return CustomerStatus; },
     getProductUrl: getProductUrl,
     getOutputUrl: getOutputUrl,
     getIndexAsync: getIndexAsync,
     getProductDataAsync: getProductDataAsync,
     getOutputStatusAsync: getOutputStatusAsync,
-    getOutputRunStatusAsync: getOutputRunStatusAsync,
-    validateInitialDataAsync: validateInitialDataAsync
+    getOutputRunStatusAsync: getOutputRunStatusAsync
 };
 
 var useStyles = makeStyles(function (theme) {
@@ -130,6 +107,24 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
       swBounds = _ref.swBounds;
   var classes = useStyles$1();
   var bounds = latLngBounds(swBounds, neBounds);
+
+  var generateLayers = function generateLayers() {
+    var results = [];
+    layers && layers.forEach(function (layer) {
+      if (layer.type === 'metar') {
+        var metar = layer;
+        results.push( /*#__PURE__*/React.createElement(Marker, {
+          position: metar.coordinates,
+          icon: new Icon({
+            iconUrl: 'logo192.png',
+            iconSize: [20, 20]
+          })
+        }, /*#__PURE__*/React.createElement(Popup, null, JSON.stringify(metar))));
+      }
+    });
+    return results;
+  };
+
   return /*#__PURE__*/React.createElement(Map, {
     bounds: bounds,
     className: classes.root,
@@ -139,11 +134,7 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
     doubleClickZoom: false,
     keyboard: false,
     touchZoom: false
-  }, /*#__PURE__*/React.createElement(ImageOverlay, {
-    url: layers,
-    bounds: bounds,
-    opacity: 0.5
-  }), /*#__PURE__*/React.createElement(TileLayer, {
+  }, generateLayers(), /*#__PURE__*/React.createElement(TileLayer, {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "\xA9 <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
   }));
@@ -241,9 +232,7 @@ var ModelSelector = function ModelSelector(_ref) {
       label = _ref$label === void 0 ? 'Model' : _ref$label;
   var classes = useStyles$4();
 
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
+  var handleClick = function handleClick(index) {};
 
   return (
     /*#__PURE__*/
@@ -308,7 +297,8 @@ var BasicTextField = function BasicTextField(_ref) {
   var action = _ref.action,
       label = _ref.label,
       state = _ref.state,
-      helperText = _ref.helperText;
+      helperText = _ref.helperText,
+      defaultValue = _ref.defaultValue;
   var classes = useStyles$6();
 
   var handleChange = function handleChange(event) {
@@ -327,7 +317,8 @@ var BasicTextField = function BasicTextField(_ref) {
       variant: "outlined",
       color: "secondary",
       onChange: handleChange,
-      helperText: helperText
+      helperText: helperText,
+      defaultValue: defaultValue
     })),
     error: /*#__PURE__*/React.createElement("form", {
       className: classes.root,
@@ -339,11 +330,43 @@ var BasicTextField = function BasicTextField(_ref) {
       label: label,
       variant: "outlined",
       onChange: handleChange,
-      helperText: helperText
+      helperText: helperText,
+      defaultValue: defaultValue
     }))
   };
   return textFieldStates[state];
 };
+
+var validateAppAsync = function validateAppAsync(baseUrl, customerId, datasetId) {
+  try {
+    if (!baseUrl) {
+      return Promise.resolve(AppStatus.NoBaseUrl);
+    }
+
+    if (!customerId || !datasetId) {
+      return Promise.resolve(AppStatus.Unknown);
+    }
+
+    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)["catch"](function () {
+      return undefined;
+    })).then(function (outputStatus) {
+      return outputStatus && outputStatus.runs ? outputStatus.runs.length === 0 ? AppStatus.NoData : Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
+        return outputRunStatus && outputRunStatus.total_available > 0 ? AppStatus.Okay : AppStatus.NoData;
+      }) : AppStatus.Unknown;
+    });
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+var AppStatus;
+
+(function (AppStatus) {
+  AppStatus[AppStatus["Unknown"] = 0] = "Unknown";
+  AppStatus[AppStatus["Okay"] = 1] = "Okay";
+  AppStatus[AppStatus["NoBaseUrl"] = 2] = "NoBaseUrl";
+  AppStatus[AppStatus["NoData"] = 3] = "NoData";
+  AppStatus[AppStatus["Error"] = 4] = "Error";
+})(AppStatus || (AppStatus = {}));
 
 var useStyles$7 = makeStyles(function (theme) {
   var _paper;
@@ -368,24 +391,35 @@ var useStyles$7 = makeStyles(function (theme) {
   };
 });
 var LandingPage = function LandingPage(_ref) {
-  var url = _ref.url;
+  var url = _ref.url,
+      _ref$customerId = _ref.customerId,
+      customerId = _ref$customerId === void 0 ? '' : _ref$customerId,
+      _ref$datasetId = _ref.datasetId,
+      datasetId = _ref$datasetId === void 0 ? '' : _ref$datasetId,
+      _ref$appStatus = _ref.appStatus,
+      appStatus = _ref$appStatus === void 0 ? AppStatus.Okay : _ref$appStatus,
+      onStatusChange = _ref.onStatusChange;
   var classes = useStyles$7();
 
   var _React$useState = React.useState('initial'),
       state = _React$useState[0],
       setState = _React$useState[1];
 
-  var _React$useState2 = React.useState(''),
+  var _React$useState2 = React.useState(customerId),
       customerInput = _React$useState2[0],
       setCustomerInput = _React$useState2[1];
 
-  var _React$useState3 = React.useState(''),
+  var _React$useState3 = React.useState(datasetId),
       datasetInput = _React$useState3[0],
       setDatasetInput = _React$useState3[1];
 
   var _React$useState4 = React.useState(''),
       errorMessage = _React$useState4[0],
       setErrorMessage = _React$useState4[1];
+
+  React.useEffect(function () {
+    setStateFromStatus(appStatus);
+  }, []);
 
   var onClick = function onClick() {
     if (customerInput === '' && datasetInput === '') {
@@ -398,25 +432,7 @@ var LandingPage = function LandingPage(_ref) {
       setState('error');
       setErrorMessage('Enter a Dataset ID.');
     } else {
-      checkInput();
-    }
-  };
-
-  var checkInput = function checkInput() {
-    try {
-      return Promise.resolve(validateInitialDataAsync(url, customerInput, datasetInput)).then(function (status) {
-        if (status === CustomerStatus.Unknown) {
-          setState('error');
-          setErrorMessage('Customer or Dataset ID does not exist.');
-        } else if (status === CustomerStatus.NoData) {
-          setState('error');
-          setErrorMessage('Data is still being processed. Please try again in a few moments.');
-        } else {
-          window.location.href += "?customer=" + customerInput + "&model=" + datasetInput;
-        }
-      });
-    } catch (e) {
-      return Promise.reject(e);
+      validateComponentAsync();
     }
   };
 
@@ -426,6 +442,33 @@ var LandingPage = function LandingPage(_ref) {
 
   var updateDatasetValue = function updateDatasetValue(input) {
     setDatasetInput(input);
+  };
+
+  var validateComponentAsync = function validateComponentAsync() {
+    try {
+      return Promise.resolve(validateAppAsync(url, customerInput, datasetInput)).then(function (status) {
+        if (status === AppStatus.Okay) {
+          onStatusChange && onStatusChange(AppStatus.Okay);
+        } else {
+          setStateFromStatus(status);
+        }
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  var setStateFromStatus = function setStateFromStatus(status) {
+    if (status === AppStatus.Unknown) {
+      setState('error');
+      setErrorMessage('Customer or Dataset ID does not exist.');
+    } else if (status === AppStatus.NoData) {
+      setState('error');
+      setErrorMessage('Data is still being processed. Please try again in a few moments.');
+    } else if (status === AppStatus.NoBaseUrl) {
+      setState('error');
+      setErrorMessage('Missing baseUrl. Please check your configuration.');
+    }
   };
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
@@ -478,12 +521,14 @@ var LandingPage = function LandingPage(_ref) {
   }, /*#__PURE__*/React.createElement(BasicTextField, {
     label: "Customer ID",
     action: updateCustomerValue,
-    state: state
+    state: state,
+    defaultValue: customerId
   }), /*#__PURE__*/React.createElement(BasicTextField, {
     label: "Dataset ID",
     action: updateDatasetValue,
     state: state,
-    helperText: errorMessage
+    helperText: errorMessage,
+    defaultValue: datasetId
   })), /*#__PURE__*/React.createElement(Grid, {
     container: true,
     item: true,
@@ -807,9 +852,7 @@ var RegionSelector = function RegionSelector(_ref) {
       label = _ref$label === void 0 ? 'Region' : _ref$label;
   var classes = useStyles$a();
 
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
+  var handleClick = function handleClick(index) {};
 
   return (
     /*#__PURE__*/
@@ -1532,31 +1575,31 @@ var ShyftWx = function ShyftWx(_ref) {
       themeOverride = _ref.themeOverride;
   var classes = useStyles$i();
 
-  var _React$useState = React.useState(true),
-      loading = _React$useState[0],
-      setLoading = _React$useState[1];
+  var _React$useState = React.useState(AppStatus.Okay),
+      status = _React$useState[0],
+      setStatus = _React$useState[1];
 
-  var _React$useState2 = React.useState({
+  var _React$useState2 = React.useState(true),
+      loading = _React$useState2[0],
+      setLoading = _React$useState2[1];
+
+  var _React$useState3 = React.useState({
     datasets: []
   }),
-      index = _React$useState2[0],
-      setIndex = _React$useState2[1];
-
-  var _React$useState3 = React.useState(''),
-      selectedProduct = _React$useState3[0],
-      setSelectedProduct = _React$useState3[1];
+      index = _React$useState3[0],
+      setIndex = _React$useState3[1];
 
   var _React$useState4 = React.useState(''),
-      selectedLevel = _React$useState4[0],
-      setSelectedLevel = _React$useState4[1];
+      selectedProduct = _React$useState4[0],
+      setSelectedProduct = _React$useState4[1];
 
   var _React$useState5 = React.useState(''),
-      selectedForecast = _React$useState5[0],
-      setSelectedForecast = _React$useState5[1];
+      selectedLevel = _React$useState5[0],
+      setSelectedLevel = _React$useState5[1];
 
-  var _React$useState6 = React.useState(false),
-      landingPage = _React$useState6[0],
-      setLandingPage = _React$useState6[1];
+  var _React$useState6 = React.useState(''),
+      selectedForecast = _React$useState6[0],
+      setSelectedForecast = _React$useState6[1];
 
   var urlParams = React.useRef(new URLSearchParams(window.location.search));
   var customerId = React.useRef(customer || urlParams.current.get('customer') || '');
@@ -1564,101 +1607,100 @@ var ShyftWx = function ShyftWx(_ref) {
 
   var loadAsync = function loadAsync() {
     try {
-      if (!url) {
-        setLandingPage(true);
-        return Promise.resolve();
-      }
-
-      if (!customerId.current || !datasetId.current) {
-        setLandingPage(true);
-        return Promise.resolve();
-      }
-
       setLoading(true);
-      return Promise.resolve(getIndexAsync(url, customerId.current, datasetId.current)).then(function (indexData) {
-        function _temp2() {
-          setIndex(arr);
+      return Promise.resolve(validateAppAsync(url, customerId.current, datasetId.current)).then(function (appStatus) {
+        if (appStatus !== AppStatus.Okay) {
+          setStatus(appStatus);
           setLoading(false);
-        }
-
-        if (!indexData || indexData.datasets.length === 0) {
-          setLandingPage(true);
           return;
         }
 
-        var arr = {
-          datasets: []
-        };
-        var i = 0;
+        return Promise.resolve(getIndexAsync(url, customerId.current, datasetId.current)).then(function (indexData) {
+          function _temp2() {
+            setIndex(arr);
+            setLoading(false);
+          }
 
-        var _temp = _for(function () {
-          return i < indexData.datasets.length;
-        }, function () {
-          return i++;
-        }, function () {
-          var dataset = indexData.datasets[i];
-          var datasetRegionRun = {
-            dataset: dataset.name,
-            region: dataset.region,
-            run: {
-              name: dataset.run,
-              levels: []
-            }
+          if (!indexData || indexData.datasets.length === 0) {
+            setStatus(AppStatus.NoData);
+            setLoading(false);
+            return;
+          }
+
+          var arr = {
+            datasets: []
           };
-          return Promise.resolve(getProductDataAsync(url, customerId.current, datasetId.current, dataset.region.name, dataset.run)).then(function (runRegionData) {
-            var items = runRegionData.items;
-            var uniqueLevels = [];
-            uniqueLevels = items.map(function (i) {
-              return i.level;
-            }).filter(function (v, i, a) {
-              return a.indexOf(v) === i;
-            }).map(function (l) {
-              return {
-                name: l,
-                products: []
-              };
-            });
-            uniqueLevels.forEach(function (lvl) {
-              lvl.products = items.filter(function (item) {
-                return item.level === lvl.name;
-              }).map(function (i) {
-                return i.product;
+          var i = 0;
+
+          var _temp = _for(function () {
+            return i < indexData.datasets.length;
+          }, function () {
+            return i++;
+          }, function () {
+            var dataset = indexData.datasets[i];
+            var datasetRegionRun = {
+              dataset: dataset.name,
+              region: dataset.region,
+              run: {
+                name: dataset.run,
+                levels: []
+              }
+            };
+            return Promise.resolve(getProductDataAsync(url, customerId.current, datasetId.current, dataset.region.name, dataset.run)).then(function (runRegionData) {
+              var items = runRegionData.items;
+              var uniqueLevels = [];
+              uniqueLevels = items.map(function (i) {
+                return i.level;
               }).filter(function (v, i, a) {
                 return a.indexOf(v) === i;
-              }).map(function (product) {
+              }).map(function (l) {
                 return {
-                  name: product,
-                  forecasts: []
+                  name: l,
+                  products: []
                 };
               });
-            });
-            uniqueLevels.forEach(function (lvl) {
-              lvl.products.forEach(function (product) {
-                product.forecasts = items.filter(function (item) {
-                  return item.level === lvl.name && item.product === product.name;
-                }).map(function (item) {
+              uniqueLevels.forEach(function (lvl) {
+                lvl.products = items.filter(function (item) {
+                  return item.level === lvl.name;
+                }).map(function (i) {
+                  return i.product;
+                }).filter(function (v, i, a) {
+                  return a.indexOf(v) === i;
+                }).map(function (product) {
                   return {
-                    hour: item.forecast,
-                    image: item.url
+                    name: product,
+                    forecasts: []
                   };
                 });
               });
+              uniqueLevels.forEach(function (lvl) {
+                lvl.products.forEach(function (product) {
+                  product.forecasts = items.filter(function (item) {
+                    return item.level === lvl.name && item.product === product.name;
+                  }).map(function (item) {
+                    return {
+                      hour: item.forecast,
+                      image: item.url
+                    };
+                  });
+                });
+              });
+              datasetRegionRun.run.levels = uniqueLevels;
+              var indexes = {
+                datasets: [datasetRegionRun]
+              };
+              arr.datasets.push(datasetRegionRun);
+
+              if (i === 0) {
+                setSelectedLevel(indexes.datasets[0].run.levels[0].name);
+                setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+                setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+              }
             });
-            datasetRegionRun.run.levels = uniqueLevels;
-            var indexes = {
-              datasets: [datasetRegionRun]
-            };
-            arr.datasets.push(datasetRegionRun);
-
-            if (i === 0) {
-              setSelectedLevel(indexes.datasets[0].run.levels[0].name);
-              setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-              setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
-            }
           });
-        });
 
-        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+          return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+        });
       });
     } catch (e) {
       return Promise.reject(e);
@@ -1670,7 +1712,6 @@ var ShyftWx = function ShyftWx(_ref) {
   }, []);
 
   var getSelectedLevel = function getSelectedLevel() {
-    console.log(index);
     return index.datasets[0].run.levels.filter(function (lvl) {
       return lvl.name === selectedLevel;
     })[0];
@@ -1688,9 +1729,7 @@ var ShyftWx = function ShyftWx(_ref) {
     setSelectedForecast(getSelectedProduct().forecasts[0].hour);
   };
 
-  var onRunSelect = function onRunSelect(buttonText) {
-    console.log(buttonText);
-  };
+  var onRunSelect = function onRunSelect(buttonText) {};
 
   var compare = function compare(a, b) {
     var valA = Number(a.hour);
@@ -1767,15 +1806,27 @@ var ShyftWx = function ShyftWx(_ref) {
     return moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
   };
 
+  var handleStatusChange = function handleStatusChange(newStatus) {
+    setStatus(newStatus);
+  };
+
   var generateContent = function generateContent() {
-    if (landingPage) {
+    if (status !== AppStatus.Okay) {
       return /*#__PURE__*/React.createElement(LandingPage, {
-        url: url
+        url: url,
+        customerId: customerId.current,
+        datasetId: datasetId.current,
+        appStatus: status,
+        onStatusChange: handleStatusChange
       });
     }
 
     if (loading) {
-      return /*#__PURE__*/React.createElement(CircularProgress, null);
+      return /*#__PURE__*/React.createElement("div", {
+        style: {
+          paddingTop: '50vh'
+        }
+      }, /*#__PURE__*/React.createElement(CircularProgress, null));
     }
 
     var selectedProduct = getSelectedProduct();

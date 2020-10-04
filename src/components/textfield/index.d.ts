@@ -7,4 +7,5 @@ declare type TextFieldProps = {
     action: (input: string) => void;
     state: string;
     helperText?: string;
+    defaultValue?: string;
 };

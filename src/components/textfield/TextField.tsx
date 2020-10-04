@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) =>
  * @param state
  * @param value
  */
-export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, helperText }) => {
+export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state, helperText, defaultValue }) => {
     const classes = useStyles();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +46,7 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     color="secondary"
                     onChange={handleChange}
                     helperText={helperText}
+                    defaultValue={defaultValue}
                 />
             </form>
         ),
@@ -58,6 +59,7 @@ export const BasicTextField: React.FC<TextFieldProps> = ({ action, label, state,
                     variant="outlined"
                     onChange={handleChange}
                     helperText={helperText}
+                    defaultValue={defaultValue}
                 />
             </form>
         )

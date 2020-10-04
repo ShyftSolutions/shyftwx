@@ -18,9 +18,7 @@ const useStyles = makeStyles((theme) => ({
 export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region' }) => {
     const classes = useStyles();
 
-    const handleClick = (index: string) => {
-        console.log(`clicked ${index}`);
-    };
+    const handleClick = (index: string) => {};
 
     return (
         /* Region Grid Container */
