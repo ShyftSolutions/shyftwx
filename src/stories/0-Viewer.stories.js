@@ -201,7 +201,7 @@ export const BaseWxViewer = () => {
 
 export const ImageViewer = () => {
     return (
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
             <_ImageViewer image="https://s3-us-east-2.amazonaws.com/wxchange-images/5b4daa25-3d9f-4f83-ade4-ee6976b259e1/TQIConus/images/AAAD00_1591524000_TQI_Temperature_2m_900.PNG" />
         </MuiThemeProvider>
     );

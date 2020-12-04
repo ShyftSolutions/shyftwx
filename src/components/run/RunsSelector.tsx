@@ -12,10 +12,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Creates a Material UI Grid Item for the Region button group
+ * Creates a Material UI Grid Item for the Region button group or dropdown menu
  *
  * @param options string[] of options for the button group
  * @param label text displayed over the button group
+ * @param action
  */
 export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Runs', action }) => {
     const classes = useStyles();

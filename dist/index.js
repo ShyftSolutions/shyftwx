@@ -1,5 +1,6 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var axios = _interopDefault(require('axios'));
 var React = require('react');
 var React__default = _interopDefault(React);
 var NavigateBeforeIcon = _interopDefault(require('@material-ui/icons/NavigateBefore'));
@@ -25,45 +26,78 @@ var Tooltip = _interopDefault(require('@material-ui/core/Tooltip'));
 var PlayArrowIcon = _interopDefault(require('@material-ui/icons/PlayArrow'));
 var PauseIcon = _interopDefault(require('@material-ui/icons/Pause'));
 
-var getProductUrl = function getProductUrl(baseUrl, customerId, datasetId, region, run) {
-  return baseUrl + "/" + customerId + "/" + datasetId + "/products" + (region && run ? "/" + run + "-" + region : '');
-};
-var getOutputUrl = function getOutputUrl(baseUrl, customerId, datasetId, run) {
-  return baseUrl + "/" + customerId + "/" + datasetId + "/outputs" + (run ? "/" + run : '');
-};
-var getIndexAsync = function getIndexAsync(baseUrl, customerId, datasetId) {
-  var url = getProductUrl(baseUrl, customerId, datasetId);
+var MAPBOX_KEY = 'pk.eyJ1Ijoiam9lMTIzMSIsImEiOiJjanlqMzV5MnAwMXdhM21vZDl4dXFqYmY0In0.02hMgnNRIBws9IM7ZoHsIg';
+
+var MAPBOX_API_URL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{SEARCH_TEXT}.json?country=US&access_token=' + MAPBOX_KEY;
+var MAPBOX_DIRECTIONS_API_URL = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{COORDS}?geometries=geojson&overview=full&annotations=duration,congestion,speed&access_token=' + MAPBOX_KEY;
+var SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/v1/product/car_route';
+var SHYFT_CAPS_URL = 'https://ogc.shyftwx.com/ogcRestful/layers';
+var SHYFT_WCS_ROUTE = 'https://api.shyftwx.com/getwxdata/point';
+var getIndexAsync = function getIndexAsync(url) {
   return fetch(url).then(function (response) {
     return response.json();
   });
 };
-var getProductDataAsync = function getProductDataAsync(baseUrl, customerId, datasetId, region, run) {
-  var url = getProductUrl(baseUrl, customerId, datasetId, region, run);
+var getProductDataAsync = function getProductDataAsync(url, region, run) {
+  url = url + "/" + run + "-" + region;
   return fetch(url).then(function (response) {
     return response.json();
   });
 };
-var getOutputStatusAsync = function getOutputStatusAsync(baseUrl, customerId, datasetId) {
-  var url = getOutputUrl(baseUrl, customerId, datasetId);
-  return fetch(url).then(function (response) {
-    return response.status !== 200 ? Promise.reject(response) : response.json();
+var searchAsync = function searchAsync(input) {
+  var url = MAPBOX_API_URL.replace('{SEARCH_TEXT}', encodeURIComponent(input));
+  return axios.get(url).then(function (response) {
+    return response.data;
   });
 };
-var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customerId, datasetId, run) {
-  var url = getOutputUrl(baseUrl, customerId, datasetId, run);
-  return fetch(url).then(function (response) {
-    return response.json();
+function directionsAsync(coords) {
+  var stringCoords = '';
+  coords.forEach(function (c) {
+    stringCoords += c[0] + "," + c[1] + ";";
+  });
+  stringCoords = stringCoords.slice(0, stringCoords.length - 1);
+  var url = MAPBOX_DIRECTIONS_API_URL.replace('{COORDS}', stringCoords);
+  return axios.get(url).then(function (response) {
+    return response.data;
+  });
+}
+var carRouteAsync = function carRouteAsync(currentRoute, startTime) {
+  startTime.setMilliseconds(0);
+  startTime.setSeconds(0);
+  startTime.setMinutes(0);
+  var route = currentRoute.routes[0];
+  return axios.post(SHYFT_CAR_ROUTE_API_URL, {
+    start_time: startTime.toISOString().slice(0, -1),
+    routes: {
+      geometry: route.geometry,
+      legs: [{
+        annotation: {
+          duration: route.legs[0].annotation.duration,
+          distance: [route.legs[0].distance]
+        }
+      }]
+    }
+  }, {
+    withCredentials: true
+  }).then(function (response) {
+    return response.data;
+  }).then(function (data) {
+    return data;
   });
 };
 
 var index = {
     __proto__: null,
-    getProductUrl: getProductUrl,
-    getOutputUrl: getOutputUrl,
+    MAPBOX_API_URL: MAPBOX_API_URL,
+    MAPBOX_DIRECTIONS_API_URL: MAPBOX_DIRECTIONS_API_URL,
+    SHYFT_CAR_ROUTE_API_URL: SHYFT_CAR_ROUTE_API_URL,
+    SHYFT_CAPS_URL: SHYFT_CAPS_URL,
+    SHYFT_WCS_ROUTE: SHYFT_WCS_ROUTE,
     getIndexAsync: getIndexAsync,
     getProductDataAsync: getProductDataAsync,
-    getOutputStatusAsync: getOutputStatusAsync,
-    getOutputRunStatusAsync: getOutputRunStatusAsync
+    searchAsync: searchAsync,
+    directionsAsync: directionsAsync,
+    carRouteAsync: carRouteAsync
 };
 
 var useStyles = core.makeStyles(function (theme) {
@@ -235,7 +269,9 @@ var ModelSelector = function ModelSelector(_ref) {
       label = _ref$label === void 0 ? 'Model' : _ref$label;
   var classes = useStyles$4();
 
-  var handleClick = function handleClick(index) {};
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
 
   return (
     /*#__PURE__*/
@@ -262,22 +298,62 @@ var useStyles$5 = core.makeStyles(function (theme) {
       '& > *': {
         margin: theme.spacing(1)
       }
+    },
+    gradient: {
+      background: 'linear-gradient(-139deg, #F0329A 0%, #FF922B 100%)',
+      borderRadius: 3,
+      border: 0,
+      color: 'white',
+      height: 60,
+      padding: '0 30px',
+      boxShadow: theme.shadows[3],
+      fontWeight: 800,
+      fontSize: '1.25em'
+    },
+    disabled: {
+      borderRadius: 3,
+      height: 60,
+      padding: '0 30px',
+      fontWeight: 800,
+      fontSize: '1.25em'
     }
   });
 });
 var BasicButton = function BasicButton(_ref) {
   var action = _ref.action,
       _ref$text = _ref.text,
-      text = _ref$text === void 0 ? 'Next' : _ref$text;
+      text = _ref$text === void 0 ? 'Next' : _ref$text,
+      _ref$style = _ref.style,
+      style = _ref$style === void 0 ? 'blue' : _ref$style;
   var classes = useStyles$5();
+  var buttonStyles = {
+    blue: /*#__PURE__*/React__default.createElement(core.Button, {
+      variant: "contained",
+      color: "primary",
+      size: "large",
+      onClick: action
+    }, text),
+    disabled: /*#__PURE__*/React__default.createElement(core.Button, {
+      variant: "contained",
+      color: "primary",
+      size: "large",
+      disabled: true
+    }, text),
+    gradient: /*#__PURE__*/React__default.createElement(core.Button, {
+      className: classes.gradient,
+      size: "large",
+      onClick: action
+    }, text),
+    disabledGradient: /*#__PURE__*/React__default.createElement(core.Button, {
+      className: classes.disabled,
+      variant: "contained",
+      size: "large",
+      disabled: true
+    }, text)
+  };
   return /*#__PURE__*/React__default.createElement("div", {
     className: classes.root
-  }, /*#__PURE__*/React__default.createElement(core.Button, {
-    variant: "contained",
-    color: "primary",
-    size: "large",
-    onClick: action
-  }, text));
+  }, buttonStyles[style]);
 };
 
 var useStyles$6 = _.makeStyles(function (theme) {
@@ -300,8 +376,7 @@ var BasicTextField = function BasicTextField(_ref) {
   var action = _ref.action,
       label = _ref.label,
       state = _ref.state,
-      helperText = _ref.helperText,
-      defaultValue = _ref.defaultValue;
+      helperText = _ref.helperText;
   var classes = useStyles$6();
 
   var handleChange = function handleChange(event) {
@@ -320,8 +395,7 @@ var BasicTextField = function BasicTextField(_ref) {
       variant: "outlined",
       color: "secondary",
       onChange: handleChange,
-      helperText: helperText,
-      defaultValue: defaultValue
+      helperText: helperText
     })),
     error: /*#__PURE__*/React__default.createElement("form", {
       className: classes.root,
@@ -333,43 +407,11 @@ var BasicTextField = function BasicTextField(_ref) {
       label: label,
       variant: "outlined",
       onChange: handleChange,
-      helperText: helperText,
-      defaultValue: defaultValue
+      helperText: helperText
     }))
   };
   return textFieldStates[state];
 };
-
-var validateAppAsync = function validateAppAsync(baseUrl, customerId, datasetId) {
-  try {
-    if (!baseUrl) {
-      return Promise.resolve(AppStatus.NoBaseUrl);
-    }
-
-    if (!customerId || !datasetId) {
-      return Promise.resolve(AppStatus.Unknown);
-    }
-
-    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)["catch"](function () {
-      return undefined;
-    })).then(function (outputStatus) {
-      return outputStatus && outputStatus.runs ? outputStatus.runs.length === 0 ? AppStatus.NoData : Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
-        return outputRunStatus && outputRunStatus.total_available > 0 ? AppStatus.Okay : AppStatus.NoData;
-      }) : AppStatus.Unknown;
-    });
-  } catch (e) {
-    return Promise.reject(e);
-  }
-};
-var AppStatus;
-
-(function (AppStatus) {
-  AppStatus[AppStatus["Unknown"] = 0] = "Unknown";
-  AppStatus[AppStatus["Okay"] = 1] = "Okay";
-  AppStatus[AppStatus["NoBaseUrl"] = 2] = "NoBaseUrl";
-  AppStatus[AppStatus["NoData"] = 3] = "NoData";
-  AppStatus[AppStatus["Error"] = 4] = "Error";
-})(AppStatus || (AppStatus = {}));
 
 var useStyles$7 = core.makeStyles(function (theme) {
   var _paper;
@@ -394,48 +436,53 @@ var useStyles$7 = core.makeStyles(function (theme) {
   };
 });
 var LandingPage = function LandingPage(_ref) {
-  var url = _ref.url,
-      _ref$customerId = _ref.customerId,
-      customerId = _ref$customerId === void 0 ? '' : _ref$customerId,
-      _ref$datasetId = _ref.datasetId,
-      datasetId = _ref$datasetId === void 0 ? '' : _ref$datasetId,
-      _ref$appStatus = _ref.appStatus,
-      appStatus = _ref$appStatus === void 0 ? AppStatus.Okay : _ref$appStatus,
-      onStatusChange = _ref.onStatusChange;
+  var url = _ref.url;
   var classes = useStyles$7();
 
   var _React$useState = React__default.useState('initial'),
       state = _React$useState[0],
       setState = _React$useState[1];
 
-  var _React$useState2 = React__default.useState(customerId),
+  var _React$useState2 = React__default.useState(''),
       customerInput = _React$useState2[0],
       setCustomerInput = _React$useState2[1];
 
-  var _React$useState3 = React__default.useState(datasetId),
+  var _React$useState3 = React__default.useState(''),
       datasetInput = _React$useState3[0],
       setDatasetInput = _React$useState3[1];
 
-  var _React$useState4 = React__default.useState(''),
+  var _React$useState4 = React__default.useState(' '),
       errorMessage = _React$useState4[0],
       setErrorMessage = _React$useState4[1];
-
-  React__default.useEffect(function () {
-    setStateFromStatus(appStatus);
-  }, []);
 
   var onClick = function onClick() {
     if (customerInput === '' && datasetInput === '') {
       setState('error');
-      setErrorMessage('Enter a Customer and Dataset ID.');
+      setErrorMessage('Enter a customer and dataset id');
     } else if (customerInput === '') {
       setState('error');
-      setErrorMessage('Enter a Customer ID.');
+      setErrorMessage('Enter a customer id');
     } else if (datasetInput === '') {
       setState('error');
-      setErrorMessage('Enter a Dataset ID.');
+      setErrorMessage('Enter a dataset id');
     } else {
-      validateComponentAsync();
+      checkInput();
+    }
+  };
+
+  var checkInput = function checkInput() {
+    try {
+      var customerUrl = url + "/" + customerInput + "/" + datasetInput + "/products";
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
+          setState('error');
+          setErrorMessage('Customer or dataset id does not exist');
+        } else {
+          window.location.href += "?customer=" + customerInput + "&model=" + datasetInput;
+        }
+      });
+    } catch (e) {
+      return Promise.reject(e);
     }
   };
 
@@ -445,33 +492,6 @@ var LandingPage = function LandingPage(_ref) {
 
   var updateDatasetValue = function updateDatasetValue(input) {
     setDatasetInput(input);
-  };
-
-  var validateComponentAsync = function validateComponentAsync() {
-    try {
-      return Promise.resolve(validateAppAsync(url, customerInput, datasetInput)).then(function (status) {
-        if (status === AppStatus.Okay) {
-          onStatusChange && onStatusChange(AppStatus.Okay);
-        } else {
-          setStateFromStatus(status);
-        }
-      });
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  var setStateFromStatus = function setStateFromStatus(status) {
-    if (status === AppStatus.Unknown) {
-      setState('error');
-      setErrorMessage('Customer or Dataset ID does not exist.');
-    } else if (status === AppStatus.NoData) {
-      setState('error');
-      setErrorMessage('Data is still being processed. Please try again in a few moments.');
-    } else if (status === AppStatus.NoBaseUrl) {
-      setState('error');
-      setErrorMessage('Missing baseUrl. Please check your configuration.');
-    }
   };
 
   return /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement(core.Grid, {
@@ -524,14 +544,12 @@ var LandingPage = function LandingPage(_ref) {
   }, /*#__PURE__*/React__default.createElement(BasicTextField, {
     label: "Customer ID",
     action: updateCustomerValue,
-    state: state,
-    defaultValue: customerId
+    state: state
   }), /*#__PURE__*/React__default.createElement(BasicTextField, {
     label: "Dataset ID",
     action: updateDatasetValue,
     state: state,
-    helperText: errorMessage,
-    defaultValue: datasetId
+    helperText: errorMessage
   })), /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     item: true,
@@ -855,7 +873,9 @@ var RegionSelector = function RegionSelector(_ref) {
       label = _ref$label === void 0 ? 'Region' : _ref$label;
   var classes = useStyles$a();
 
-  var handleClick = function handleClick(index) {};
+  var handleClick = function handleClick(index) {
+    console.log("clicked " + index);
+  };
 
   return (
     /*#__PURE__*/
@@ -875,9 +895,10 @@ var RegionSelector = function RegionSelector(_ref) {
 };
 
 var useStyles$b = styles.makeStyles(function (theme) {
+  var _dropdown;
+
   return {
     formControl: {
-      minWidth: 120,
       boxShadow: theme.shadows[3]
     },
     selectEmpty: {
@@ -886,14 +907,16 @@ var useStyles$b = styles.makeStyles(function (theme) {
     label: {
       align: 'center'
     },
-    dropdown: {
-      background: theme.palette.primary.contrastText
-    },
+    dropdown: (_dropdown = {
+      backgroundColor: theme.palette.secondary.light,
+      fontSize: '.8em'
+    }, _dropdown[theme.breakpoints.down('sm')] = {
+      fontSize: '.7em'
+    }, _dropdown[theme.breakpoints.down('xs')] = {
+      fontSize: '.7em'
+    }, _dropdown.paddingTop = 10, _dropdown.paddingBottom = 10, _dropdown.paddingLeft = 10, _dropdown),
     items: {
-      background: theme.palette.primary.contrastText,
-      '&:hover': {
-        background: theme.palette.primary.main
-      }
+      background: theme.palette.primary.contrastText
     }
   };
 });
@@ -907,12 +930,8 @@ var SimpleSelect = function SimpleSelect(_ref) {
       setSelectedValue = _React$useState[1];
 
   var handleChange = function handleChange(event) {
-    var name = event.target.name;
-
-    if (name) {
-      setSelectedValue(name);
-      action(name);
-    }
+    setSelectedValue(event.target.value);
+    action(event.target.value);
   };
 
   return /*#__PURE__*/React__default.createElement("div", null, /*#__PURE__*/React__default.createElement(FormControl, {
@@ -971,6 +990,106 @@ var RunsSelector = function RunsSelector(_ref) {
     })))
   );
 };
+
+var theme = core.createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#F76707',
+      dark: '#868e96',
+      contrastText: '#212529'
+    }
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 768,
+      md: 950,
+      lg: 1130,
+      xl: 1460
+    }
+  },
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontSize: '1rem',
+        fontWeight: 400
+      },
+      h5: {
+        fontWeight: 500
+      },
+      body2: {
+        fontWeight: 500,
+        fontSize: 16
+      },
+      button: {
+        color: '#FFFFFF',
+        fontWeight: 800
+      }
+    },
+    MuiListItem: {
+      root: {
+        '&$selected, &$selected:hover': {
+          backgroundColor: '#329af0',
+          color: '#f8f9fa'
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#329af0',
+        minWidth: 30
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#F76707',
+        color: '#f8f9fa',
+        fontSize: 16,
+        fontWeight: 800
+      },
+      tooltipPlacementBottom: {
+        marginTop: 15
+      }
+    },
+    MuiSwitch: {
+      colorPrimary: {
+        color: '#37B24D',
+        '& + $track': {
+          backgroundColor: '#37B24D'
+        },
+        '&$checked': {
+          color: '#F50000',
+          '&:hover': {
+            backgroundColor: core.fade('#F50000', 0.04)
+          }
+        },
+        '&$checked + $track': {
+          backgroundColor: '#F50000'
+        }
+      }
+    }
+  },
+  spacing: 10
+});
+var options = {
+  disableAlign: true,
+  factor: 5
+};
+theme = core.responsiveFontSizes(theme, options);
+var theme$1 = theme;
 
 // A type of promise-like that resolves synchronously and supports only one observer
 const _Pact = /*#__PURE__*/(function() {
@@ -1132,28 +1251,7 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$d = core.makeStyles(function (theme) {
-  var _media;
-
-  return {
-    media: (_media = {}, _media[theme.breakpoints.up('md')] = {
-      height: '40vw'
-    }, _media[theme.breakpoints.down('sm')] = {
-      width: '100%'
-    }, _media)
-  };
-});
-var ImageViewer = function ImageViewer(_ref) {
-  var image = _ref.image;
-  var classes = useStyles$d();
-  return /*#__PURE__*/React__default.createElement("img", {
-    className: classes.media,
-    src: image,
-    alt: "weather viewer"
-  });
-};
-
-var useStyles$e = styles.makeStyles(function (theme) {
+var useStyles$d = styles.makeStyles(function (theme) {
   var _root, _markLabel;
 
   return {
@@ -1222,7 +1320,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$e();
+  var classes = useStyles$d();
   var optionsCount = React__default.useRef(options.length);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
@@ -1265,6 +1363,64 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
     value: selected,
     min: minValue
   })));
+};
+
+var useStyles$e = core.makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%',
+      paddingTop: 5,
+      paddingBottom: 5
+    },
+    paper: {
+      backgroundColor: theme.palette.secondary.main,
+      padding: 5
+    },
+    mobilePaper: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.secondary.main,
+      border: '1px solid currentColor',
+      padding: 5
+    },
+    text: {
+      color: theme.palette.secondary.main
+    }
+  };
+});
+var ValidTime = function ValidTime(_ref) {
+  var time = _ref.time;
+  var classes = useStyles$e();
+  return /*#__PURE__*/React__default.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    smDown: true
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    direction: "row",
+    justify: "flex-end",
+    alignItems: "center"
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    item: true
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "h6"
+  }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Paper, {
+    className: classes.paper
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    variant: "button"
+  }, time))))), /*#__PURE__*/React__default.createElement(core.Hidden, {
+    mdUp: true
+  }, /*#__PURE__*/React__default.createElement(core.Paper, {
+    className: classes.mobilePaper
+  }, /*#__PURE__*/React__default.createElement(core.Grid, {
+    container: true,
+    item: true,
+    xs: 12,
+    justify: "center"
+  }, /*#__PURE__*/React__default.createElement(core.Typography, {
+    className: classes.text,
+    variant: "h6"
+  }, time)))));
 };
 
 var useTimer = function useTimer(interval) {
@@ -1408,145 +1564,25 @@ var TimeControl = function TimeControl(_ref) {
 };
 
 var useStyles$h = core.makeStyles(function (theme) {
+  var _media;
+
   return {
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%',
-      paddingTop: 5,
-      paddingBottom: 5
-    },
-    paper: {
-      backgroundColor: theme.palette.secondary.main,
-      padding: 5
-    },
-    mobilePaper: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.secondary.main,
-      border: '1px solid currentColor',
-      padding: 5
-    },
-    text: {
-      color: theme.palette.secondary.main
-    }
+    media: (_media = {}, _media[theme.breakpoints.up('md')] = {
+      height: '40vw'
+    }, _media[theme.breakpoints.down('sm')] = {
+      width: '100%'
+    }, _media)
   };
 });
-var ValidTime = function ValidTime(_ref) {
-  var time = _ref.time;
+var ImageViewer = function ImageViewer(_ref) {
+  var image = _ref.image;
   var classes = useStyles$h();
-  return /*#__PURE__*/React__default.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/React__default.createElement(core.CssBaseline, null), /*#__PURE__*/React__default.createElement(core.Hidden, {
-    smDown: true
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    direction: "row",
-    justify: "flex-end",
-    alignItems: "center"
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    item: true
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "h6"
-  }, "Valid Time"), /*#__PURE__*/React__default.createElement(core.Paper, {
-    className: classes.paper
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    variant: "button"
-  }, time))))), /*#__PURE__*/React__default.createElement(core.Hidden, {
-    mdUp: true
-  }, /*#__PURE__*/React__default.createElement(core.Paper, {
-    className: classes.mobilePaper
-  }, /*#__PURE__*/React__default.createElement(core.Grid, {
-    container: true,
-    item: true,
-    xs: 12,
-    justify: "center"
-  }, /*#__PURE__*/React__default.createElement(core.Typography, {
-    className: classes.text,
-    variant: "h6"
-  }, time)))));
+  return /*#__PURE__*/React__default.createElement("img", {
+    className: classes.media,
+    src: image,
+    alt: "weather viewer"
+  });
 };
-
-var theme = core.createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#ffffff',
-      main: '#F76707',
-      dark: '#868e96',
-      contrastText: '#212529'
-    }
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 768,
-      md: 950,
-      lg: 1130,
-      xl: 1460
-    }
-  },
-  overrides: {
-    MuiTypography: {
-      h1: {
-        fontSize: '1rem',
-        fontWeight: 400
-      },
-      h5: {
-        fontWeight: 500
-      },
-      body2: {
-        fontWeight: 500,
-        fontSize: 16
-      },
-      button: {
-        color: '#FFFFFF',
-        fontWeight: 800
-      }
-    },
-    MuiListItem: {
-      root: {
-        '&$selected, &$selected:hover': {
-          backgroundColor: '#329af0',
-          color: '#f8f9fa'
-        },
-        paddingTop: '6px',
-        paddingBottom: '6px'
-      },
-      gutters: {
-        paddingLeft: '6px',
-        paddingRight: '6px'
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#329af0',
-        minWidth: 30
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#F76707',
-        color: '#f8f9fa',
-        fontSize: 16,
-        fontWeight: 800
-      },
-      tooltipPlacementBottom: {
-        marginTop: 15
-      }
-    }
-  },
-  spacing: 10
-});
-var options = {
-  disableAlign: true,
-  factor: 5
-};
-theme = core.responsiveFontSizes(theme, options);
-var theme$1 = theme;
 
 var ShyftContext = React__default.createContext({});
 var drawerWidth$1 = 250;
@@ -1559,151 +1595,156 @@ var useStyles$i = core.makeStyles(function (theme) {
       padding: theme.spacing(3),
       marginLeft: drawerWidth$1
     },
-    '@media (max-width: 768px)': {
+    '@media (max-width: 767px)': {
       contentClass: {
         marginLeft: 0
       }
     },
-    '@media (min-width: 1460px)': {
+    '@media (min-width: 1459px)': {
       contentClass: {
         marginLeft: xlDrawerWidth$1
       }
     }
   };
 });
-var ShyftWx = function ShyftWx(_ref) {
+var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
   var dataset = _ref.dataset,
       url = _ref.url,
       customer = _ref.customer,
-      themeOverride = _ref.themeOverride;
+      dynamicFeatures = _ref.dynamicFeatures;
   var classes = useStyles$i();
 
-  var _React$useState = React__default.useState(AppStatus.Okay),
-      status = _React$useState[0],
-      setStatus = _React$useState[1];
+  var _React$useState = React__default.useState(true),
+      loading = _React$useState[0],
+      setLoading = _React$useState[1];
 
-  var _React$useState2 = React__default.useState(true),
-      loading = _React$useState2[0],
-      setLoading = _React$useState2[1];
-
-  var _React$useState3 = React__default.useState({
+  var _React$useState2 = React__default.useState({
     datasets: []
   }),
-      index = _React$useState3[0],
-      setIndex = _React$useState3[1];
+      index = _React$useState2[0],
+      setIndex = _React$useState2[1];
+
+  var _React$useState3 = React__default.useState(''),
+      selectedProduct = _React$useState3[0],
+      setSelectedProduct = _React$useState3[1];
 
   var _React$useState4 = React__default.useState(''),
-      selectedProduct = _React$useState4[0],
-      setSelectedProduct = _React$useState4[1];
+      selectedLevel = _React$useState4[0],
+      setSelectedLevel = _React$useState4[1];
 
   var _React$useState5 = React__default.useState(''),
-      selectedLevel = _React$useState5[0],
-      setSelectedLevel = _React$useState5[1];
+      selectedForecast = _React$useState5[0],
+      setSelectedForecast = _React$useState5[1];
 
   var _React$useState6 = React__default.useState(''),
-      selectedForecast = _React$useState6[0],
-      setSelectedForecast = _React$useState6[1];
+      setSelectedRegion = _React$useState6[1];
+
+  var _React$useState7 = React__default.useState('');
+
+  var _React$useState8 = React__default.useState(false),
+      landingPage = _React$useState8[0],
+      setLandingPage = _React$useState8[1];
+
+  var isDynamic = React__default.useRef(false);
+
+  if (dynamicFeatures && dynamicFeatures.length !== 0) {
+    isDynamic.current = true;
+  }
 
   var urlParams = React__default.useRef(new URLSearchParams(window.location.search));
-  var customerId = React__default.useRef(customer || urlParams.current.get('customer') || '');
-  var datasetId = React__default.useRef(dataset || urlParams.current.get('model') || '');
+  customer = customer || urlParams.current.get('customer') || '';
+  dataset = dataset || urlParams.current.get('model') || '';
+  var customerUrl = url + "/" + customer + "/" + dataset + "/products";
 
   var loadAsync = function loadAsync() {
     try {
-      setLoading(true);
-      return Promise.resolve(validateAppAsync(url, customerId.current, datasetId.current)).then(function (appStatus) {
-        if (appStatus !== AppStatus.Okay) {
-          setStatus(appStatus);
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+        function _temp2() {
+          setIndex(arr);
           setLoading(false);
+        }
+
+        if (!indexData || indexData.datasets.length === 0) {
+          setLandingPage(true);
           return;
         }
 
-        return Promise.resolve(getIndexAsync(url, customerId.current, datasetId.current)).then(function (indexData) {
-          function _temp2() {
-            setIndex(arr);
-            setLoading(false);
-          }
+        var arr = {
+          datasets: []
+        };
+        var i = 0;
 
-          if (!indexData || indexData.datasets.length === 0) {
-            setStatus(AppStatus.NoData);
-            setLoading(false);
-            return;
-          }
-
-          var arr = {
-            datasets: []
+        var _temp = _for(function () {
+          return i < indexData.datasets.length;
+        }, function () {
+          return i++;
+        }, function () {
+          var dataset = indexData.datasets[i];
+          var datasetRegionRun = {
+            dataset: dataset.name,
+            region: dataset.region,
+            run: {
+              name: dataset.run,
+              levels: []
+            }
           };
-          var i = 0;
-
-          var _temp = _for(function () {
-            return i < indexData.datasets.length;
-          }, function () {
-            return i++;
-          }, function () {
-            var dataset = indexData.datasets[i];
-            var datasetRegionRun = {
-              dataset: dataset.name,
-              region: dataset.region,
-              run: {
-                name: dataset.run,
-                levels: []
-              }
-            };
-            return Promise.resolve(getProductDataAsync(url, customerId.current, datasetId.current, dataset.region.name, dataset.run)).then(function (runRegionData) {
-              var items = runRegionData.items;
-              var uniqueLevels = [];
-              uniqueLevels = items.map(function (i) {
-                return i.level;
+          var runRegion = dataset.run + "-" + dataset.region.name;
+          var datasetUrl = customerUrl + "/" + runRegion;
+          return Promise.resolve(getIndexAsync(datasetUrl)).then(function (runRegionData) {
+            var items = runRegionData.items;
+            var uniqueLevels = [];
+            uniqueLevels = items.map(function (i) {
+              return i.level;
+            }).filter(function (v, i, a) {
+              return a.indexOf(v) === i;
+            }).map(function (l) {
+              return {
+                name: l,
+                products: []
+              };
+            });
+            uniqueLevels.forEach(function (lvl) {
+              lvl.products = items.filter(function (item) {
+                return item.level === lvl.name;
+              }).map(function (i) {
+                return i.product;
               }).filter(function (v, i, a) {
                 return a.indexOf(v) === i;
-              }).map(function (l) {
+              }).map(function (product) {
                 return {
-                  name: l,
-                  products: []
+                  name: product,
+                  forecasts: []
                 };
               });
-              uniqueLevels.forEach(function (lvl) {
-                lvl.products = items.filter(function (item) {
-                  return item.level === lvl.name;
-                }).map(function (i) {
-                  return i.product;
-                }).filter(function (v, i, a) {
-                  return a.indexOf(v) === i;
-                }).map(function (product) {
+            });
+            uniqueLevels.forEach(function (lvl) {
+              lvl.products.forEach(function (product) {
+                product.forecasts = items.filter(function (item) {
+                  return item.level === lvl.name && item.product === product.name;
+                }).map(function (item) {
                   return {
-                    name: product,
-                    forecasts: []
+                    hour: item.forecast,
+                    image: item.filename
                   };
                 });
               });
-              uniqueLevels.forEach(function (lvl) {
-                lvl.products.forEach(function (product) {
-                  product.forecasts = items.filter(function (item) {
-                    return item.level === lvl.name && item.product === product.name;
-                  }).map(function (item) {
-                    return {
-                      hour: item.forecast,
-                      image: item.url
-                    };
-                  });
-                });
-              });
-              datasetRegionRun.run.levels = uniqueLevels;
-              var indexes = {
-                datasets: [datasetRegionRun]
-              };
-              arr.datasets.push(datasetRegionRun);
-
-              if (i === 0) {
-                setSelectedLevel(indexes.datasets[0].run.levels[0].name);
-                setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-                setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
-              }
             });
-          });
+            datasetRegionRun.run.levels = uniqueLevels;
+            var indexes = {
+              datasets: [datasetRegionRun]
+            };
+            arr.datasets.push(datasetRegionRun);
 
-          return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+            if (i === 0) {
+              setSelectedRegion(indexes.datasets[0].region.name);
+              setSelectedLevel(indexes.datasets[0].run.levels[0].name);
+              setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+              setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+            }
+          });
         });
+
+        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
       });
     } catch (e) {
       return Promise.reject(e);
@@ -1711,6 +1752,16 @@ var ShyftWx = function ShyftWx(_ref) {
   };
 
   React__default.useEffect(function () {
+    if (!url) {
+      setLandingPage(true);
+      return;
+    }
+
+    if (!customer || !dataset) {
+      setLandingPage(true);
+    }
+
+    setLoading(true);
     loadAsync();
   }, []);
 
@@ -1732,7 +1783,9 @@ var ShyftWx = function ShyftWx(_ref) {
     setSelectedForecast(getSelectedProduct().forecasts[0].hour);
   };
 
-  var onRunSelect = function onRunSelect(buttonText) {};
+  var onRunSelect = function onRunSelect(buttonText) {
+    console.log(buttonText);
+  };
 
   var compare = function compare(a, b) {
     var valA = Number(a.hour);
@@ -1806,30 +1859,19 @@ var ShyftWx = function ShyftWx(_ref) {
   };
 
   var getValidTime = function getValidTime() {
-    return moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
-  };
-
-  var handleStatusChange = function handleStatusChange(newStatus) {
-    setStatus(newStatus);
+    var validTime = moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
+    return validTime;
   };
 
   var generateContent = function generateContent() {
-    if (status !== AppStatus.Okay) {
+    if (landingPage) {
       return /*#__PURE__*/React__default.createElement(LandingPage, {
-        url: url,
-        customerId: customerId.current,
-        datasetId: datasetId.current,
-        appStatus: status,
-        onStatusChange: handleStatusChange
+        url: url
       });
     }
 
     if (loading) {
-      return /*#__PURE__*/React__default.createElement("div", {
-        style: {
-          paddingTop: '50vh'
-        }
-      }, /*#__PURE__*/React__default.createElement(core.CircularProgress, null));
+      return /*#__PURE__*/React__default.createElement(core.CircularProgress, null);
     }
 
     var selectedProduct = getSelectedProduct();
@@ -1845,8 +1887,6 @@ var ShyftWx = function ShyftWx(_ref) {
         value: +f.hour + +index.datasets[0].run.name,
         label: moment.unix(+f.hour + +index.datasets[0].run.name).utc().format('MM/DD HH:mm[Z]')
       };
-    }).sort(function (valA, valB) {
-      return valA.value - valB.value;
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
       return f.hour === selectedForecast;
@@ -1947,19 +1987,482 @@ var ShyftWx = function ShyftWx(_ref) {
     }))))));
   };
 
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, generateContent());
+};
+
+var drawerWidth$2 = 250;
+var xlDrawerWidth$2 = 350;
+var useStyles$j = core.makeStyles(function (theme) {
+  return {
+    toolbar: theme.mixins.toolbar,
+    contentClass: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      marginLeft: drawerWidth$2
+    },
+    '@media (max-width: 767px)': {
+      contentClass: {
+        marginLeft: 0
+      }
+    },
+    '@media (min-width: 1459px)': {
+      contentClass: {
+        marginLeft: xlDrawerWidth$2
+      }
+    }
+  };
+});
+var ShyftWxStatic = function ShyftWxStatic(_ref) {
+  var dataset = _ref.dataset,
+      url = _ref.url,
+      customer = _ref.customer,
+      dynamicFeatures = _ref.dynamicFeatures;
+  var classes = useStyles$j();
+
+  var _React$useState = React__default.useState(true),
+      loading = _React$useState[0],
+      setLoading = _React$useState[1];
+
+  var _React$useState2 = React__default.useState({
+    datasets: []
+  }),
+      index = _React$useState2[0],
+      setIndex = _React$useState2[1];
+
+  var _React$useState3 = React__default.useState(''),
+      selectedProduct = _React$useState3[0],
+      setSelectedProduct = _React$useState3[1];
+
+  var _React$useState4 = React__default.useState(''),
+      selectedLevel = _React$useState4[0],
+      setSelectedLevel = _React$useState4[1];
+
+  var _React$useState5 = React__default.useState(''),
+      selectedForecast = _React$useState5[0],
+      setSelectedForecast = _React$useState5[1];
+
+  var _React$useState6 = React__default.useState(''),
+      setSelectedRegion = _React$useState6[1];
+
+  var _React$useState7 = React__default.useState('');
+
+  var _React$useState8 = React__default.useState(false),
+      landingPage = _React$useState8[0],
+      setLandingPage = _React$useState8[1];
+
+  var isDynamic = React__default.useRef(false);
+
+  if (dynamicFeatures && dynamicFeatures.length !== 0) {
+    isDynamic.current = true;
+  }
+
+  var urlParams = React__default.useRef(new URLSearchParams(window.location.search));
+  customer = customer || urlParams.current.get('customer') || '';
+  dataset = dataset || urlParams.current.get('model') || '';
+  var customerUrl = url + "/" + customer + "/" + dataset + "/products";
+
+  var loadAsync = function loadAsync() {
+    try {
+      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
+        function _temp2() {
+          setIndex(arr);
+          setLoading(false);
+        }
+
+        if (!indexData || indexData.datasets.length === 0) {
+          setLandingPage(true);
+          return;
+        }
+
+        var arr = {
+          datasets: []
+        };
+        var i = 0;
+
+        var _temp = _for(function () {
+          return i < indexData.datasets.length;
+        }, function () {
+          return i++;
+        }, function () {
+          var dataset = indexData.datasets[i];
+          var datasetRegionRun = {
+            dataset: dataset.name,
+            region: dataset.region,
+            run: {
+              name: dataset.run,
+              levels: []
+            }
+          };
+          var runRegion = dataset.run + "-" + dataset.region.name;
+          var datasetUrl = customerUrl + "/" + runRegion;
+          return Promise.resolve(getIndexAsync(datasetUrl)).then(function (runRegionData) {
+            var items = runRegionData.items;
+            var uniqueLevels = [];
+            uniqueLevels = items.map(function (i) {
+              return i.level;
+            }).filter(function (v, i, a) {
+              return a.indexOf(v) === i;
+            }).map(function (l) {
+              return {
+                name: l,
+                products: []
+              };
+            });
+            uniqueLevels.forEach(function (lvl) {
+              lvl.products = items.filter(function (item) {
+                return item.level === lvl.name;
+              }).map(function (i) {
+                return i.product;
+              }).filter(function (v, i, a) {
+                return a.indexOf(v) === i;
+              }).map(function (product) {
+                return {
+                  name: product,
+                  forecasts: []
+                };
+              });
+            });
+            uniqueLevels.forEach(function (lvl) {
+              lvl.products.forEach(function (product) {
+                product.forecasts = items.filter(function (item) {
+                  return item.level === lvl.name && item.product === product.name;
+                }).map(function (item) {
+                  return {
+                    hour: item.forecast,
+                    image: item.filename
+                  };
+                });
+              });
+            });
+            datasetRegionRun.run.levels = uniqueLevels;
+            var indexes = {
+              datasets: [datasetRegionRun]
+            };
+            setIndex(indexes);
+            arr.datasets.push(datasetRegionRun);
+
+            if (i === 0) {
+              setSelectedRegion(indexes.datasets[0].region.name);
+              setSelectedLevel(indexes.datasets[0].run.levels[0].name);
+              setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+              setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+            }
+          });
+        });
+
+        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  React__default.useEffect(function () {
+    if (!url) {
+      setLandingPage(true);
+      return;
+    }
+
+    if (!customer || !dataset) {
+      setLandingPage(true);
+    }
+
+    setLoading(true);
+    loadAsync();
+  }, []);
+
+  var getSelectedLevel = function getSelectedLevel() {
+    return index.datasets[0].run.levels.filter(function (lvl) {
+      return lvl.name === selectedLevel;
+    })[0];
+  };
+
+  var getSelectedProduct = function getSelectedProduct() {
+    return getSelectedLevel().products.filter(function (p) {
+      return p.name === selectedProduct;
+    })[0];
+  };
+
+  var onProductSelect = function onProductSelect(product) {
+    setSelectedLevel(product.level);
+    setSelectedProduct(product.product);
+    setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  };
+
+  var onRunSelect = function onRunSelect(buttonText) {
+    console.log(buttonText);
+  };
+
+  var compare = function compare(a, b) {
+    var valA = Number(a.hour);
+    var valB = Number(b.hour);
+    var comparison = 0;
+
+    if (valA > valB) {
+      comparison = 1;
+    } else if (valA < valB) {
+      comparison = -1;
+    }
+
+    return comparison;
+  };
+
+  var onSliderNavigationNext = function onSliderNavigationNext() {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === selectedForecast;
+    });
+
+    if (forecastIndex + 1 === forecasts.length) {
+      setSelectedForecast(forecasts[0].hour);
+    } else {
+      setSelectedForecast(forecasts[forecastIndex + 1].hour);
+    }
+  };
+
+  var onSliderNavigationBack = function onSliderNavigationBack() {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === selectedForecast;
+    });
+
+    if (forecastIndex - 1 < 0) {
+      setSelectedForecast(forecasts[forecasts.length - 1].hour);
+    } else {
+      setSelectedForecast(forecasts[forecastIndex - 1].hour);
+    }
+  };
+
+  var onSliderNavigation = function onSliderNavigation(value) {
+    value -= +index.datasets[0].run.name;
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return +f.hour === +value;
+    });
+    setSelectedForecast(forecasts[forecastIndex].hour);
+  };
+
+  var onToggleToPlay = function onToggleToPlay(isRunning) {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+
+    if (!isRunning) {
+      setSelectedForecast(forecasts[0].hour);
+    } else {
+      var forecastIndex = forecasts.findIndex(function (f) {
+        return f.hour === selectedForecast;
+      });
+
+      if (selectedForecast === forecasts[forecasts.length - 1].hour) {
+        setSelectedForecast(forecasts[0].hour);
+      } else {
+        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+      }
+    }
+  };
+
+  var getValidTime = function getValidTime() {
+    var validTime = moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
+    return validTime;
+  };
+
+  var generateContent = function generateContent() {
+    if (landingPage) {
+      return /*#__PURE__*/React__default.createElement(LandingPage, {
+        url: url
+      });
+    }
+
+    if (loading) {
+      return /*#__PURE__*/React__default.createElement(core.CircularProgress, null);
+    }
+
+    var selectedProduct = getSelectedProduct();
+    var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
+      return {
+        name: lvl.name,
+        open: index === 0,
+        products: lvl.products
+      };
+    });
+    var sliderVals = selectedProduct.forecasts.map(function (f) {
+      return {
+        value: +f.hour + +index.datasets[0].run.name,
+        label: moment.unix(+f.hour + +index.datasets[0].run.name).utc().format('MM/DD HH:mm[Z]')
+      };
+    });
+    var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
+      return f.hour === selectedForecast;
+    })[0].image;
+    return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true
+    }, /*#__PURE__*/React__default.createElement(ProductSelector, {
+      "data-cy": "product-selector",
+      categories: levelProductVals,
+      action: onProductSelect
+    })), /*#__PURE__*/React__default.createElement("main", {
+      className: classes.contentClass
+    }, /*#__PURE__*/React__default.createElement(core.Hidden, {
+      smUp: true
+    }, /*#__PURE__*/React__default.createElement("div", {
+      className: classes.toolbar
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      justify: "space-between",
+      spacing: 1
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: true,
+      sm: true,
+      md: true
+    }, /*#__PURE__*/React__default.createElement(ModelSelector, {
+      "data-cy": "model-selector",
+      options: [index.datasets[0].dataset],
+      action: function action() {}
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: true,
+      md: true
+    }, /*#__PURE__*/React__default.createElement(RegionSelector, {
+      "data-cy": "region-selector",
+      options: [index.datasets[0].region.name],
+      action: function action() {}
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: true,
+      sm: true,
+      md: true
+    }, /*#__PURE__*/React__default.createElement(RunsSelector, {
+      "data-cy": "runs-selector",
+      options: [+index.datasets[0].run.name],
+      action: onRunSelect
+    })), /*#__PURE__*/React__default.createElement(core.Hidden, {
+      xsDown: true
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 12,
+      md: true
+    }, /*#__PURE__*/React__default.createElement(ValidTime, {
+      time: getValidTime()
+    })))), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      direction: "column",
+      spacing: 1
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      justify: "center",
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React__default.createElement(ImageViewer, {
+      image: activeForecastLayer
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      container: true,
+      item: true,
+      justify: "center",
+      alignItems: "center"
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      md: 3,
+      sm: 5,
+      xs: 5
+    }, /*#__PURE__*/React__default.createElement(TimeControl, {
+      "data-cy": "time-control",
+      onBack: onSliderNavigationBack,
+      onNext: onSliderNavigationNext,
+      onToggle: onToggleToPlay
+    })), /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      md: 9,
+      sm: 11,
+      xs: 12
+    }, /*#__PURE__*/React__default.createElement(DiscreteSlider, {
+      "data-cy": "slider",
+      options: sliderVals,
+      selected: +selectedForecast + +index.datasets[0].run.name,
+      action: onSliderNavigation
+    }))), /*#__PURE__*/React__default.createElement(core.Hidden, {
+      smUp: true
+    }, /*#__PURE__*/React__default.createElement(core.Grid, {
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React__default.createElement(ValidTime, {
+      time: getValidTime()
+    }))))));
+  };
+
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, generateContent());
+};
+
+var ShyftWx = function ShyftWx(props) {
+  var dataset = props.dataset,
+      url = props.url,
+      customer = props.customer,
+      themeOverride = props.themeOverride,
+      dynamicFeatures = props.dynamicFeatures;
+
+  var _React$useState = React__default.useState(true),
+      loading = _React$useState[0],
+      setLoading = _React$useState[1];
+
+  var _React$useState2 = React__default.useState(false),
+      landingPage = _React$useState2[0],
+      setLandingPage = _React$useState2[1];
+
+  var isDynamic = React__default.useRef(false);
+
+  if (dynamicFeatures && dynamicFeatures.length !== 0) {
+    isDynamic.current = true;
+  }
+
+  var urlParams = React__default.useRef(new URLSearchParams(window.location.search));
+  customer = customer || urlParams.current.get('customer') || '';
+  dataset = dataset || urlParams.current.get('model') || '';
+  React__default.useEffect(function () {
+    setLoading(true);
+
+    if (!url) {
+      setLandingPage(true);
+      return;
+    }
+
+    if (!customer || !dataset) {
+      setLandingPage(true);
+      return;
+    }
+
+    setLoading(false);
+  }, []);
+
+  var generateContent = function generateContent() {
+    if (landingPage) {
+      return /*#__PURE__*/React__default.createElement(LandingPage, {
+        url: url
+      });
+    }
+
+    if (loading) {
+      return /*#__PURE__*/React__default.createElement(core.CircularProgress, null);
+    }
+
+    if (isDynamic.current) {
+      return /*#__PURE__*/React__default.createElement(ShyftWxDynamic, props);
+    } else {
+      return /*#__PURE__*/React__default.createElement(ShyftWxStatic, props);
+    }
+  };
+
   return /*#__PURE__*/React__default.createElement(core.MuiThemeProvider, {
     theme: themeOverride || theme$1
-  }, /*#__PURE__*/React__default.createElement(ShyftContext.Provider, {
-    value: {
-      data: index
-    }
   }, /*#__PURE__*/React__default.createElement(core.Grid, {
     container: true,
     direction: "row",
     justify: "center",
     alignItems: "center",
     spacing: 3
-  }, generateContent())));
+  }, generateContent()));
 };
 
 exports.BackButton = BackButton;

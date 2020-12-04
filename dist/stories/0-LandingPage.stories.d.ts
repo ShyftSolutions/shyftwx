@@ -5,6 +5,4 @@ declare namespace _default {
 }
 export default _default;
 export function LandingPage(): JSX.Element;
-export function LandingPageValid(): JSX.Element;
-export function LandingPageBadData(): JSX.Element;
-import _LandingPage from "../components/root/LandingPage";
+import _LandingPage from "../components/landingpage/Page";

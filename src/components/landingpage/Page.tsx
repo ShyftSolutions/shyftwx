@@ -1,8 +1,8 @@
 import React from 'react';
 import BasicButton from '../buttons/BasicButton';
 import TextField from '../textfield/TextField';
+import { getIndexAsync } from '../../apis';
 import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
-import { AppStatus, validateAppAsync } from '../../services/app-service';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -26,36 +26,38 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const LandingPage: React.FC<LandingPageProps> = ({
-    url,
-    customerId = '',
-    datasetId = '',
-    appStatus = AppStatus.Okay,
-    onStatusChange
-}) => {
+export const LandingPage: React.FC<PageProps> = ({ url }) => {
     const classes = useStyles();
 
     const [state, setState] = React.useState('initial');
-    const [customerInput, setCustomerInput] = React.useState(customerId);
-    const [datasetInput, setDatasetInput] = React.useState(datasetId);
-    const [errorMessage, setErrorMessage] = React.useState('');
-
-    React.useEffect(() => {
-        setStateFromStatus(appStatus);
-    }, []);
+    const [customerInput, setCustomerInput] = React.useState('');
+    const [datasetInput, setDatasetInput] = React.useState('');
+    const [errorMessage, setErrorMessage] = React.useState(' ');
 
     const onClick = () => {
         if (customerInput === '' && datasetInput === '') {
             setState('error');
-            setErrorMessage('Enter a Customer and Dataset ID.');
+            setErrorMessage('Enter a customer and dataset id');
         } else if (customerInput === '') {
             setState('error');
-            setErrorMessage('Enter a Customer ID.');
+            setErrorMessage('Enter a customer id');
         } else if (datasetInput === '') {
             setState('error');
-            setErrorMessage('Enter a Dataset ID.');
+            setErrorMessage('Enter a dataset id');
         } else {
-            validateComponentAsync();
+            checkInput();
+        }
+    };
+
+    const checkInput = async () => {
+        const customerUrl = `${url}/${customerInput}/${datasetInput}/products`;
+        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
+
+        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
+            setState('error');
+            setErrorMessage('Customer or dataset id does not exist');
+        } else {
+            window.location.href += `?customer=${customerInput}&model=${datasetInput}`;
         }
     };
 
@@ -65,29 +67,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
     const updateDatasetValue = (input: string) => {
         setDatasetInput(input);
-    };
-
-    const validateComponentAsync = async () => {
-        const status = await validateAppAsync(url, customerInput, datasetInput);
-
-        if (status === AppStatus.Okay) {
-            onStatusChange && onStatusChange(AppStatus.Okay);
-        } else {
-            setStateFromStatus(status);
-        }
-    };
-
-    const setStateFromStatus = (status: AppStatus) => {
-        if (status === AppStatus.Unknown) {
-            setState('error');
-            setErrorMessage('Customer or Dataset ID does not exist.');
-        } else if (status === AppStatus.NoData) {
-            setState('error');
-            setErrorMessage('Data is still being processed. Please try again in a few moments.');
-        } else if (status === AppStatus.NoBaseUrl) {
-            setState('error');
-            setErrorMessage('Missing baseUrl. Please check your configuration.');
-        }
     };
 
     return (
@@ -121,18 +100,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                                 </Paper>
                             </Grid>
                             <Grid container item alignItems="center" direction="column">
-                                <TextField
-                                    label="Customer ID"
-                                    action={updateCustomerValue}
-                                    state={state}
-                                    defaultValue={customerId}
-                                />
+                                <TextField label="Customer ID" action={updateCustomerValue} state={state} />
                                 <TextField
                                     label="Dataset ID"
                                     action={updateDatasetValue}
                                     state={state}
                                     helperText={errorMessage}
-                                    defaultValue={datasetId}
                                 />
                             </Grid>
                             <Grid container item justify="center">
