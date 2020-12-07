@@ -3,6 +3,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core';
 
 /**
  * SimpleSelect creates a vertical dropdown menu where the options on the menu
@@ -11,24 +12,30 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
-        minWidth: 120,
-        boxShadow: theme.shadows[3],
+        boxShadow: theme.shadows[3]
     },
     selectEmpty: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(2)
     },
     label: {
-        align: 'center',
+        align: 'center'
     },
     dropdown: {
-        background: theme.palette.primary.contrastText,
+        backgroundColor: theme.palette.secondary.light,
+        fontSize: '.8em',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '.7em'
+        },
+        [theme.breakpoints.down('xs')]: {
+            fontSize: '.7em'
+        },
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 10
     },
     items: {
-        background: theme.palette.primary.contrastText,
-        '&:hover': {
-            background: theme.palette.primary.main,
-        },
-    },
+        background: theme.palette.primary.contrastText
+    }
 }));
 
 /**
@@ -43,13 +50,9 @@ export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) =
 
     const [selectedValue, setSelectedValue] = React.useState(choices[0]);
 
-    const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        const name = event.target.name;
-
-        if (name) {
-            setSelectedValue(name);
-            action(name);
-        }
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSelectedValue(event.target.value as string);
+        action(event.target.value as string);
     };
 
     return (

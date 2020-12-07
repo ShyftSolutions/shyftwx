@@ -1,4 +1,4 @@
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
+import { createMuiTheme, fade, responsiveFontSizes } from '@material-ui/core';
 
 let theme = createMuiTheme({
     palette: {
@@ -72,9 +72,25 @@ let theme = createMuiTheme({
             tooltipPlacementBottom: {
                 marginTop: 15
             }
+        },
+        MuiSwitch: {
+            colorPrimary: {
+                color: '#37B24D',
+                '& + $track': {
+                    backgroundColor: '#37B24D'
+                },
+                '&$checked': {
+                    color: '#F50000',
+                    '&:hover': {
+                        backgroundColor: fade('#F50000', 0.04)
+                    }
+                },
+                '&$checked + $track': {
+                    backgroundColor: '#F50000'
+                }
+            }
         }
     },
-
     spacing: 10
 });
 
