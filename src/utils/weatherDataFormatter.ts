@@ -27,17 +27,15 @@ export function transformWeatherData(weatherResp) {
 function convertLeg(rawLegData) {
     const featureValues = {};
 
-    const leg: RouteLeg = {
-        coordinates: rawLegData.geometry.coordinates.map((pair) => pair.reverse()),
-        featureValues: null
-    };
-
     // adding something like { 'Temperature': { name: 'Temperature', value: 100.0 }... }
     rawLegData.properties.parameters.map((feature) => {
         featureValues[feature.name] = { name: feature.name, value: feature.value, unit: feature.unit };
     });
 
-    leg.featureValues = featureValues;
+    const leg: RouteLeg = {
+        coordinates: rawLegData.geometry.coordinates.map((pair) => pair.reverse()),
+        featureValues: featureValues
+    };
 
     return leg;
 }

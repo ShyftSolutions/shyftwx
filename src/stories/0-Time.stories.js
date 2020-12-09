@@ -13,7 +13,7 @@ export default {
 export const TimeControl = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_TimeControl />
+            <_TimeControl onBack="do nothing" onNext="do nothing" onToggle={() => 'do nothing'} />
         </MuiThemeProvider>
     );
 };

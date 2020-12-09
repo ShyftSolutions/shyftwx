@@ -3,7 +3,7 @@ import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
 import BasicButton from '../buttons/BasicButton';
 import BasicCheckbox from '../checkbox/BasicCheckbox';
 import ThresholdInput from './ThresholdInput';
-import { Units } from './../../utils/Units';
+import { Units } from '../../utils/Units';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -99,7 +99,7 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                         >
                             <Grid container item spacing={2}>
                                 <Grid container item justify="flex-start">
-                                    <BasicButton style="blue" text="back" action={onClick} />
+                                    <BasicButton type="blue" text="back" action={onClick} />
                                 </Grid>
 
                                 <Grid container item justify="flex-start" style={{ border: '1px red' }}>
@@ -167,9 +167,9 @@ export const WeatherInput: React.FC<WeatherInputProps> = ({
                             </Grid>
 
                             {windChecked || precipChecked || tempChecked ? (
-                                <BasicButton style="blue" text="start" action={onStart} />
+                                <BasicButton type="blue" text="start" action={onStart} />
                             ) : (
-                                <BasicButton style="disabled" text="start" />
+                                <BasicButton type="disabled" text="start" />
                             )}
                         </Grid>
                     </Paper>

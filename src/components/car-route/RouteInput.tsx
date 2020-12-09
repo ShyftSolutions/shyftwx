@@ -136,9 +136,9 @@ export const RouteInput: React.FC<RouteInputProps> = ({
 
                             <Grid container item justify="flex-end">
                                 {startCoords.length === 0 || endCoords.length === 0 ? (
-                                    <BasicButton style="disabled" />
+                                    <BasicButton type="disabled" />
                                 ) : (
-                                    <BasicButton style="blue" action={handleButtonClick} />
+                                    <BasicButton type="blue" action={handleButtonClick} />
                                 )}
                             </Grid>
                         </Grid>

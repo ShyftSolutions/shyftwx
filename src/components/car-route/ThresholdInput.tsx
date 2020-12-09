@@ -75,7 +75,7 @@ const unitMinMaxes = {
             max: 60
         }
     }
-}
+};
 
 export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, unitAction, sliderValues }) => {
     const classes = useStyles();
@@ -84,7 +84,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
         const newThreshold: Threshold = {
             ...sliderValues,
             threshold: newValues
-        }
+        };
         action(newThreshold);
     };
 
@@ -94,15 +94,15 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
 
     const handleUnitChange = (newUnit: string) => {
         unitAction(newUnit);
-    }
+    };
 
     const sliders = {
         wind: (
             <ThresholdSlider
                 key="wind"
                 label="Wind"
-                min={unitMinMaxes['wind'][sliderValues.unit]?.min || 0}
-                max={unitMinMaxes['wind'][sliderValues.unit]?.max || 100}
+                min={unitMinMaxes.wind[sliderValues.unit]?.min || 0}
+                max={unitMinMaxes.wind[sliderValues.unit]?.max || 100}
                 values={sliderValues.threshold}
                 units={sliderValues.unit}
                 onChange={(values) => handleThresholdChange(values)}
@@ -113,8 +113,8 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
             <ThresholdSlider
                 key="temp"
                 label="Temp"
-                min={unitMinMaxes['temp'][sliderValues.unit]?.min || 0}
-                max={unitMinMaxes['temp'][sliderValues.unit]?.max || 100}
+                min={unitMinMaxes.temp[sliderValues.unit]?.min || 0}
+                max={unitMinMaxes.temp[sliderValues.unit]?.max || 100}
                 values={sliderValues.threshold}
                 units={sliderValues.unit}
                 onChange={(values) => handleThresholdChange(values)}
@@ -125,8 +125,8 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
             <ThresholdSlider
                 key="precip"
                 label="Precip"
-                min={unitMinMaxes['precip'][sliderValues.unit]?.min || 0}
-                max={unitMinMaxes['precip'][sliderValues.unit]?.max || 100}
+                min={unitMinMaxes.precip[sliderValues.unit]?.min || 0}
+                max={unitMinMaxes.precip[sliderValues.unit]?.max || 100}
                 values={sliderValues.threshold}
                 units={sliderValues.unit}
                 onChange={(values) => handleThresholdChange(values)}

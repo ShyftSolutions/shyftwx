@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) =>
  * @param action function that occurs when the button is clicked
  * @param style
  */
-export const BasicButton: React.FC<BasicButtonProps> = ({ action, text = 'Next', style = 'blue' }) => {
+export const BasicButton: React.FC<BasicButtonProps> = ({ action, text = 'Next', type = 'blue' }) => {
     const classes = useStyles();
 
     const buttonStyles = {
@@ -63,7 +63,7 @@ export const BasicButton: React.FC<BasicButtonProps> = ({ action, text = 'Next',
         )
     };
 
-    return <div className={classes.root}>{buttonStyles[style]}</div>;
+    return <div className={classes.root}>{buttonStyles[type]}</div>;
 };
 
 export default BasicButton;

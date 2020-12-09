@@ -114,7 +114,7 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ action }) => {
                                 <FontAwesomeIcon icon={fas.faCircle} className={classes.dot} />
                             </Grid>
 
-                            <BasicButton style="gradient" text="start" action={action} />
+                            <BasicButton type="gradient" text="start" action={action} />
                         </Grid>
                     </Paper>
                 </Grid>
