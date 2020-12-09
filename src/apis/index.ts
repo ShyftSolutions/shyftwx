@@ -10,20 +10,59 @@ export const SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/v1/product/car_r
 export const SHYFT_CAPS_URL = 'https://ogc.shyftwx.com/ogcRestful/layers';
 export const SHYFT_WCS_ROUTE = 'https://api.shyftwx.com/getwxdata/point';
 
-export const getIndexAsync = (url: string) => {
+export const getProductUrl = (
+    baseUrl: string,
+    customerId: string,
+    datasetId: string,
+    region?: string,
+    run?: string
+): string => {
+    return `${baseUrl}/${customerId}/${datasetId}/products${region && run ? `/${run}-${region}` : ''}`;
+};
+
+export const getOutputUrl = (baseUrl: string, customerId: string, datasetId: string, run?: string): string => {
+    return `${baseUrl}/${customerId}/${datasetId}/outputs${run ? `/${run}` : ''}`;
+};
+
+export const getIndexAsync = (baseUrl: string, customerId: string, datasetId: string): Promise<ShyftIndex> => {
+    const url = getProductUrl(baseUrl, customerId, datasetId);
+
     return fetch(url).then((response) => response.json());
 };
 
-export const getProductDataAsync = (url: string, region: string, run: string) => {
-    url = `${url}/${run}-${region}`;
+export const getProductDataAsync = (
+    baseUrl: string,
+    customerId: string,
+    datasetId: string,
+    region: string,
+    run: string
+) => {
+    const url = getProductUrl(baseUrl, customerId, datasetId, region, run);
 
     return fetch(url).then((response) => response.json());
 };
 
-export const searchAsync = (input: string): Promise<SearchData> => {
-    const url = MAPBOX_API_URL.replace('{SEARCH_TEXT}', encodeURIComponent(input));
+export const getOutputStatusAsync = (
+    baseUrl: string,
+    customerId: string,
+    datasetId: string
+): Promise<{ runs: string[] }> => {
+    const url = getOutputUrl(baseUrl, customerId, datasetId);
 
-    return axios.get<SearchData>(url).then((response) => response.data);
+    return fetch(url).then((response) => (response.status !== 200 ? Promise.reject(response) : response.json()));
+};
+
+export const getOutputRunStatusAsync = (
+    baseUrl: string,
+    customerId: string,
+    datasetId: string,
+    run: string
+): Promise<{
+    total_available: number;
+}> => {
+    const url = getOutputUrl(baseUrl, customerId, datasetId, run);
+
+    return fetch(url).then((response) => response.json());
 };
 
 export function directionsAsync(coords: number[][]) {
@@ -45,7 +84,7 @@ export const carRouteAsync = (currentRoute: any, startTime: Date | undefined): P
     (startTime as Date).setSeconds(0);
     (startTime as Date).setMinutes(0);
 
-    let route = currentRoute.routes[0]
+    const route = currentRoute.routes[0];
 
     return axios
         .post(
@@ -70,7 +109,6 @@ export const carRouteAsync = (currentRoute: any, startTime: Date | undefined): P
         )
         .then((response) => response.data)
         .then((data) => {
-
             return data;
 
             // const results: RouteImpactDataSegment[] = [];

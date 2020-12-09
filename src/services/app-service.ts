@@ -1,4 +1,4 @@
-import { getOutputStatusAsync, getOutputRunStatusAsync } from '../apis';
+import { getOutputRunStatusAsync, getOutputStatusAsync } from '../apis';
 
 export enum AppStatus {
     Unknown = 0,

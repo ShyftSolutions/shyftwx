@@ -269,9 +269,7 @@ var ModelSelector = function ModelSelector(_ref) {
       label = _ref$label === void 0 ? 'Model' : _ref$label;
   var classes = useStyles$4();
 
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
+  var handleClick = function handleClick(index) {};
 
   return (
     /*#__PURE__*/
@@ -376,7 +374,8 @@ var BasicTextField = function BasicTextField(_ref) {
   var action = _ref.action,
       label = _ref.label,
       state = _ref.state,
-      helperText = _ref.helperText;
+      helperText = _ref.helperText,
+      defaultValue = _ref.defaultValue;
   var classes = useStyles$6();
 
   var handleChange = function handleChange(event) {
@@ -395,7 +394,8 @@ var BasicTextField = function BasicTextField(_ref) {
       variant: "outlined",
       color: "secondary",
       onChange: handleChange,
-      helperText: helperText
+      helperText: helperText,
+      defaultValue: defaultValue
     })),
     error: /*#__PURE__*/React__default.createElement("form", {
       className: classes.root,
@@ -407,7 +407,8 @@ var BasicTextField = function BasicTextField(_ref) {
       label: label,
       variant: "outlined",
       onChange: handleChange,
-      helperText: helperText
+      helperText: helperText,
+      defaultValue: defaultValue
     }))
   };
   return textFieldStates[state];
@@ -873,9 +874,7 @@ var RegionSelector = function RegionSelector(_ref) {
       label = _ref$label === void 0 ? 'Region' : _ref$label;
   var classes = useStyles$a();
 
-  var handleClick = function handleClick(index) {
-    console.log("clicked " + index);
-  };
+  var handleClick = function handleClick(index) {};
 
   return (
     /*#__PURE__*/

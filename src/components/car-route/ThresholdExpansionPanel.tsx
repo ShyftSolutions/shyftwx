@@ -1,9 +1,9 @@
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AddIcon from '@material-ui/icons/Add';
-import ThresholdInput from './ThresholdInput';
-import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React from 'react';
+import ThresholdInput from './ThresholdInput';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,7 +27,7 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
 }) => {
     const classes = useStyles();
 
-    // const [values, setValues] = React.useState<Threshold>(sliderValues || {greaterThan: true, threshold: []});
+    const [values] = React.useState<Threshold>(sliderValues || { greaterThan: true, threshold: [], unit: '' });
     const [expanded, setExpanded] = React.useState(false);
     const [active, setActive] = React.useState(sliderValues?.threshold.length !== 0);
 
@@ -59,7 +59,7 @@ export const ThresholdExpansionPanel: React.FC<ThresholdExpansionPanelProps> = (
                     <ExpansionPanelDetails>
                         <ThresholdInput
                             impact={weatherImpact}
-                            sliderValues={sliderValues}
+                            sliderValues={values}
                             action={onSliderValueChange}
                             unitAction={onUnitChange}
                         />

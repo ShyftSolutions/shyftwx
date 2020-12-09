@@ -2,15 +2,15 @@ import { CircularProgress, Grid, Hidden, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
 import { getIndexAsync } from '../../apis';
-import LandingPage from '../landingpage/Page';
-import Slider from '../time/Slider';
-import ValidTime from '../time/ValidTime';
 import ModelSelector from '../models/ModelSelector';
 import ProductSelector from '../products/ProductSelector';
 import RegionSelector from '../regions/RegionSelector';
 import RunsSelector from '../run/RunsSelector';
+import Slider from '../time/Slider';
 import TimeControl from '../time/TimeControl';
+import ValidTime from '../time/ValidTime';
 import ImageViewer from '../viewers/ImageViewer';
+import LandingPage from './LandingPage';
 
 export const ShyftContext = React.createContext({});
 

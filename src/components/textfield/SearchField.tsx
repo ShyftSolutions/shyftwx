@@ -2,14 +2,10 @@ import { Grid, TextField, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { Autocomplete } from '@material-ui/lab';
+import { Feature } from 'geojson';
 import throttle from 'lodash/throttle';
 import React from 'react';
 import { searchAsync } from '../../apis';
-import { Debugger } from 'inspector';
-import { Feature } from 'geojson';
-// import SearchInContentParameterType = module
-
-// const provider = new OpenStreetMapProvider();
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -42,7 +38,6 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
     const [value, setValue] = React.useState<Feature | null>();
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<Feature[]>([]);
-    const loaded = React.useRef(false);
 
     // const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     handleChange(event.target.value);

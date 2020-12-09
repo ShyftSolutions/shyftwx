@@ -1,12 +1,12 @@
+import { Divider, Drawer, Grid, List, ListItem, Paper, Typography } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Drawer, Typography, Divider, Grid, List, ListItem, Paper } from '@material-ui/core';
+import { LayerGroup } from 'react-leaflet';
 import SearchField from '../textfield/SearchField';
 import TimeSelector from '../time/TimeSelector';
-import { ThresholdExpansionPanel } from './ThresholdExpansionPanel';
-import { LayerGroup } from 'react-leaflet';
-import { Route } from './Route';
 import MapBackground from './MapBackground';
+import { Route } from './Route';
+import { ThresholdExpansionPanel } from './ThresholdExpansionPanel';
 import TimeChart from './TimeChart';
 
 const drawerWidth = 300;
@@ -107,8 +107,8 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                 <Typography className={classes.header} gutterBottom>
                     Route
                 </Typography>
-                <SearchField label="Starting Point" defaultValue={startingPoint} />
-                <SearchField label="Destination" defaultValue={destination} />
+                <SearchField label="Starting Point" handleChange={(value) => console.log(value)} />
+                <SearchField label="Destination" handleChange={(value) => console.log(value)} />
 
                 <Divider />
                 <Typography className={classes.header} gutterBottom>
@@ -116,7 +116,7 @@ export const InputDrawer: React.FC<InputDrawerProps> = ({
                 </Typography>
                 <Grid container direction="column" justify="space-between" alignItems="center">
                     <Grid item>
-                        <TimeSelector value={time} />
+                        <TimeSelector value={time} action={(newDate) => console.log(newDate)} />
                     </Grid>
                     <Grid item>
                         <Paper elevation={0} className={classes.buttonPaper}>
