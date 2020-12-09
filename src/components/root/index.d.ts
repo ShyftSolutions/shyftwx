@@ -12,6 +12,24 @@ declare type ShyftWxProps = {
     dynamicFeatures?: DynamicFeature[];
 };
 
+declare type ShyftWxContentProps = {
+    index: Index;
+    product: string;
+    level: string;
+    forecast: string;
+    region: string;
+    run: string;
+    onProductSelect: (product: string) => void;
+    onLevelSelect: (level: string) => void;
+    onForecastSelect: (forecast: string) => void;
+    onRegionSelect: (region: string) => void;
+    onRunSelect: (run: string) => void;
+};
+
+declare type ShyftWxDynamicProps = {
+    dynamicFeatures: DynamicFeature[];
+} & ShyftWxContentProps;
+
 declare type ShyftIndex = {
     version: string;
     datasets: ShyftDataset[];

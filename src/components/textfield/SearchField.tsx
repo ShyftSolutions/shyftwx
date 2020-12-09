@@ -5,7 +5,7 @@ import { Autocomplete } from '@material-ui/lab';
 import { Feature } from 'geojson';
 import throttle from 'lodash/throttle';
 import React from 'react';
-import { searchAsync } from '../../apis';
+import { directionsAsync } from '../../apis';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -46,7 +46,7 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
     const fetch = React.useMemo(
         () =>
             throttle((request, callback) => {
-                searchAsync(request.input).then((results) => callback(results.features));
+                directionsAsync(request.input).then((results) => callback(results.features));
             }, 200),
         []
     );

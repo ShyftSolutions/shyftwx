@@ -1,27 +1,27 @@
 import axios from 'axios';
+import { makeStyles, ButtonGroup, Button, Grid, Typography, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, createStyles, Paper, createMuiTheme, fade, responsiveFontSizes, Fab, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import React, { useState } from 'react';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import Button from '@material-ui/core/Button';
-import { makeStyles, Button as Button$1, ButtonGroup, Grid, Typography, createStyles, Paper, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, createMuiTheme, fade, responsiveFontSizes, Fab, CircularProgress, MuiThemeProvider } from '@material-ui/core';
-import 'leaflet/dist/leaflet.css';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-import { latLngBounds, Icon } from 'leaflet';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { makeStyles as makeStyles$1, createStyles as createStyles$1, TextField } from '@material-ui/core/';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import { makeStyles as makeStyles$1, createStyles as createStyles$1, TextField } from '@material-ui/core/';
+import moment from 'moment';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { makeStyles as makeStyles$2 } from '@material-ui/core/styles';
-import moment from 'moment';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import Button$1 from '@material-ui/core/Button';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
+import 'leaflet/dist/leaflet.css';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { latLngBounds, Icon } from 'leaflet';
 
 var MAPBOX_KEY = 'pk.eyJ1Ijoiam9lMTIzMSIsImEiOiJjanlqMzV5MnAwMXdhM21vZDl4dXFqYmY0In0.02hMgnNRIBws9IM7ZoHsIg';
 
@@ -30,21 +30,34 @@ var MAPBOX_DIRECTIONS_API_URL = 'https://api.mapbox.com/directions/v5/mapbox/dri
 var SHYFT_CAR_ROUTE_API_URL = 'https://api.shyftwx.com/v1/product/car_route';
 var SHYFT_CAPS_URL = 'https://ogc.shyftwx.com/ogcRestful/layers';
 var SHYFT_WCS_ROUTE = 'https://api.shyftwx.com/getwxdata/point';
-var getIndexAsync = function getIndexAsync(url) {
+var getProductUrl = function getProductUrl(baseUrl, customerId, datasetId, region, run) {
+  return baseUrl + "/" + customerId + "/" + datasetId + "/products" + (region && run ? "/" + run + "-" + region : '');
+};
+var getOutputUrl = function getOutputUrl(baseUrl, customerId, datasetId, run) {
+  return baseUrl + "/" + customerId + "/" + datasetId + "/outputs" + (run ? "/" + run : '');
+};
+var getIndexAsync = function getIndexAsync(baseUrl, customerId, datasetId) {
+  var url = getProductUrl(baseUrl, customerId, datasetId);
   return fetch(url).then(function (response) {
     return response.json();
   });
 };
-var getProductDataAsync = function getProductDataAsync(url, region, run) {
-  url = url + "/" + run + "-" + region;
+var getProductDataAsync = function getProductDataAsync(baseUrl, customerId, datasetId, region, run) {
+  var url = getProductUrl(baseUrl, customerId, datasetId, region, run);
   return fetch(url).then(function (response) {
     return response.json();
   });
 };
-var searchAsync = function searchAsync(input) {
-  var url = MAPBOX_API_URL.replace('{SEARCH_TEXT}', encodeURIComponent(input));
-  return axios.get(url).then(function (response) {
-    return response.data;
+var getOutputStatusAsync = function getOutputStatusAsync(baseUrl, customerId, datasetId) {
+  var url = getOutputUrl(baseUrl, customerId, datasetId);
+  return fetch(url).then(function (response) {
+    return response.status !== 200 ? Promise.reject(response) : response.json();
+  });
+};
+var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customerId, datasetId, run) {
+  var url = getOutputUrl(baseUrl, customerId, datasetId, run);
+  return fetch(url).then(function (response) {
+    return response.json();
   });
 };
 function directionsAsync(coords) {
@@ -90,116 +103,17 @@ var index = {
     SHYFT_CAR_ROUTE_API_URL: SHYFT_CAR_ROUTE_API_URL,
     SHYFT_CAPS_URL: SHYFT_CAPS_URL,
     SHYFT_WCS_ROUTE: SHYFT_WCS_ROUTE,
+    getProductUrl: getProductUrl,
+    getOutputUrl: getOutputUrl,
     getIndexAsync: getIndexAsync,
     getProductDataAsync: getProductDataAsync,
-    searchAsync: searchAsync,
+    getOutputStatusAsync: getOutputStatusAsync,
+    getOutputRunStatusAsync: getOutputRunStatusAsync,
     directionsAsync: directionsAsync,
     carRouteAsync: carRouteAsync
 };
 
 var useStyles = makeStyles(function (theme) {
-  return {
-    root: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      ariaLabel: 'back',
-      maxWidth: '100%',
-      minWidth: '100%',
-      maxHeight: 30,
-      minHeight: 15
-    }
-  };
-});
-var BackButton = function BackButton(_ref) {
-  var action = _ref.action;
-  var classes = useStyles();
-  return /*#__PURE__*/React.createElement(Button, {
-    onClick: action,
-    className: classes.root,
-    variant: "outlined",
-    color: "primary"
-  }, /*#__PURE__*/React.createElement(NavigateBeforeIcon, null));
-};
-
-var useStyles$1 = makeStyles(function (theme) {
-  return {
-    root: {
-      height: '40vw',
-      width: '100%'
-    },
-    paddingMiddle: {
-      marginLeft: 15,
-      marginBottom: 20,
-      marginTop: 15
-    }
-  };
-});
-var BaseWxViewer = function BaseWxViewer(_ref) {
-  var layers = _ref.layers,
-      neBounds = _ref.neBounds,
-      swBounds = _ref.swBounds;
-  var classes = useStyles$1();
-  var bounds = latLngBounds(swBounds, neBounds);
-
-  var generateLayers = function generateLayers() {
-    var results = [];
-    layers && layers.forEach(function (layer) {
-      if (layer.type === 'metar') {
-        var metar = layer;
-        results.push( /*#__PURE__*/React.createElement(Marker, {
-          position: metar.coordinates,
-          icon: new Icon({
-            iconUrl: 'logo192.png',
-            iconSize: [20, 20]
-          })
-        }, /*#__PURE__*/React.createElement(Popup, null, JSON.stringify(metar))));
-      }
-    });
-    return results;
-  };
-
-  return /*#__PURE__*/React.createElement(Map, {
-    bounds: bounds,
-    className: classes.root,
-    dragging: false,
-    zoomControl: false,
-    scrollWheelZoom: false,
-    doubleClickZoom: false,
-    keyboard: false,
-    touchZoom: false
-  }, generateLayers(), /*#__PURE__*/React.createElement(TileLayer, {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: "\xA9 <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
-  }));
-};
-
-var useStyles$2 = makeStyles(function (theme) {
-  return {
-    root: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      ariaLabel: 'back',
-      maxWidth: '100%',
-      minWidth: '100%',
-      maxHeight: 30,
-      minHeight: 15
-    }
-  };
-});
-var ForwardButton = function ForwardButton(_ref) {
-  var action = _ref.action;
-  var classes = useStyles$2();
-  return /*#__PURE__*/React.createElement(Button$1, {
-    onClick: action,
-    className: classes.root,
-    variant: "outlined",
-    color: "primary"
-  }, /*#__PURE__*/React.createElement(NavigateNextIcon, null));
-};
-
-var useStyles$3 = makeStyles(function (theme) {
   return {
     root: {
       margin: 0,
@@ -227,7 +141,7 @@ var GroupedButtons = function GroupedButtons(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? ['1', '2', '3'] : _ref$options,
       action = _ref.action;
-  var classes = useStyles$3();
+  var classes = useStyles();
 
   var _useState = useState(options[0]),
       selected = _useState[0],
@@ -241,7 +155,7 @@ var GroupedButtons = function GroupedButtons(_ref) {
   return /*#__PURE__*/React.createElement(ButtonGroup, {
     className: classes.root
   }, options.map(function (option) {
-    return /*#__PURE__*/React.createElement(Button$1, {
+    return /*#__PURE__*/React.createElement(Button, {
       key: option,
       name: "group-button",
       onClick: function onClick() {
@@ -252,7 +166,7 @@ var GroupedButtons = function GroupedButtons(_ref) {
   }));
 };
 
-var useStyles$4 = makeStyles(function (theme) {
+var useStyles$1 = makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -264,7 +178,7 @@ var ModelSelector = function ModelSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Model' : _ref$label;
-  var classes = useStyles$4();
+  var classes = useStyles$1();
 
   var handleClick = function handleClick(index) {};
 
@@ -287,278 +201,6 @@ var ModelSelector = function ModelSelector(_ref) {
   );
 };
 
-var useStyles$5 = makeStyles(function (theme) {
-  return createStyles({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1)
-      }
-    },
-    gradient: {
-      background: 'linear-gradient(-139deg, #F0329A 0%, #FF922B 100%)',
-      borderRadius: 3,
-      border: 0,
-      color: 'white',
-      height: 60,
-      padding: '0 30px',
-      boxShadow: theme.shadows[3],
-      fontWeight: 800,
-      fontSize: '1.25em'
-    },
-    disabled: {
-      borderRadius: 3,
-      height: 60,
-      padding: '0 30px',
-      fontWeight: 800,
-      fontSize: '1.25em'
-    }
-  });
-});
-var BasicButton = function BasicButton(_ref) {
-  var action = _ref.action,
-      _ref$text = _ref.text,
-      text = _ref$text === void 0 ? 'Next' : _ref$text,
-      _ref$style = _ref.style,
-      style = _ref$style === void 0 ? 'blue' : _ref$style;
-  var classes = useStyles$5();
-  var buttonStyles = {
-    blue: /*#__PURE__*/React.createElement(Button$1, {
-      variant: "contained",
-      color: "primary",
-      size: "large",
-      onClick: action
-    }, text),
-    disabled: /*#__PURE__*/React.createElement(Button$1, {
-      variant: "contained",
-      color: "primary",
-      size: "large",
-      disabled: true
-    }, text),
-    gradient: /*#__PURE__*/React.createElement(Button$1, {
-      className: classes.gradient,
-      size: "large",
-      onClick: action
-    }, text),
-    disabledGradient: /*#__PURE__*/React.createElement(Button$1, {
-      className: classes.disabled,
-      variant: "contained",
-      size: "large",
-      disabled: true
-    }, text)
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    className: classes.root
-  }, buttonStyles[style]);
-};
-
-var useStyles$6 = makeStyles$1(function (theme) {
-  return createStyles$1({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1),
-        width: '35ch'
-      }
-    },
-    textField: {
-      '& label.Mui-focused': {
-        color: theme.palette.secondary.main,
-        fontWeight: 700
-      }
-    }
-  });
-});
-var BasicTextField = function BasicTextField(_ref) {
-  var action = _ref.action,
-      label = _ref.label,
-      state = _ref.state,
-      helperText = _ref.helperText,
-      defaultValue = _ref.defaultValue;
-  var classes = useStyles$6();
-
-  var handleChange = function handleChange(event) {
-    action(event.target.value);
-  };
-
-  var textFieldStates = {
-    initial: /*#__PURE__*/React.createElement("form", {
-      className: classes.root,
-      noValidate: true,
-      autoComplete: "off"
-    }, /*#__PURE__*/React.createElement(TextField, {
-      className: classes.textField,
-      id: "outlined-basic",
-      label: label,
-      variant: "outlined",
-      color: "secondary",
-      onChange: handleChange,
-      helperText: helperText,
-      defaultValue: defaultValue
-    })),
-    error: /*#__PURE__*/React.createElement("form", {
-      className: classes.root,
-      noValidate: true,
-      autoComplete: "off"
-    }, /*#__PURE__*/React.createElement(TextField, {
-      error: true,
-      id: "outlined-error",
-      label: label,
-      variant: "outlined",
-      onChange: handleChange,
-      helperText: helperText,
-      defaultValue: defaultValue
-    }))
-  };
-  return textFieldStates[state];
-};
-
-var useStyles$7 = makeStyles(function (theme) {
-  var _paper;
-
-  return {
-    paper: (_paper = {}, _paper[theme.breakpoints.down('sm')] = {
-      minHeight: '40vh',
-      minWidth: '60vw'
-    }, _paper[theme.breakpoints.up('md')] = {
-      minHeight: '40vh',
-      minWidth: '40vw'
-    }, _paper),
-    textPaper: {
-      paddingTop: 20
-    },
-    text: {
-      color: theme.palette.secondary.contrastText
-    },
-    subtitle: {
-      color: theme.palette.secondary.dark
-    }
-  };
-});
-var LandingPage = function LandingPage(_ref) {
-  var url = _ref.url;
-  var classes = useStyles$7();
-
-  var _React$useState = React.useState('initial'),
-      state = _React$useState[0],
-      setState = _React$useState[1];
-
-  var _React$useState2 = React.useState(''),
-      customerInput = _React$useState2[0],
-      setCustomerInput = _React$useState2[1];
-
-  var _React$useState3 = React.useState(''),
-      datasetInput = _React$useState3[0],
-      setDatasetInput = _React$useState3[1];
-
-  var _React$useState4 = React.useState(' '),
-      errorMessage = _React$useState4[0],
-      setErrorMessage = _React$useState4[1];
-
-  var onClick = function onClick() {
-    if (customerInput === '' && datasetInput === '') {
-      setState('error');
-      setErrorMessage('Enter a customer and dataset id');
-    } else if (customerInput === '') {
-      setState('error');
-      setErrorMessage('Enter a customer id');
-    } else if (datasetInput === '') {
-      setState('error');
-      setErrorMessage('Enter a dataset id');
-    } else {
-      checkInput();
-    }
-  };
-
-  var checkInput = function checkInput() {
-    try {
-      var customerUrl = url + "/" + customerInput + "/" + datasetInput + "/products";
-      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        if (indexData.datasets === undefined || indexData.datasets.length === 0) {
-          setState('error');
-          setErrorMessage('Customer or dataset id does not exist');
-        } else {
-          window.location.href += "?customer=" + customerInput + "&model=" + datasetInput;
-        }
-      });
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  var updateCustomerValue = function updateCustomerValue(input) {
-    setCustomerInput(input);
-  };
-
-  var updateDatasetValue = function updateDatasetValue(input) {
-    setDatasetInput(input);
-  };
-
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    spacing: 0,
-    direction: "column",
-    alignItems: "center",
-    justify: "center",
-    style: {
-      minHeight: '100vh'
-    }
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    direction: "column",
-    alignItems: "center",
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Paper, {
-    className: classes.paper
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    direction: "column",
-    justify: "space-evenly",
-    spacing: 2,
-    style: {
-      minHeight: '40vh',
-      minWidth: '40vw'
-    }
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Paper, {
-    className: classes.textPaper,
-    elevation: 0
-  }, /*#__PURE__*/React.createElement(Typography, {
-    align: "center",
-    variant: "h5",
-    gutterBottom: true
-  }, "Welcome"), /*#__PURE__*/React.createElement(Typography, {
-    variant: "body1",
-    color: "textSecondary",
-    align: "center"
-  }, "Please enter your information below ", /*#__PURE__*/React.createElement("br", null), " to access the viewer:"))), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    alignItems: "center",
-    direction: "column"
-  }, /*#__PURE__*/React.createElement(BasicTextField, {
-    label: "Customer ID",
-    action: updateCustomerValue,
-    state: state
-  }), /*#__PURE__*/React.createElement(BasicTextField, {
-    label: "Dataset ID",
-    action: updateDatasetValue,
-    state: state,
-    helperText: errorMessage
-  })), /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(BasicButton, {
-    action: onClick
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }))))));
-};
-
 function _extends() {
   _extends = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -577,7 +219,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var useStyles$8 = makeStyles(function (theme) {
+var useStyles$2 = makeStyles(function (theme) {
   return {
     root: {
       maxWidth: 400
@@ -625,7 +267,7 @@ var ProductMenu = function ProductMenu(_ref) {
       options = _ref$options === void 0 ? emptyMenu : _ref$options,
       action = _ref.action,
       sortFn = _ref.sortFn;
-  var classes = useStyles$8();
+  var classes = useStyles$2();
 
   var _React$useState = React.useState(options[0].name + " " + options[0].products[0].name),
       selectedProduct = _React$useState[0],
@@ -699,7 +341,7 @@ var ProductMenu = function ProductMenu(_ref) {
 
 var drawerWidth = 250;
 var xlDrawerWidth = 350;
-var useStyles$9 = makeStyles(function (theme) {
+var useStyles$3 = makeStyles(function (theme) {
   var _drawer, _appBar, _menuButton, _drawerPaper;
 
   return {
@@ -735,7 +377,7 @@ var ProductSelector = function ProductSelector(_ref) {
       label = _ref$label === void 0 ? 'Products' : _ref$label,
       action = _ref.action,
       window = _ref.window;
-  var classes = useStyles$9();
+  var classes = useStyles$3();
 
   var _React$useState = React.useState(false),
       mobileOpen = _React$useState[0],
@@ -857,7 +499,7 @@ var ProductSelector = function ProductSelector(_ref) {
   }, menu))));
 };
 
-var useStyles$a = makeStyles(function (theme) {
+var useStyles$4 = makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1,
@@ -869,7 +511,7 @@ var RegionSelector = function RegionSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Region' : _ref$label;
-  var classes = useStyles$a();
+  var classes = useStyles$4();
 
   var handleClick = function handleClick(index) {};
 
@@ -890,202 +532,332 @@ var RegionSelector = function RegionSelector(_ref) {
   );
 };
 
-var useStyles$b = makeStyles$2(function (theme) {
-  var _dropdown;
-
-  return {
-    formControl: {
-      boxShadow: theme.shadows[3]
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    },
-    label: {
-      align: 'center'
-    },
-    dropdown: (_dropdown = {
-      backgroundColor: theme.palette.secondary.light,
-      fontSize: '.8em'
-    }, _dropdown[theme.breakpoints.down('sm')] = {
-      fontSize: '.7em'
-    }, _dropdown[theme.breakpoints.down('xs')] = {
-      fontSize: '.7em'
-    }, _dropdown.paddingTop = 10, _dropdown.paddingBottom = 10, _dropdown.paddingLeft = 10, _dropdown),
-    items: {
-      background: theme.palette.primary.contrastText
+var validateAppAsync = function validateAppAsync(baseUrl, customerId, datasetId) {
+  try {
+    if (!baseUrl) {
+      return Promise.resolve(AppStatus.NoBaseUrl);
     }
-  };
-});
-var SimpleSelect = function SimpleSelect(_ref) {
-  var choices = _ref.choices,
-      action = _ref.action;
-  var classes = useStyles$b();
 
-  var _React$useState = React.useState(choices[0]),
-      selectedValue = _React$useState[0],
-      setSelectedValue = _React$useState[1];
+    if (!customerId || !datasetId) {
+      return Promise.resolve(AppStatus.Unknown);
+    }
+
+    return Promise.resolve(getOutputStatusAsync(baseUrl, customerId, datasetId)["catch"](function () {
+      return undefined;
+    })).then(function (outputStatus) {
+      return outputStatus && outputStatus.runs ? outputStatus.runs.length === 0 ? AppStatus.NoData : Promise.resolve(getOutputRunStatusAsync(baseUrl, customerId, datasetId, outputStatus.runs[0])).then(function (outputRunStatus) {
+        return outputRunStatus && outputRunStatus.total_available > 0 ? AppStatus.Okay : AppStatus.NoData;
+      }) : AppStatus.Unknown;
+    });
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+var AppStatus;
+
+(function (AppStatus) {
+  AppStatus[AppStatus["Unknown"] = 0] = "Unknown";
+  AppStatus[AppStatus["Okay"] = 1] = "Okay";
+  AppStatus[AppStatus["NoBaseUrl"] = 2] = "NoBaseUrl";
+  AppStatus[AppStatus["NoData"] = 3] = "NoData";
+  AppStatus[AppStatus["Error"] = 4] = "Error";
+})(AppStatus || (AppStatus = {}));
+
+var useStyles$5 = makeStyles(function (theme) {
+  return createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1)
+      }
+    },
+    gradient: {
+      background: 'linear-gradient(-139deg, #F0329A 0%, #FF922B 100%)',
+      borderRadius: 3,
+      border: 0,
+      color: 'white',
+      height: 60,
+      padding: '0 30px',
+      boxShadow: theme.shadows[3],
+      fontWeight: 800,
+      fontSize: '1.25em'
+    },
+    disabled: {
+      borderRadius: 3,
+      height: 60,
+      padding: '0 30px',
+      fontWeight: 800,
+      fontSize: '1.25em'
+    }
+  });
+});
+var BasicButton = function BasicButton(_ref) {
+  var action = _ref.action,
+      _ref$text = _ref.text,
+      text = _ref$text === void 0 ? 'Next' : _ref$text,
+      _ref$style = _ref.style,
+      style = _ref$style === void 0 ? 'blue' : _ref$style;
+  var classes = useStyles$5();
+  var buttonStyles = {
+    blue: /*#__PURE__*/React.createElement(Button, {
+      variant: "contained",
+      color: "primary",
+      size: "large",
+      onClick: action
+    }, text),
+    disabled: /*#__PURE__*/React.createElement(Button, {
+      variant: "contained",
+      color: "primary",
+      size: "large",
+      disabled: true
+    }, text),
+    gradient: /*#__PURE__*/React.createElement(Button, {
+      className: classes.gradient,
+      size: "large",
+      onClick: action
+    }, text),
+    disabledGradient: /*#__PURE__*/React.createElement(Button, {
+      className: classes.disabled,
+      variant: "contained",
+      size: "large",
+      disabled: true
+    }, text)
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, buttonStyles[style]);
+};
+
+var useStyles$6 = makeStyles$1(function (theme) {
+  return createStyles$1({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+        width: '35ch'
+      }
+    },
+    textField: {
+      '& label.Mui-focused': {
+        color: theme.palette.secondary.main,
+        fontWeight: 700
+      }
+    }
+  });
+});
+var BasicTextField = function BasicTextField(_ref) {
+  var action = _ref.action,
+      label = _ref.label,
+      state = _ref.state,
+      helperText = _ref.helperText,
+      defaultValue = _ref.defaultValue;
+  var classes = useStyles$6();
 
   var handleChange = function handleChange(event) {
-    setSelectedValue(event.target.value);
     action(event.target.value);
   };
 
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
-    variant: "outlined",
-    className: classes.formControl
-  }, /*#__PURE__*/React.createElement(Select, {
-    classes: {
-      select: classes.dropdown
-    },
-    id: "simple-select",
-    value: selectedValue,
-    onChange: handleChange
-  }, choices.map(function (option) {
-    return /*#__PURE__*/React.createElement(MenuItem, {
-      color: "primary",
-      key: option,
-      className: classes.items,
-      value: option
-    }, option);
-  }))));
+  var textFieldStates = {
+    initial: /*#__PURE__*/React.createElement("form", {
+      className: classes.root,
+      noValidate: true,
+      autoComplete: "off"
+    }, /*#__PURE__*/React.createElement(TextField, {
+      className: classes.textField,
+      id: "outlined-basic",
+      label: label,
+      variant: "outlined",
+      color: "secondary",
+      onChange: handleChange,
+      helperText: helperText,
+      defaultValue: defaultValue
+    })),
+    error: /*#__PURE__*/React.createElement("form", {
+      className: classes.root,
+      noValidate: true,
+      autoComplete: "off"
+    }, /*#__PURE__*/React.createElement(TextField, {
+      error: true,
+      id: "outlined-error",
+      label: label,
+      variant: "outlined",
+      onChange: handleChange,
+      helperText: helperText,
+      defaultValue: defaultValue
+    }))
+  };
+  return textFieldStates[state];
 };
 
-var useStyles$c = makeStyles(function (theme) {
+var useStyles$7 = makeStyles(function (theme) {
+  var _paper;
+
   return {
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%'
+    paper: (_paper = {}, _paper[theme.breakpoints.down('sm')] = {
+      minHeight: '40vh',
+      minWidth: '60vw'
+    }, _paper[theme.breakpoints.up('md')] = {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }, _paper),
+    textPaper: {
+      paddingTop: 20
+    },
+    text: {
+      color: theme.palette.secondary.contrastText
+    },
+    subtitle: {
+      color: theme.palette.secondary.dark
     }
   };
 });
-var RunsSelector = function RunsSelector(_ref) {
-  var options = _ref.options,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Runs' : _ref$label,
-      action = _ref.action;
-  var classes = useStyles$c();
-  var newOptions = options.map(function (option) {
-    return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
-  });
-  return (
-    /*#__PURE__*/
-    React.createElement(Grid, {
-      container: true,
-      item: true,
-      className: classes.root
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true
-    }, /*#__PURE__*/React.createElement(Typography, {
-      variant: "h6"
-    }, label), newOptions.length === 1 ? /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: newOptions,
-      action: action
-    }) : /*#__PURE__*/React.createElement(SimpleSelect, {
-      choices: newOptions,
-      action: action
-    })))
-  );
-};
+var LandingPage = function LandingPage(_ref) {
+  var url = _ref.url,
+      _ref$customerId = _ref.customerId,
+      customerId = _ref$customerId === void 0 ? '' : _ref$customerId,
+      _ref$datasetId = _ref.datasetId,
+      datasetId = _ref$datasetId === void 0 ? '' : _ref$datasetId,
+      _ref$appStatus = _ref.appStatus,
+      appStatus = _ref$appStatus === void 0 ? AppStatus.Okay : _ref$appStatus,
+      onStatusChange = _ref.onStatusChange;
+  var classes = useStyles$7();
 
-var theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#72c3fc',
-      main: '#329af0',
-      dark: '#1c7cd6',
-      contrastText: '#f8f9fa'
-    },
-    secondary: {
-      light: '#ffffff',
-      main: '#F76707',
-      dark: '#868e96',
-      contrastText: '#212529'
+  var _React$useState = React.useState('initial'),
+      state = _React$useState[0],
+      setState = _React$useState[1];
+
+  var _React$useState2 = React.useState(customerId),
+      customerInput = _React$useState2[0],
+      setCustomerInput = _React$useState2[1];
+
+  var _React$useState3 = React.useState(datasetId),
+      datasetInput = _React$useState3[0],
+      setDatasetInput = _React$useState3[1];
+
+  var _React$useState4 = React.useState(''),
+      errorMessage = _React$useState4[0],
+      setErrorMessage = _React$useState4[1];
+
+  React.useEffect(function () {
+    setStateFromStatus(appStatus);
+  }, []);
+
+  var onClick = function onClick() {
+    if (customerInput === '' && datasetInput === '') {
+      setState('error');
+      setErrorMessage('Enter a Customer and Dataset ID.');
+    } else if (customerInput === '') {
+      setState('error');
+      setErrorMessage('Enter a Customer ID.');
+    } else if (datasetInput === '') {
+      setState('error');
+      setErrorMessage('Enter a Dataset ID.');
+    } else {
+      validateComponentAsync();
     }
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 768,
-      md: 950,
-      lg: 1130,
-      xl: 1460
-    }
-  },
-  overrides: {
-    MuiTypography: {
-      h1: {
-        fontSize: '1rem',
-        fontWeight: 400
-      },
-      h5: {
-        fontWeight: 500
-      },
-      body2: {
-        fontWeight: 500,
-        fontSize: 16
-      },
-      button: {
-        color: '#FFFFFF',
-        fontWeight: 800
-      }
-    },
-    MuiListItem: {
-      root: {
-        '&$selected, &$selected:hover': {
-          backgroundColor: '#329af0',
-          color: '#f8f9fa'
-        },
-        paddingTop: '6px',
-        paddingBottom: '6px'
-      },
-      gutters: {
-        paddingLeft: '6px',
-        paddingRight: '6px'
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: '#329af0',
-        minWidth: 30
-      }
-    },
-    MuiTooltip: {
-      tooltip: {
-        backgroundColor: '#F76707',
-        color: '#f8f9fa',
-        fontSize: 16,
-        fontWeight: 800
-      },
-      tooltipPlacementBottom: {
-        marginTop: 15
-      }
-    },
-    MuiSwitch: {
-      colorPrimary: {
-        color: '#37B24D',
-        '& + $track': {
-          backgroundColor: '#37B24D'
-        },
-        '&$checked': {
-          color: '#F50000',
-          '&:hover': {
-            backgroundColor: fade('#F50000', 0.04)
-          }
-        },
-        '&$checked + $track': {
-          backgroundColor: '#F50000'
+  };
+
+  var updateCustomerValue = function updateCustomerValue(input) {
+    setCustomerInput(input);
+  };
+
+  var updateDatasetValue = function updateDatasetValue(input) {
+    setDatasetInput(input);
+  };
+
+  var validateComponentAsync = function validateComponentAsync() {
+    try {
+      return Promise.resolve(validateAppAsync(url, customerInput, datasetInput)).then(function (status) {
+        if (status === AppStatus.Okay) {
+          onStatusChange && onStatusChange(AppStatus.Okay);
+        } else {
+          setStateFromStatus(status);
         }
-      }
+      });
+    } catch (e) {
+      return Promise.reject(e);
     }
-  },
-  spacing: 10
-});
-var options = {
-  disableAlign: true,
-  factor: 5
+  };
+
+  var setStateFromStatus = function setStateFromStatus(status) {
+    if (status === AppStatus.Unknown) {
+      setState('error');
+      setErrorMessage('Customer or Dataset ID does not exist.');
+    } else if (status === AppStatus.NoData) {
+      setState('error');
+      setErrorMessage('Data is still being processed. Please try again in a few moments.');
+    } else if (status === AppStatus.NoBaseUrl) {
+      setState('error');
+      setErrorMessage('Missing baseUrl. Please check your configuration.');
+    }
+  };
+
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    spacing: 0,
+    direction: "column",
+    alignItems: "center",
+    justify: "center",
+    style: {
+      minHeight: '100vh'
+    }
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    alignItems: "center",
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.paper
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    direction: "column",
+    justify: "space-evenly",
+    spacing: 2,
+    style: {
+      minHeight: '40vh',
+      minWidth: '40vw'
+    }
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.textPaper,
+    elevation: 0
+  }, /*#__PURE__*/React.createElement(Typography, {
+    align: "center",
+    variant: "h5",
+    gutterBottom: true
+  }, "Welcome"), /*#__PURE__*/React.createElement(Typography, {
+    variant: "body1",
+    color: "textSecondary",
+    align: "center"
+  }, "Please enter your information below ", /*#__PURE__*/React.createElement("br", null), " to access the viewer:"))), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    alignItems: "center",
+    direction: "column"
+  }, /*#__PURE__*/React.createElement(BasicTextField, {
+    label: "Customer ID",
+    action: updateCustomerValue,
+    state: state,
+    defaultValue: customerId
+  }), /*#__PURE__*/React.createElement(BasicTextField, {
+    label: "Dataset ID",
+    action: updateDatasetValue,
+    state: state,
+    helperText: errorMessage,
+    defaultValue: datasetId
+  })), /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(BasicButton, {
+    action: onClick
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }))))));
 };
-theme = responsiveFontSizes(theme, options);
-var theme$1 = theme;
 
 // A type of promise-like that resolves synchronously and supports only one observer
 const _Pact = /*#__PURE__*/(function() {
@@ -1247,7 +1019,204 @@ function _for(test, update, body) {
 	}
 }
 
-var useStyles$d = makeStyles$2(function (theme) {
+var theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#72c3fc',
+      main: '#329af0',
+      dark: '#1c7cd6',
+      contrastText: '#f8f9fa'
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#F76707',
+      dark: '#868e96',
+      contrastText: '#212529'
+    }
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 768,
+      md: 950,
+      lg: 1130,
+      xl: 1460
+    }
+  },
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontSize: '1rem',
+        fontWeight: 400
+      },
+      h5: {
+        fontWeight: 500
+      },
+      body2: {
+        fontWeight: 500,
+        fontSize: 16
+      },
+      button: {
+        color: '#FFFFFF',
+        fontWeight: 800
+      }
+    },
+    MuiListItem: {
+      root: {
+        '&$selected, &$selected:hover': {
+          backgroundColor: '#329af0',
+          color: '#f8f9fa'
+        },
+        paddingTop: '6px',
+        paddingBottom: '6px'
+      },
+      gutters: {
+        paddingLeft: '6px',
+        paddingRight: '6px'
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#329af0',
+        minWidth: 30
+      }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: '#F76707',
+        color: '#f8f9fa',
+        fontSize: 16,
+        fontWeight: 800
+      },
+      tooltipPlacementBottom: {
+        marginTop: 15
+      }
+    },
+    MuiSwitch: {
+      colorPrimary: {
+        color: '#37B24D',
+        '& + $track': {
+          backgroundColor: '#37B24D'
+        },
+        '&$checked': {
+          color: '#F50000',
+          '&:hover': {
+            backgroundColor: fade('#F50000', 0.04)
+          }
+        },
+        '&$checked + $track': {
+          backgroundColor: '#F50000'
+        }
+      }
+    }
+  },
+  spacing: 10
+});
+var options = {
+  disableAlign: true,
+  factor: 5
+};
+theme = responsiveFontSizes(theme, options);
+var theme$1 = theme;
+
+var useStyles$8 = makeStyles$2(function (theme) {
+  var _dropdown;
+
+  return {
+    formControl: {
+      boxShadow: theme.shadows[3]
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    label: {
+      align: 'center'
+    },
+    dropdown: (_dropdown = {
+      backgroundColor: theme.palette.secondary.light,
+      fontSize: '.8em'
+    }, _dropdown[theme.breakpoints.down('sm')] = {
+      fontSize: '.7em'
+    }, _dropdown[theme.breakpoints.down('xs')] = {
+      fontSize: '.7em'
+    }, _dropdown.paddingTop = 10, _dropdown.paddingBottom = 10, _dropdown.paddingLeft = 10, _dropdown),
+    items: {
+      background: theme.palette.primary.contrastText
+    }
+  };
+});
+var SimpleSelect = function SimpleSelect(_ref) {
+  var choices = _ref.choices,
+      action = _ref.action;
+  var classes = useStyles$8();
+
+  var _React$useState = React.useState(choices[0]),
+      selectedValue = _React$useState[0],
+      setSelectedValue = _React$useState[1];
+
+  var handleChange = function handleChange(event) {
+    setSelectedValue(event.target.value);
+    action(event.target.value);
+  };
+
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
+    variant: "outlined",
+    className: classes.formControl
+  }, /*#__PURE__*/React.createElement(Select, {
+    classes: {
+      select: classes.dropdown
+    },
+    id: "simple-select",
+    value: selectedValue,
+    onChange: handleChange
+  }, choices.map(function (option) {
+    return /*#__PURE__*/React.createElement(MenuItem, {
+      color: "primary",
+      key: option,
+      className: classes.items,
+      value: option
+    }, option);
+  }))));
+};
+
+var useStyles$9 = makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%'
+    }
+  };
+});
+var RunsSelector = function RunsSelector(_ref) {
+  var options = _ref.options,
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Runs' : _ref$label,
+      action = _ref.action;
+  var classes = useStyles$9();
+  var newOptions = options.map(function (option) {
+    return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
+  });
+  return (
+    /*#__PURE__*/
+    React.createElement(Grid, {
+      container: true,
+      item: true,
+      className: classes.root
+    }, /*#__PURE__*/React.createElement(Grid, {
+      item: true
+    }, /*#__PURE__*/React.createElement(Typography, {
+      variant: "h6"
+    }, label), newOptions.length === 1 ? /*#__PURE__*/React.createElement(GroupedButtons, {
+      options: newOptions,
+      action: action
+    }) : /*#__PURE__*/React.createElement(SimpleSelect, {
+      choices: newOptions,
+      action: action
+    })))
+  );
+};
+
+var useStyles$a = makeStyles$2(function (theme) {
   var _root, _markLabel;
 
   return {
@@ -1316,7 +1285,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var options = _ref.options,
       action = _ref.action,
       selected = _ref.selected;
-  var classes = useStyles$d();
+  var classes = useStyles$a();
   var optionsCount = React.useRef(options.length);
   var stepValue = options[1].value - options[0].value;
   var maxValue = options[options.length - 1].value;
@@ -1361,62 +1330,54 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   })));
 };
 
-var useStyles$e = makeStyles(function (theme) {
+var useStyles$b = makeStyles(function (theme) {
   return {
     root: {
-      flexGrow: 1,
-      maxWidth: '100%',
-      paddingTop: 5,
-      paddingBottom: 5
-    },
-    paper: {
-      backgroundColor: theme.palette.secondary.main,
-      padding: 5
-    },
-    mobilePaper: {
       backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.secondary.main,
-      border: '1px solid currentColor',
-      padding: 5
-    },
-    text: {
-      color: theme.palette.secondary.main
+      color: theme.palette.primary.dark,
+      boxShadow: theme.shadows[3],
+      ariaLabel: 'back',
+      maxWidth: '100%',
+      minWidth: '100%',
+      maxHeight: 30,
+      minHeight: 15
     }
   };
 });
-var ValidTime = function ValidTime(_ref) {
-  var time = _ref.time;
-  var classes = useStyles$e();
-  return /*#__PURE__*/React.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
-    smDown: true
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    direction: "row",
-    justify: "flex-end",
-    alignItems: "center"
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
-  }, "Valid Time"), /*#__PURE__*/React.createElement(Paper, {
-    className: classes.paper
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "button"
-  }, time))))), /*#__PURE__*/React.createElement(Hidden, {
-    mdUp: true
-  }, /*#__PURE__*/React.createElement(Paper, {
-    className: classes.mobilePaper
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    xs: 12,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Typography, {
-    className: classes.text,
-    variant: "h6"
-  }, time)))));
+var BackButton = function BackButton(_ref) {
+  var action = _ref.action;
+  var classes = useStyles$b();
+  return /*#__PURE__*/React.createElement(Button$1, {
+    onClick: action,
+    className: classes.root,
+    variant: "outlined",
+    color: "primary"
+  }, /*#__PURE__*/React.createElement(NavigateBeforeIcon, null));
+};
+
+var useStyles$c = makeStyles(function (theme) {
+  return {
+    root: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.primary.dark,
+      boxShadow: theme.shadows[3],
+      ariaLabel: 'back',
+      maxWidth: '100%',
+      minWidth: '100%',
+      maxHeight: 30,
+      minHeight: 15
+    }
+  };
+});
+var ForwardButton = function ForwardButton(_ref) {
+  var action = _ref.action;
+  var classes = useStyles$c();
+  return /*#__PURE__*/React.createElement(Button, {
+    onClick: action,
+    className: classes.root,
+    variant: "outlined",
+    color: "primary"
+  }, /*#__PURE__*/React.createElement(NavigateNextIcon, null));
 };
 
 var useTimer = function useTimer(interval) {
@@ -1441,7 +1402,7 @@ var useTimer = function useTimer(interval) {
   return [ticks, isRunning, setIsRunning];
 };
 
-var useStyles$f = makeStyles(function (theme) {
+var useStyles$d = makeStyles(function (theme) {
   return {
     root: {
       flexGrow: 1
@@ -1471,7 +1432,7 @@ var useStyles$f = makeStyles(function (theme) {
 });
 var StartStopButton = function StartStopButton(_ref) {
   var onToggle = _ref.onToggle;
-  var classes = useStyles$f();
+  var classes = useStyles$d();
 
   var _useTimer = useTimer(600),
       tick = _useTimer[0],
@@ -1502,7 +1463,7 @@ var StartStopButton = function StartStopButton(_ref) {
   }));
 };
 
-var useStyles$g = makeStyles(function (theme) {
+var useStyles$e = makeStyles(function (theme) {
   var _offset;
 
   return {
@@ -1518,7 +1479,7 @@ var TimeControl = function TimeControl(_ref) {
   var onBack = _ref.onBack,
       onNext = _ref.onNext,
       onToggle = _ref.onToggle;
-  var classes = useStyles$g();
+  var classes = useStyles$e();
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
   }, /*#__PURE__*/React.createElement(Grid, {
@@ -1559,7 +1520,65 @@ var TimeControl = function TimeControl(_ref) {
   })));
 };
 
-var useStyles$h = makeStyles(function (theme) {
+var useStyles$f = makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1,
+      maxWidth: '100%',
+      paddingTop: 5,
+      paddingBottom: 5
+    },
+    paper: {
+      backgroundColor: theme.palette.secondary.main,
+      padding: 5
+    },
+    mobilePaper: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.secondary.main,
+      border: '1px solid currentColor',
+      padding: 5
+    },
+    text: {
+      color: theme.palette.secondary.main
+    }
+  };
+});
+var ValidTime = function ValidTime(_ref) {
+  var time = _ref.time;
+  var classes = useStyles$f();
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
+    smDown: true
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    direction: "row",
+    justify: "flex-end",
+    alignItems: "center"
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "h6"
+  }, "Valid Time"), /*#__PURE__*/React.createElement(Paper, {
+    className: classes.paper
+  }, /*#__PURE__*/React.createElement(Typography, {
+    variant: "button"
+  }, time))))), /*#__PURE__*/React.createElement(Hidden, {
+    mdUp: true
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.mobilePaper
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    xs: 12,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Typography, {
+    className: classes.text,
+    variant: "h6"
+  }, time)))));
+};
+
+var useStyles$g = makeStyles(function (theme) {
   var _media;
 
   return {
@@ -1572,7 +1591,7 @@ var useStyles$h = makeStyles(function (theme) {
 });
 var ImageViewer = function ImageViewer(_ref) {
   var image = _ref.image;
-  var classes = useStyles$h();
+  var classes = useStyles$g();
   return /*#__PURE__*/React.createElement("img", {
     className: classes.media,
     src: image,
@@ -1583,7 +1602,7 @@ var ImageViewer = function ImageViewer(_ref) {
 var ShyftContext = React.createContext({});
 var drawerWidth$1 = 250;
 var xlDrawerWidth$1 = 350;
-var useStyles$i = makeStyles(function (theme) {
+var useStyles$h = makeStyles(function (theme) {
   return {
     toolbar: theme.mixins.toolbar,
     contentClass: {
@@ -1604,182 +1623,34 @@ var useStyles$i = makeStyles(function (theme) {
   };
 });
 var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
-  var dataset = _ref.dataset,
-      url = _ref.url,
-      customer = _ref.customer,
-      dynamicFeatures = _ref.dynamicFeatures;
-  var classes = useStyles$i();
-
-  var _React$useState = React.useState(true),
-      loading = _React$useState[0],
-      setLoading = _React$useState[1];
-
-  var _React$useState2 = React.useState({
-    datasets: []
-  }),
-      index = _React$useState2[0],
-      setIndex = _React$useState2[1];
-
-  var _React$useState3 = React.useState(''),
-      selectedProduct = _React$useState3[0],
-      setSelectedProduct = _React$useState3[1];
-
-  var _React$useState4 = React.useState(''),
-      selectedLevel = _React$useState4[0],
-      setSelectedLevel = _React$useState4[1];
-
-  var _React$useState5 = React.useState(''),
-      selectedForecast = _React$useState5[0],
-      setSelectedForecast = _React$useState5[1];
-
-  var _React$useState6 = React.useState(''),
-      setSelectedRegion = _React$useState6[1];
-
-  var _React$useState7 = React.useState('');
-
-  var _React$useState8 = React.useState(false),
-      landingPage = _React$useState8[0],
-      setLandingPage = _React$useState8[1];
-
-  var isDynamic = React.useRef(false);
-
-  if (dynamicFeatures && dynamicFeatures.length !== 0) {
-    isDynamic.current = true;
-  }
-
-  var urlParams = React.useRef(new URLSearchParams(window.location.search));
-  customer = customer || urlParams.current.get('customer') || '';
-  dataset = dataset || urlParams.current.get('model') || '';
-  var customerUrl = url + "/" + customer + "/" + dataset + "/products";
-
-  var loadAsync = function loadAsync() {
-    try {
-      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        function _temp2() {
-          setIndex(arr);
-          setLoading(false);
-        }
-
-        if (!indexData || indexData.datasets.length === 0) {
-          setLandingPage(true);
-          return;
-        }
-
-        var arr = {
-          datasets: []
-        };
-        var i = 0;
-
-        var _temp = _for(function () {
-          return i < indexData.datasets.length;
-        }, function () {
-          return i++;
-        }, function () {
-          var dataset = indexData.datasets[i];
-          var datasetRegionRun = {
-            dataset: dataset.name,
-            region: dataset.region,
-            run: {
-              name: dataset.run,
-              levels: []
-            }
-          };
-          var runRegion = dataset.run + "-" + dataset.region.name;
-          var datasetUrl = customerUrl + "/" + runRegion;
-          return Promise.resolve(getIndexAsync(datasetUrl)).then(function (runRegionData) {
-            var items = runRegionData.items;
-            var uniqueLevels = [];
-            uniqueLevels = items.map(function (i) {
-              return i.level;
-            }).filter(function (v, i, a) {
-              return a.indexOf(v) === i;
-            }).map(function (l) {
-              return {
-                name: l,
-                products: []
-              };
-            });
-            uniqueLevels.forEach(function (lvl) {
-              lvl.products = items.filter(function (item) {
-                return item.level === lvl.name;
-              }).map(function (i) {
-                return i.product;
-              }).filter(function (v, i, a) {
-                return a.indexOf(v) === i;
-              }).map(function (product) {
-                return {
-                  name: product,
-                  forecasts: []
-                };
-              });
-            });
-            uniqueLevels.forEach(function (lvl) {
-              lvl.products.forEach(function (product) {
-                product.forecasts = items.filter(function (item) {
-                  return item.level === lvl.name && item.product === product.name;
-                }).map(function (item) {
-                  return {
-                    hour: item.forecast,
-                    image: item.filename
-                  };
-                });
-              });
-            });
-            datasetRegionRun.run.levels = uniqueLevels;
-            var indexes = {
-              datasets: [datasetRegionRun]
-            };
-            arr.datasets.push(datasetRegionRun);
-
-            if (i === 0) {
-              setSelectedRegion(indexes.datasets[0].region.name);
-              setSelectedLevel(indexes.datasets[0].run.levels[0].name);
-              setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-              setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
-            }
-          });
-        });
-
-        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
-      });
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  React.useEffect(function () {
-    if (!url) {
-      setLandingPage(true);
-      return;
-    }
-
-    if (!customer || !dataset) {
-      setLandingPage(true);
-    }
-
-    setLoading(true);
-    loadAsync();
-  }, []);
+  var index = _ref.index,
+      forecast = _ref.forecast,
+      level = _ref.level,
+      product = _ref.product,
+      onForecastSelect = _ref.onForecastSelect,
+      onLevelSelect = _ref.onLevelSelect,
+      onProductSelect = _ref.onProductSelect;
+  var classes = useStyles$h();
 
   var getSelectedLevel = function getSelectedLevel() {
     return index.datasets[0].run.levels.filter(function (lvl) {
-      return lvl.name === selectedLevel;
+      return lvl.name === level;
     })[0];
   };
 
   var getSelectedProduct = function getSelectedProduct() {
     return getSelectedLevel().products.filter(function (p) {
-      return p.name === selectedProduct;
+      return p.name === product;
     })[0];
   };
 
-  var onProductSelect = function onProductSelect(product) {
-    setSelectedLevel(product.level);
-    setSelectedProduct(product.product);
-    setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  var handleProductSelect = function handleProductSelect(product) {
+    onLevelSelect(product.level);
+    onProductSelect(product.product);
+    onForecastSelect(getSelectedProduct().forecasts[0].hour);
   };
 
-  var onRunSelect = function onRunSelect(buttonText) {
+  var handleRunSelect = function handleRunSelect(buttonText) {
     console.log(buttonText);
   };
 
@@ -1801,13 +1672,13 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     var forecasts = getSelectedProduct().forecasts;
     forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === selectedForecast;
+      return f.hour === forecast;
     });
 
     if (forecastIndex + 1 === forecasts.length) {
-      setSelectedForecast(forecasts[0].hour);
+      onForecastSelect(forecasts[0].hour);
     } else {
-      setSelectedForecast(forecasts[forecastIndex + 1].hour);
+      onForecastSelect(forecasts[forecastIndex + 1].hour);
     }
   };
 
@@ -1815,13 +1686,13 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     var forecasts = getSelectedProduct().forecasts;
     forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === selectedForecast;
+      return f.hour === forecast;
     });
 
     if (forecastIndex - 1 < 0) {
-      setSelectedForecast(forecasts[forecasts.length - 1].hour);
+      onForecastSelect(forecasts[forecasts.length - 1].hour);
     } else {
-      setSelectedForecast(forecasts[forecastIndex - 1].hour);
+      onForecastSelect(forecasts[forecastIndex - 1].hour);
     }
   };
 
@@ -1832,7 +1703,7 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     var forecastIndex = forecasts.findIndex(function (f) {
       return +f.hour === +value;
     });
-    setSelectedForecast(forecasts[forecastIndex].hour);
+    onForecastSelect(forecasts[forecastIndex].hour);
   };
 
   var onToggleToPlay = function onToggleToPlay(isRunning) {
@@ -1840,36 +1711,26 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     forecasts.sort(compare);
 
     if (!isRunning) {
-      setSelectedForecast(forecasts[0].hour);
+      onForecastSelect(forecasts[0].hour);
     } else {
       var forecastIndex = forecasts.findIndex(function (f) {
-        return f.hour === selectedForecast;
+        return f.hour === forecast;
       });
 
-      if (selectedForecast === forecasts[forecasts.length - 1].hour) {
-        setSelectedForecast(forecasts[0].hour);
+      if (forecast === forecasts[forecasts.length - 1].hour) {
+        onForecastSelect(forecasts[0].hour);
       } else {
-        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+        onForecastSelect(forecasts[forecastIndex + 1].hour);
       }
     }
   };
 
   var getValidTime = function getValidTime() {
-    var validTime = moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
+    var validTime = moment.unix(+index.datasets[0].run.name + +forecast).utc().format('MM/DD HH:mm[Z]');
     return validTime;
   };
 
   var generateContent = function generateContent() {
-    if (landingPage) {
-      return /*#__PURE__*/React.createElement(LandingPage, {
-        url: url
-      });
-    }
-
-    if (loading) {
-      return /*#__PURE__*/React.createElement(CircularProgress, null);
-    }
-
     var selectedProduct = getSelectedProduct();
     var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
       return {
@@ -1885,14 +1746,14 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
       };
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
-      return f.hour === selectedForecast;
+      return f.hour === forecast;
     })[0].image;
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Grid, {
       container: true
     }, /*#__PURE__*/React.createElement(ProductSelector, {
       "data-cy": "product-selector",
       categories: levelProductVals,
-      action: onProductSelect
+      action: handleProductSelect
     })), /*#__PURE__*/React.createElement("main", {
       className: classes.contentClass
     }, /*#__PURE__*/React.createElement(Hidden, {
@@ -1928,7 +1789,7 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     }, /*#__PURE__*/React.createElement(RunsSelector, {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
-      action: onRunSelect
+      action: handleRunSelect
     })), /*#__PURE__*/React.createElement(Hidden, {
       xsDown: true
     }, /*#__PURE__*/React.createElement(Grid, {
@@ -1971,7 +1832,7 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     }, /*#__PURE__*/React.createElement(DiscreteSlider, {
       "data-cy": "slider",
       options: sliderVals,
-      selected: +selectedForecast + +index.datasets[0].run.name,
+      selected: +forecast + +index.datasets[0].run.name,
       action: onSliderNavigation
     }))), /*#__PURE__*/React.createElement(Hidden, {
       smUp: true
@@ -1988,7 +1849,7 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
 
 var drawerWidth$2 = 250;
 var xlDrawerWidth$2 = 350;
-var useStyles$j = makeStyles(function (theme) {
+var useStyles$i = makeStyles(function (theme) {
   return {
     toolbar: theme.mixins.toolbar,
     contentClass: {
@@ -2009,183 +1870,34 @@ var useStyles$j = makeStyles(function (theme) {
   };
 });
 var ShyftWxStatic = function ShyftWxStatic(_ref) {
-  var dataset = _ref.dataset,
-      url = _ref.url,
-      customer = _ref.customer,
-      dynamicFeatures = _ref.dynamicFeatures;
-  var classes = useStyles$j();
-
-  var _React$useState = React.useState(true),
-      loading = _React$useState[0],
-      setLoading = _React$useState[1];
-
-  var _React$useState2 = React.useState({
-    datasets: []
-  }),
-      index = _React$useState2[0],
-      setIndex = _React$useState2[1];
-
-  var _React$useState3 = React.useState(''),
-      selectedProduct = _React$useState3[0],
-      setSelectedProduct = _React$useState3[1];
-
-  var _React$useState4 = React.useState(''),
-      selectedLevel = _React$useState4[0],
-      setSelectedLevel = _React$useState4[1];
-
-  var _React$useState5 = React.useState(''),
-      selectedForecast = _React$useState5[0],
-      setSelectedForecast = _React$useState5[1];
-
-  var _React$useState6 = React.useState(''),
-      setSelectedRegion = _React$useState6[1];
-
-  var _React$useState7 = React.useState('');
-
-  var _React$useState8 = React.useState(false),
-      landingPage = _React$useState8[0],
-      setLandingPage = _React$useState8[1];
-
-  var isDynamic = React.useRef(false);
-
-  if (dynamicFeatures && dynamicFeatures.length !== 0) {
-    isDynamic.current = true;
-  }
-
-  var urlParams = React.useRef(new URLSearchParams(window.location.search));
-  customer = customer || urlParams.current.get('customer') || '';
-  dataset = dataset || urlParams.current.get('model') || '';
-  var customerUrl = url + "/" + customer + "/" + dataset + "/products";
-
-  var loadAsync = function loadAsync() {
-    try {
-      return Promise.resolve(getIndexAsync(customerUrl)).then(function (indexData) {
-        function _temp2() {
-          setIndex(arr);
-          setLoading(false);
-        }
-
-        if (!indexData || indexData.datasets.length === 0) {
-          setLandingPage(true);
-          return;
-        }
-
-        var arr = {
-          datasets: []
-        };
-        var i = 0;
-
-        var _temp = _for(function () {
-          return i < indexData.datasets.length;
-        }, function () {
-          return i++;
-        }, function () {
-          var dataset = indexData.datasets[i];
-          var datasetRegionRun = {
-            dataset: dataset.name,
-            region: dataset.region,
-            run: {
-              name: dataset.run,
-              levels: []
-            }
-          };
-          var runRegion = dataset.run + "-" + dataset.region.name;
-          var datasetUrl = customerUrl + "/" + runRegion;
-          return Promise.resolve(getIndexAsync(datasetUrl)).then(function (runRegionData) {
-            var items = runRegionData.items;
-            var uniqueLevels = [];
-            uniqueLevels = items.map(function (i) {
-              return i.level;
-            }).filter(function (v, i, a) {
-              return a.indexOf(v) === i;
-            }).map(function (l) {
-              return {
-                name: l,
-                products: []
-              };
-            });
-            uniqueLevels.forEach(function (lvl) {
-              lvl.products = items.filter(function (item) {
-                return item.level === lvl.name;
-              }).map(function (i) {
-                return i.product;
-              }).filter(function (v, i, a) {
-                return a.indexOf(v) === i;
-              }).map(function (product) {
-                return {
-                  name: product,
-                  forecasts: []
-                };
-              });
-            });
-            uniqueLevels.forEach(function (lvl) {
-              lvl.products.forEach(function (product) {
-                product.forecasts = items.filter(function (item) {
-                  return item.level === lvl.name && item.product === product.name;
-                }).map(function (item) {
-                  return {
-                    hour: item.forecast,
-                    image: item.filename
-                  };
-                });
-              });
-            });
-            datasetRegionRun.run.levels = uniqueLevels;
-            var indexes = {
-              datasets: [datasetRegionRun]
-            };
-            setIndex(indexes);
-            arr.datasets.push(datasetRegionRun);
-
-            if (i === 0) {
-              setSelectedRegion(indexes.datasets[0].region.name);
-              setSelectedLevel(indexes.datasets[0].run.levels[0].name);
-              setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-              setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
-            }
-          });
-        });
-
-        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
-      });
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  React.useEffect(function () {
-    if (!url) {
-      setLandingPage(true);
-      return;
-    }
-
-    if (!customer || !dataset) {
-      setLandingPage(true);
-    }
-
-    setLoading(true);
-    loadAsync();
-  }, []);
+  var index = _ref.index,
+      forecast = _ref.forecast,
+      level = _ref.level,
+      product = _ref.product,
+      onForecastSelect = _ref.onForecastSelect,
+      onLevelSelect = _ref.onLevelSelect,
+      onProductSelect = _ref.onProductSelect;
+  var classes = useStyles$i();
 
   var getSelectedLevel = function getSelectedLevel() {
     return index.datasets[0].run.levels.filter(function (lvl) {
-      return lvl.name === selectedLevel;
+      return lvl.name === level;
     })[0];
   };
 
   var getSelectedProduct = function getSelectedProduct() {
     return getSelectedLevel().products.filter(function (p) {
-      return p.name === selectedProduct;
+      return p.name === product;
     })[0];
   };
 
-  var onProductSelect = function onProductSelect(product) {
-    setSelectedLevel(product.level);
-    setSelectedProduct(product.product);
-    setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+  var handleProductSelect = function handleProductSelect(product) {
+    onLevelSelect(product.level);
+    onProductSelect(product.product);
+    onForecastSelect(getSelectedProduct().forecasts[0].hour);
   };
 
-  var onRunSelect = function onRunSelect(buttonText) {
+  var handleRunSelect = function handleRunSelect(buttonText) {
     console.log(buttonText);
   };
 
@@ -2207,13 +1919,13 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     var forecasts = getSelectedProduct().forecasts;
     forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === selectedForecast;
+      return f.hour === forecast;
     });
 
     if (forecastIndex + 1 === forecasts.length) {
-      setSelectedForecast(forecasts[0].hour);
+      onForecastSelect(forecasts[0].hour);
     } else {
-      setSelectedForecast(forecasts[forecastIndex + 1].hour);
+      onForecastSelect(forecasts[forecastIndex + 1].hour);
     }
   };
 
@@ -2221,13 +1933,13 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     var forecasts = getSelectedProduct().forecasts;
     forecasts.sort(compare);
     var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === selectedForecast;
+      return f.hour === forecast;
     });
 
     if (forecastIndex - 1 < 0) {
-      setSelectedForecast(forecasts[forecasts.length - 1].hour);
+      onForecastSelect(forecasts[forecasts.length - 1].hour);
     } else {
-      setSelectedForecast(forecasts[forecastIndex - 1].hour);
+      onForecastSelect(forecasts[forecastIndex - 1].hour);
     }
   };
 
@@ -2238,7 +1950,7 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     var forecastIndex = forecasts.findIndex(function (f) {
       return +f.hour === +value;
     });
-    setSelectedForecast(forecasts[forecastIndex].hour);
+    onForecastSelect(forecasts[forecastIndex].hour);
   };
 
   var onToggleToPlay = function onToggleToPlay(isRunning) {
@@ -2246,36 +1958,26 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     forecasts.sort(compare);
 
     if (!isRunning) {
-      setSelectedForecast(forecasts[0].hour);
+      onForecastSelect(forecasts[0].hour);
     } else {
       var forecastIndex = forecasts.findIndex(function (f) {
-        return f.hour === selectedForecast;
+        return f.hour === forecast;
       });
 
-      if (selectedForecast === forecasts[forecasts.length - 1].hour) {
-        setSelectedForecast(forecasts[0].hour);
+      if (forecast === forecasts[forecasts.length - 1].hour) {
+        onForecastSelect(forecasts[0].hour);
       } else {
-        setSelectedForecast(forecasts[forecastIndex + 1].hour);
+        onForecastSelect(forecasts[forecastIndex + 1].hour);
       }
     }
   };
 
   var getValidTime = function getValidTime() {
-    var validTime = moment.unix(+index.datasets[0].run.name + +selectedForecast).utc().format('MM/DD HH:mm[Z]');
+    var validTime = moment.unix(+index.datasets[0].run.name + +forecast).utc().format('MM/DD HH:mm[Z]');
     return validTime;
   };
 
   var generateContent = function generateContent() {
-    if (landingPage) {
-      return /*#__PURE__*/React.createElement(LandingPage, {
-        url: url
-      });
-    }
-
-    if (loading) {
-      return /*#__PURE__*/React.createElement(CircularProgress, null);
-    }
-
     var selectedProduct = getSelectedProduct();
     var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
       return {
@@ -2291,14 +1993,14 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
       };
     });
     var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
-      return f.hour === selectedForecast;
+      return f.hour === forecast;
     })[0].image;
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Grid, {
       container: true
     }, /*#__PURE__*/React.createElement(ProductSelector, {
       "data-cy": "product-selector",
       categories: levelProductVals,
-      action: onProductSelect
+      action: handleProductSelect
     })), /*#__PURE__*/React.createElement("main", {
       className: classes.contentClass
     }, /*#__PURE__*/React.createElement(Hidden, {
@@ -2334,7 +2036,7 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     }, /*#__PURE__*/React.createElement(RunsSelector, {
       "data-cy": "runs-selector",
       options: [+index.datasets[0].run.name],
-      action: onRunSelect
+      action: handleRunSelect
     })), /*#__PURE__*/React.createElement(Hidden, {
       xsDown: true
     }, /*#__PURE__*/React.createElement(Grid, {
@@ -2377,7 +2079,7 @@ var ShyftWxStatic = function ShyftWxStatic(_ref) {
     }, /*#__PURE__*/React.createElement(DiscreteSlider, {
       "data-cy": "slider",
       options: sliderVals,
-      selected: +selectedForecast + +index.datasets[0].run.name,
+      selected: +forecast + +index.datasets[0].run.name,
       action: onSliderNavigation
     }))), /*#__PURE__*/React.createElement(Hidden, {
       smUp: true
@@ -2399,13 +2101,39 @@ var ShyftWx = function ShyftWx(props) {
       themeOverride = props.themeOverride,
       dynamicFeatures = props.dynamicFeatures;
 
-  var _React$useState = React.useState(true),
-      loading = _React$useState[0],
-      setLoading = _React$useState[1];
+  var _React$useState = React.useState(AppStatus.Okay),
+      status = _React$useState[0],
+      setStatus = _React$useState[1];
 
-  var _React$useState2 = React.useState(false),
-      landingPage = _React$useState2[0],
-      setLandingPage = _React$useState2[1];
+  var _React$useState2 = React.useState(true),
+      loading = _React$useState2[0],
+      setLoading = _React$useState2[1];
+
+  var _React$useState3 = React.useState({
+    datasets: []
+  }),
+      index = _React$useState3[0],
+      setIndex = _React$useState3[1];
+
+  var _React$useState4 = React.useState(''),
+      selectedProduct = _React$useState4[0],
+      setSelectedProduct = _React$useState4[1];
+
+  var _React$useState5 = React.useState(''),
+      selectedLevel = _React$useState5[0],
+      setSelectedLevel = _React$useState5[1];
+
+  var _React$useState6 = React.useState(''),
+      selectedForecast = _React$useState6[0],
+      setSelectedForecast = _React$useState6[1];
+
+  var _React$useState7 = React.useState(''),
+      selectedRegion = _React$useState7[0],
+      setSelectedRegion = _React$useState7[1];
+
+  var _React$useState8 = React.useState(''),
+      selectedRun = _React$useState8[0],
+      setSelectedRun = _React$useState8[1];
 
   var isDynamic = React.useRef(false);
 
@@ -2414,39 +2142,166 @@ var ShyftWx = function ShyftWx(props) {
   }
 
   var urlParams = React.useRef(new URLSearchParams(window.location.search));
-  customer = customer || urlParams.current.get('customer') || '';
-  dataset = dataset || urlParams.current.get('model') || '';
+  var customerId = React.useRef(customer || urlParams.current.get('customer') || '');
+  var datasetId = React.useRef(dataset || urlParams.current.get('model') || '');
   React.useEffect(function () {
-    setLoading(true);
-
-    if (!url) {
-      setLandingPage(true);
-      return;
-    }
-
-    if (!customer || !dataset) {
-      setLandingPage(true);
-      return;
-    }
-
-    setLoading(false);
+    loadAsync();
   }, []);
 
+  var loadAsync = function loadAsync() {
+    try {
+      setLoading(true);
+      return Promise.resolve(validateAppAsync(url, customerId.current, datasetId.current)).then(function (appStatus) {
+        if (appStatus !== AppStatus.Okay) {
+          setStatus(appStatus);
+          setLoading(false);
+          return;
+        }
+
+        return Promise.resolve(getIndexAsync(url, customerId.current, datasetId.current)).then(function (indexData) {
+          function _temp2() {
+            setIndex(arr);
+            setLoading(false);
+          }
+
+          if (!indexData || indexData.datasets.length === 0) {
+            setStatus(AppStatus.NoData);
+            setLoading(false);
+            return;
+          }
+
+          var arr = {
+            datasets: []
+          };
+          var i = 0;
+
+          var _temp = _for(function () {
+            return i < indexData.datasets.length;
+          }, function () {
+            return i++;
+          }, function () {
+            var dataset = indexData.datasets[i];
+            var datasetRegionRun = {
+              dataset: dataset.name,
+              region: dataset.region,
+              run: {
+                name: dataset.run,
+                levels: []
+              }
+            };
+            return Promise.resolve(getProductDataAsync(url, customerId.current, datasetId.current, dataset.region.name, dataset.run)).then(function (runRegionData) {
+              var items = runRegionData.items;
+              var uniqueLevels = [];
+              uniqueLevels = items.map(function (i) {
+                return i.level;
+              }).filter(function (v, i, a) {
+                return a.indexOf(v) === i;
+              }).map(function (l) {
+                return {
+                  name: l,
+                  products: []
+                };
+              });
+              uniqueLevels.forEach(function (lvl) {
+                lvl.products = items.filter(function (item) {
+                  return item.level === lvl.name;
+                }).map(function (i) {
+                  return i.product;
+                }).filter(function (v, i, a) {
+                  return a.indexOf(v) === i;
+                }).map(function (product) {
+                  return {
+                    name: product,
+                    forecasts: []
+                  };
+                });
+              });
+              uniqueLevels.forEach(function (lvl) {
+                lvl.products.forEach(function (product) {
+                  product.forecasts = items.filter(function (item) {
+                    return item.level === lvl.name && item.product === product.name;
+                  }).map(function (item) {
+                    return {
+                      hour: item.forecast,
+                      image: item.url
+                    };
+                  });
+                });
+              });
+              datasetRegionRun.run.levels = uniqueLevels;
+              var indexes = {
+                datasets: [datasetRegionRun]
+              };
+              arr.datasets.push(datasetRegionRun);
+
+              if (i === 0) {
+                setSelectedLevel(indexes.datasets[0].run.levels[0].name);
+                setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
+                setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
+              }
+            });
+          });
+
+          return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+        });
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  var handleStatusChange = function handleStatusChange(newStatus) {
+    setStatus(newStatus);
+  };
+
   var generateContent = function generateContent() {
-    if (landingPage) {
+    if (status !== AppStatus.Okay) {
       return /*#__PURE__*/React.createElement(LandingPage, {
-        url: url
+        url: url,
+        customerId: customerId.current,
+        datasetId: datasetId.current,
+        appStatus: status,
+        onStatusChange: handleStatusChange
       });
     }
 
     if (loading) {
-      return /*#__PURE__*/React.createElement(CircularProgress, null);
+      return /*#__PURE__*/React.createElement("div", {
+        style: {
+          paddingTop: '50vh'
+        }
+      }, /*#__PURE__*/React.createElement(CircularProgress, null));
     }
 
-    if (isDynamic.current) {
-      return /*#__PURE__*/React.createElement(ShyftWxDynamic, props);
+    if (isDynamic.current && dynamicFeatures) {
+      return /*#__PURE__*/React.createElement(ShyftWxDynamic, {
+        dynamicFeatures: dynamicFeatures,
+        index: index,
+        forecast: selectedForecast,
+        level: selectedLevel,
+        product: selectedProduct,
+        region: selectedRegion,
+        run: selectedRun,
+        onForecastSelect: setSelectedForecast,
+        onLevelSelect: setSelectedLevel,
+        onProductSelect: setSelectedProduct,
+        onRegionSelect: setSelectedRegion,
+        onRunSelect: setSelectedRun
+      });
     } else {
-      return /*#__PURE__*/React.createElement(ShyftWxStatic, props);
+      return /*#__PURE__*/React.createElement(ShyftWxStatic, {
+        index: index,
+        forecast: selectedForecast,
+        level: selectedLevel,
+        product: selectedProduct,
+        region: selectedRegion,
+        run: selectedRun,
+        onForecastSelect: setSelectedForecast,
+        onLevelSelect: setSelectedLevel,
+        onProductSelect: setSelectedProduct,
+        onRegionSelect: setSelectedRegion,
+        onRunSelect: setSelectedRun
+      });
     }
   };
 
@@ -2459,6 +2314,58 @@ var ShyftWx = function ShyftWx(props) {
     alignItems: "center",
     spacing: 3
   }, generateContent()));
+};
+
+var useStyles$j = makeStyles(function (theme) {
+  return {
+    root: {
+      height: '40vw',
+      width: '100%'
+    },
+    paddingMiddle: {
+      marginLeft: 15,
+      marginBottom: 20,
+      marginTop: 15
+    }
+  };
+});
+var BaseWxViewer = function BaseWxViewer(_ref) {
+  var layers = _ref.layers,
+      neBounds = _ref.neBounds,
+      swBounds = _ref.swBounds;
+  var classes = useStyles$j();
+  var bounds = latLngBounds(swBounds, neBounds);
+
+  var generateLayers = function generateLayers() {
+    var results = [];
+    layers && layers.forEach(function (layer) {
+      if (layer.type === 'metar') {
+        var metar = layer;
+        results.push( /*#__PURE__*/React.createElement(Marker, {
+          position: metar.coordinates,
+          icon: new Icon({
+            iconUrl: 'logo192.png',
+            iconSize: [20, 20]
+          })
+        }, /*#__PURE__*/React.createElement(Popup, null, JSON.stringify(metar))));
+      }
+    });
+    return results;
+  };
+
+  return /*#__PURE__*/React.createElement(Map, {
+    bounds: bounds,
+    className: classes.root,
+    dragging: false,
+    zoomControl: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    keyboard: false,
+    touchZoom: false
+  }, generateLayers(), /*#__PURE__*/React.createElement(TileLayer, {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution: "\xA9 <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
+  }));
 };
 
 export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, LandingPage, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunsSelector, ShyftWx, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme$1 as theme };

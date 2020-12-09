@@ -1,7 +1,6 @@
-import { CircularProgress, Grid, Hidden, makeStyles } from '@material-ui/core';
+import { Grid, Hidden, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
-import { getIndexAsync } from '../../apis';
 import ModelSelector from '../models/ModelSelector';
 import ProductSelector from '../products/ProductSelector';
 import RegionSelector from '../regions/RegionSelector';
@@ -10,7 +9,6 @@ import Slider from '../time/Slider';
 import TimeControl from '../time/TimeControl';
 import ValidTime from '../time/ValidTime';
 import ImageViewer from '../viewers/ImageViewer';
-import LandingPage from './LandingPage';
 
 export const ShyftContext = React.createContext({});
 
@@ -37,147 +35,37 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
-    children,
-    dataset,
-    url,
-    customer,
-    themeOverride,
-    dynamicFeatures
+export const ShyftWxDynamic: React.FC<ShyftWxDynamicProps> = ({
+    dynamicFeatures,
+    index,
+    forecast,
+    level,
+    product,
+    region,
+    run,
+    onForecastSelect,
+    onLevelSelect,
+    onProductSelect,
+    onRegionSelect,
+    onRunSelect
 }) => {
     const classes = useStyles();
 
-    const [loading, setLoading] = React.useState(true);
-    const [index, setIndex] = React.useState<Index>({ datasets: [] });
-    const [selectedProduct, setSelectedProduct] = React.useState<string>('');
-    const [selectedLevel, setSelectedLevel] = React.useState<string>('');
-    const [selectedForecast, setSelectedForecast] = React.useState<string>('');
-    const [selectedRegion, setSelectedRegion] = React.useState<string>('');
-    const [selectedRun, setSelectedRun] = React.useState<string>('');
-    const [landingPage, setLandingPage] = React.useState(false);
-
-    const isDynamic = React.useRef(false);
-
-    if (dynamicFeatures && dynamicFeatures.length !== 0) {
-        isDynamic.current = true;
-    }
-
-    const urlParams = React.useRef(new URLSearchParams(window.location.search));
-    customer = customer || urlParams.current.get('customer') || '';
-    dataset = dataset || urlParams.current.get('model') || '';
-
-    const customerUrl = `${url}/${customer}/${dataset}/products`;
-
-    const loadAsync = async () => {
-        const indexData = (await getIndexAsync(customerUrl)) as ShyftIndex;
-
-        if (!indexData || indexData.datasets.length === 0) {
-            setLandingPage(true);
-            return;
-        }
-
-        const arr = { datasets: [] as DatasetRegionRun[] };
-
-        for (let i = 0; i < indexData.datasets.length; i++) {
-            const dataset = indexData.datasets[i];
-
-            const datasetRegionRun: DatasetRegionRun = {
-                dataset: dataset.name,
-                region: dataset.region,
-                run: {
-                    name: dataset.run,
-                    levels: []
-                }
-            };
-
-            const runRegion = `${dataset.run}-${dataset.region.name}`;
-            const datasetUrl = `${customerUrl}/${runRegion}`;
-
-            const runRegionData = await getIndexAsync(datasetUrl);
-
-            const items = runRegionData.items;
-            let uniqueLevels: Level[] = [];
-
-            uniqueLevels = items
-                .map((i) => i.level) // get all level values
-                .filter((v, i, a) => a.indexOf(v) === i) // filter down to unique levels
-                .map((l) => {
-                    return { name: l, products: [] };
-                }); // return level obj arr
-
-            uniqueLevels.forEach((lvl) => {
-                lvl.products = items
-                    .filter((item) => item.level === lvl.name) // only look at items for this level
-                    .map((i) => i.product) // gather all of the products
-                    .filter((v, i, a) => a.indexOf(v) === i) // only get unique products
-                    .map((product) => {
-                        return { name: product, forecasts: [] };
-                    }); // return product obj arr
-            });
-
-            uniqueLevels.forEach((lvl) => {
-                lvl.products.forEach((product) => {
-                    product.forecasts = items
-                        .filter((item) => item.level === lvl.name && item.product === product.name) // only look at specific level and product
-                        .map((item) => {
-                            return { hour: item.forecast, image: item.filename };
-                        }); // return forecast obj arr
-                });
-            });
-
-            // uniqueLevels now have all of the products and forecasts hours for a given run
-            datasetRegionRun.run.levels = uniqueLevels;
-
-            const indexes = { datasets: [datasetRegionRun] };
-
-            // add dataset to index array
-            arr.datasets.push(datasetRegionRun);
-
-            // setting default values
-            if (i === 0) {
-                setSelectedRegion(indexes.datasets[0].region.name);
-                setSelectedLevel(indexes.datasets[0].run.levels[0].name);
-                setSelectedProduct(indexes.datasets[0].run.levels[0].products[0].name);
-                setSelectedForecast(indexes.datasets[0].run.levels[0].products[0].forecasts[0].hour);
-            }
-        }
-
-        // set index to array of datasets
-        setIndex(arr);
-
-        setLoading(false);
-    };
-
-    React.useEffect(() => {
-        if (!url) {
-            setLandingPage(true);
-            return;
-        }
-
-        if (!customer || !dataset) {
-            setLandingPage(true);
-        }
-
-        setLoading(true);
-
-        loadAsync();
-    }, []);
-
     const getSelectedLevel = () => {
-        return index.datasets[0].run.levels.filter((lvl) => lvl.name === selectedLevel)[0];
+        return index.datasets[0].run.levels.filter((lvl) => lvl.name === level)[0];
     };
 
     const getSelectedProduct = () => {
-        return getSelectedLevel().products.filter((p) => p.name === selectedProduct)[0];
+        return getSelectedLevel().products.filter((p) => p.name === product)[0];
     };
 
-    const onProductSelect = (product: ProductSelectionResponse) => {
-        setSelectedLevel(product.level);
-        setSelectedProduct(product.product);
-        setSelectedForecast(getSelectedProduct().forecasts[0].hour);
+    const handleProductSelect = (product: ProductSelectionResponse) => {
+        onLevelSelect(product.level);
+        onProductSelect(product.product);
+        onForecastSelect(getSelectedProduct().forecasts[0].hour);
     };
 
-    const onRunSelect = (buttonText: string) => {
+    const handleRunSelect = (buttonText: string) => {
         console.log(buttonText);
         // setSelectedRun(buttonText);
     };
@@ -204,24 +92,24 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
     const onSliderNavigationNext = () => {
         const forecasts = getSelectedProduct().forecasts;
         forecasts.sort(compare);
-        const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+        const forecastIndex = forecasts.findIndex((f) => f.hour === forecast);
 
         if (forecastIndex + 1 === forecasts.length) {
-            setSelectedForecast(forecasts[0].hour);
+            onForecastSelect(forecasts[0].hour);
         } else {
-            setSelectedForecast(forecasts[forecastIndex + 1].hour);
+            onForecastSelect(forecasts[forecastIndex + 1].hour);
         }
     };
 
     const onSliderNavigationBack = () => {
         const forecasts = getSelectedProduct().forecasts;
         forecasts.sort(compare);
-        const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+        const forecastIndex = forecasts.findIndex((f) => f.hour === forecast);
 
         if (forecastIndex - 1 < 0) {
-            setSelectedForecast(forecasts[forecasts.length - 1].hour);
+            onForecastSelect(forecasts[forecasts.length - 1].hour);
         } else {
-            setSelectedForecast(forecasts[forecastIndex - 1].hour);
+            onForecastSelect(forecasts[forecastIndex - 1].hour);
         }
     };
 
@@ -231,7 +119,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
         forecasts.sort(compare);
         const forecastIndex = forecasts.findIndex((f) => +f.hour === +value);
 
-        setSelectedForecast(forecasts[forecastIndex].hour);
+        onForecastSelect(forecasts[forecastIndex].hour);
     };
 
     const onToggleToPlay = (isRunning: boolean) => {
@@ -239,35 +127,27 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
         forecasts.sort(compare);
 
         if (!isRunning) {
-            setSelectedForecast(forecasts[0].hour);
+            onForecastSelect(forecasts[0].hour);
         } else {
-            const forecastIndex = forecasts.findIndex((f) => f.hour === selectedForecast);
+            const forecastIndex = forecasts.findIndex((f) => f.hour === forecast);
 
-            if (selectedForecast === forecasts[forecasts.length - 1].hour) {
-                setSelectedForecast(forecasts[0].hour);
+            if (forecast === forecasts[forecasts.length - 1].hour) {
+                onForecastSelect(forecasts[0].hour);
             } else {
-                setSelectedForecast(forecasts[forecastIndex + 1].hour);
+                onForecastSelect(forecasts[forecastIndex + 1].hour);
             }
         }
     };
 
     const getValidTime = () => {
         const validTime = moment
-            .unix(+index.datasets[0].run.name + +selectedForecast)
+            .unix(+index.datasets[0].run.name + +forecast)
             .utc()
             .format('MM/DD HH:mm[Z]');
         return validTime;
     };
 
     const generateContent = (): React.ReactNode => {
-        if (landingPage) {
-            return <LandingPage url={url} />;
-        }
-
-        if (loading) {
-            return <CircularProgress />;
-        }
-
         const selectedProduct = getSelectedProduct();
 
         const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
@@ -284,7 +164,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
             };
         });
 
-        const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === selectedForecast)[0].image;
+        const activeForecastLayer = selectedProduct.forecasts.filter((f) => f.hour === forecast)[0].image;
 
         return (
             <React.Fragment>
@@ -293,7 +173,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
                     <ProductSelector
                         data-cy="product-selector"
                         categories={levelProductVals}
-                        action={onProductSelect}
+                        action={handleProductSelect}
                     />
                 </Grid>
 
@@ -322,7 +202,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
                             <RunsSelector
                                 data-cy="runs-selector"
                                 options={[+index.datasets[0].run.name]}
-                                action={onRunSelect}
+                                action={handleRunSelect}
                             />
                         </Grid>
                         <Hidden xsDown>
@@ -352,7 +232,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxProps> = ({
                                 <Slider
                                     data-cy="slider"
                                     options={sliderVals}
-                                    selected={+selectedForecast + +index.datasets[0].run.name}
+                                    selected={+forecast + +index.datasets[0].run.name}
                                     action={onSliderNavigation}
                                 />
                             </Grid>
