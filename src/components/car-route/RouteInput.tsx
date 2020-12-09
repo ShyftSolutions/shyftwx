@@ -1,11 +1,11 @@
-import React from 'react';
-import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import TimeSelector from '../time/TimeSelector';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import React from 'react';
+import { directionsAsync } from '../../apis';
 import BasicButton from '../buttons/BasicButton';
 import SearchField from '../textfield/SearchField';
-import { directionsAsync } from '../../apis';
+import TimeSelector from '../time/TimeSelector';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -45,7 +45,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
     onClick,
     onStartPointChange,
     onDestinationChange,
-    onTimeChange,
+    onTimeChange
 }) => {
     const classes = useStyles();
     const [startCoords, setStartCoords] = React.useState<number[]>([]);

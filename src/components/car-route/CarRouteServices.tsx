@@ -1,24 +1,36 @@
-import React from 'react';
-import WelcomePage from './WelcomePage';
-import RouteInput from './RouteInput';
-import WeatherInput from './WeatherInput';
-import 'leaflet/dist/leaflet.css';
-import InputDrawer from './InputDrawer';
+import { CircularProgress, Grid } from '@material-ui/core';
 import { Feature } from 'geojson';
+import 'leaflet/dist/leaflet.css';
+import React from 'react';
 import { carRouteAsync } from '../../apis';
 import { transformWeatherData } from '../../utils/weatherDataFormatter';
-import { CircularProgress, Grid } from '@material-ui/core';
-import { Units, isStandard } from './../../utils/Units';
 import { convertUnits } from './../../utils/unitConverter';
+import { Units } from './../../utils/Units';
+import InputDrawer from './InputDrawer';
+import RouteInput from './RouteInput';
+import WeatherInput from './WeatherInput';
+import WelcomePage from './WelcomePage';
 
 export const CarRouteServices = () => {
     const [state, setState] = React.useState('initial');
     const [startingPoint, setStartingPoint] = React.useState<Feature>();
     const [destination, setDestination] = React.useState<Feature>();
     const [time, setTime] = React.useState<Date>(new Date());
-    const [windThresholds, setWindThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [], unit: Units.MPH });
-    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [], unit: Units.IN_HR });
-    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({ greaterThan: true, threshold: [], unit: Units.F });
+    const [windThresholds, setWindThresholds] = React.useState<Threshold>({
+        greaterThan: true,
+        threshold: [],
+        unit: Units.MPH
+    });
+    const [precipThresholds, setPrecipThresholds] = React.useState<Threshold>({
+        greaterThan: true,
+        threshold: [],
+        unit: Units.IN_HR
+    });
+    const [tempThresholds, setTempThresholds] = React.useState<Threshold>({
+        greaterThan: true,
+        threshold: [],
+        unit: Units.F
+    });
     const [directions, setDirections] = React.useState<any>();
     const [possibleTrips, setPossibleTrips] = React.useState<any>();
     const [loading, setLoading] = React.useState(false);
@@ -64,21 +76,27 @@ export const CarRouteServices = () => {
     };
 
     const precipUnitChange = (newUnit: string) => {
-        setPrecipThresholds({...precipThresholds, 
-                            unit: newUnit, 
-                            threshold: convertUnits(precipThresholds.unit, newUnit, precipThresholds.threshold)});
+        setPrecipThresholds({
+            ...precipThresholds,
+            unit: newUnit,
+            threshold: convertUnits(precipThresholds.unit, newUnit, precipThresholds.threshold)
+        });
     };
 
     const tempUnitChange = (newUnit: string) => {
-        setTempThresholds({...tempThresholds, 
-            unit: newUnit, 
-            threshold: convertUnits(tempThresholds.unit, newUnit, tempThresholds.threshold)});
+        setTempThresholds({
+            ...tempThresholds,
+            unit: newUnit,
+            threshold: convertUnits(tempThresholds.unit, newUnit, tempThresholds.threshold)
+        });
     };
 
     const windUnitChange = (newUnit: string) => {
-        setWindThresholds({...windThresholds, 
-            unit: newUnit, 
-            threshold: convertUnits(windThresholds.unit, newUnit, windThresholds.threshold)});
+        setWindThresholds({
+            ...windThresholds,
+            unit: newUnit,
+            threshold: convertUnits(windThresholds.unit, newUnit, windThresholds.threshold)
+        });
     };
 
     const onStartButtonClick = async () => {
