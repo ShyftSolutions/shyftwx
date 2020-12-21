@@ -1,4 +1,4 @@
-import _ProductSelector from '../components/products/ProductSelector';
+import _SideMenu from '../components/products/SideMenu';
 import { object, text, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core';
@@ -6,7 +6,7 @@ import theme from './../theme';
 import { faPercent, faTint, faWind, faCloudShowersHeavy } from '@fortawesome/free-solid-svg-icons';
 
 export default {
-    component: _ProductSelector,
+    component: _SideMenu,
     title: 'Products',
     decoration: [withKnobs]
 };
@@ -53,10 +53,12 @@ const options = [
     }
 ];
 
-export const ProductSelector = () => {
+const models = ['GFS', 'HRRR', 'ECMWF'];
+
+export const SideMenu = () => {
     return (
         <MuiThemeProvider theme={theme}>
-            <_ProductSelector categories={object('Product Categories', options)} />
+            <_SideMenu categories={object('Product Categories', options)} options={models} />
         </MuiThemeProvider>
     );
 };

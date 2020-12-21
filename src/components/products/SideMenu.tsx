@@ -13,8 +13,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import ProductMenu from './ProductMenu';
 import React from 'react';
+import ModelTabs from '../models/ModelTabs';
 
-const drawerWidth = 250;
+const drawerWidth = 300;
 const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -61,11 +62,12 @@ const useStyles = makeStyles((theme) => ({
  * @param label the label for this component
  * @param action to be completed upon a product being selected
  * @param window
+ * @param options
  */
-export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, label = 'Products', action, window }) => {
+export const SideMenu: React.FC<ProductDrawerProps> = ({ categories, label = 'Products', action, window, options }) => {
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [shouldSort, setShouldSort] = React.useState<boolean>(false)
+    const [shouldSort, setShouldSort] = React.useState<boolean>(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -74,7 +76,7 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
     // return a function to be passed down as the sort function
     const getSortFn = () => {
         if (shouldSort) {
-            return function(a, b) {
+            return function (a, b) {
                 var nameA = a.name.toUpperCase();
                 var nameB = b.name.toUpperCase();
                 if (nameA < nameB) {
@@ -83,37 +85,44 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
                 if (nameA > nameB) {
                     return 1;
                 }
-            
+
                 // names must be equal
                 return 0;
-            }
+            };
         } else {
-            return function(a, b) {
-                var nameA = a.name.toUpperCase();
-                var nameB = b.name.toUpperCase();
+            return function (a, b) {
+                const nameA = a.name.toUpperCase();
+                const nameB = b.name.toUpperCase();
                 if (nameA < nameB) {
                     return 1;
                 }
                 if (nameA > nameB) {
                     return -1;
                 }
-            
+
                 // names must be equal
                 return 0;
-            }
+            };
         }
-    }
+    };
 
     const menu = (
         <div>
             <div className={classes.toolbar} />
             <Divider />
-            <Toolbar style={{paddingLeft: '6px', paddingRight: '6px'}}>
+            <Toolbar style={{ paddingLeft: '6px', paddingRight: '6px' }}>
+                <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
+                    Model
+                </Typography>
+            </Toolbar>
+            <ModelTabs options={options} action={(option) => console.log(option)} />
+            <Divider />
+            <Toolbar style={{ paddingLeft: '6px', paddingRight: '6px' }}>
                 <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
                     {label}
                 </Typography>
-                <div style={shouldSort ? {color: '#329af0'} : {color: '#aeaeae'}}>
-                    <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{fontSize: '16pt'}}/>
+                <div style={shouldSort ? { color: '#329af0' } : { color: '#aeaeae' }}>
+                    <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{ fontSize: '16pt' }} />
                 </div>
             </Toolbar>
             <ProductMenu options={categories} action={action} sortFn={getSortFn()} />
@@ -172,4 +181,4 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
     );
 };
 
-export default ProductSelector;
+export default SideMenu;

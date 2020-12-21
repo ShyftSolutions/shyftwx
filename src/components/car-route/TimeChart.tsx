@@ -108,7 +108,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({ data, thresholds }) => {
             // if legFeatureValue is not the same unit as our threshold - convert it
             const thresholdUnit = thresholds[featureValue.name].unit;
 
-            // if the service unit and what the ui recorded arent the same, 
+            // if the service unit and what the ui recorded aren't the same,
             // convert the value from the service to what the ui has stored
             if (thresholdUnit !== legFeatureUnit) {
                 legFeatureValue = convertUnits(legFeatureUnit, thresholdUnit, [legFeatureValue])[0]

@@ -2,7 +2,7 @@ import * as apis from './apis';
 import GroupedButtons from './components/buttons/GroupedButtons';
 import ModelSelector from './components/models/ModelSelector';
 import ProductMenu from './components/products/ProductMenu';
-import ProductSelector from './components/products/ProductSelector';
+import SideMenu from './components/products/SideMenu';
 import RegionSelector from './components/regions/RegionSelector';
 import LandingPage from './components/root/LandingPage';
 import ShyftWx from './components/root/ShyftWx';
@@ -20,7 +20,7 @@ export {
     GroupedButtons,
     LandingPage,
     ProductMenu,
-    ProductSelector,
+    SideMenu,
     RegionSelector,
     ModelSelector,
     BackButton,

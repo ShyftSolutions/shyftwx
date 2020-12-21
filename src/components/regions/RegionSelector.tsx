@@ -1,6 +1,7 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import GroupedButtons from '../buttons/GroupedButtons';
 import React from 'react';
+import SimpleSelect from '../dropdown/SimpleSelect';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,7 +26,7 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label =
         <Grid container item className={classes.root}>
             <Grid item>
                 <Typography variant="h6">{label}</Typography>
-                <GroupedButtons options={options} action={handleClick} />
+                <SimpleSelect choices={options} action={handleClick} />
             </Grid>
         </Grid>
     );

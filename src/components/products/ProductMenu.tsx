@@ -33,6 +33,7 @@ const ICON_MAP = {
     Pressure: fas.faArrowDown,
     RelativeHumidity: fas.faPercent,
     Temperature: fas.faTemperatureHigh,
+    SurfaceTemperature: fas.faTemperatureHigh,
     TotalPrecipitation: fas.faCloudShowersHeavy,
     Visibility: fas.faEye,
     Wind: fas.faWind

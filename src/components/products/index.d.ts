@@ -7,6 +7,7 @@ declare type ProductDrawerProps = {
     label?: string;
     action: (ProductSelectionResponse) => void;
     window?: () => Window;
+    options: string[];
 };
 
 declare type ProductMenuProps = {

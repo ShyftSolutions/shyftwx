@@ -1,8 +1,8 @@
 import { Grid, Hidden, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
-import ModelSelector from '../models/ModelSelector';
-import ProductSelector from '../products/ProductSelector';
+// import ModelSelector from '../models/ModelSelector';
+import SideMenu from '../products/SideMenu';
 import RegionSelector from '../regions/RegionSelector';
 import RunsSelector from '../run/RunsSelector';
 import Slider from '../time/Slider';
@@ -12,7 +12,7 @@ import ImageViewer from '../viewers/ImageViewer';
 
 export const ShyftContext = React.createContext({});
 
-const drawerWidth = 250;
+const drawerWidth = 300;
 const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -170,10 +170,11 @@ export const ShyftWxDynamic: React.FC<ShyftWxDynamicProps> = ({
             <React.Fragment>
                 {/* Product Menu Grid */}
                 <Grid container>
-                    <ProductSelector
+                    <SideMenu
                         data-cy="product-selector"
                         categories={levelProductVals}
                         action={handleProductSelect}
+                        options={[index.datasets[0].dataset]}
                     />
                 </Grid>
 
@@ -184,13 +185,13 @@ export const ShyftWxDynamic: React.FC<ShyftWxDynamicProps> = ({
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>
-                        <Grid item xs sm md>
+                      {/* <Grid item xs sm md>
                             <ModelSelector
                                 data-cy="model-selector"
                                 options={[index.datasets[0].dataset]}
                                 action={() => {}}
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs md>
                             <RegionSelector
                                 data-cy="region-selector"
