@@ -18,6 +18,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
     const [selectedForecast, setSelectedForecast] = React.useState<string>('');
     const [selectedRegion, setSelectedRegion] = React.useState<string>('');
     const [selectedRun, setSelectedRun] = React.useState<string>('');
+    const [levelsAndProducts, setLevelsAndProducts] = React.useState<{ name: string; levels: [] }[]>([]);
 
     const isDynamic = React.useRef(false);
 
@@ -104,6 +105,27 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
                 });
             });
 
+            let uniqueProducts: { name: string; levels: [] }[] = [];
+
+            uniqueProducts = items
+                .map((i) => i.product) // get all product values
+                .filter((v, i, a) => a.indexOf(v) === i) // filter down to unique products
+                .map((l) => {
+                    return { name: l, levels: [] };
+                }); // return product obj arr
+
+            uniqueProducts.forEach((product) => {
+                product.levels = items
+                    .filter((item) => item.product === product.name) // only look at items for this product
+                    .map((i) => i.level) // gather all of the levels
+                    .filter((v, i, a) => a.indexOf(v) === i) // only get unique levels
+                    .map((level) => {
+                        return level;
+                    }); // return product obj arr
+            });
+
+            setLevelsAndProducts(uniqueProducts);
+
             // uniqueLevels now have all of the products and forecasts hours for a given run
             datasetRegionRun.run.levels = uniqueLevels;
 
@@ -124,6 +146,15 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
         setIndex(arr);
 
         setLoading(false);
+    };
+
+    const getLevels = (value: string): string[] => {
+        const obj = levelsAndProducts.find((o) => o.name === value);
+        if (obj) {
+            return obj.levels;
+        } else {
+            return [];
+        }
     };
 
     const handleStatusChange = (newStatus: AppStatus): void => {
@@ -166,6 +197,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
                     onProductSelect={setSelectedProduct}
                     onRegionSelect={setSelectedRegion}
                     onRunSelect={setSelectedRun}
+                    getLevels={getLevels}
                 />
             );
         } else {
@@ -182,6 +214,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
                     onProductSelect={setSelectedProduct}
                     onRegionSelect={setSelectedRegion}
                     onRunSelect={setSelectedRun}
+                    getLevels={getLevels}
                 />
             );
         }

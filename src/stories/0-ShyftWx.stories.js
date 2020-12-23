@@ -26,6 +26,16 @@ export const ShyftWx = () => {
     );
 };
 
+export const ShyftWxMultipleLevels = () => {
+    return (
+        <MuiThemeProvider theme={theme}>
+            <Container>
+                <_ShyftWx customer="d3b939d0-36a2-4583-a6c5-c880a454c861" dataset="Metadata04" url={url} />
+            </Container>
+        </MuiThemeProvider>
+    );
+};
+
 export const LandingPageToShyftWx = () => {
     return (
         <MuiThemeProvider theme={theme}>

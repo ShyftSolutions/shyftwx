@@ -99,7 +99,6 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
 
     // define the props for the slider based on the options prop
     const optionsCount = React.useRef(options.length);
-    const stepValue: number = options[1].value - options[0].value;
     const maxValue: number = options[options.length - 1].value;
     const minValue: number = options[0].value;
 
@@ -129,7 +128,7 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
                     valueLabelDisplay="auto"
                     aria-label="pretty slider"
                     track={false}
-                    step={stepValue}
+                    step={null}
                     marks={options}
                     max={maxValue}
                     ValueLabelComponent={ValueLabelComponent}
@@ -143,7 +142,7 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
                     classes={classes}
                     aria-label="pretty slider"
                     track={false}
-                    step={stepValue}
+                    step={null}
                     marks={options}
                     max={maxValue}
                     onChange={handleChangeCommitted}

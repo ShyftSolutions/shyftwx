@@ -9,7 +9,7 @@ import RegionSelector from './../regions/RegionSelector';
 import RunsSelector from './../run/RunsSelector';
 import TimeControl from './../time/TimeControl';
 import ImageViewer from './../viewers/ImageViewer';
-import { VerticalSlider } from '../../stories/0-Level.stories';
+import VerticalSlider from '../levels/VerticalSlider';
 
 const drawerWidth = 300;
 const xlDrawerWidth = 350;
@@ -46,9 +46,11 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
     onLevelSelect,
     onProductSelect,
     onRegionSelect,
-    onRunSelect
+    onRunSelect,
+    getLevels
 }) => {
     const classes = useStyles();
+    const [levels, setLevels] = React.useState(getLevels(product));
 
     const getSelectedLevel = () => {
         return index.datasets[0].run.levels.filter((lvl) => lvl.name === level)[0];
@@ -62,6 +64,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
         onLevelSelect(product.level);
         onProductSelect(product.product);
         onForecastSelect(getSelectedProduct().forecasts[0].hour);
+        setLevels(getLevels(product.product));
     };
 
     const handleRunSelect = (buttonText: string) => {
@@ -119,6 +122,10 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
         const forecastIndex = forecasts.findIndex((f) => +f.hour === +value);
 
         onForecastSelect(forecasts[forecastIndex].hour);
+    };
+
+    const onLevelSliderChange = (value: string) => {
+        onLevelSelect(value);
     };
 
     const onToggleToPlay = (isRunning: boolean) => {
@@ -184,13 +191,6 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>
-                        {/* <Grid item xs sm md>
-                            <ModelSelector
-                                data-cy="model-selector"
-                                options={[index.datasets[0].dataset]}
-                                action={() => {}}
-                            />
-                        </Grid> */}
                         <Grid item xs md>
                             <RegionSelector
                                 data-cy="region-selector"
@@ -220,7 +220,11 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
                                 <ImageViewer image={activeForecastLayer} />
                             </Grid>
                             <Grid container item xs={1} alignItems="flex-end">
-                                <VerticalSlider />
+                                {levels.length > 1 ? (
+                                    <VerticalSlider options={levels} selected={level} action={onLevelSliderChange} />
+                                ) : (
+                                    <></>
+                                )}
                             </Grid>
                         </Grid>
 

@@ -24,7 +24,8 @@ const tabsStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.type === 'light' ? '#eee' : theme.palette.divider,
         borderRadius: 10,
-        width: 'fit-content'
+        width: 'fit-content',
+        maxHeight: 180
     },
     flexContainer: {
         display: 'inline-flex',

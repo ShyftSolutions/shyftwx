@@ -1,7 +1,6 @@
 import React from 'react';
 import Slider from '@material-ui/core/Slider';
 import { makeStyles } from '@material-ui/core/styles';
-import { CssBaseline } from '@material-ui/core';
 
 /**
  * Uses Material UI slider to create a responsive time for forecast hours and
@@ -65,31 +64,31 @@ const useStyles = makeStyles((theme) => ({
  * @param action function to be executed when a change occurs on the slider
  * @param selected the current selected value on the slider based on parent component
  */
-export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selected }) => {
+export const DiscreteSlider: React.FC<VerticalSliderProps> = ({ options, action, selected }) => {
     const classes = useStyles();
 
-    // define the props for the slider based on the options prop
-    const stepValue: number = options[1].value - options[0].value;
-    const maxValue: number = options[options.length - 1].value;
-    const minValue: number = options[0].value;
+    const marks: { value: number; label: string }[] = [];
+    options.forEach((option, index) => {
+        marks.push({ value: index, label: option });
+    });
 
     const handleChangeCommitted = (e: React.ChangeEvent<{}>, value: number | number[]) => {
-        action(value as number);
+        action(options[value as number]);
     };
 
     return (
         <div className={classes.root}>
-            <CssBaseline />
             <Slider
                 classes={classes}
-                aria-label="pretty slider"
+                valueLabelDisplay="off"
+                aria-label="vertical slider"
                 track={false}
-                step={stepValue}
-                marks={options}
-                max={maxValue}
+                step={null}
+                marks={marks}
+                max={options.length - 1}
                 onChange={handleChangeCommitted}
-                value={selected}
-                min={minValue}
+                value={options.indexOf(selected)}
+                min={0}
                 orientation="vertical"
             />
         </div>
