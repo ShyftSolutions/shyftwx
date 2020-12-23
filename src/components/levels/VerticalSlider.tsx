@@ -9,7 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     root: {
         color: theme.palette.primary.main,
-        height: 300
+        height: '50%',
+        display: 'inline-flex'
     },
     thumb: {
         height: 18,
@@ -32,7 +33,11 @@ const useStyles = makeStyles((theme) => ({
     },
     markLabel: {
         fontWeight: 500,
-        padding: 10
+        padding: 10,
+        fontSize: '.8em',
+        [theme.breakpoints.down('sm')]: {
+            //display: 'none'
+        }
     },
     mark: {
         backgroundColor: theme.palette.primary.dark,
