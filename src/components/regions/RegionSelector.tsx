@@ -1,8 +1,8 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
-import GroupedButtons from '../buttons/GroupedButtons';
 import React from 'react';
+import GroupedButtons from '../buttons/GroupedButtons';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
         maxWidth: '100%'
@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
 export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region' }) => {
     const classes = useStyles();
 
-    const handleClick = (index: string) => {};
+    const handleClick = (index: string) => {
+        console.log(index);
+    };
 
     return (
         /* Region Grid Container */

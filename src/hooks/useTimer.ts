@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 /**
  * Creates a timer hook with millisecond time intervals
  *
  * @param interval time (in milliseconds) between each tick
  */
-export const useTimer = (interval: number): [number, boolean, Function] => {
+export const useTimer = (interval: number): [number, boolean, Dispatch<SetStateAction<boolean>>] => {
     const [ticks, setTicks] = React.useState(0);
     const [isRunning, setIsRunning] = React.useState(false);
 

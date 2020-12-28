@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import { Fab, makeStyles } from '@material-ui/core';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import React from 'react';
 import useTimer from '../../hooks/useTimer';
 
 /**
@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 export const StartStopButton: React.FC<TimeActivationButtonProps> = ({ onToggle }) => {
     const classes = useStyles();
     const [tick, isRunning, setIsRunning] = useTimer(600);
-
 
     const handleClick = () => {
         if (isRunning) {

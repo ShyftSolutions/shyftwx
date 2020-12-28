@@ -1,5 +1,4 @@
 import { CircularProgress, Grid } from '@material-ui/core';
-import { Feature } from 'geojson';
 import 'leaflet/dist/leaflet.css';
 import React from 'react';
 import { carRouteAsync } from '../../apis';
