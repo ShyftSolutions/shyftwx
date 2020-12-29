@@ -1,9 +1,5 @@
-import React from 'react';
-import CloseIcon from '@material-ui/icons/Close';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { makeStyles } from '@material-ui/core/styles';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     Button,
     Dialog,
@@ -18,8 +14,12 @@ import {
     TableRow,
     Typography
 } from '@material-ui/core';
-import { transformUnit } from './../../utils/Units';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
+import React from 'react';
 import { convertUnits } from './../../utils/unitConverter';
+import { transformUnit } from './../../utils/Units';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -81,7 +81,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({ data, thresholds }) => {
     };
 
     const getFormattedTime = (time: string) => {
-        const hour: number = Number(time.substring(11, 13));
+        const hour = Number(time.substring(11, 13));
 
         if (hour === 12) {
             return '12:00 PM';
@@ -108,10 +108,10 @@ export const TimeChart: React.FC<TimeChartProps> = ({ data, thresholds }) => {
             // if legFeatureValue is not the same unit as our threshold - convert it
             const thresholdUnit = thresholds[featureValue.name].unit;
 
-            // if the service unit and what the ui recorded arent the same, 
+            // if the service unit and what the ui recorded arent the same,
             // convert the value from the service to what the ui has stored
             if (thresholdUnit !== legFeatureUnit) {
-                legFeatureValue = convertUnits(legFeatureUnit, thresholdUnit, [legFeatureValue])[0]
+                legFeatureValue = convertUnits(legFeatureUnit, thresholdUnit, [legFeatureValue])[0];
             }
 
             const isGreaterThan = thresholds[featureValue.name].greaterThan;

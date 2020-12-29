@@ -17,8 +17,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button$1 from '@material-ui/core/Button';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import 'leaflet/dist/leaflet.css';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import { latLngBounds, Icon } from 'leaflet';
@@ -166,7 +166,7 @@ var GroupedButtons = function GroupedButtons(_ref) {
   }));
 };
 
-var useStyles$1 = makeStyles(function (theme) {
+var useStyles$1 = makeStyles(function () {
   return {
     root: {
       flexGrow: 1,
@@ -180,7 +180,9 @@ var ModelSelector = function ModelSelector(_ref) {
       label = _ref$label === void 0 ? 'Model' : _ref$label;
   var classes = useStyles$1();
 
-  var handleClick = function handleClick(index) {};
+  var handleClick = function handleClick(index) {
+    console.log(index);
+  };
 
   return (
     /*#__PURE__*/
@@ -499,7 +501,7 @@ var ProductSelector = function ProductSelector(_ref) {
   }, menu))));
 };
 
-var useStyles$4 = makeStyles(function (theme) {
+var useStyles$4 = makeStyles(function () {
   return {
     root: {
       flexGrow: 1,
@@ -513,7 +515,9 @@ var RegionSelector = function RegionSelector(_ref) {
       label = _ref$label === void 0 ? 'Region' : _ref$label;
   var classes = useStyles$4();
 
-  var handleClick = function handleClick(index) {};
+  var handleClick = function handleClick(index) {
+    console.log(index);
+  };
 
   return (
     /*#__PURE__*/
@@ -594,8 +598,8 @@ var BasicButton = function BasicButton(_ref) {
   var action = _ref.action,
       _ref$text = _ref.text,
       text = _ref$text === void 0 ? 'Next' : _ref$text,
-      _ref$style = _ref.style,
-      style = _ref$style === void 0 ? 'blue' : _ref$style;
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'blue' : _ref$type;
   var classes = useStyles$5();
   var buttonStyles = {
     blue: /*#__PURE__*/React.createElement(Button, {
@@ -624,7 +628,7 @@ var BasicButton = function BasicButton(_ref) {
   };
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
-  }, buttonStyles[style]);
+  }, buttonStyles[type]);
 };
 
 var useStyles$6 = makeStyles$1(function (theme) {
@@ -1179,7 +1183,7 @@ var SimpleSelect = function SimpleSelect(_ref) {
   }))));
 };
 
-var useStyles$9 = makeStyles(function (theme) {
+var useStyles$9 = makeStyles(function () {
   return {
     root: {
       flexGrow: 1,
@@ -1291,7 +1295,7 @@ var DiscreteSlider = function DiscreteSlider(_ref) {
   var maxValue = options[options.length - 1].value;
   var minValue = options[0].value;
 
-  var handleChangeCommitted = function handleChangeCommitted(e, value) {
+  var handleChangeCommitted = function handleChangeCommitted(_, value) {
     action(value);
   };
 

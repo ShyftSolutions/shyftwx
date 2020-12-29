@@ -1,7 +1,7 @@
-import { createSliderWithTooltip, Range } from 'rc-slider';
-import React from 'react';
 import { Grid } from '@material-ui/core';
+import { createSliderWithTooltip, Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import React from 'react';
 
 const ShyftRange = createSliderWithTooltip(Range);
 
@@ -63,14 +63,16 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({
                     trackStyle={trackStyle}
                     onChange={handleRangeChange}
                     onAfterChange={applyWxData}
-                    handleStyle={{
-                        border: 'solid 2px #329af0',
-                        height: 16,
-                        width: 16,
-                        marginLeft: -3,
-                        marginTop: -4,
-                        backgroundColor: '#329af0'
-                    }}
+                    handleStyle={[
+                        {
+                            border: 'solid 2px #329af0',
+                            height: 16,
+                            width: 16,
+                            marginLeft: -3,
+                            marginTop: -4,
+                            backgroundColor: '#329af0'
+                        }
+                    ]}
                 />
             </Grid>
         </Grid>

@@ -1,9 +1,9 @@
-import React from 'react';
-import Slider from '@material-ui/core/Slider';
-import Tooltip from '@material-ui/core/Tooltip';
-import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
 import { CssBaseline, Hidden } from '@material-ui/core';
+import Slider from '@material-ui/core/Slider';
+import { makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
+import React from 'react';
 
 /**
  * Uses Material UI slider to create a responsive time for forecast hours and
@@ -103,7 +103,7 @@ export const DiscreteSlider: React.FC<SliderProps> = ({ options, action, selecte
     const maxValue: number = options[options.length - 1].value;
     const minValue: number = options[0].value;
 
-    const handleChangeCommitted = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    const handleChangeCommitted = (_, value: number | number[]) => {
         action(value as number);
     };
 

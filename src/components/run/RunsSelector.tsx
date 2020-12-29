@@ -1,10 +1,10 @@
-import { Grid, Typography, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import moment from 'moment';
+import React from 'react';
 import GroupedButtons from '../buttons/GroupedButtons';
 import SimpleSelect from '../dropdown/SimpleSelect';
-import React from 'react';
-import moment from 'moment';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
         maxWidth: '100%'
@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
  */
 export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Runs', action }) => {
     const classes = useStyles();
-
 
     const newOptions = options.map((option) => moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]'));
 

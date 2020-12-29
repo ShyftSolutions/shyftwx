@@ -1,5 +1,5 @@
 import { Container, MuiThemeProvider } from '@material-ui/core';
-import { withKnobs } from '@storybook/addon-knobs/react';
+import { withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
 import _ShyftWx from '../components/root/ShyftWx';
 import theme from './../theme';
