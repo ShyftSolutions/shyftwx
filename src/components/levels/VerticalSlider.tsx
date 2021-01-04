@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
         fontSize: '.8em',
         [theme.breakpoints.down('sm')]: {
-            //display: 'none'
+            // display: 'none'
         }
     },
     mark: {
@@ -68,13 +68,18 @@ const useStyles = makeStyles((theme) => ({
  * @param options array of objects consisting of a value and a label property
  * @param action function to be executed when a change occurs on the slider
  * @param selected the current selected value on the slider based on parent component
+ * @param increase, direction of the vertical slider (true if slider increases bottom to top, false if decreases bottom to top)
  */
-export const DiscreteSlider: React.FC<VerticalSliderProps> = ({ options, action, selected }) => {
+export const VerticalSlider: React.FC<VerticalSliderProps> = ({ options, action, selected, increase = true }) => {
     const classes = useStyles();
 
     const marks: { value: number; label: string }[] = [];
     options.forEach((option, index) => {
-        marks.push({ value: index, label: option });
+        if (increase) {
+            marks.push({ value: index, label: option });
+        } else {
+            marks.push({ value: options.length - index - 1, label: option });
+        }
     });
 
     const handleChangeCommitted = (e: React.ChangeEvent<{}>, value: number | number[]) => {
@@ -100,4 +105,4 @@ export const DiscreteSlider: React.FC<VerticalSliderProps> = ({ options, action,
     );
 };
 
-export default DiscreteSlider;
+export default VerticalSlider;
