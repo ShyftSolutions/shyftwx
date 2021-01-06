@@ -85,7 +85,7 @@
         "@material-ui/pickers": "3.2.10",
         "@material-ui/lab": "4.0.0-alpha.56",
         "@mdi/font": "5.3.45",
-        "axios": "0.19.2",
+        "axios": "0.21.1",
         "leaflet": "1.6.0",
         "lodash": "4.17.19",
         "moment": "2.27.0",
