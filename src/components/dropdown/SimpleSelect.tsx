@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: 0,
         paddingBottom: 0,
         background: 'white',
+        borderLeftWidth: '0px',
         '& li.Mui-selected': {
             fontWeight: 700
         }
