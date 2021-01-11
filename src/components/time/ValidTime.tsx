@@ -4,20 +4,28 @@ import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        textAlign: 'right',
         flexGrow: 1,
         maxWidth: '100%',
-        paddingTop: 5,
-        paddingBottom: 5
-    },
-    paper: {
-        backgroundColor: theme.palette.secondary.main,
-        padding: 5
+        paddingTop: 5
     },
     mobilePaper: {
         backgroundColor: theme.palette.secondary.light,
         color: theme.palette.secondary.main,
         border: '1px solid currentColor',
         padding: 5
+    },
+    timeLabel: {
+        color: '#F76707',
+        display: 'inline',
+        fontWeight: 800,
+        fontSize: '16px',
+        letterSpacing: '1px',
+        marginBottom: '0px'
+    },
+    time: {
+        display: 'inline',
+        fontWeight: 400
     },
     text: {
         color: theme.palette.secondary.main
@@ -35,17 +43,11 @@ export const ValidTime: React.FC<ValidTimeProps> = ({ time }) => {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <Hidden smDown>
-                <Grid container direction="row" justify="flex-end" alignItems="center">
-                    <Grid item>
-                        <Typography variant="h6">Valid Time</Typography>
-                        <Paper className={classes.paper}>
-                            <Typography variant="button">{time}</Typography>
-                        </Paper>
-                    </Grid>
-                </Grid>
+            <Hidden xsDown>
+                <h3 className={classes.timeLabel}>Valid Time: </h3>
+                <h4 className={classes.time}>{time}</h4>
             </Hidden>
-            <Hidden mdUp>
+            <Hidden smUp>
                 <Paper className={classes.mobilePaper}>
                     <Grid container item xs={12} justify="center">
                         <Typography className={classes.text} variant="h6">

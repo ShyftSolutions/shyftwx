@@ -24,6 +24,7 @@ declare type ShyftWxContentProps = {
     onForecastSelect: (forecast: string) => void;
     onRegionSelect: (region: string) => void;
     onRunSelect: (run: string) => void;
+    getLevels: (product: string) => string[];
 };
 
 declare type ShyftWxDynamicProps = {
@@ -71,6 +72,7 @@ declare type ForecastHour = {
 
 declare type Product = {
     name: string;
+    metadata: any;
     forecasts: ForecastHour[];
 };
 

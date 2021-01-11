@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     media: {
         [theme.breakpoints.up('md')]: {
-            height: '40vw'
+            height: '41vw'
         },
         [theme.breakpoints.down('sm')]: {
             width: '100%'

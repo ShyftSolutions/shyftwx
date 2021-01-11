@@ -1,19 +1,15 @@
 import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core';
 
 /**
  * SimpleSelect creates a vertical dropdown menu where the options on the menu
  * are defined in an array of strings called 'options'
  */
-
 const useStyles = makeStyles((theme) => ({
-    formControl: {
-        boxShadow: theme.shadows[3]
-    },
     selectEmpty: {
         marginTop: theme.spacing(2)
     },
@@ -21,20 +17,33 @@ const useStyles = makeStyles((theme) => ({
         align: 'center'
     },
     dropdown: {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: 'white',
         fontSize: '.8em',
+        fontWeight: 500,
         [theme.breakpoints.down('sm')]: {
             fontSize: '.7em'
         },
-        [theme.breakpoints.down('xs')]: {
-            fontSize: '.7em'
-        },
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 10
+        padding: '10px 0px 10px 10px',
+        borderWidth: 2,
+        borderRadius: 8,
+        '&:focus': {
+            background: 'white',
+            borderColor: theme.palette.primary
+        }
     },
     items: {
-        background: theme.palette.primary.contrastText
+        background: 'white'
+    },
+    list: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        background: 'white',
+        '& li.Mui-selected': {
+            fontWeight: 700
+        }
+    },
+    disabled: {
+        color: '#212529'
     }
 }));
 
@@ -45,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
  * @param options string[]
  * @param action function to be executed to set the selected value
  */
-export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) => {
+export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action, label }) => {
     const classes = useStyles();
 
     const [selectedValue, setSelectedValue] = React.useState(choices[0]);
@@ -55,14 +64,27 @@ export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) =
         action(event.target.value as string);
     };
 
+    let oneChoice: boolean = false;
+    if (choices.length === 1) {
+        oneChoice = true;
+    }
+
     return (
         <div>
-            <FormControl variant="outlined" className={classes.formControl}>
+            <FormControl variant="outlined" style={{ margin: '5px auto' }}>
+                <InputLabel id="select-input-label">{label}</InputLabel>
                 <Select
-                    classes={{ select: classes.dropdown }}
+                    classes={{ select: classes.dropdown, disabled: classes.disabled }}
                     id="simple-select"
                     value={selectedValue}
                     onChange={handleChange}
+                    disabled={oneChoice}
+                    label={label}
+                    MenuProps={{
+                        classes: {
+                            list: classes.list
+                        }
+                    }}
                 >
                     {choices.map((option: string) => (
                         <MenuItem color="primary" key={option} className={classes.items} value={option}>

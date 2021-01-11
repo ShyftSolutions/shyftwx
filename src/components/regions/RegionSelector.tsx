@@ -1,13 +1,5 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
-import GroupedButtons from '../buttons/GroupedButtons';
-
-const useStyles = makeStyles(() => ({
-    root: {
-        flexGrow: 1,
-        maxWidth: '100%'
-    }
-}));
+import SimpleSelect from '../dropdown/SimpleSelect';
 
 /**
  * Creates a Material UI Grid Item for the Region button group and a label
@@ -16,21 +8,14 @@ const useStyles = makeStyles(() => ({
  * @param label text displayed above the product
  */
 export const RegionSelector: React.FC<RegionSelectorProps> = ({ options, label = 'Region' }) => {
+    const handleClick = (index: string) => {};
     const classes = useStyles();
 
     const handleClick = (index: string) => {
         console.log(index);
     };
 
-    return (
-        /* Region Grid Container */
-        <Grid container item className={classes.root}>
-            <Grid item>
-                <Typography variant="h6">{label}</Typography>
-                <GroupedButtons options={options} action={handleClick} />
-            </Grid>
-        </Grid>
-    );
+    return <SimpleSelect choices={options} action={handleClick} label={label} />;
 };
 
 export default RegionSelector;

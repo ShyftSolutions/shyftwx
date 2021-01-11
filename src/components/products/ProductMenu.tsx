@@ -6,18 +6,35 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 400
+        maxWidth: 400,
+        width: '90%',
+        margin: 'auto',
+        border: '1px solid rgba(174, 174, 174, 0.75)',
+        borderRadius: '4px'
     },
     categoryStyle: {
-        fontWeight: 800,
+        borderBottom: '1px solid rgba(174, 174, 174, 0.75)'
+    },
+    categoryText: {
+        fontWeight: 400,
         fontSize: 16,
-        letterSpacing: 1,
         paddingLeft: 8,
-        color: theme.palette.secondary.main
+        color: '#212529'
+    },
+    label: {
+        backgroundColor: 'white',
+        color: '#F76707',
+        fontSize: '13px',
+        fontWeight: 800,
+        letterSpacing: '.75px',
+        padding: '0px 2px',
+        transform: 'translate(11px, -9px)',
+        position: 'absolute',
+        zIndex: 1
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        color: theme.palette.secondary.contrastText
+        backgroundColor: '#f8f9fa',
     },
     icon: {},
     text: {},
@@ -33,6 +50,7 @@ const ICON_MAP = {
     Pressure: fas.faArrowDown,
     RelativeHumidity: fas.faPercent,
     Temperature: fas.faTemperatureHigh,
+    SurfaceTemperature: fas.faTemperatureHigh,
     TotalPrecipitation: fas.faCloudShowersHeavy,
     Visibility: fas.faEye,
     Wind: fas.faWind
@@ -60,7 +78,7 @@ const emptyMenu = [
  * Uses Material UI to create a product menu with categories and subcategories
  *
  * @param options [
-    {
+ {
         name: 'Menu',
         open: true,
         products: [
@@ -72,8 +90,9 @@ const emptyMenu = [
             }
         ]
     }
-  ]
-  * @param action function that handles the selected product in the parent component
+ ]
+ * @param action function that handles the selected product in the parent component
+ * @param sortFn
  */
 export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, action, sortFn }) => {
     const classes = useStyles();
@@ -117,13 +136,19 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
 
     return (
         <div className={classes.root}>
+            <label className={classes.label}>Products</label>
             {/**
              * Loop through the list of categories and create the labels for each
              */}
             {categories.sort(sortFn).map((cat: Category, index: number) => (
-                <List key={index}>
-                    <ListItem data-cy={cat.name} button onClick={() => handleClick(cat)}>
-                        <ListItemText primary={<Typography className={classes.categoryStyle}>{cat.name}</Typography>} />
+                <List key={index} style={{ paddingBottom: '0px' }}>
+                    <ListItem
+                        data-cy={cat.name}
+                        button
+                        onClick={() => handleClick(cat)}
+                        className={classes.categoryStyle}
+                    >
+                        <ListItemText primary={<Typography className={classes.categoryText}>{cat.name}</Typography>} />
                         {cat.open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     <Collapse in={cat.open} timeout="auto" unmountOnExit>
@@ -137,10 +162,16 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                                 key={index}
                                 button
                                 className={classes.nested}
+                                style={
+                                    index === (cat.products.length - 1)
+                                        ? { borderBottom: '1px solid rgba(174, 174, 174, 0.75)' }
+                                        : {}
+                                }
                                 selected={selectedProduct === cat.name + ' ' + product.name}
                                 onClick={(event) =>
                                     handleListItemClick(event, { level: cat.name, product: product.name })
                                 }
+                                disableRipple
                             >
                                 {/**
                                  * If there is an icon for this product, display it before the product name

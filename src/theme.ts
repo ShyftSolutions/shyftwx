@@ -42,11 +42,20 @@ let theme = createMuiTheme({
                 fontWeight: 800
             }
         },
+        MuiInputLabel: {
+            root: {
+                color: '#F76707',
+                fontSize: '17px',
+                fontWeight: 800,
+                letterSpacing: '1px'
+            }
+        },
         MuiListItem: {
             root: {
                 '&$selected, &$selected:hover': {
                     backgroundColor: '#329af0',
-                    color: '#f8f9fa'
+                    color: '#f8f9fa',
+                    borderRight: '7px solid #1c7cd6'
                 },
                 paddingTop: '6px',
                 paddingBottom: '6px'
@@ -71,6 +80,13 @@ let theme = createMuiTheme({
             },
             tooltipPlacementBottom: {
                 marginTop: 15
+            }
+        },
+        MuiSelect: {
+            icon: {
+                '&$disabled': {
+                    display: 'none'
+                }
             }
         },
         MuiSwitch: {

@@ -3,14 +3,15 @@ import moment from 'moment';
 import React from 'react';
 import Slider from '../time/Slider';
 import ValidTime from '../time/ValidTime';
-import ModelSelector from './../models/ModelSelector';
-import ProductSelector from './../products/ProductSelector';
+// import ModelSelector from './../models/ModelSelector';
+import SideMenu from './../products/SideMenu';
 import RegionSelector from './../regions/RegionSelector';
 import RunsSelector from './../run/RunsSelector';
 import TimeControl from './../time/TimeControl';
 import ImageViewer from './../viewers/ImageViewer';
+import VerticalSlider from '../levels/VerticalSlider';
 
-const drawerWidth = 250;
+const drawerWidth = 300;
 const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
     contentClass: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(2),
         marginLeft: drawerWidth
     },
     '@media (max-width: 767px)': {
@@ -44,9 +46,11 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
     onLevelSelect,
     onProductSelect,
     onRegionSelect,
-    onRunSelect
+    onRunSelect,
+    getLevels
 }) => {
     const classes = useStyles();
+    const [levels, setLevels] = React.useState(getLevels(product));
 
     const getSelectedLevel = () => {
         return index.datasets[0].run.levels.filter((lvl) => lvl.name === level)[0];
@@ -60,6 +64,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
         onLevelSelect(product.level);
         onProductSelect(product.product);
         onForecastSelect(getSelectedProduct().forecasts[0].hour);
+        setLevels(getLevels(product.product));
     };
 
     const handleRunSelect = (buttonText: string) => {
@@ -119,6 +124,10 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
         onForecastSelect(forecasts[forecastIndex].hour);
     };
 
+    const onLevelSliderChange = (value: string) => {
+        onLevelSelect(value);
+    };
+
     const onToggleToPlay = (isRunning: boolean) => {
         const forecasts = getSelectedProduct().forecasts;
         forecasts.sort(compare);
@@ -145,6 +154,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
     };
 
     const generateContent = (): React.ReactNode => {
+        console.log(index);
         const selectedProduct = getSelectedProduct();
 
         const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
@@ -167,10 +177,11 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
             <React.Fragment>
                 {/* Product Menu Grid */}
                 <Grid container>
-                    <ProductSelector
+                    <SideMenu
                         data-cy="product-selector"
                         categories={levelProductVals}
                         action={handleProductSelect}
+                        options={[index.datasets[0].dataset]}
                     />
                 </Grid>
 
@@ -181,21 +192,14 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>
-                        <Grid item xs sm md>
-                            <ModelSelector
-                                data-cy="model-selector"
-                                options={[index.datasets[0].dataset]}
-                                action={() => {}}
-                            />
-                        </Grid>
-                        <Grid item xs md>
+                        <Grid container item xs md alignItems="center">
                             <RegionSelector
                                 data-cy="region-selector"
                                 options={[index.datasets[0].region.name]}
                                 action={() => {}}
                             />
                         </Grid>
-                        <Grid item xs sm md>
+                        <Grid container item xs sm md alignItems="center">
                             <RunsSelector
                                 data-cy="runs-selector"
                                 options={[+index.datasets[0].run.name]}
@@ -203,16 +207,26 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
                             />
                         </Grid>
                         <Hidden xsDown>
-                            <Grid item xs={12} md>
+                            <Grid container item sm alignItems="flex-end">
                                 <ValidTime time={getValidTime()} />
                             </Grid>
                         </Hidden>
+                        <Grid item xs={1} />
                     </Grid>
 
                     {/* Viewer/Time Grid */}
                     <Grid container direction="column" spacing={1}>
-                        <Grid container justify="center" item xs={12}>
-                            <ImageViewer image={activeForecastLayer} />
+                        <Grid container direction="row">
+                            <Grid container justify="center" item xs={11} style={{ backgroundColor: 'white' }}>
+                                <ImageViewer image={activeForecastLayer} />
+                            </Grid>
+                            <Grid container item xs={1} alignItems="flex-end">
+                                {levels.length > 1 ? (
+                                    <VerticalSlider options={levels} selected={level} action={onLevelSliderChange} />
+                                ) : (
+                                    <></>
+                                )}
+                            </Grid>
                         </Grid>
 
                         <Grid container item justify="center" alignItems="center">
@@ -225,7 +239,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
                                 />
                             </Grid>
 
-                            <Grid item md={9} sm={11} xs={12}>
+                            <Grid item md={8} sm={10} xs={12}>
                                 <Slider
                                     data-cy="slider"
                                     options={sliderVals}
@@ -233,6 +247,8 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
                                     action={onSliderNavigation}
                                 />
                             </Grid>
+
+                            <Grid item sm={1} />
                         </Grid>
 
                         <Hidden smUp>

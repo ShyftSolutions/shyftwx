@@ -38,7 +38,6 @@ export const getProductDataAsync = (
     run: string
 ) => {
     const url = getProductUrl(baseUrl, customerId, datasetId, region, run);
-
     return fetch(url).then((response) => response.json());
 };
 

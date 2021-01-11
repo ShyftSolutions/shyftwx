@@ -1,20 +1,11 @@
-import {
-    AppBar,
-    CssBaseline,
-    Divider,
-    Drawer,
-    Hidden,
-    IconButton,
-    makeStyles,
-    Toolbar,
-    Typography
-} from '@material-ui/core';
+import { Divider, AppBar, CssBaseline, Toolbar, IconButton, Hidden, Drawer, makeStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
-import React from 'react';
 import ProductMenu from './ProductMenu';
+import React from 'react';
+import ModelSelector from '../models/ModelSelector';
 
-const drawerWidth = 250;
+const drawerWidth = 300;
 const xlDrawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -61,8 +52,9 @@ const useStyles = makeStyles((theme) => ({
  * @param label the label for this component
  * @param action to be completed upon a product being selected
  * @param window
+ * @param options
  */
-export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, label = 'Products', action, window }) => {
+export const SideMenu: React.FC<ProductDrawerProps> = ({ categories, action, window, options }) => {
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [shouldSort, setShouldSort] = React.useState<boolean>(false);
@@ -106,16 +98,18 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
 
     const menu = (
         <div>
-            <div className={classes.toolbar} />
+            <ModelSelector options={options} action={(option) => console.log(option)} />
             <Divider />
-            <Toolbar style={{ paddingLeft: '6px', paddingRight: '6px' }}>
-                <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
-                    {label}
-                </Typography>
-                <div style={shouldSort ? { color: '#329af0' } : { color: '#aeaeae' }}>
-                    <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{ fontSize: '16pt' }} />
-                </div>
-            </Toolbar>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    padding: '5px 5% 5px 5px',
+                    color: shouldSort ? '#329af0' : '#aeaeae'
+                }}
+            >
+                <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{ fontSize: '16pt' }} />
+            </div>
             <ProductMenu options={categories} action={action} sortFn={getSortFn()} />
         </div>
     );
@@ -172,4 +166,4 @@ export const ProductSelector: React.FC<ProductDrawerProps> = ({ categories, labe
     );
 };
 
-export default ProductSelector;
+export default SideMenu;

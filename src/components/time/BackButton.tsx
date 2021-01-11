@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100%',
         minWidth: '100%',
         maxHeight: 30,
-        minHeight: 15
+        minHeight: 15,
     }
 }));
 
