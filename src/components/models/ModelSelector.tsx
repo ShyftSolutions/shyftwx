@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) =>
             '& li.Mui-selected': {
                 fontWeight: 700,
                 borderRadius: '5px',
-                borderLeftWidth: '0px'
+                borderRightWidth: '0px'
             },
             '& li.Mui-selected:hover': {
-                borderLeftWidth: '0px'
+                borderRightWidth: '0px'
             }
         },
         paper: {
