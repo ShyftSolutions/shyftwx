@@ -47,7 +47,7 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
 
         const indexData = await getIndexAsync(url, customerId.current, datasetId.current);
 
-        if (!indexData || indexData.datasets.length === 0) {
+        if (!indexData || indexData['run-regions'].length === 0) {
             setStatus(AppStatus.NoData);
             setLoading(false);
             return;
@@ -55,11 +55,11 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
 
         const arr = { datasets: [] as DatasetRegionRun[] };
 
-        for (let i = 0; i < indexData.datasets.length; i++) {
-            const dataset = indexData.datasets[i];
+        for (let i = 0; i < indexData['run-regions'].length; i++) {
+            const dataset = indexData['run-regions'][i];
 
             const datasetRegionRun: DatasetRegionRun = {
-                dataset: dataset.name,
+                dataset: dataset.dataset_name,
                 region: dataset.region,
                 run: {
                     name: dataset.run,
@@ -91,8 +91,20 @@ export const ShyftWx: React.FC<ShyftWxProps> = (props) => {
                     .map((i) => i.product) // gather all of the products
                     .filter((v, i, a) => a.indexOf(v) === i) // only get unique products
                     .map((product) => {
-                        return { name: product, forecasts: [] };
+                        return { name: product, metadata: [], forecasts: [] };
                     }); // return product obj arr
+            });
+
+            uniqueLevels.forEach((lvl) => {
+                lvl.products.forEach((product) => {
+                    product.metadata = items
+                        .filter(
+                            (item) => item.level === lvl.name && item.product === product.name && item.forecast === '0'
+                        ) // only look at specific level and product
+                        .map((item) => {
+                            return item.item_metadata;
+                        }); // return forecast obj arr
+                });
             });
 
             uniqueLevels.forEach((lvl) => {

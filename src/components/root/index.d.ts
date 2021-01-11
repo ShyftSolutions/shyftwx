@@ -72,6 +72,7 @@ declare type ForecastHour = {
 
 declare type Product = {
     name: string;
+    metadata: any;
     forecasts: ForecastHour[];
 };
 

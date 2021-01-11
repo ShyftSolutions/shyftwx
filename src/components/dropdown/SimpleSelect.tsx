@@ -1,4 +1,5 @@
 import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
 import Select from '@material-ui/core/Select';
@@ -22,15 +23,9 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             fontSize: '.7em'
         },
-        [theme.breakpoints.down('xs')]: {
-            fontSize: '.7em'
-        },
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 10,
+        padding: '10px 0px 10px 10px',
         borderWidth: 2,
         borderRadius: 8,
-        boxShadow: '0 4px 12px 0 rgba(0,0,0,0.16)',
         '&:focus': {
             background: 'white',
             borderColor: theme.palette.primary
@@ -59,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
  * @param options string[]
  * @param action function to be executed to set the selected value
  */
-export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) => {
+export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action, label }) => {
     const classes = useStyles();
 
     const [selectedValue, setSelectedValue] = React.useState(choices[0]);
@@ -76,41 +71,27 @@ export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action }) =
 
     return (
         <div>
-            <FormControl variant="outlined">
-                {oneChoice ? (
-                    <Select
-                        classes={{ select: classes.dropdown, disabled: classes.disabled }}
-                        id="simple-select"
-                        value={selectedValue}
-                        onChange={handleChange}
-                        disabled
-                        IconComponent={() => <></>}
-                    >
-                        {choices.map((option: string) => (
-                            <MenuItem color="primary" key={option} className={classes.items} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                ) : (
-                    <Select
-                        classes={{ select: classes.dropdown, disabled: classes.disabled }}
-                        id="simple-select"
-                        value={selectedValue}
-                        onChange={handleChange}
-                        MenuProps={{
-                            classes: {
-                                list: classes.list
-                            }
-                        }}
-                    >
-                        {choices.map((option: string) => (
-                            <MenuItem color="primary" key={option} className={classes.items} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                )}
+            <FormControl variant="outlined" style={{ margin: '5px auto' }}>
+                <InputLabel id="select-input-label">{label}</InputLabel>
+                <Select
+                    classes={{ select: classes.dropdown, disabled: classes.disabled }}
+                    id="simple-select"
+                    value={selectedValue}
+                    onChange={handleChange}
+                    disabled={oneChoice}
+                    label={label}
+                    MenuProps={{
+                        classes: {
+                            list: classes.list
+                        }
+                    }}
+                >
+                    {choices.map((option: string) => (
+                        <MenuItem color="primary" key={option} className={classes.items} value={option}>
+                            {option}
+                        </MenuItem>
+                    ))}
+                </Select>
             </FormControl>
         </div>
     );

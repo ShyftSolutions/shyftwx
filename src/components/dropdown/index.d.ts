@@ -5,4 +5,5 @@
 declare type SimpleSelectProps = {
     choices: string[];
     action: (option: string) => void;
+    label: string;
 };

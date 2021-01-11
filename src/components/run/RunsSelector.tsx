@@ -1,14 +1,6 @@
-import { Grid, Typography, makeStyles } from '@material-ui/core';
 import SimpleSelect from '../dropdown/SimpleSelect';
 import React from 'react';
 import moment from 'moment';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        maxWidth: '100%'
-    }
-}));
 
 /**
  * Creates a Material UI Grid Item for the Region button group or dropdown menu
@@ -18,19 +10,9 @@ const useStyles = makeStyles((theme) => ({
  * @param action
  */
 export const RunsSelector: React.FC<RunsSelectorProps> = ({ options, label = 'Run', action }) => {
-    const classes = useStyles();
-
     const newOptions = options.map((option) => moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]'));
 
-    return (
-        /* Run Grid Container */
-        <Grid container item className={classes.root}>
-            <Grid item>
-                <Typography variant="h6">{label}</Typography>
-                <SimpleSelect choices={newOptions} action={action} />
-            </Grid>
-        </Grid>
-    );
+    return <SimpleSelect choices={newOptions} action={action} label={label} />;
 };
 
 export default RunsSelector;

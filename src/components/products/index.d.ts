@@ -4,7 +4,6 @@
 
 declare type ProductDrawerProps = {
     categories: Category[];
-    label?: string;
     action: (ProductSelectionResponse) => void;
     window?: () => Window;
     options: string[];

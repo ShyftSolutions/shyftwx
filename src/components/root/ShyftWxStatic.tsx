@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
     contentClass: {
         flexGrow: 1,
-        paddingTop: theme.spacing(2),
+        paddingTop: theme.spacing(3),
         paddingBottom: theme.spacing(2),
         marginLeft: drawerWidth
     },
@@ -154,6 +154,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
     };
 
     const generateContent = (): React.ReactNode => {
+        console.log(index);
         const selectedProduct = getSelectedProduct();
 
         const levelProductVals = index.datasets[0].run.levels.map((lvl, index) => {
@@ -191,14 +192,14 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>
-                        <Grid item xs md>
+                        <Grid container item xs md alignItems="center">
                             <RegionSelector
                                 data-cy="region-selector"
                                 options={[index.datasets[0].region.name]}
                                 action={() => {}}
                             />
                         </Grid>
-                        <Grid item xs sm md>
+                        <Grid container item xs sm md alignItems="center">
                             <RunsSelector
                                 data-cy="runs-selector"
                                 options={[+index.datasets[0].run.name]}
@@ -206,7 +207,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
                             />
                         </Grid>
                         <Hidden xsDown>
-                            <Grid item xs={12} md>
+                            <Grid container item sm alignItems="flex-end">
                                 <ValidTime time={getValidTime()} />
                             </Grid>
                         </Hidden>

@@ -1,19 +1,9 @@
-import {
-    Divider,
-    AppBar,
-    CssBaseline,
-    Toolbar,
-    IconButton,
-    Typography,
-    Hidden,
-    Drawer,
-    makeStyles
-} from '@material-ui/core';
+import { Divider, AppBar, CssBaseline, Toolbar, IconButton, Hidden, Drawer, makeStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import ProductMenu from './ProductMenu';
 import React from 'react';
-import ModelTabs from '../models/ModelTabs';
+import ModelSelector from '../models/ModelSelector';
 
 const drawerWidth = 300;
 const xlDrawerWidth = 350;
@@ -64,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
  * @param window
  * @param options
  */
-export const SideMenu: React.FC<ProductDrawerProps> = ({ categories, label = 'Products', action, window, options }) => {
+export const SideMenu: React.FC<ProductDrawerProps> = ({ categories, action, window, options }) => {
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [shouldSort, setShouldSort] = React.useState<boolean>(false);
@@ -108,23 +98,18 @@ export const SideMenu: React.FC<ProductDrawerProps> = ({ categories, label = 'Pr
 
     const menu = (
         <div>
-            <div className={classes.toolbar} />
+            <ModelSelector options={options} action={(option) => console.log(option)} />
             <Divider />
-            <Toolbar style={{ paddingLeft: '6px', paddingRight: '6px' }}>
-                <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
-                    Model
-                </Typography>
-            </Toolbar>
-            <ModelTabs options={options} action={(option) => console.log(option)} />
-            <Divider />
-            <Toolbar style={{ paddingLeft: '6px', paddingRight: '6px' }}>
-                <Typography variant="h6" style={{ paddingLeft: '6px', flex: 1 }}>
-                    {label}
-                </Typography>
-                <div style={shouldSort ? { color: '#329af0' } : { color: '#aeaeae' }}>
-                    <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{ fontSize: '16pt' }} />
-                </div>
-            </Toolbar>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    padding: '5px 5% 5px 5px',
+                    color: shouldSort ? '#329af0' : '#aeaeae'
+                }}
+            >
+                <SortByAlphaIcon onClick={() => setShouldSort(!shouldSort)} style={{ fontSize: '16pt' }} />
+            </div>
             <ProductMenu options={categories} action={action} sortFn={getSortFn()} />
         </div>
     );

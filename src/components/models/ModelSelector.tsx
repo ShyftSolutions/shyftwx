@@ -1,34 +1,77 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
-
-import GroupedButtons from '../buttons/GroupedButtons';
 import React from 'react';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        maxWidth: '100%'
-    }
-}));
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        formControl: {
+            'box-sizing': 'content-box',
+            margin: '28px 14px 28px 14px',
+            width: '90%'
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2)
+        },
+        list: {
+            padding: '5px',
+            borderRadius: '5px',
+            border: '1px solid #e9ecef',
+            background: '#e9ecef',
+            '& li.Mui-selected': {
+                fontWeight: 700,
+                borderRadius: '5px',
+                borderRightWidth: '0px'
+            },
+            '& li.Mui-selected:hover': {
+                borderRightWidth: '0px'
+            }
+        },
+        paper: {
+            left: '278px'
+        },
+        disabled: {
+            color: '#212529'
+        }
+    })
+);
 
-/**
- * Creates a Material UI Grid Item for a Model button group selector and its label
- *
- * @param options string[]
- * @param label string
- */
-export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = 'Model' }) => {
+export const ModelSelector: React.FC<ModelSelectorProps> = ({ options, label = 'Model', action }) => {
     const classes = useStyles();
+    const [value, setValue] = React.useState(options[0]);
 
-    const handleClick = (index: string) => {};
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setValue(event.target.value as string);
+        action(event.target.value as string);
+    };
 
     return (
-        /* Region Grid Container */
-        <Grid container data-cy="model-selector" direction="column" className={classes.root}>
-            <Grid item>
-                <Typography variant="h6">{label}</Typography>
-                <GroupedButtons data-cy="model-selector-buttons" options={options} action={handleClick} />
-            </Grid>
-        </Grid>
+        <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="model-select-input-label">{label}</InputLabel>
+            <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={value}
+                onChange={handleChange}
+                disabled={options.length === 1}
+                label={label}
+                MenuProps={{
+                    classes: {
+                        paper: classes.paper,
+                        list: classes.list
+                    }
+                }}
+                classes={{ disabled: classes.disabled }}
+            >
+                {options.map((option: string) => (
+                    <MenuItem key={option} value={option}>
+                        {option}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     );
 };
 
