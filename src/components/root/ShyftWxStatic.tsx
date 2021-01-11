@@ -224,7 +224,7 @@ export const ShyftWxStatic: React.FC<ShyftWxContentProps> = ({
                                 {levels.length > 1 ? (
                                     <VerticalSlider options={levels} selected={level} action={onLevelSliderChange} />
                                 ) : (
-                                    <></>
+                                    <span style={{ display: 'none' }} />
                                 )}
                             </Grid>
                         </Grid>
