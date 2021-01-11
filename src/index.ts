@@ -13,6 +13,7 @@ import ForwardButton from './components/time/ForwardButton';
 import Slider from './components/time/Slider';
 import StartStopButton from './components/time/StartStopButton';
 import TimeControl from './components/time/TimeControl';
+import VerticalSlider from './components/levels/VerticalSlider';
 import BaseWxViewer from './components/viewers/BaseWxViewer';
 import theme from './theme';
 
@@ -33,5 +34,6 @@ export {
     StartStopButton,
     TimeControl,
     theme,
+    VerticalSlider,
     apis
 };
