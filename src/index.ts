@@ -5,6 +5,7 @@ import ProductMenu from './components/products/ProductMenu';
 import SideMenu from './components/products/SideMenu';
 import RegionSelector from './components/regions/RegionSelector';
 import LandingPage from './components/root/LandingPage';
+import ShyftWxStatic from './components/root/ShyftWxStatic';
 import ShyftWx from './components/root/ShyftWx';
 import RunsSelector from './components/run/RunsSelector';
 import BackButton from './components/time/BackButton';
@@ -28,6 +29,7 @@ export {
     RunsSelector,
     Slider,
     ShyftWx,
+    ShyftWxStatic,
     StartStopButton,
     TimeControl,
     theme,
