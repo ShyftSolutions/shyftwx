@@ -55,7 +55,7 @@ let theme = createMuiTheme({
                 '&$selected, &$selected:hover': {
                     backgroundColor: '#329af0',
                     color: '#f8f9fa',
-                    borderRight: '7px solid #1c7cd6'
+                    borderLeft: '7px solid #1c7cd6'
                 },
                 paddingTop: '6px',
                 paddingBottom: '6px'
