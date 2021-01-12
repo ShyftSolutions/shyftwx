@@ -5,4 +5,3 @@ declare namespace _default {
 }
 export default _default;
 export function ShyftModel(): JSX.Element;
-export function ModelTabs(): JSX.Element;
