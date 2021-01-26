@@ -1,34 +1,31 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "extends": [
-    "eslint:recommended", 
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "plugins": ["@typescript-eslint"],
-  "env": {
-    "node": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "ecmaFeatures": {
-      "legacyDecorators": true,
-      "jsx": true
+    "parser": "@typescript-eslint/parser",
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+    "plugins": ["@typescript-eslint"],
+    "env": {
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "ecmaFeatures": {
+            "legacyDecorators": true,
+            "jsx": true
+        }
+    },
+    "settings": {
+        "react": {
+            "version": "16"
+        }
+    },
+    "rules": {
+        "space-before-function-paren": 0,
+        "react/prop-types": 0,
+        "react/jsx-handler-names": 0,
+        "react/jsx-fragments": 0,
+        "react/no-unused-prop-types": 0,
+        "import/export": 0,
+        "react/jsx-pascal-case": 0,
+        "@typescript-eslint/no-empty-function": 1,
+        "@typescript-eslint/no-inferrable-types": 1
     }
-  },
-  "settings": {
-    "react": {
-      "version": "16"
-    }
-  },
-  "rules": {
-    "space-before-function-paren": 0,
-    "react/prop-types": 0,
-    "react/jsx-handler-names": 0,
-    "react/jsx-fragments": 0,
-    "react/no-unused-prop-types": 0,
-    "import/export": 0,
-    "react/jsx-pascal-case": 0,
-    "@typescript-eslint/no-empty-function": 1
-  }
 }

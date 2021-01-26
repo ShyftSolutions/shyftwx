@@ -1,8 +1,8 @@
-import React from 'react';
-import { makeStyles, List, ListItem, ListItemText, Collapse, ListItemIcon, Typography } from '@material-ui/core';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Collapse, List, ListItem, ListItemIcon, ListItemText, makeStyles, Typography } from '@material-ui/core';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#f8f9fa'
     },
     icon: {},
     text: {},
@@ -163,7 +163,7 @@ export const ProductMenu: React.FC<ProductMenuProps> = ({ options = emptyMenu, a
                                 button
                                 className={classes.nested}
                                 style={
-                                    index === (cat.products.length - 1)
+                                    index === cat.products.length - 1
                                         ? { borderBottom: '1px solid rgba(174, 174, 174, 0.75)' }
                                         : {}
                                 }

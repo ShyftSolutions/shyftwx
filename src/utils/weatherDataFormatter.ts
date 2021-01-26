@@ -13,7 +13,7 @@
 //     }
 // }
 
-export function transformWeatherData(weatherResp) {
+export function transformWeatherData(weatherResp): RouteLeg[] {
     const formattedData: RouteLeg[] = [];
 
     // transform

@@ -1,14 +1,14 @@
-import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         formControl: {
-            'box-sizing': 'content-box',
+            boxSizing: 'content-box',
             margin: '28px 14px 28px 14px',
             width: '90%'
         },

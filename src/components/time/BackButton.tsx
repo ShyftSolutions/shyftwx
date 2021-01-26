@@ -1,7 +1,7 @@
-import React from 'react';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import React from 'react';
 
 /**
  * Uses Material UI to create a back button
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100%',
         minWidth: '100%',
         maxHeight: 30,
-        minHeight: 15,
+        minHeight: 15
     }
 }));
 

@@ -1,21 +1,22 @@
 import axios from 'axios';
-import { makeStyles, ButtonGroup, Button, Grid, Typography, List, ListItem, ListItemText, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, createStyles, Paper, createMuiTheme, fade, responsiveFontSizes, Fab, MuiThemeProvider, CircularProgress } from '@material-ui/core';
+import { makeStyles, ButtonGroup, Button, List, ListItem, ListItemText, Typography, Collapse, ListItemIcon, CssBaseline, AppBar, Toolbar, IconButton, Hidden, Drawer, Divider, createStyles as createStyles$1, Grid, Paper, Fab, createMuiTheme, fade, responsiveFontSizes, MuiThemeProvider, CircularProgress } from '@material-ui/core';
 import React, { useState } from 'react';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import MenuIcon from '@material-ui/icons/Menu';
-import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
-import { makeStyles as makeStyles$1, createStyles as createStyles$1, TextField } from '@material-ui/core/';
-import moment from 'moment';
 import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import { makeStyles as makeStyles$2 } from '@material-ui/core/styles';
+import { makeStyles as makeStyles$1, createStyles } from '@material-ui/core/styles';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/Menu';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import { makeStyles as makeStyles$2, createStyles as createStyles$2, TextField } from '@material-ui/core/';
+import moment from 'moment';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Button$1 from '@material-ui/core/Button';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -166,41 +167,81 @@ var GroupedButtons = function GroupedButtons(_ref) {
   }));
 };
 
-var useStyles$1 = makeStyles(function () {
-  return {
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%'
+var useStyles$1 = makeStyles$1(function (theme) {
+  return createStyles({
+    formControl: {
+      boxSizing: 'content-box',
+      margin: '28px 14px 28px 14px',
+      width: '90%'
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    list: {
+      padding: '5px',
+      borderRadius: '5px',
+      border: '1px solid #e9ecef',
+      background: '#e9ecef',
+      '& li.Mui-selected': {
+        fontWeight: 700,
+        borderRadius: '5px',
+        borderLeftWidth: '0px'
+      },
+      '& li.Mui-selected:hover': {
+        borderLeftWidth: '0px'
+      }
+    },
+    paper: {
+      left: '278px'
+    },
+    disabled: {
+      color: '#212529'
     }
-  };
+  });
 });
 var ModelSelector = function ModelSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Model' : _ref$label;
+      label = _ref$label === void 0 ? 'Model' : _ref$label,
+      action = _ref.action;
   var classes = useStyles$1();
 
-  var handleClick = function handleClick(index) {
-    console.log(index);
+  var _React$useState = React.useState(options[0]),
+      value = _React$useState[0],
+      setValue = _React$useState[1];
+
+  var handleChange = function handleChange(event) {
+    setValue(event.target.value);
+    action(event.target.value);
   };
 
-  return (
-    /*#__PURE__*/
-    React.createElement(Grid, {
-      container: true,
-      "data-cy": "model-selector",
-      direction: "column",
-      className: classes.root
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true
-    }, /*#__PURE__*/React.createElement(Typography, {
-      variant: "h6"
-    }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
-      "data-cy": "model-selector-buttons",
-      options: options,
-      action: handleClick
-    })))
-  );
+  return /*#__PURE__*/React.createElement(FormControl, {
+    variant: "outlined",
+    className: classes.formControl
+  }, /*#__PURE__*/React.createElement(InputLabel, {
+    id: "model-select-input-label"
+  }, label), /*#__PURE__*/React.createElement(Select, {
+    labelId: "demo-simple-select-outlined-label",
+    id: "demo-simple-select-outlined",
+    value: value,
+    onChange: handleChange,
+    disabled: options.length === 1,
+    label: label,
+    MenuProps: {
+      classes: {
+        paper: classes.paper,
+        list: classes.list
+      }
+    },
+    classes: {
+      disabled: classes.disabled
+    }
+  }, options.map(function (option) {
+    return /*#__PURE__*/React.createElement(MenuItem, {
+      key: option,
+      value: option
+    }, option);
+  })));
 };
 
 function _extends() {
@@ -224,18 +265,35 @@ function _extends() {
 var useStyles$2 = makeStyles(function (theme) {
   return {
     root: {
-      maxWidth: 400
+      maxWidth: 400,
+      width: '90%',
+      margin: 'auto',
+      border: '1px solid rgba(174, 174, 174, 0.75)',
+      borderRadius: '4px'
     },
     categoryStyle: {
-      fontWeight: 800,
+      borderBottom: '1px solid rgba(174, 174, 174, 0.75)'
+    },
+    categoryText: {
+      fontWeight: 400,
       fontSize: 16,
-      letterSpacing: 1,
       paddingLeft: 8,
-      color: theme.palette.secondary.main
+      color: '#212529'
+    },
+    label: {
+      backgroundColor: 'white',
+      color: '#F76707',
+      fontSize: '13px',
+      fontWeight: 800,
+      letterSpacing: '.75px',
+      padding: '0px 2px',
+      transform: 'translate(11px, -9px)',
+      position: 'absolute',
+      zIndex: 1
     },
     nested: {
       paddingLeft: theme.spacing(4),
-      color: theme.palette.secondary.contrastText
+      backgroundColor: '#f8f9fa'
     },
     icon: {},
     text: {},
@@ -251,6 +309,7 @@ var ICON_MAP = {
   Pressure: fas.faArrowDown,
   RelativeHumidity: fas.faPercent,
   Temperature: fas.faTemperatureHigh,
+  SurfaceTemperature: fas.faTemperatureHigh,
   TotalPrecipitation: fas.faCloudShowersHeavy,
   Visibility: fas.faEye,
   Wind: fas.faWind
@@ -299,18 +358,24 @@ var ProductMenu = function ProductMenu(_ref) {
 
   return /*#__PURE__*/React.createElement("div", {
     className: classes.root
-  }, categories.sort(sortFn).map(function (cat, index) {
+  }, /*#__PURE__*/React.createElement("label", {
+    className: classes.label
+  }, "Products"), categories.sort(sortFn).map(function (cat, index) {
     return /*#__PURE__*/React.createElement(List, {
-      key: index
+      key: index,
+      style: {
+        paddingBottom: '0px'
+      }
     }, /*#__PURE__*/React.createElement(ListItem, {
       "data-cy": cat.name,
       button: true,
       onClick: function onClick() {
         return handleClick(cat);
-      }
+      },
+      className: classes.categoryStyle
     }, /*#__PURE__*/React.createElement(ListItemText, {
       primary: /*#__PURE__*/React.createElement(Typography, {
-        className: classes.categoryStyle
+        className: classes.categoryText
       }, cat.name)
     }), cat.open ? /*#__PURE__*/React.createElement(ExpandLess, null) : /*#__PURE__*/React.createElement(ExpandMore, null)), /*#__PURE__*/React.createElement(Collapse, {
       "in": cat.open,
@@ -322,13 +387,17 @@ var ProductMenu = function ProductMenu(_ref) {
         key: index,
         button: true,
         className: classes.nested,
+        style: index === cat.products.length - 1 ? {
+          borderBottom: '1px solid rgba(174, 174, 174, 0.75)'
+        } : {},
         selected: selectedProduct === cat.name + ' ' + product.name,
         onClick: function onClick(event) {
           return handleListItemClick(event, {
             level: cat.name,
             product: product.name
           });
-        }
+        },
+        disableRipple: true
       }, ICON_MAP[product.name] !== undefined && /*#__PURE__*/React.createElement(ListItemIcon, null, /*#__PURE__*/React.createElement(FontAwesomeIcon, {
         className: selectedProduct === cat.name + ' ' + product.name ? classes.selected : classes.icon,
         icon: ICON_MAP[product.name]
@@ -341,7 +410,7 @@ var ProductMenu = function ProductMenu(_ref) {
   }));
 };
 
-var drawerWidth = 250;
+var drawerWidth = 300;
 var xlDrawerWidth = 350;
 var useStyles$3 = makeStyles(function (theme) {
   var _drawer, _appBar, _menuButton, _drawerPaper;
@@ -373,12 +442,11 @@ var useStyles$3 = makeStyles(function (theme) {
     }, _drawerPaper)
   };
 });
-var ProductSelector = function ProductSelector(_ref) {
+var SideMenu = function SideMenu(_ref) {
   var categories = _ref.categories,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Products' : _ref$label,
       action = _ref.action,
-      window = _ref.window;
+      window = _ref.window,
+      options = _ref.options;
   var classes = useStyles$3();
 
   var _React$useState = React.useState(false),
@@ -427,24 +495,17 @@ var ProductSelector = function ProductSelector(_ref) {
     }
   };
 
-  var menu = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: classes.toolbar
-  }), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement(Toolbar, {
-    style: {
-      paddingLeft: '6px',
-      paddingRight: '6px'
+  var menu = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(ModelSelector, {
+    options: options,
+    action: function action(option) {
+      return console.log(option);
     }
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6",
+  }), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("div", {
     style: {
-      paddingLeft: '6px',
-      flex: 1
-    }
-  }, label), /*#__PURE__*/React.createElement("div", {
-    style: shouldSort ? {
-      color: '#329af0'
-    } : {
-      color: '#aeaeae'
+      display: 'flex',
+      justifyContent: 'flex-end',
+      padding: '5px 5% 5px 5px',
+      color: shouldSort ? '#329af0' : '#aeaeae'
     }
   }, /*#__PURE__*/React.createElement(SortByAlphaIcon, {
     onClick: function onClick() {
@@ -453,7 +514,7 @@ var ProductSelector = function ProductSelector(_ref) {
     style: {
       fontSize: '16pt'
     }
-  }))), /*#__PURE__*/React.createElement(ProductMenu, {
+  })), /*#__PURE__*/React.createElement(ProductMenu, {
     options: categories,
     action: action,
     sortFn: getSortFn()
@@ -501,39 +562,110 @@ var ProductSelector = function ProductSelector(_ref) {
   }, menu))));
 };
 
-var useStyles$4 = makeStyles(function () {
+var useStyles$4 = makeStyles$1(function (theme) {
+  var _dropdown;
+
   return {
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%'
+    selectEmpty: {
+      marginTop: theme.spacing(2)
+    },
+    label: {
+      align: 'center'
+    },
+    dropdown: (_dropdown = {
+      backgroundColor: 'white',
+      fontSize: '.8em',
+      fontWeight: 500
+    }, _dropdown[theme.breakpoints.down('sm')] = {
+      fontSize: '.7em'
+    }, _dropdown.padding = '10px 0px 10px 10px', _dropdown.borderWidth = 2, _dropdown.borderRadius = 8, _dropdown['&:focus'] = {
+      background: 'white',
+      borderColor: theme.palette.primary
+    }, _dropdown),
+    items: {
+      background: 'white'
+    },
+    list: {
+      paddingTop: 0,
+      paddingBottom: 0,
+      background: 'white',
+      borderLeftWidth: '0px',
+      '& li.Mui-selected': {
+        fontWeight: 700
+      }
+    },
+    disabled: {
+      color: '#212529'
     }
   };
 });
+var SimpleSelect = function SimpleSelect(_ref) {
+  var choices = _ref.choices,
+      action = _ref.action,
+      label = _ref.label;
+  var classes = useStyles$4();
+
+  var _React$useState = React.useState(choices[0]),
+      selectedValue = _React$useState[0],
+      setSelectedValue = _React$useState[1];
+
+  var handleChange = function handleChange(event) {
+    setSelectedValue(event.target.value);
+    action(event.target.value);
+  };
+
+  var oneChoice = false;
+
+  if (choices.length === 1) {
+    oneChoice = true;
+  }
+
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
+    variant: "outlined",
+    style: {
+      margin: '5px auto'
+    }
+  }, /*#__PURE__*/React.createElement(InputLabel, {
+    id: "select-input-label"
+  }, label), /*#__PURE__*/React.createElement(Select, {
+    classes: {
+      select: classes.dropdown,
+      disabled: classes.disabled
+    },
+    id: "simple-select",
+    value: selectedValue,
+    onChange: handleChange,
+    disabled: oneChoice,
+    label: label,
+    MenuProps: {
+      classes: {
+        list: classes.list
+      }
+    }
+  }, choices.map(function (option) {
+    return /*#__PURE__*/React.createElement(MenuItem, {
+      color: "primary",
+      key: option,
+      className: classes.items,
+      value: option
+    }, option);
+  }))));
+};
+
 var RegionSelector = function RegionSelector(_ref) {
   var options = _ref.options,
       _ref$label = _ref.label,
       label = _ref$label === void 0 ? 'Region' : _ref$label;
-  var classes = useStyles$4();
 
   var handleClick = function handleClick(index) {
     console.log(index);
   };
 
-  return (
-    /*#__PURE__*/
-    React.createElement(Grid, {
-      container: true,
-      item: true,
-      className: classes.root
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true
-    }, /*#__PURE__*/React.createElement(Typography, {
-      variant: "h6"
-    }, label), /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: options,
-      action: handleClick
-    })))
-  );
+  return /*#__PURE__*/React.createElement(SimpleSelect, {
+    choices: options,
+    action: handleClick,
+    label: label
+  });
 };
 
 var validateAppAsync = function validateAppAsync(baseUrl, customerId, datasetId) {
@@ -568,7 +700,7 @@ var AppStatus;
 })(AppStatus || (AppStatus = {}));
 
 var useStyles$5 = makeStyles(function (theme) {
-  return createStyles({
+  return createStyles$1({
     root: {
       '& > *': {
         margin: theme.spacing(1)
@@ -631,8 +763,8 @@ var BasicButton = function BasicButton(_ref) {
   }, buttonStyles[type]);
 };
 
-var useStyles$6 = makeStyles$1(function (theme) {
-  return createStyles$1({
+var useStyles$6 = makeStyles$2(function (theme) {
+  return createStyles$2({
     root: {
       '& > *': {
         margin: theme.spacing(1),
@@ -863,6 +995,781 @@ var LandingPage = function LandingPage(_ref) {
   }))))));
 };
 
+var useStyles$8 = makeStyles$1(function (theme) {
+  var _root, _markLabel;
+
+  return {
+    root: (_root = {
+      color: theme.palette.primary.main,
+      height: 20
+    }, _root[theme.breakpoints.down('xs')] = {
+      marginBottom: 20
+    }, _root),
+    thumb: {
+      height: 24,
+      width: 24,
+      backgroundColor: theme.palette.secondary.light,
+      border: '2px solid currentColor',
+      marginTop: -8,
+      marginLeft: -12,
+      '&:focus, &:hover, &$active': {
+        boxShadow: 'inherit'
+      }
+    },
+    active: {},
+    rail: {
+      height: 5,
+      borderRadius: 4
+    },
+    markLabelActive: {
+      fontWeight: 700,
+      padding: 12
+    },
+    markLabel: (_markLabel = {
+      fontWeight: 500,
+      padding: 12
+    }, _markLabel[theme.breakpoints.down('xs')] = {
+      display: 'none'
+    }, _markLabel),
+    mark: {
+      backgroundColor: theme.palette.primary.dark,
+      height: 5
+    }
+  };
+});
+
+function ValueLabelComponent(props) {
+  var children = props.children,
+      open = props.open,
+      value = props.value;
+  var validTime = moment.unix(value).utc().format('MM/DD HH:mm[Z]');
+  return /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
+    smDown: true
+  }, /*#__PURE__*/React.createElement(Tooltip, {
+    open: open,
+    enterTouchDelay: 0,
+    title: validTime,
+    placement: "top"
+  }, children)), /*#__PURE__*/React.createElement(Hidden, {
+    mdUp: true
+  }, /*#__PURE__*/React.createElement(Tooltip, {
+    open: open,
+    enterTouchDelay: 0,
+    title: validTime,
+    placement: "bottom"
+  }, children)));
+}
+
+var DiscreteSlider = function DiscreteSlider(_ref) {
+  var options = _ref.options,
+      action = _ref.action,
+      selected = _ref.selected;
+  var classes = useStyles$8();
+  var optionsCount = React.useRef(options.length);
+  var maxValue = options[options.length - 1].value;
+  var minValue = options[0].value;
+
+  var handleChangeCommitted = function handleChangeCommitted(_, value) {
+    action(value);
+  };
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
+    xsDown: true
+  }, optionsCount.current >= 16 ? options.forEach(function (option, index) {
+    if (!(index === 0 || index === optionsCount.current - 1 || index % 4 === 0 && index <= optionsCount.current - 4)) {
+      option.label = '';
+    }
+  }) : undefined, /*#__PURE__*/React.createElement(Slider, {
+    classes: classes,
+    valueLabelDisplay: "auto",
+    "aria-label": "pretty slider",
+    track: false,
+    step: null,
+    marks: options,
+    max: maxValue,
+    ValueLabelComponent: ValueLabelComponent,
+    onChange: handleChangeCommitted,
+    value: selected,
+    min: minValue
+  })), /*#__PURE__*/React.createElement(Hidden, {
+    smUp: true
+  }, /*#__PURE__*/React.createElement(Slider, {
+    classes: classes,
+    "aria-label": "pretty slider",
+    track: false,
+    step: null,
+    marks: options,
+    max: maxValue,
+    onChange: handleChangeCommitted,
+    value: selected,
+    min: minValue
+  })));
+};
+
+var useStyles$9 = makeStyles(function (theme) {
+  return {
+    root: {
+      textAlign: 'right',
+      flexGrow: 1,
+      maxWidth: '100%',
+      paddingTop: 5
+    },
+    mobilePaper: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.secondary.main,
+      border: '1px solid currentColor',
+      padding: 5
+    },
+    timeLabel: {
+      color: '#F76707',
+      display: 'inline',
+      fontWeight: 800,
+      fontSize: '16px',
+      letterSpacing: '1px',
+      marginBottom: '0px'
+    },
+    time: {
+      display: 'inline',
+      fontWeight: 400
+    },
+    text: {
+      color: theme.palette.secondary.main
+    }
+  };
+});
+var ValidTime = function ValidTime(_ref) {
+  var time = _ref.time;
+  var classes = useStyles$9();
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
+    xsDown: true
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: classes.timeLabel
+  }, "Valid Time: "), /*#__PURE__*/React.createElement("h4", {
+    className: classes.time
+  }, time)), /*#__PURE__*/React.createElement(Hidden, {
+    smUp: true
+  }, /*#__PURE__*/React.createElement(Paper, {
+    className: classes.mobilePaper
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    xs: 12,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(Typography, {
+    className: classes.text,
+    variant: "h6"
+  }, time)))));
+};
+
+var RunsSelector = function RunsSelector(_ref) {
+  var options = _ref.options,
+      _ref$label = _ref.label,
+      label = _ref$label === void 0 ? 'Run' : _ref$label,
+      action = _ref.action;
+  var newOptions = options.map(function (option) {
+    return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
+  });
+  return /*#__PURE__*/React.createElement(SimpleSelect, {
+    choices: newOptions,
+    action: action,
+    label: label
+  });
+};
+
+var useStyles$a = makeStyles(function (theme) {
+  return {
+    root: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.primary.dark,
+      boxShadow: theme.shadows[3],
+      ariaLabel: 'back',
+      maxWidth: '100%',
+      minWidth: '100%',
+      maxHeight: 30,
+      minHeight: 15
+    }
+  };
+});
+var BackButton = function BackButton(_ref) {
+  var action = _ref.action;
+  var classes = useStyles$a();
+  return /*#__PURE__*/React.createElement(Button$1, {
+    onClick: action,
+    className: classes.root,
+    variant: "outlined",
+    color: "primary"
+  }, /*#__PURE__*/React.createElement(NavigateBeforeIcon, null));
+};
+
+var useStyles$b = makeStyles(function (theme) {
+  return {
+    root: {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.primary.dark,
+      boxShadow: theme.shadows[3],
+      ariaLabel: 'back',
+      maxWidth: '100%',
+      minWidth: '100%',
+      maxHeight: 30,
+      minHeight: 15
+    }
+  };
+});
+var ForwardButton = function ForwardButton(_ref) {
+  var action = _ref.action;
+  var classes = useStyles$b();
+  return /*#__PURE__*/React.createElement(Button, {
+    onClick: action,
+    className: classes.root,
+    variant: "outlined",
+    color: "primary"
+  }, /*#__PURE__*/React.createElement(NavigateNextIcon, null));
+};
+
+var useTimer = function useTimer(interval) {
+  var _React$useState = React.useState(0),
+      ticks = _React$useState[0],
+      setTicks = _React$useState[1];
+
+  var _React$useState2 = React.useState(false),
+      isRunning = _React$useState2[0],
+      setIsRunning = _React$useState2[1];
+
+  React.useEffect(function () {
+    if (isRunning) {
+      var timerId = window.setTimeout(function () {
+        setTicks(ticks + 1);
+      }, interval);
+      return function () {
+        return window.clearTimeout(timerId);
+      };
+    }
+  }, [ticks, isRunning]);
+  return [ticks, isRunning, setIsRunning];
+};
+
+var useStyles$c = makeStyles(function (theme) {
+  return {
+    root: {
+      flexGrow: 1
+    },
+    play: {
+      ariaLabel: 'play',
+      boxShadow: theme.shadows[3],
+      background: theme.palette.primary.dark,
+      '&:hover': {
+        background: theme.palette.primary.dark
+      },
+      resize: 'inherit'
+    },
+    pause: {
+      ariaLabel: 'pause',
+      boxShadow: theme.shadows[3],
+      background: theme.palette.primary.dark,
+      '&:hover': {
+        background: theme.palette.primary.dark
+      },
+      resize: 'inherit'
+    },
+    icon: {
+      color: theme.palette.primary.contrastText
+    }
+  };
+});
+var StartStopButton = function StartStopButton(_ref) {
+  var onToggle = _ref.onToggle;
+  var classes = useStyles$c();
+
+  var _useTimer = useTimer(600),
+      tick = _useTimer[0],
+      isRunning = _useTimer[1],
+      setIsRunning = _useTimer[2];
+
+  var handleClick = function handleClick() {
+    if (isRunning) {
+      setIsRunning(false);
+    } else {
+      setIsRunning(true);
+    }
+  };
+
+  React.useEffect(function () {
+    onToggle(isRunning);
+  }, [tick]);
+  return isRunning ? /*#__PURE__*/React.createElement(Fab, {
+    onClick: handleClick,
+    className: classes.pause
+  }, /*#__PURE__*/React.createElement(PauseIcon, {
+    className: classes.icon
+  })) : /*#__PURE__*/React.createElement(Fab, {
+    onClick: handleClick,
+    className: classes.play
+  }, /*#__PURE__*/React.createElement(PlayArrowIcon, {
+    className: classes.icon
+  }));
+};
+
+var useStyles$d = makeStyles(function (theme) {
+  var _offset;
+
+  return {
+    root: {
+      flexGrow: 1
+    },
+    offset: (_offset = {}, _offset[theme.breakpoints.up('md')] = {
+      display: 'none'
+    }, _offset)
+  };
+});
+var TimeControl = function TimeControl(_ref) {
+  var onBack = _ref.onBack,
+      onNext = _ref.onNext,
+      onToggle = _ref.onToggle;
+  var classes = useStyles$d();
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(Grid, {
+    container: true,
+    item: true,
+    direction: "row",
+    alignItems: "center",
+    justify: "center",
+    wrap: "nowrap",
+    spacing: 1
+  }, /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: true,
+    className: classes.offset
+  }), /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React.createElement(BackButton, {
+    "data-cy": "back-button",
+    action: onBack
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    container: true,
+    xs: true,
+    justify: "center"
+  }, /*#__PURE__*/React.createElement(StartStopButton, {
+    "data-cy": "play-button",
+    onToggle: onToggle
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React.createElement(ForwardButton, {
+    "data-cy": "forward-button",
+    action: onNext
+  })), /*#__PURE__*/React.createElement(Grid, {
+    item: true,
+    xs: true
+  })));
+};
+
+var useStyles$e = makeStyles(function (theme) {
+  var _media;
+
+  return {
+    media: (_media = {}, _media[theme.breakpoints.up('md')] = {
+      height: '41vw'
+    }, _media[theme.breakpoints.down('sm')] = {
+      width: '100%'
+    }, _media)
+  };
+});
+var ImageViewer = function ImageViewer(_ref) {
+  var image = _ref.image;
+  var classes = useStyles$e();
+  return /*#__PURE__*/React.createElement("img", {
+    className: classes.media,
+    src: image,
+    alt: "weather viewer"
+  });
+};
+
+var useStyles$f = makeStyles$1(function (theme) {
+  var _markLabel;
+
+  return {
+    root: {
+      color: theme.palette.primary.main,
+      height: '50%',
+      display: 'inline-flex'
+    },
+    thumb: {
+      height: 18,
+      width: 18,
+      backgroundColor: theme.palette.secondary.light,
+      border: '2px solid currentColor',
+      marginTop: -8,
+      marginLeft: -12,
+      '&:focus, &:hover, &$active': {
+        boxShadow: 'inherit'
+      }
+    },
+    rail: {
+      height: 5,
+      borderRadius: 4
+    },
+    markLabelActive: {
+      fontWeight: 700,
+      padding: 10
+    },
+    markLabel: (_markLabel = {
+      fontWeight: 500,
+      padding: 10,
+      fontSize: '.8em'
+    }, _markLabel[theme.breakpoints.down('sm')] = {}, _markLabel),
+    mark: {
+      backgroundColor: theme.palette.primary.dark,
+      height: 5
+    },
+    vertical: {
+      '& $rail': {
+        width: 5
+      },
+      '& $track': {
+        width: 5
+      },
+      '& $mark': {
+        width: 5,
+        height: 1
+      },
+      '& $thumb': {
+        marginLeft: -6,
+        marginBottom: -8
+      }
+    }
+  };
+});
+var VerticalSlider = function VerticalSlider(_ref) {
+  var options = _ref.options,
+      action = _ref.action,
+      selected = _ref.selected,
+      _ref$increase = _ref.increase,
+      increase = _ref$increase === void 0 ? true : _ref$increase;
+  var classes = useStyles$f();
+  var marks = [];
+  options.forEach(function (option, index) {
+    if (increase) {
+      marks.push({
+        value: index,
+        label: option
+      });
+    } else {
+      marks.push({
+        value: options.length - index - 1,
+        label: option
+      });
+    }
+  });
+
+  var handleChangeCommitted = function handleChangeCommitted(e, value) {
+    action(options[value]);
+  };
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: classes.root
+  }, /*#__PURE__*/React.createElement(Slider, {
+    classes: classes,
+    valueLabelDisplay: "off",
+    "aria-label": "vertical slider",
+    track: false,
+    step: null,
+    marks: marks,
+    max: options.length - 1,
+    onChange: handleChangeCommitted,
+    value: options.indexOf(selected),
+    min: 0,
+    orientation: "vertical"
+  }));
+};
+
+var drawerWidth$1 = 300;
+var xlDrawerWidth$1 = 350;
+var useStyles$g = makeStyles(function (theme) {
+  return {
+    toolbar: theme.mixins.toolbar,
+    contentClass: {
+      flexGrow: 1,
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(2),
+      marginLeft: drawerWidth$1
+    },
+    '@media (max-width: 767px)': {
+      contentClass: {
+        marginLeft: 0
+      }
+    },
+    '@media (min-width: 1459px)': {
+      contentClass: {
+        marginLeft: xlDrawerWidth$1
+      }
+    }
+  };
+});
+var ShyftWxStatic = function ShyftWxStatic(_ref) {
+  var index = _ref.index,
+      forecast = _ref.forecast,
+      level = _ref.level,
+      product = _ref.product,
+      onForecastSelect = _ref.onForecastSelect,
+      onLevelSelect = _ref.onLevelSelect,
+      onProductSelect = _ref.onProductSelect,
+      getLevels = _ref.getLevels;
+  var classes = useStyles$g();
+
+  var _React$useState = React.useState(getLevels(product)),
+      levels = _React$useState[0],
+      setLevels = _React$useState[1];
+
+  var getSelectedLevel = function getSelectedLevel() {
+    return index.datasets[0].run.levels.filter(function (lvl) {
+      return lvl.name === level;
+    })[0];
+  };
+
+  var getSelectedProduct = function getSelectedProduct() {
+    return getSelectedLevel().products.filter(function (p) {
+      return p.name === product;
+    })[0];
+  };
+
+  var handleProductSelect = function handleProductSelect(product) {
+    onLevelSelect(product.level);
+    onProductSelect(product.product);
+    onForecastSelect(getSelectedProduct().forecasts[0].hour);
+    setLevels(getLevels(product.product));
+  };
+
+  var handleRunSelect = function handleRunSelect(buttonText) {
+    console.log(buttonText);
+  };
+
+  var compare = function compare(a, b) {
+    var valA = Number(a.hour);
+    var valB = Number(b.hour);
+    var comparison = 0;
+
+    if (valA > valB) {
+      comparison = 1;
+    } else if (valA < valB) {
+      comparison = -1;
+    }
+
+    return comparison;
+  };
+
+  var onSliderNavigationNext = function onSliderNavigationNext() {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === forecast;
+    });
+
+    if (forecastIndex + 1 === forecasts.length) {
+      onForecastSelect(forecasts[0].hour);
+    } else {
+      onForecastSelect(forecasts[forecastIndex + 1].hour);
+    }
+  };
+
+  var onSliderNavigationBack = function onSliderNavigationBack() {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return f.hour === forecast;
+    });
+
+    if (forecastIndex - 1 < 0) {
+      onForecastSelect(forecasts[forecasts.length - 1].hour);
+    } else {
+      onForecastSelect(forecasts[forecastIndex - 1].hour);
+    }
+  };
+
+  var onSliderNavigation = function onSliderNavigation(value) {
+    value -= +index.datasets[0].run.name;
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+    var forecastIndex = forecasts.findIndex(function (f) {
+      return +f.hour === +value;
+    });
+    onForecastSelect(forecasts[forecastIndex].hour);
+  };
+
+  var onLevelSliderChange = function onLevelSliderChange(value) {
+    onLevelSelect(value);
+  };
+
+  var onToggleToPlay = function onToggleToPlay(isRunning) {
+    var forecasts = getSelectedProduct().forecasts;
+    forecasts.sort(compare);
+
+    if (!isRunning) {
+      onForecastSelect(forecasts[0].hour);
+    } else {
+      var forecastIndex = forecasts.findIndex(function (f) {
+        return f.hour === forecast;
+      });
+
+      if (forecast === forecasts[forecasts.length - 1].hour) {
+        onForecastSelect(forecasts[0].hour);
+      } else {
+        onForecastSelect(forecasts[forecastIndex + 1].hour);
+      }
+    }
+  };
+
+  var getValidTime = function getValidTime() {
+    var validTime = moment.unix(+index.datasets[0].run.name + +forecast).utc().format('MM/DD HH:mm[Z]');
+    return validTime;
+  };
+
+  var generateContent = function generateContent() {
+    console.log(index);
+    var selectedProduct = getSelectedProduct();
+    var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
+      return {
+        name: lvl.name,
+        open: index === 0,
+        products: lvl.products
+      };
+    });
+    var sliderVals = selectedProduct.forecasts.map(function (f) {
+      return {
+        value: +f.hour + +index.datasets[0].run.name,
+        label: moment.unix(+f.hour + +index.datasets[0].run.name).utc().format('MM/DD HH:mm[Z]')
+      };
+    });
+    var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
+      return f.hour === forecast;
+    })[0].image;
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Grid, {
+      container: true
+    }, /*#__PURE__*/React.createElement(SideMenu, {
+      "data-cy": "product-selector",
+      categories: levelProductVals,
+      action: handleProductSelect,
+      options: [index.datasets[0].dataset]
+    })), /*#__PURE__*/React.createElement("main", {
+      className: classes.contentClass
+    }, /*#__PURE__*/React.createElement(Hidden, {
+      smUp: true
+    }, /*#__PURE__*/React.createElement("div", {
+      className: classes.toolbar
+    })), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      justify: "space-between",
+      spacing: 1
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: true,
+      md: true,
+      alignItems: "center"
+    }, /*#__PURE__*/React.createElement(RegionSelector, {
+      "data-cy": "region-selector",
+      options: [index.datasets[0].region.name],
+      action: function action() {}
+    })), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: true,
+      sm: true,
+      md: true,
+      alignItems: "center"
+    }, /*#__PURE__*/React.createElement(RunsSelector, {
+      "data-cy": "runs-selector",
+      options: [+index.datasets[0].run.name],
+      action: handleRunSelect
+    })), /*#__PURE__*/React.createElement(Hidden, {
+      xsDown: true
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      sm: true,
+      alignItems: "flex-end"
+    }, /*#__PURE__*/React.createElement(ValidTime, {
+      time: getValidTime()
+    }))), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 1
+    })), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      direction: "column",
+      spacing: 1
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      direction: "row"
+    }, /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      justify: "center",
+      item: true,
+      xs: 11,
+      style: {
+        backgroundColor: 'white'
+      }
+    }, /*#__PURE__*/React.createElement(ImageViewer, {
+      image: activeForecastLayer
+    })), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      xs: 1,
+      alignItems: "flex-end"
+    }, levels.length > 1 ? /*#__PURE__*/React.createElement(VerticalSlider, {
+      options: levels,
+      selected: level,
+      action: onLevelSliderChange
+    }) : /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: 'none'
+      }
+    }))), /*#__PURE__*/React.createElement(Grid, {
+      container: true,
+      item: true,
+      justify: "center",
+      alignItems: "center"
+    }, /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      md: 3,
+      sm: 5,
+      xs: 5
+    }, /*#__PURE__*/React.createElement(TimeControl, {
+      "data-cy": "time-control",
+      onBack: onSliderNavigationBack,
+      onNext: onSliderNavigationNext,
+      onToggle: onToggleToPlay
+    })), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      md: 8,
+      sm: 10,
+      xs: 12
+    }, /*#__PURE__*/React.createElement(DiscreteSlider, {
+      "data-cy": "slider",
+      options: sliderVals,
+      selected: +forecast + +index.datasets[0].run.name,
+      action: onSliderNavigation
+    })), /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      sm: 1
+    })), /*#__PURE__*/React.createElement(Hidden, {
+      smUp: true
+    }, /*#__PURE__*/React.createElement(Grid, {
+      item: true,
+      xs: 12
+    }, /*#__PURE__*/React.createElement(ValidTime, {
+      time: getValidTime()
+    }))))));
+  };
+
+  return /*#__PURE__*/React.createElement(React.Fragment, null, generateContent());
+};
+
 // A type of promise-like that resolves synchronously and supports only one observer
 const _Pact = /*#__PURE__*/(function() {
 	function _Pact() {}
@@ -1065,11 +1972,20 @@ var theme = createMuiTheme({
         fontWeight: 800
       }
     },
+    MuiInputLabel: {
+      root: {
+        color: '#F76707',
+        fontSize: '17px',
+        fontWeight: 800,
+        letterSpacing: '1px'
+      }
+    },
     MuiListItem: {
       root: {
         '&$selected, &$selected:hover': {
           backgroundColor: '#329af0',
-          color: '#f8f9fa'
+          color: '#f8f9fa',
+          borderLeft: '7px solid #1c7cd6'
         },
         paddingTop: '6px',
         paddingBottom: '6px'
@@ -1094,6 +2010,13 @@ var theme = createMuiTheme({
       },
       tooltipPlacementBottom: {
         marginTop: 15
+      }
+    },
+    MuiSelect: {
+      icon: {
+        '&$disabled': {
+          display: 'none'
+        }
       }
     },
     MuiSwitch: {
@@ -1123,496 +2046,16 @@ var options = {
 theme = responsiveFontSizes(theme, options);
 var theme$1 = theme;
 
-var useStyles$8 = makeStyles$2(function (theme) {
-  var _dropdown;
-
-  return {
-    formControl: {
-      boxShadow: theme.shadows[3]
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    },
-    label: {
-      align: 'center'
-    },
-    dropdown: (_dropdown = {
-      backgroundColor: theme.palette.secondary.light,
-      fontSize: '.8em'
-    }, _dropdown[theme.breakpoints.down('sm')] = {
-      fontSize: '.7em'
-    }, _dropdown[theme.breakpoints.down('xs')] = {
-      fontSize: '.7em'
-    }, _dropdown.paddingTop = 10, _dropdown.paddingBottom = 10, _dropdown.paddingLeft = 10, _dropdown),
-    items: {
-      background: theme.palette.primary.contrastText
-    }
-  };
-});
-var SimpleSelect = function SimpleSelect(_ref) {
-  var choices = _ref.choices,
-      action = _ref.action;
-  var classes = useStyles$8();
-
-  var _React$useState = React.useState(choices[0]),
-      selectedValue = _React$useState[0],
-      setSelectedValue = _React$useState[1];
-
-  var handleChange = function handleChange(event) {
-    setSelectedValue(event.target.value);
-    action(event.target.value);
-  };
-
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(FormControl, {
-    variant: "outlined",
-    className: classes.formControl
-  }, /*#__PURE__*/React.createElement(Select, {
-    classes: {
-      select: classes.dropdown
-    },
-    id: "simple-select",
-    value: selectedValue,
-    onChange: handleChange
-  }, choices.map(function (option) {
-    return /*#__PURE__*/React.createElement(MenuItem, {
-      color: "primary",
-      key: option,
-      className: classes.items,
-      value: option
-    }, option);
-  }))));
-};
-
-var useStyles$9 = makeStyles(function () {
-  return {
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%'
-    }
-  };
-});
-var RunsSelector = function RunsSelector(_ref) {
-  var options = _ref.options,
-      _ref$label = _ref.label,
-      label = _ref$label === void 0 ? 'Runs' : _ref$label,
-      action = _ref.action;
-  var classes = useStyles$9();
-  var newOptions = options.map(function (option) {
-    return moment.unix(option).utc().format('YYYY-MM-DD[T] hh:mm[Z]');
-  });
-  return (
-    /*#__PURE__*/
-    React.createElement(Grid, {
-      container: true,
-      item: true,
-      className: classes.root
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true
-    }, /*#__PURE__*/React.createElement(Typography, {
-      variant: "h6"
-    }, label), newOptions.length === 1 ? /*#__PURE__*/React.createElement(GroupedButtons, {
-      options: newOptions,
-      action: action
-    }) : /*#__PURE__*/React.createElement(SimpleSelect, {
-      choices: newOptions,
-      action: action
-    })))
-  );
-};
-
-var useStyles$a = makeStyles$2(function (theme) {
-  var _root, _markLabel;
-
-  return {
-    root: (_root = {
-      color: theme.palette.primary.main,
-      height: 20
-    }, _root[theme.breakpoints.down('xs')] = {
-      marginBottom: 20
-    }, _root),
-    thumb: {
-      height: 24,
-      width: 24,
-      backgroundColor: theme.palette.secondary.light,
-      border: '2px solid currentColor',
-      marginTop: -8,
-      marginLeft: -12,
-      '&:focus, &:hover, &$active': {
-        boxShadow: 'inherit'
-      }
-    },
-    active: {},
-    rail: {
-      height: 5,
-      borderRadius: 4
-    },
-    markLabelActive: {
-      fontWeight: 700,
-      padding: 12
-    },
-    markLabel: (_markLabel = {
-      fontWeight: 500,
-      padding: 12
-    }, _markLabel[theme.breakpoints.down('xs')] = {
-      display: 'none'
-    }, _markLabel),
-    mark: {
-      backgroundColor: theme.palette.primary.dark,
-      height: 5
-    }
-  };
-});
-
-function ValueLabelComponent(props) {
-  var children = props.children,
-      open = props.open,
-      value = props.value;
-  var validTime = moment.unix(value).utc().format('MM/DD HH:mm[Z]');
-  return /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
-    smDown: true
-  }, /*#__PURE__*/React.createElement(Tooltip, {
-    open: open,
-    enterTouchDelay: 0,
-    title: validTime,
-    placement: "top"
-  }, children)), /*#__PURE__*/React.createElement(Hidden, {
-    mdUp: true
-  }, /*#__PURE__*/React.createElement(Tooltip, {
-    open: open,
-    enterTouchDelay: 0,
-    title: validTime,
-    placement: "bottom"
-  }, children)));
-}
-
-var DiscreteSlider = function DiscreteSlider(_ref) {
-  var options = _ref.options,
-      action = _ref.action,
-      selected = _ref.selected;
-  var classes = useStyles$a();
-  var optionsCount = React.useRef(options.length);
-  var stepValue = options[1].value - options[0].value;
-  var maxValue = options[options.length - 1].value;
-  var minValue = options[0].value;
-
-  var handleChangeCommitted = function handleChangeCommitted(_, value) {
-    action(value);
-  };
-
-  return /*#__PURE__*/React.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
-    xsDown: true
-  }, optionsCount.current >= 16 ? options.forEach(function (option, index) {
-    if (!(index === 0 || index === optionsCount.current - 1 || index % 4 === 0 && index <= optionsCount.current - 4)) {
-      option.label = '';
-    }
-  }) : undefined, /*#__PURE__*/React.createElement(Slider, {
-    classes: classes,
-    valueLabelDisplay: "auto",
-    "aria-label": "pretty slider",
-    track: false,
-    step: stepValue,
-    marks: options,
-    max: maxValue,
-    ValueLabelComponent: ValueLabelComponent,
-    onChange: handleChangeCommitted,
-    value: selected,
-    min: minValue
-  })), /*#__PURE__*/React.createElement(Hidden, {
-    smUp: true
-  }, /*#__PURE__*/React.createElement(Slider, {
-    classes: classes,
-    "aria-label": "pretty slider",
-    track: false,
-    step: stepValue,
-    marks: options,
-    max: maxValue,
-    onChange: handleChangeCommitted,
-    value: selected,
-    min: minValue
-  })));
-};
-
-var useStyles$b = makeStyles(function (theme) {
-  return {
-    root: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      ariaLabel: 'back',
-      maxWidth: '100%',
-      minWidth: '100%',
-      maxHeight: 30,
-      minHeight: 15
-    }
-  };
-});
-var BackButton = function BackButton(_ref) {
-  var action = _ref.action;
-  var classes = useStyles$b();
-  return /*#__PURE__*/React.createElement(Button$1, {
-    onClick: action,
-    className: classes.root,
-    variant: "outlined",
-    color: "primary"
-  }, /*#__PURE__*/React.createElement(NavigateBeforeIcon, null));
-};
-
-var useStyles$c = makeStyles(function (theme) {
-  return {
-    root: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.primary.dark,
-      boxShadow: theme.shadows[3],
-      ariaLabel: 'back',
-      maxWidth: '100%',
-      minWidth: '100%',
-      maxHeight: 30,
-      minHeight: 15
-    }
-  };
-});
-var ForwardButton = function ForwardButton(_ref) {
-  var action = _ref.action;
-  var classes = useStyles$c();
-  return /*#__PURE__*/React.createElement(Button, {
-    onClick: action,
-    className: classes.root,
-    variant: "outlined",
-    color: "primary"
-  }, /*#__PURE__*/React.createElement(NavigateNextIcon, null));
-};
-
-var useTimer = function useTimer(interval) {
-  var _React$useState = React.useState(0),
-      ticks = _React$useState[0],
-      setTicks = _React$useState[1];
-
-  var _React$useState2 = React.useState(false),
-      isRunning = _React$useState2[0],
-      setIsRunning = _React$useState2[1];
-
-  React.useEffect(function () {
-    if (isRunning) {
-      var timerId = window.setTimeout(function () {
-        setTicks(ticks + 1);
-      }, interval);
-      return function () {
-        return window.clearTimeout(timerId);
-      };
-    }
-  }, [ticks, isRunning]);
-  return [ticks, isRunning, setIsRunning];
-};
-
-var useStyles$d = makeStyles(function (theme) {
-  return {
-    root: {
-      flexGrow: 1
-    },
-    play: {
-      ariaLabel: 'play',
-      boxShadow: theme.shadows[3],
-      background: theme.palette.primary.dark,
-      '&:hover': {
-        background: theme.palette.primary.dark
-      },
-      resize: 'inherit'
-    },
-    pause: {
-      ariaLabel: 'pause',
-      boxShadow: theme.shadows[3],
-      background: theme.palette.primary.dark,
-      '&:hover': {
-        background: theme.palette.primary.dark
-      },
-      resize: 'inherit'
-    },
-    icon: {
-      color: theme.palette.primary.contrastText
-    }
-  };
-});
-var StartStopButton = function StartStopButton(_ref) {
-  var onToggle = _ref.onToggle;
-  var classes = useStyles$d();
-
-  var _useTimer = useTimer(600),
-      tick = _useTimer[0],
-      isRunning = _useTimer[1],
-      setIsRunning = _useTimer[2];
-
-  var handleClick = function handleClick() {
-    if (isRunning) {
-      setIsRunning(false);
-    } else {
-      setIsRunning(true);
-    }
-  };
-
-  React.useEffect(function () {
-    onToggle(isRunning);
-  }, [tick]);
-  return isRunning ? /*#__PURE__*/React.createElement(Fab, {
-    onClick: handleClick,
-    className: classes.pause
-  }, /*#__PURE__*/React.createElement(PauseIcon, {
-    className: classes.icon
-  })) : /*#__PURE__*/React.createElement(Fab, {
-    onClick: handleClick,
-    className: classes.play
-  }, /*#__PURE__*/React.createElement(PlayArrowIcon, {
-    className: classes.icon
-  }));
-};
-
-var useStyles$e = makeStyles(function (theme) {
-  var _offset;
-
-  return {
-    root: {
-      flexGrow: 1
-    },
-    offset: (_offset = {}, _offset[theme.breakpoints.up('md')] = {
-      display: 'none'
-    }, _offset)
-  };
-});
-var TimeControl = function TimeControl(_ref) {
-  var onBack = _ref.onBack,
-      onNext = _ref.onNext,
-      onToggle = _ref.onToggle;
-  var classes = useStyles$e();
-  return /*#__PURE__*/React.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    direction: "row",
-    alignItems: "center",
-    justify: "center",
-    wrap: "nowrap",
-    spacing: 1
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: true,
-    className: classes.offset
-  }), /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/React.createElement(BackButton, {
-    "data-cy": "back-button",
-    action: onBack
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    container: true,
-    xs: true,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(StartStopButton, {
-    "data-cy": "play-button",
-    onToggle: onToggle
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: 3
-  }, /*#__PURE__*/React.createElement(ForwardButton, {
-    "data-cy": "forward-button",
-    action: onNext
-  })), /*#__PURE__*/React.createElement(Grid, {
-    item: true,
-    xs: true
-  })));
-};
-
-var useStyles$f = makeStyles(function (theme) {
-  return {
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%',
-      paddingTop: 5,
-      paddingBottom: 5
-    },
-    paper: {
-      backgroundColor: theme.palette.secondary.main,
-      padding: 5
-    },
-    mobilePaper: {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.secondary.main,
-      border: '1px solid currentColor',
-      padding: 5
-    },
-    text: {
-      color: theme.palette.secondary.main
-    }
-  };
-});
-var ValidTime = function ValidTime(_ref) {
-  var time = _ref.time;
-  var classes = useStyles$f();
-  return /*#__PURE__*/React.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/React.createElement(CssBaseline, null), /*#__PURE__*/React.createElement(Hidden, {
-    smDown: true
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    direction: "row",
-    justify: "flex-end",
-    alignItems: "center"
-  }, /*#__PURE__*/React.createElement(Grid, {
-    item: true
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "h6"
-  }, "Valid Time"), /*#__PURE__*/React.createElement(Paper, {
-    className: classes.paper
-  }, /*#__PURE__*/React.createElement(Typography, {
-    variant: "button"
-  }, time))))), /*#__PURE__*/React.createElement(Hidden, {
-    mdUp: true
-  }, /*#__PURE__*/React.createElement(Paper, {
-    className: classes.mobilePaper
-  }, /*#__PURE__*/React.createElement(Grid, {
-    container: true,
-    item: true,
-    xs: 12,
-    justify: "center"
-  }, /*#__PURE__*/React.createElement(Typography, {
-    className: classes.text,
-    variant: "h6"
-  }, time)))));
-};
-
-var useStyles$g = makeStyles(function (theme) {
-  var _media;
-
-  return {
-    media: (_media = {}, _media[theme.breakpoints.up('md')] = {
-      height: '40vw'
-    }, _media[theme.breakpoints.down('sm')] = {
-      width: '100%'
-    }, _media)
-  };
-});
-var ImageViewer = function ImageViewer(_ref) {
-  var image = _ref.image;
-  var classes = useStyles$g();
-  return /*#__PURE__*/React.createElement("img", {
-    className: classes.media,
-    src: image,
-    alt: "weather viewer"
-  });
-};
-
 var ShyftContext = React.createContext({});
-var drawerWidth$1 = 250;
-var xlDrawerWidth$1 = 350;
+var drawerWidth$2 = 300;
+var xlDrawerWidth$2 = 350;
 var useStyles$h = makeStyles(function (theme) {
   return {
     toolbar: theme.mixins.toolbar,
     contentClass: {
       flexGrow: 1,
       padding: theme.spacing(3),
-      marginLeft: drawerWidth$1
+      marginLeft: drawerWidth$2
     },
     '@media (max-width: 767px)': {
       contentClass: {
@@ -1621,7 +2064,7 @@ var useStyles$h = makeStyles(function (theme) {
     },
     '@media (min-width: 1459px)': {
       contentClass: {
-        marginLeft: xlDrawerWidth$1
+        marginLeft: xlDrawerWidth$2
       }
     }
   };
@@ -1754,10 +2197,11 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
     })[0].image;
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Grid, {
       container: true
-    }, /*#__PURE__*/React.createElement(ProductSelector, {
+    }, /*#__PURE__*/React.createElement(SideMenu, {
       "data-cy": "product-selector",
       categories: levelProductVals,
-      action: handleProductSelect
+      action: handleProductSelect,
+      options: [index.datasets[0].dataset]
     })), /*#__PURE__*/React.createElement("main", {
       className: classes.contentClass
     }, /*#__PURE__*/React.createElement(Hidden, {
@@ -1769,262 +2213,6 @@ var ShyftWxDynamic = function ShyftWxDynamic(_ref) {
       justify: "space-between",
       spacing: 1
     }, /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      xs: true,
-      sm: true,
-      md: true
-    }, /*#__PURE__*/React.createElement(ModelSelector, {
-      "data-cy": "model-selector",
-      options: [index.datasets[0].dataset],
-      action: function action() {}
-    })), /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      xs: true,
-      md: true
-    }, /*#__PURE__*/React.createElement(RegionSelector, {
-      "data-cy": "region-selector",
-      options: [index.datasets[0].region.name],
-      action: function action() {}
-    })), /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      xs: true,
-      sm: true,
-      md: true
-    }, /*#__PURE__*/React.createElement(RunsSelector, {
-      "data-cy": "runs-selector",
-      options: [+index.datasets[0].run.name],
-      action: handleRunSelect
-    })), /*#__PURE__*/React.createElement(Hidden, {
-      xsDown: true
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      xs: 12,
-      md: true
-    }, /*#__PURE__*/React.createElement(ValidTime, {
-      time: getValidTime()
-    })))), /*#__PURE__*/React.createElement(Grid, {
-      container: true,
-      direction: "column",
-      spacing: 1
-    }, /*#__PURE__*/React.createElement(Grid, {
-      container: true,
-      justify: "center",
-      item: true,
-      xs: 12
-    }, /*#__PURE__*/React.createElement(ImageViewer, {
-      image: activeForecastLayer
-    })), /*#__PURE__*/React.createElement(Grid, {
-      container: true,
-      item: true,
-      justify: "center",
-      alignItems: "center"
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      md: 3,
-      sm: 5,
-      xs: 5
-    }, /*#__PURE__*/React.createElement(TimeControl, {
-      "data-cy": "time-control",
-      onBack: onSliderNavigationBack,
-      onNext: onSliderNavigationNext,
-      onToggle: onToggleToPlay
-    })), /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      md: 9,
-      sm: 11,
-      xs: 12
-    }, /*#__PURE__*/React.createElement(DiscreteSlider, {
-      "data-cy": "slider",
-      options: sliderVals,
-      selected: +forecast + +index.datasets[0].run.name,
-      action: onSliderNavigation
-    }))), /*#__PURE__*/React.createElement(Hidden, {
-      smUp: true
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      xs: 12
-    }, /*#__PURE__*/React.createElement(ValidTime, {
-      time: getValidTime()
-    }))))));
-  };
-
-  return /*#__PURE__*/React.createElement(React.Fragment, null, generateContent());
-};
-
-var drawerWidth$2 = 250;
-var xlDrawerWidth$2 = 350;
-var useStyles$i = makeStyles(function (theme) {
-  return {
-    toolbar: theme.mixins.toolbar,
-    contentClass: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      marginLeft: drawerWidth$2
-    },
-    '@media (max-width: 767px)': {
-      contentClass: {
-        marginLeft: 0
-      }
-    },
-    '@media (min-width: 1459px)': {
-      contentClass: {
-        marginLeft: xlDrawerWidth$2
-      }
-    }
-  };
-});
-var ShyftWxStatic = function ShyftWxStatic(_ref) {
-  var index = _ref.index,
-      forecast = _ref.forecast,
-      level = _ref.level,
-      product = _ref.product,
-      onForecastSelect = _ref.onForecastSelect,
-      onLevelSelect = _ref.onLevelSelect,
-      onProductSelect = _ref.onProductSelect;
-  var classes = useStyles$i();
-
-  var getSelectedLevel = function getSelectedLevel() {
-    return index.datasets[0].run.levels.filter(function (lvl) {
-      return lvl.name === level;
-    })[0];
-  };
-
-  var getSelectedProduct = function getSelectedProduct() {
-    return getSelectedLevel().products.filter(function (p) {
-      return p.name === product;
-    })[0];
-  };
-
-  var handleProductSelect = function handleProductSelect(product) {
-    onLevelSelect(product.level);
-    onProductSelect(product.product);
-    onForecastSelect(getSelectedProduct().forecasts[0].hour);
-  };
-
-  var handleRunSelect = function handleRunSelect(buttonText) {
-    console.log(buttonText);
-  };
-
-  var compare = function compare(a, b) {
-    var valA = Number(a.hour);
-    var valB = Number(b.hour);
-    var comparison = 0;
-
-    if (valA > valB) {
-      comparison = 1;
-    } else if (valA < valB) {
-      comparison = -1;
-    }
-
-    return comparison;
-  };
-
-  var onSliderNavigationNext = function onSliderNavigationNext() {
-    var forecasts = getSelectedProduct().forecasts;
-    forecasts.sort(compare);
-    var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === forecast;
-    });
-
-    if (forecastIndex + 1 === forecasts.length) {
-      onForecastSelect(forecasts[0].hour);
-    } else {
-      onForecastSelect(forecasts[forecastIndex + 1].hour);
-    }
-  };
-
-  var onSliderNavigationBack = function onSliderNavigationBack() {
-    var forecasts = getSelectedProduct().forecasts;
-    forecasts.sort(compare);
-    var forecastIndex = forecasts.findIndex(function (f) {
-      return f.hour === forecast;
-    });
-
-    if (forecastIndex - 1 < 0) {
-      onForecastSelect(forecasts[forecasts.length - 1].hour);
-    } else {
-      onForecastSelect(forecasts[forecastIndex - 1].hour);
-    }
-  };
-
-  var onSliderNavigation = function onSliderNavigation(value) {
-    value -= +index.datasets[0].run.name;
-    var forecasts = getSelectedProduct().forecasts;
-    forecasts.sort(compare);
-    var forecastIndex = forecasts.findIndex(function (f) {
-      return +f.hour === +value;
-    });
-    onForecastSelect(forecasts[forecastIndex].hour);
-  };
-
-  var onToggleToPlay = function onToggleToPlay(isRunning) {
-    var forecasts = getSelectedProduct().forecasts;
-    forecasts.sort(compare);
-
-    if (!isRunning) {
-      onForecastSelect(forecasts[0].hour);
-    } else {
-      var forecastIndex = forecasts.findIndex(function (f) {
-        return f.hour === forecast;
-      });
-
-      if (forecast === forecasts[forecasts.length - 1].hour) {
-        onForecastSelect(forecasts[0].hour);
-      } else {
-        onForecastSelect(forecasts[forecastIndex + 1].hour);
-      }
-    }
-  };
-
-  var getValidTime = function getValidTime() {
-    var validTime = moment.unix(+index.datasets[0].run.name + +forecast).utc().format('MM/DD HH:mm[Z]');
-    return validTime;
-  };
-
-  var generateContent = function generateContent() {
-    var selectedProduct = getSelectedProduct();
-    var levelProductVals = index.datasets[0].run.levels.map(function (lvl, index) {
-      return {
-        name: lvl.name,
-        open: index === 0,
-        products: lvl.products
-      };
-    });
-    var sliderVals = selectedProduct.forecasts.map(function (f) {
-      return {
-        value: +f.hour + +index.datasets[0].run.name,
-        label: moment.unix(+f.hour + +index.datasets[0].run.name).utc().format('MM/DD HH:mm[Z]')
-      };
-    });
-    var activeForecastLayer = selectedProduct.forecasts.filter(function (f) {
-      return f.hour === forecast;
-    })[0].image;
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Grid, {
-      container: true
-    }, /*#__PURE__*/React.createElement(ProductSelector, {
-      "data-cy": "product-selector",
-      categories: levelProductVals,
-      action: handleProductSelect
-    })), /*#__PURE__*/React.createElement("main", {
-      className: classes.contentClass
-    }, /*#__PURE__*/React.createElement(Hidden, {
-      smUp: true
-    }, /*#__PURE__*/React.createElement("div", {
-      className: classes.toolbar
-    })), /*#__PURE__*/React.createElement(Grid, {
-      container: true,
-      justify: "space-between",
-      spacing: 1
-    }, /*#__PURE__*/React.createElement(Grid, {
-      item: true,
-      xs: true,
-      sm: true,
-      md: true
-    }, /*#__PURE__*/React.createElement(ModelSelector, {
-      "data-cy": "model-selector",
-      options: [index.datasets[0].dataset],
-      action: function action() {}
-    })), /*#__PURE__*/React.createElement(Grid, {
       item: true,
       xs: true,
       md: true
@@ -2139,6 +2327,10 @@ var ShyftWx = function ShyftWx(props) {
       selectedRun = _React$useState8[0],
       setSelectedRun = _React$useState8[1];
 
+  var _React$useState9 = React.useState([]),
+      levelsAndProducts = _React$useState9[0],
+      setLevelsAndProducts = _React$useState9[1];
+
   var isDynamic = React.useRef(false);
 
   if (dynamicFeatures && dynamicFeatures.length !== 0) {
@@ -2168,7 +2360,7 @@ var ShyftWx = function ShyftWx(props) {
             setLoading(false);
           }
 
-          if (!indexData || indexData.datasets.length === 0) {
+          if (!indexData || indexData['run-regions'].length === 0) {
             setStatus(AppStatus.NoData);
             setLoading(false);
             return;
@@ -2180,13 +2372,13 @@ var ShyftWx = function ShyftWx(props) {
           var i = 0;
 
           var _temp = _for(function () {
-            return i < indexData.datasets.length;
+            return i < indexData['run-regions'].length;
           }, function () {
             return i++;
           }, function () {
-            var dataset = indexData.datasets[i];
+            var dataset = indexData['run-regions'][i];
             var datasetRegionRun = {
-              dataset: dataset.name,
+              dataset: dataset.dataset_name,
               region: dataset.region,
               run: {
                 name: dataset.run,
@@ -2216,8 +2408,18 @@ var ShyftWx = function ShyftWx(props) {
                 }).map(function (product) {
                   return {
                     name: product,
+                    metadata: [],
                     forecasts: []
                   };
+                });
+              });
+              uniqueLevels.forEach(function (lvl) {
+                lvl.products.forEach(function (product) {
+                  product.metadata = items.filter(function (item) {
+                    return item.level === lvl.name && item.product === product.name && item.forecast === '0';
+                  }).map(function (item) {
+                    return item.item_metadata;
+                  });
                 });
               });
               uniqueLevels.forEach(function (lvl) {
@@ -2232,6 +2434,29 @@ var ShyftWx = function ShyftWx(props) {
                   });
                 });
               });
+              var uniqueProducts = [];
+              uniqueProducts = items.map(function (i) {
+                return i.product;
+              }).filter(function (v, i, a) {
+                return a.indexOf(v) === i;
+              }).map(function (l) {
+                return {
+                  name: l,
+                  levels: []
+                };
+              });
+              uniqueProducts.forEach(function (product) {
+                product.levels = items.filter(function (item) {
+                  return item.product === product.name;
+                }).map(function (i) {
+                  return i.level;
+                }).filter(function (v, i, a) {
+                  return a.indexOf(v) === i;
+                }).map(function (level) {
+                  return level;
+                });
+              });
+              setLevelsAndProducts(uniqueProducts);
               datasetRegionRun.run.levels = uniqueLevels;
               var indexes = {
                 datasets: [datasetRegionRun]
@@ -2251,6 +2476,18 @@ var ShyftWx = function ShyftWx(props) {
       });
     } catch (e) {
       return Promise.reject(e);
+    }
+  };
+
+  var getLevels = function getLevels(value) {
+    var obj = levelsAndProducts.find(function (o) {
+      return o.name === value;
+    });
+
+    if (obj) {
+      return obj.levels;
+    } else {
+      return [];
     }
   };
 
@@ -2290,7 +2527,8 @@ var ShyftWx = function ShyftWx(props) {
         onLevelSelect: setSelectedLevel,
         onProductSelect: setSelectedProduct,
         onRegionSelect: setSelectedRegion,
-        onRunSelect: setSelectedRun
+        onRunSelect: setSelectedRun,
+        getLevels: getLevels
       });
     } else {
       return /*#__PURE__*/React.createElement(ShyftWxStatic, {
@@ -2304,7 +2542,8 @@ var ShyftWx = function ShyftWx(props) {
         onLevelSelect: setSelectedLevel,
         onProductSelect: setSelectedProduct,
         onRegionSelect: setSelectedRegion,
-        onRunSelect: setSelectedRun
+        onRunSelect: setSelectedRun,
+        getLevels: getLevels
       });
     }
   };
@@ -2320,7 +2559,7 @@ var ShyftWx = function ShyftWx(props) {
   }, generateContent()));
 };
 
-var useStyles$j = makeStyles(function (theme) {
+var useStyles$i = makeStyles(function (theme) {
   return {
     root: {
       height: '40vw',
@@ -2337,7 +2576,7 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
   var layers = _ref.layers,
       neBounds = _ref.neBounds,
       swBounds = _ref.swBounds;
-  var classes = useStyles$j();
+  var classes = useStyles$i();
   var bounds = latLngBounds(swBounds, neBounds);
 
   var generateLayers = function generateLayers() {
@@ -2372,5 +2611,5 @@ var BaseWxViewer = function BaseWxViewer(_ref) {
   }));
 };
 
-export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, LandingPage, ModelSelector, ProductMenu, ProductSelector, RegionSelector, RunsSelector, ShyftWx, DiscreteSlider as Slider, StartStopButton, TimeControl, index as apis, theme$1 as theme };
+export { BackButton, BaseWxViewer, ForwardButton, GroupedButtons, LandingPage, ModelSelector, ProductMenu, RegionSelector, RunsSelector, ShyftWx, ShyftWxStatic, SideMenu, DiscreteSlider as Slider, StartStopButton, TimeControl, VerticalSlider, index as apis, theme$1 as theme };
 //# sourceMappingURL=index.modern.js.map

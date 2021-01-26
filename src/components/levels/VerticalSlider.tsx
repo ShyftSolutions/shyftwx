@@ -1,6 +1,6 @@
-import React from 'react';
 import Slider from '@material-ui/core/Slider';
 import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
 /**
  * Uses Material UI slider to create a responsive time for forecast hours and
@@ -82,6 +82,7 @@ export const VerticalSlider: React.FC<VerticalSliderProps> = ({ options, action,
         }
     });
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     const handleChangeCommitted = (e: React.ChangeEvent<{}>, value: number | number[]) => {
         action(options[value as number]);
     };

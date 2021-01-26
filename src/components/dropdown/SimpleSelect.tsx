@@ -1,9 +1,9 @@
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import React from 'react';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
 /**
  * SimpleSelect creates a vertical dropdown menu where the options on the menu
@@ -65,7 +65,7 @@ export const SimpleSelect: React.FC<SimpleSelectProps> = ({ choices, action, lab
         action(event.target.value as string);
     };
 
-    let oneChoice: boolean = false;
+    let oneChoice = false;
     if (choices.length === 1) {
         oneChoice = true;
     }

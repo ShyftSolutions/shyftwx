@@ -185,7 +185,7 @@ export const ShyftWxDynamic: React.FC<ShyftWxDynamicProps> = ({
 
                     {/* Model/Region/Run/Valid Menu Grid */}
                     <Grid container justify="space-between" spacing={1}>
-                      {/* <Grid item xs sm md>
+                        {/* <Grid item xs sm md>
                             <ModelSelector
                                 data-cy="model-selector"
                                 options={[index.datasets[0].dataset]}
