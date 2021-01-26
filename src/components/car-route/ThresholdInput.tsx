@@ -1,8 +1,8 @@
-import React from 'react';
-import { Paper, Typography, makeStyles, Grid, Fab } from '@material-ui/core';
+import { Fab, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import ThresholdSlider from '../slider/ThresholdSlider';
+import React from 'react';
 import SimpleSelect from '../dropdown/SimpleSelect';
+import ThresholdSlider from '../slider/ThresholdSlider';
 import { Units } from './../../utils/Units';
 
 const useStyles = makeStyles((theme) => ({
@@ -155,7 +155,7 @@ export const ThresholdInput: React.FC<ThresholdInputProps> = ({ impact, action, 
 
                 <Grid container item alignItems="center" xs={6}>
                     <Typography className={classes.unitText}>Units:</Typography>
-                    <SimpleSelect action={handleUnitChange} choices={unitOptions[impact]} />
+                    <SimpleSelect action={handleUnitChange} choices={unitOptions[impact]} label="" />
                 </Grid>
             </Grid>
         </Paper>

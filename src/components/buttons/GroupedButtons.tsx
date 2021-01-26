@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
  * @param options string[]
  * @param action function that takes in an 'option' to set as the selected button for the group
  */
-export const GroupedButtons: React.FC<GroupedButtonsProps> = ({ options = ['1', '2', '3'], action }) => {
+export const GroupedButtons: React.FC<GroupedButtonsProps> = ({ options = ['1', '2', '3'], onClick: action }) => {
     const classes = useStyles();
 
     const [selected, setSelected] = useState(options[0]);

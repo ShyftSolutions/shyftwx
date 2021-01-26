@@ -1,4 +1,4 @@
-/// <reference types="react" />
 import 'leaflet/dist/leaflet.css';
-export declare const CarRouteServices: () => JSX.Element;
+import React from 'react';
+export declare const CarRouteServices: React.FC;
 export default CarRouteServices;

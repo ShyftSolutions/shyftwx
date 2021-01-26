@@ -138,7 +138,7 @@ export const RouteInput: React.FC<RouteInputProps> = ({
                                 {startCoords.length === 0 || endCoords.length === 0 ? (
                                     <BasicButton type="disabled" />
                                 ) : (
-                                    <BasicButton type="blue" action={handleButtonClick} />
+                                    <BasicButton type="blue" onClick={handleButtonClick} />
                                 )}
                             </Grid>
                         </Grid>

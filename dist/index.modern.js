@@ -61,6 +61,12 @@ var getOutputRunStatusAsync = function getOutputRunStatusAsync(baseUrl, customer
     return response.json();
   });
 };
+var searchAsync = function searchAsync(input) {
+  var url = MAPBOX_API_URL.replace('{SEARCH_TEXT}', encodeURIComponent(input));
+  return axios.get(url).then(function (response) {
+    return response.data;
+  });
+};
 function directionsAsync(coords) {
   var stringCoords = '';
   coords.forEach(function (c) {
@@ -110,6 +116,7 @@ var index = {
     getProductDataAsync: getProductDataAsync,
     getOutputStatusAsync: getOutputStatusAsync,
     getOutputRunStatusAsync: getOutputRunStatusAsync,
+    searchAsync: searchAsync,
     directionsAsync: directionsAsync,
     carRouteAsync: carRouteAsync
 };
@@ -141,7 +148,7 @@ var useStyles = makeStyles(function (theme) {
 var GroupedButtons = function GroupedButtons(_ref) {
   var _ref$options = _ref.options,
       options = _ref$options === void 0 ? ['1', '2', '3'] : _ref$options,
-      action = _ref.action;
+      action = _ref.onClick;
   var classes = useStyles();
 
   var _useState = useState(options[0]),
@@ -727,7 +734,7 @@ var useStyles$5 = makeStyles(function (theme) {
   });
 });
 var BasicButton = function BasicButton(_ref) {
-  var action = _ref.action,
+  var action = _ref.onClick,
       _ref$text = _ref.text,
       text = _ref$text === void 0 ? 'Next' : _ref$text,
       _ref$type = _ref.type,
@@ -989,7 +996,7 @@ var LandingPage = function LandingPage(_ref) {
     item: true,
     justify: "center"
   }, /*#__PURE__*/React.createElement(BasicButton, {
-    action: onClick
+    onClick: onClick
   })), /*#__PURE__*/React.createElement(Grid, {
     item: true
   }))))));

@@ -11,7 +11,7 @@ import RouteInput from './RouteInput';
 import WeatherInput from './WeatherInput';
 import WelcomePage from './WelcomePage';
 
-export const CarRouteServices = () => {
+export const CarRouteServices: React.FC = () => {
     const [state, setState] = React.useState('initial');
     const [startingPoint, setStartingPoint] = React.useState<Feature>();
     const [destination, setDestination] = React.useState<Feature>();

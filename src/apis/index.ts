@@ -64,6 +64,12 @@ export const getOutputRunStatusAsync = (
     return fetch(url).then((response) => response.json());
 };
 
+export const searchAsync = (input: string): Promise<SearchData> => {
+    const url = MAPBOX_API_URL.replace('{SEARCH_TEXT}', encodeURIComponent(input));
+
+    return axios.get<SearchData>(url).then((response) => response.data);
+};
+
 export function directionsAsync(coords: number[][]) {
     let stringCoords = '';
 

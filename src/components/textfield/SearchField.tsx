@@ -5,7 +5,7 @@ import { Autocomplete } from '@material-ui/lab';
 import { Feature } from 'geojson';
 import throttle from 'lodash/throttle';
 import React from 'react';
-import { directionsAsync } from '../../apis';
+import { searchAsync } from '../../apis';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -39,14 +39,10 @@ export const SearchField: React.FC<SearchFieldProps> = (props) => {
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<Feature[]>([]);
 
-    // const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     handleChange(event.target.value);
-    // };
-
     const fetch = React.useMemo(
         () =>
             throttle((request, callback) => {
-                directionsAsync(request.input).then((results) => callback(results.features));
+                searchAsync(request.input).then((results) => callback(results.features));
             }, 200),
         []
     );

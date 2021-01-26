@@ -4,11 +4,11 @@
 
 declare type GroupedButtonsProps = {
     options: string[];
-    action: (option: string) => void;
+    onClick: (option: string) => void;
 };
 
 declare type BasicButtonProps = {
     text?: string;
-    action?: () => void;
     type?: string;
+    onClick?: () => void;
 };

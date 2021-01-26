@@ -13,5 +13,6 @@ export declare const getOutputStatusAsync: (baseUrl: string, customerId: string,
 export declare const getOutputRunStatusAsync: (baseUrl: string, customerId: string, datasetId: string, run: string) => Promise<{
     total_available: number;
 }>;
+export declare const searchAsync: (input: string) => Promise<SearchData>;
 export declare function directionsAsync(coords: number[][]): Promise<any>;
 export declare const carRouteAsync: (currentRoute: any, startTime: Date | undefined) => Promise<RouteImpactDataSegment[]>;

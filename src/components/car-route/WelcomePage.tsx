@@ -1,7 +1,7 @@
-import React from 'react';
-import { Paper, Grid, Typography, makeStyles } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import React from 'react';
 import BasicButton from '../buttons/BasicButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -114,7 +114,7 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ action }) => {
                                 <FontAwesomeIcon icon={fas.faCircle} className={classes.dot} />
                             </Grid>
 
-                            <BasicButton type="gradient" text="start" action={action} />
+                            <BasicButton type="gradient" text="start" onClick={action} />
                         </Grid>
                     </Paper>
                 </Grid>

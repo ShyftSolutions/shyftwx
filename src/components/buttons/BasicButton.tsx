@@ -1,5 +1,5 @@
+import { Button, createStyles, makeStyles } from '@material-ui/core';
 import React from 'react';
-import { makeStyles, createStyles, Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) =>
  * @param action function that occurs when the button is clicked
  * @param style
  */
-export const BasicButton: React.FC<BasicButtonProps> = ({ action, text = 'Next', type = 'blue' }) => {
+export const BasicButton: React.FC<BasicButtonProps> = ({ onClick: action, text = 'Next', type = 'blue' }) => {
     const classes = useStyles();
 
     const buttonStyles = {

@@ -136,7 +136,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                                 />
                             </Grid>
                             <Grid container item justify="center">
-                                <BasicButton action={onClick} />
+                                <BasicButton onClick={onClick} />
                             </Grid>
                             <Grid item />
                         </Grid>
